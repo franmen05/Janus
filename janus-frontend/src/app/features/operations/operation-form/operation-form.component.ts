@@ -7,11 +7,12 @@ import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
 import { Client } from '../../../core/models/client.model';
 import { CargoType, InspectionType } from '../../../core/models/operation.model';
+import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
 @Component({
   selector: 'app-operation-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, StatusLabelPipe],
   template: `
     <h2 class="mb-4">{{ (isEdit() ? 'OPERATIONS.EDIT_TITLE' : 'OPERATIONS.NEW_TITLE') | translate }}</h2>
     <div class="card">
@@ -32,13 +33,13 @@ import { CargoType, InspectionType } from '../../../core/models/operation.model'
             <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.CARGO_TYPE' | translate }}</label>
               <select class="form-select" formControlName="cargoType">
-                @for (t of cargoTypes; track t) { <option [value]="t">{{ t }}</option> }
+                @for (t of cargoTypes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
               </select>
             </div>
             <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.INSPECTION_TYPE' | translate }}</label>
               <select class="form-select" formControlName="inspectionType">
-                @for (t of inspectionTypes; track t) { <option [value]="t">{{ t }}</option> }
+                @for (t of inspectionTypes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
               </select>
             </div>
           </div>

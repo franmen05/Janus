@@ -6,12 +6,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { Operation, OperationStatus } from '../../../core/models/operation.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
+import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-operation-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, StatusBadgeComponent],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe],
   template: `
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2>{{ 'OPERATIONS.TITLE' | translate }}</h2>
@@ -25,7 +26,7 @@ import { AuthService } from '../../../core/services/auth.service';
           <div class="col-md-4">
             <select class="form-select" [(ngModel)]="filterStatus" (ngModelChange)="loadOperations()">
               <option value="">{{ 'OPERATIONS.ALL_STATUSES' | translate }}</option>
-              @for (s of statuses; track s) { <option [value]="s">{{ s }}</option> }
+              @for (s of statuses; track s) { <option [value]="s">{{ s | statusLabel }}</option> }
             </select>
           </div>
         </div>
@@ -42,8 +43,8 @@ import { AuthService } from '../../../core/services/auth.service';
               <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
                 <td class="fw-bold">{{ op.referenceNumber }}</td>
                 <td>{{ op.clientName }}</td>
-                <td>{{ op.cargoType }}</td>
-                <td>{{ op.inspectionType }}</td>
+                <td>{{ op.cargoType | statusLabel }}</td>
+                <td>{{ op.inspectionType | statusLabel }}</td>
                 <td><app-status-badge [status]="op.status" /></td>
                 <td>{{ op.assignedAgentName ?? '-' }}</td>
                 <td>{{ op.createdAt | date:'shortDate' }}</td>

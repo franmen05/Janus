@@ -6,12 +6,13 @@ import { OperationService } from '../../../core/services/operation.service';
 import { OperationStatus, StatusHistory } from '../../../core/models/operation.model';
 import { CompletenessResponse, DocumentStatus } from '../../../core/models/document.model';
 import { TimelineComponent, TimelineEvent } from '../../../shared/components/timeline/timeline.component';
+import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-operation-status',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, TimelineComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, TimelineComponent, StatusLabelPipe],
   template: `
     @if (authService.hasRole(['ADMIN', 'AGENT'])) {
       <div class="card mb-3">
@@ -21,7 +22,7 @@ import { AuthService } from '../../../core/services/auth.service';
             <div class="col-md-4">
               <select class="form-select" [(ngModel)]="selectedStatus">
                 <option value="">{{ 'STATUS_CHANGE.SELECT_STATUS' | translate }}</option>
-                @for (s of availableStatuses; track s) { <option [value]="s">{{ s }}</option> }
+                @for (s of availableStatuses; track s) { <option [value]="s">{{ s | statusLabel }}</option> }
               </select>
             </div>
             <div class="col-md-5">
@@ -62,7 +63,7 @@ export class OperationStatusComponent implements OnInit {
   loadHistory(): void {
     this.operationService.getHistory(this.operationId()).subscribe(h => {
       this.timelineEvents.set(h.map(item => ({
-        title: (item.previousStatus ?? 'NEW') + ' → ' + item.newStatus,
+        title: this.translateStatus(item.previousStatus ?? 'NEW') + ' → ' + this.translateStatus(item.newStatus),
         description: item.comment ?? '',
         date: item.changedAt,
         user: item.changedByUsername
@@ -97,5 +98,11 @@ export class OperationStatusComponent implements OnInit {
       next: () => { this.selectedStatus = ''; this.comment = ''; this.loadHistory(); this.statusChanged.emit(); },
       error: (err) => alert(err.error?.error ?? this.translate.instant('STATUS_CHANGE.FAILED'))
     });
+  }
+
+  private translateStatus(status: string): string {
+    const key = 'STATUS.' + status;
+    const translated = this.translate.instant(key);
+    return translated !== key ? translated : status;
   }
 }

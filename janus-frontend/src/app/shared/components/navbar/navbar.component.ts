@@ -2,13 +2,14 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, NgbDropdownModule],
   template: `
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
@@ -19,15 +20,15 @@ import { LanguageService } from '../../../core/services/language.service';
         <div class="collapse navbar-collapse justify-content-end">
           @if (authService.isAuthenticated()) {
             <ul class="navbar-nav">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">
+              <li class="nav-item" ngbDropdown>
+                <a class="nav-link" ngbDropdownToggle role="button">
                   {{ langService.currentLanguage().toUpperCase() }}
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end">
+                <div ngbDropdownMenu class="dropdown-menu-end">
                   @for (lang of langService.availableLanguages; track lang.code) {
-                    <li><button class="dropdown-item" [class.active]="lang.code === langService.currentLanguage()" (click)="langService.setLanguage(lang.code)">{{ lang.label }}</button></li>
+                    <button ngbDropdownItem [class.active]="lang.code === langService.currentLanguage()" (click)="langService.setLanguage(lang.code)">{{ lang.label }}</button>
                   }
-                </ul>
+                </div>
               </li>
               <li class="nav-item">
                 <span class="nav-link text-light">

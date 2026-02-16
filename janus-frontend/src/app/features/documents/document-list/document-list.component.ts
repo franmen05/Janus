@@ -6,12 +6,13 @@ import { DocumentService } from '../../../core/services/document.service';
 import { Document } from '../../../core/models/document.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { FileSizePipe } from '../../../shared/pipes/file-size.pipe';
+import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-document-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, FileSizePipe],
+  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, FileSizePipe, StatusLabelPipe],
   template: `
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h5 class="mb-0">{{ 'DOCUMENTS.TITLE' | translate }}</h5>
@@ -28,7 +29,7 @@ import { AuthService } from '../../../core/services/auth.service';
           <tbody>
             @for (doc of documents(); track doc.id) {
               <tr>
-                <td>{{ doc.documentType }}</td>
+                <td>{{ doc.documentType | statusLabel }}</td>
                 <td><app-status-badge [status]="doc.status" /></td>
                 <td>{{ doc.latestVersionName ?? '-' }}</td>
                 <td>{{ doc.latestVersionSize | fileSize }}</td>
