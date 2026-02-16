@@ -13,6 +13,6 @@ public class AuditLogRepository implements PanacheRepository<AuditLog> {
     }
 
     public List<AuditLog> findByUsername(String username) {
-        return list("username ORDER BY createdAt DESC", username);
+        return list("username = ?1 ORDER BY createdAt DESC", username);
     }
 }

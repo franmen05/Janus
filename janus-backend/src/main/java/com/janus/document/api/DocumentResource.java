@@ -19,6 +19,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
@@ -77,7 +78,7 @@ public class DocumentResource {
             return Response.status(Response.Status.CREATED)
                     .entity(DocumentResponse.from(doc))
                     .build();
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new RuntimeException("Upload failed", e);
         }
     }
