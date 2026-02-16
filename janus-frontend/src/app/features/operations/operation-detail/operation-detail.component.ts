@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { AuditService } from '../../../core/services/audit.service';
 import { Operation } from '../../../core/models/operation.model';
@@ -36,6 +36,9 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           <app-status-badge [status]="operation()!.status" />
           @if (authService.hasRole(['ADMIN', 'AGENT'])) {
             <a [routerLink]="['/operations', operation()!.id, 'edit']" class="btn btn-sm btn-outline-primary">{{ 'ACTIONS.EDIT' | translate }}</a>
+          }
+          @if (authService.hasRole(['ADMIN']) && operation()!.status === 'DRAFT') {
+            <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete()">{{ 'ACTIONS.DELETE' | translate }}</button>
           }
         </div>
       </div>
@@ -121,9 +124,11 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 })
 export class OperationDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private operationService = inject(OperationService);
   private auditService = inject(AuditService);
   private documentService = inject(DocumentService);
+  private translate = inject(TranslateService);
   authService = inject(AuthService);
 
   operation = signal<Operation | null>(null);
@@ -140,5 +145,14 @@ export class OperationDetailComponent implements OnInit {
     this.operationService.getCompleteness(id).subscribe(c => this.completeness.set(c));
     this.auditService.getByOperation(id).subscribe(logs => this.auditLogs.set(logs));
     this.documentService.getByOperation(id).subscribe(docs => this.documents.set(docs));
+  }
+
+  confirmDelete(): void {
+    const msg = this.translate.instant('COMMON.ARE_YOU_SURE');
+    if (confirm(msg)) {
+      this.operationService.delete(this.operation()!.id).subscribe(() => {
+        this.router.navigate(['/operations']);
+      });
+    }
   }
 }

@@ -33,6 +33,10 @@ export class OperationService {
     return this.http.post<void>(`${this.apiUrl}/${id}/change-status`, request);
   }
 
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
   getHistory(id: number): Observable<StatusHistory[]> {
     return this.http.get<StatusHistory[]>(`${this.apiUrl}/${id}/history`);
   }

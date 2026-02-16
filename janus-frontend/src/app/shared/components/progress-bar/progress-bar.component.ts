@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
     </div>
     <div class="progress" style="height: 8px;">
       <div class="progress-bar" [style.width.%]="progressPercent()"
-           [ngClass]="isFinal() ? 'bg-success' : 'bg-primary'"></div>
+           [ngClass]="status() === 'CANCELLED' ? 'bg-danger' : (isFinal() ? 'bg-success' : 'bg-primary')"></div>
     </div>
   `
 })

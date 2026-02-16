@@ -10,6 +10,8 @@ import com.janus.document.domain.service.DocumentCompletenessService;
 import com.janus.document.domain.service.DocumentValidationService;
 import com.janus.document.infrastructure.storage.StorageService;
 import com.janus.operation.application.OperationService;
+import com.janus.operation.domain.service.StatusTransitionService;
+import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.NotFoundException;
 import com.janus.user.domain.repository.UserRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,6 +45,9 @@ public class DocumentService {
     @Inject
     DocumentCompletenessService completenessService;
 
+    @Inject
+    StatusTransitionService statusTransitionService;
+
     public List<Document> findByOperationId(Long operationId) {
         return documentRepository.findByOperationId(operationId);
     }
@@ -58,6 +63,10 @@ public class DocumentService {
                            InputStream fileStream, String originalName,
                            String mimeType, long fileSize, String username) {
         var operation = operationService.findById(operationId);
+
+        if (statusTransitionService.isFinalStatus(operation.status)) {
+            throw new BusinessException("Cannot upload documents to a closed or cancelled operation");
+        }
 
         validationService.validateFile(mimeType, fileSize);
 

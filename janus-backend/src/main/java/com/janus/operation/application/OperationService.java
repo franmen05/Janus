@@ -1,6 +1,7 @@
 package com.janus.operation.application;
 
 import com.janus.client.domain.repository.ClientRepository;
+import com.janus.notification.application.NotificationService;
 import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.api.dto.CreateOperationRequest;
 import com.janus.operation.domain.model.Operation;
@@ -37,6 +38,9 @@ public class OperationService {
 
     @Inject
     StatusTransitionService statusTransitionService;
+
+    @Inject
+    NotificationService notificationService;
 
     public List<Operation> listAll() {
         return operationRepository.listAll();
@@ -116,6 +120,20 @@ public class OperationService {
         }
 
         recordStatusChange(op, previousStatus, request.newStatus(), username, request.comment(), ipAddress);
+
+        notificationService.sendStatusChangeNotification(
+                op.id, op.client.email, op.referenceNumber, request.newStatus().name()
+        );
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        var op = findById(id);
+        if (op.status != OperationStatus.DRAFT) {
+            throw new BusinessException("Cannot delete an operation that is not in DRAFT status");
+        }
+        statusHistoryRepository.deleteByOperationId(id);
+        operationRepository.delete(op);
     }
 
     public List<StatusHistory> getHistory(Long operationId) {
