@@ -1,0 +1,219 @@
+{
+  "APP": {
+    "TITLE": "Janus",
+    "SUBTITLE": "Customs Management System"
+  },
+  "NAV": {
+    "DASHBOARD": "Dashboard",
+    "OPERATIONS": "Operations",
+    "CLIENTS": "Clients",
+    "AUDIT_LOG": "Audit Log",
+    "LOGOUT": "Logout"
+  },
+  "LOGIN": {
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "SIGN_IN": "Sign In"
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "ACTIVE": "Active",
+    "DRAFT": "Draft",
+    "CLOSED": "Closed",
+    "CANCELLED": "Cancelled",
+    "RECENT_OPERATIONS": "Recent Operations",
+    "VIEW_ALL": "View All",
+    "NO_OPERATIONS": "No operations yet"
+  },
+  "OPERATIONS": {
+    "TITLE": "Operations",
+    "NEW": "New Operation",
+    "EDIT_TITLE": "Edit Operation",
+    "NEW_TITLE": "New Operation",
+    "ALL_STATUSES": "All Statuses",
+    "NO_OPERATIONS": "No operations found",
+    "REFERENCE": "Reference",
+    "CLIENT": "Client",
+    "SELECT_CLIENT": "Select client...",
+    "CARGO_TYPE": "Cargo Type",
+    "INSPECTION_TYPE": "Inspection Type",
+    "NOTES": "Notes",
+    "ASSIGNED_AGENT": "Assigned Agent",
+    "NOT_ASSIGNED": "Not assigned",
+    "CREATED": "Created",
+    "LAST_UPDATED": "Last Updated",
+    "AGENT": "Agent",
+    "CARGO": "Cargo",
+    "INSPECTION": "Inspection"
+  },
+  "DOCUMENTS": {
+    "TITLE": "Documents",
+    "UPLOAD": "Upload Document",
+    "UPLOAD_TITLE": "Upload Document",
+    "DOCUMENT_TYPE": "Document Type",
+    "UPLOADING": "Uploading...",
+    "TYPE": "Type",
+    "FILE_NAME": "File Name",
+    "SIZE": "Size",
+    "UPLOADED": "Uploaded",
+    "NO_DOCUMENTS": "No documents uploaded yet",
+    "VERSIONS_TITLE": "Document Versions",
+    "VERSION": "Version",
+    "UPLOADED_BY": "Uploaded By",
+    "DATE": "Date"
+  },
+  "CLIENTS": {
+    "TITLE": "Clients",
+    "NEW": "New Client",
+    "EDIT_TITLE": "Edit Client",
+    "NEW_TITLE": "New Client",
+    "NAME": "Name",
+    "TAX_ID": "Tax ID",
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "ADDRESS": "Address",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive"
+  },
+  "AUDIT": {
+    "TITLE": "Audit Log",
+    "FILTER_PLACEHOLDER": "Filter by username...",
+    "DATE": "Date",
+    "USER": "User",
+    "ACTION": "Action",
+    "ENTITY": "Entity",
+    "ID": "ID",
+    "DETAILS": "Details",
+    "IP": "IP",
+    "NO_LOGS": "No audit logs found"
+  },
+  "TABS": {
+    "INFO": "Info",
+    "DOCUMENTS": "Documents",
+    "HISTORY": "History",
+    "AUDIT": "Audit"
+  },
+  "STATUS": {
+    "DRAFT": "Draft",
+    "DOCUMENTATION_COMPLETE": "Documentation Complete",
+    "DECLARATION_IN_PROGRESS": "Declaration in Progress",
+    "SUBMITTED_TO_CUSTOMS": "Submitted to Customs",
+    "VALUATION_REVIEW": "Valuation Review",
+    "PAYMENT_PREPARATION": "Payment Preparation",
+    "IN_TRANSIT": "In Transit",
+    "CLOSED": "Closed",
+    "CANCELLED": "Cancelled",
+    "PENDING": "Pending",
+    "VALIDATED": "Validated",
+    "OBSERVED": "Observed",
+    "REQUIRES_REPLACEMENT": "Requires Replacement"
+  },
+  "STATUS_SHORT": {
+    "DRAFT": "Draft",
+    "DOCUMENTATION_COMPLETE": "Docs Complete",
+    "DECLARATION_IN_PROGRESS": "Declaration",
+    "SUBMITTED_TO_CUSTOMS": "Submitted",
+    "VALUATION_REVIEW": "Valuation",
+    "PAYMENT_PREPARATION": "Payment",
+    "IN_TRANSIT": "In Transit",
+    "CLOSED": "Closed",
+    "CANCELLED": "Cancelled",
+    "PENDING": "Pending",
+    "VALIDATED": "Validated",
+    "OBSERVED": "Observed",
+    "REQUIRES_REPLACEMENT": "Replace",
+    "CREATE": "Create",
+    "UPDATE": "Update",
+    "DELETE": "Delete",
+    "STATUS_CHANGE": "Status Change",
+    "UPLOAD": "Upload",
+    "DOWNLOAD": "Download"
+  },
+  "PROGRESS": {
+    "DRAFT": "Draft",
+    "DOCS": "Docs",
+    "DECLARATION": "Declaration",
+    "SUBMITTED": "Submitted",
+    "VALUATION": "Valuation",
+    "PAYMENT": "Payment",
+    "TRANSIT": "Transit",
+    "CLOSED": "Closed"
+  },
+  "DOCUMENT_TYPES": {
+    "BL": "Bill of Lading (BL)",
+    "COMMERCIAL_INVOICE": "Commercial Invoice",
+    "PACKING_LIST": "Packing List",
+    "CERTIFICATE": "Certificate",
+    "OTHER": "Other"
+  },
+  "CARGO_TYPES": {
+    "FCL": "Full Container Load",
+    "LCL": "Less than Container Load"
+  },
+  "INSPECTION_TYPES": {
+    "EXPRESS": "Express",
+    "VISUAL": "Visual",
+    "PHYSICAL": "Physical"
+  },
+  "ACTIONS": {
+    "CREATE": "Create",
+    "UPDATE": "Update",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "CANCEL": "Cancel",
+    "CONFIRM": "Confirm",
+    "DOWNLOAD": "Download",
+    "VERSIONS": "Versions",
+    "UPLOAD": "Upload"
+  },
+  "COMMON": {
+    "ARE_YOU_SURE": "Are you sure?",
+    "STATUS": "Status",
+    "ACTIONS": "Actions"
+  },
+  "FILE_UPLOAD": {
+    "DRAG_DROP": "Drag & drop a file here, or",
+    "BROWSE": "Browse Files",
+    "ALLOWED": "Allowed: PDF, JPG, PNG. Max: {{size}}MB",
+    "REMOVE": "Remove",
+    "FILE_TOO_LARGE": "File exceeds maximum size of {{size}}MB"
+  },
+  "UPLOAD": {
+    "VALIDATED": "Document uploaded and VALIDATED successfully.",
+    "OBSERVED": "Document uploaded but has OBSERVATIONS. Please review.",
+    "REQUIRES_REPLACEMENT": "Document uploaded but REQUIRES REPLACEMENT. Please upload a corrected version.",
+    "PENDING": "Document uploaded. Validation pending.",
+    "FAILED": "Upload failed"
+  },
+  "STATUS_CHANGE": {
+    "TITLE": "Change Status",
+    "SELECT_STATUS": "Select new status...",
+    "COMMENT_PLACEHOLDER": "Comment (optional)",
+    "BUTTON": "Change Status",
+    "HISTORY": "Status History",
+    "MISSING_DOCS": "Cannot advance to DOCUMENTATION COMPLETE.\n\nMissing documents: {{missing}}\nCompleteness: {{percentage}}%",
+    "BLOCKED_DOCS": "Cannot advance to DOCUMENTATION COMPLETE.\n\n{{count}} document(s) have status OBSERVED or REQUIRES_REPLACEMENT and must be resolved first.",
+    "FAILED": "Failed to change status"
+  },
+  "COMPLETENESS": {
+    "TITLE": "Document Completeness",
+    "MISSING": "Missing:"
+  },
+  "CONFIRM_DIALOG": {
+    "TITLE": "Confirm",
+    "MESSAGE": "Are you sure?"
+  },
+  "TIMELINE": {
+    "BY": "by"
+  },
+  "LANG": {
+    "ES": "Español",
+    "EN": "English"
+  },
+  "DELETE_CONFIRM": {
+    "DOCUMENT": "Are you sure you want to delete this document?"
+  },
+  "AUTH": {
+    "INVALID_CREDENTIALS": "Invalid credentials"
+  }
+}

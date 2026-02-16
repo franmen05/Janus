@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuditService } from '../../../core/services/audit.service';
 import { AuditLog } from '../../../core/models/audit.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
@@ -8,14 +9,14 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
 @Component({
   selector: 'app-audit-log',
   standalone: true,
-  imports: [CommonModule, FormsModule, StatusBadgeComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, StatusBadgeComponent],
   template: `
-    <h2 class="mb-4">Audit Log</h2>
+    <h2 class="mb-4">{{ 'AUDIT.TITLE' | translate }}</h2>
     <div class="card mb-3">
       <div class="card-body">
         <div class="row g-3">
           <div class="col-md-4">
-            <input type="text" class="form-control" placeholder="Filter by username..." [(ngModel)]="filterUsername" (ngModelChange)="loadLogs()">
+            <input type="text" class="form-control" [placeholder]="'AUDIT.FILTER_PLACEHOLDER' | translate" [(ngModel)]="filterUsername" (ngModelChange)="loadLogs()">
           </div>
         </div>
       </div>
@@ -24,7 +25,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
       <div class="card-body p-0">
         <table class="table table-hover table-sm mb-0">
           <thead class="table-light">
-            <tr><th>Date</th><th>User</th><th>Action</th><th>Entity</th><th>ID</th><th>Details</th><th>IP</th></tr>
+            <tr><th>{{ 'AUDIT.DATE' | translate }}</th><th>{{ 'AUDIT.USER' | translate }}</th><th>{{ 'AUDIT.ACTION' | translate }}</th><th>{{ 'AUDIT.ENTITY' | translate }}</th><th>{{ 'AUDIT.ID' | translate }}</th><th>{{ 'AUDIT.DETAILS' | translate }}</th><th>{{ 'AUDIT.IP' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (log of logs(); track log.id) {
@@ -39,7 +40,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
               </tr>
             }
             @if (logs().length === 0) {
-              <tr><td colspan="7" class="text-center text-muted py-3">No audit logs found</td></tr>
+              <tr><td colspan="7" class="text-center text-muted py-3">{{ 'AUDIT.NO_LOGS' | translate }}</td></tr>
             }
           </tbody>
         </table>

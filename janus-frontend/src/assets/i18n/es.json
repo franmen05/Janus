@@ -1,0 +1,219 @@
+{
+  "APP": {
+    "TITLE": "Janus",
+    "SUBTITLE": "Sistema de Gestión Aduanera"
+  },
+  "NAV": {
+    "DASHBOARD": "Panel",
+    "OPERATIONS": "Operaciones",
+    "CLIENTS": "Clientes",
+    "AUDIT_LOG": "Registro de Auditoría",
+    "LOGOUT": "Cerrar Sesión"
+  },
+  "LOGIN": {
+    "USERNAME": "Usuario",
+    "PASSWORD": "Contraseña",
+    "SIGN_IN": "Iniciar Sesión"
+  },
+  "DASHBOARD": {
+    "TITLE": "Panel",
+    "ACTIVE": "Activas",
+    "DRAFT": "Borrador",
+    "CLOSED": "Cerradas",
+    "CANCELLED": "Canceladas",
+    "RECENT_OPERATIONS": "Operaciones Recientes",
+    "VIEW_ALL": "Ver Todas",
+    "NO_OPERATIONS": "Aún no hay operaciones"
+  },
+  "OPERATIONS": {
+    "TITLE": "Operaciones",
+    "NEW": "Nueva Operación",
+    "EDIT_TITLE": "Editar Operación",
+    "NEW_TITLE": "Nueva Operación",
+    "ALL_STATUSES": "Todos los Estados",
+    "NO_OPERATIONS": "No se encontraron operaciones",
+    "REFERENCE": "Referencia",
+    "CLIENT": "Cliente",
+    "SELECT_CLIENT": "Seleccionar cliente...",
+    "CARGO_TYPE": "Tipo de Carga",
+    "INSPECTION_TYPE": "Tipo de Inspección",
+    "NOTES": "Notas",
+    "ASSIGNED_AGENT": "Agente Asignado",
+    "NOT_ASSIGNED": "Sin asignar",
+    "CREATED": "Creado",
+    "LAST_UPDATED": "Última Actualización",
+    "AGENT": "Agente",
+    "CARGO": "Carga",
+    "INSPECTION": "Inspección"
+  },
+  "DOCUMENTS": {
+    "TITLE": "Documentos",
+    "UPLOAD": "Subir Documento",
+    "UPLOAD_TITLE": "Subir Documento",
+    "DOCUMENT_TYPE": "Tipo de Documento",
+    "UPLOADING": "Subiendo...",
+    "TYPE": "Tipo",
+    "FILE_NAME": "Nombre del Archivo",
+    "SIZE": "Tamaño",
+    "UPLOADED": "Subido",
+    "NO_DOCUMENTS": "Aún no se han subido documentos",
+    "VERSIONS_TITLE": "Versiones del Documento",
+    "VERSION": "Versión",
+    "UPLOADED_BY": "Subido Por",
+    "DATE": "Fecha"
+  },
+  "CLIENTS": {
+    "TITLE": "Clientes",
+    "NEW": "Nuevo Cliente",
+    "EDIT_TITLE": "Editar Cliente",
+    "NEW_TITLE": "Nuevo Cliente",
+    "NAME": "Nombre",
+    "TAX_ID": "RUC / NIT",
+    "EMAIL": "Correo Electrónico",
+    "PHONE": "Teléfono",
+    "ADDRESS": "Dirección",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo"
+  },
+  "AUDIT": {
+    "TITLE": "Registro de Auditoría",
+    "FILTER_PLACEHOLDER": "Filtrar por usuario...",
+    "DATE": "Fecha",
+    "USER": "Usuario",
+    "ACTION": "Acción",
+    "ENTITY": "Entidad",
+    "ID": "ID",
+    "DETAILS": "Detalles",
+    "IP": "IP",
+    "NO_LOGS": "No se encontraron registros de auditoría"
+  },
+  "TABS": {
+    "INFO": "Info",
+    "DOCUMENTS": "Documentos",
+    "HISTORY": "Historial",
+    "AUDIT": "Auditoría"
+  },
+  "STATUS": {
+    "DRAFT": "Borrador",
+    "DOCUMENTATION_COMPLETE": "Documentación Completa",
+    "DECLARATION_IN_PROGRESS": "Declaración en Proceso",
+    "SUBMITTED_TO_CUSTOMS": "Presentado a Aduanas",
+    "VALUATION_REVIEW": "Revisión de Valoración",
+    "PAYMENT_PREPARATION": "Preparación de Pago",
+    "IN_TRANSIT": "En Tránsito",
+    "CLOSED": "Cerrado",
+    "CANCELLED": "Cancelado",
+    "PENDING": "Pendiente",
+    "VALIDATED": "Validado",
+    "OBSERVED": "Observado",
+    "REQUIRES_REPLACEMENT": "Requiere Reemplazo"
+  },
+  "STATUS_SHORT": {
+    "DRAFT": "Borrador",
+    "DOCUMENTATION_COMPLETE": "Docs Completos",
+    "DECLARATION_IN_PROGRESS": "Declaración",
+    "SUBMITTED_TO_CUSTOMS": "Presentado",
+    "VALUATION_REVIEW": "Valoración",
+    "PAYMENT_PREPARATION": "Pago",
+    "IN_TRANSIT": "En Tránsito",
+    "CLOSED": "Cerrado",
+    "CANCELLED": "Cancelado",
+    "PENDING": "Pendiente",
+    "VALIDATED": "Validado",
+    "OBSERVED": "Observado",
+    "REQUIRES_REPLACEMENT": "Reemplazar",
+    "CREATE": "Crear",
+    "UPDATE": "Actualizar",
+    "DELETE": "Eliminar",
+    "STATUS_CHANGE": "Cambio Estado",
+    "UPLOAD": "Subir",
+    "DOWNLOAD": "Descargar"
+  },
+  "PROGRESS": {
+    "DRAFT": "Borrador",
+    "DOCS": "Docs",
+    "DECLARATION": "Declaración",
+    "SUBMITTED": "Presentado",
+    "VALUATION": "Valoración",
+    "PAYMENT": "Pago",
+    "TRANSIT": "Tránsito",
+    "CLOSED": "Cerrado"
+  },
+  "DOCUMENT_TYPES": {
+    "BL": "Conocimiento de Embarque (BL)",
+    "COMMERCIAL_INVOICE": "Factura Comercial",
+    "PACKING_LIST": "Lista de Empaque",
+    "CERTIFICATE": "Certificado",
+    "OTHER": "Otro"
+  },
+  "CARGO_TYPES": {
+    "FCL": "Contenedor Completo (FCL)",
+    "LCL": "Carga Consolidada (LCL)"
+  },
+  "INSPECTION_TYPES": {
+    "EXPRESS": "Express",
+    "VISUAL": "Visual",
+    "PHYSICAL": "Física"
+  },
+  "ACTIONS": {
+    "CREATE": "Crear",
+    "UPDATE": "Actualizar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "CANCEL": "Cancelar",
+    "CONFIRM": "Confirmar",
+    "DOWNLOAD": "Descargar",
+    "VERSIONS": "Versiones",
+    "UPLOAD": "Subir"
+  },
+  "COMMON": {
+    "ARE_YOU_SURE": "¿Está seguro?",
+    "STATUS": "Estado",
+    "ACTIONS": "Acciones"
+  },
+  "FILE_UPLOAD": {
+    "DRAG_DROP": "Arrastre y suelte un archivo aquí, o",
+    "BROWSE": "Buscar Archivos",
+    "ALLOWED": "Permitidos: PDF, JPG, PNG. Máx: {{size}}MB",
+    "REMOVE": "Eliminar",
+    "FILE_TOO_LARGE": "El archivo excede el tamaño máximo de {{size}}MB"
+  },
+  "UPLOAD": {
+    "VALIDATED": "Documento subido y VALIDADO exitosamente.",
+    "OBSERVED": "Documento subido pero tiene OBSERVACIONES. Por favor revise.",
+    "REQUIRES_REPLACEMENT": "Documento subido pero REQUIERE REEMPLAZO. Por favor suba una versión corregida.",
+    "PENDING": "Documento subido. Validación pendiente.",
+    "FAILED": "Error al subir"
+  },
+  "STATUS_CHANGE": {
+    "TITLE": "Cambiar Estado",
+    "SELECT_STATUS": "Seleccionar nuevo estado...",
+    "COMMENT_PLACEHOLDER": "Comentario (opcional)",
+    "BUTTON": "Cambiar Estado",
+    "HISTORY": "Historial de Estados",
+    "MISSING_DOCS": "No se puede avanzar a DOCUMENTACIÓN COMPLETA.\n\nDocumentos faltantes: {{missing}}\nCompletitud: {{percentage}}%",
+    "BLOCKED_DOCS": "No se puede avanzar a DOCUMENTACIÓN COMPLETA.\n\n{{count}} documento(s) tienen estado OBSERVADO o REQUIERE REEMPLAZO y deben resolverse primero.",
+    "FAILED": "Error al cambiar estado"
+  },
+  "COMPLETENESS": {
+    "TITLE": "Completitud de Documentos",
+    "MISSING": "Faltantes:"
+  },
+  "CONFIRM_DIALOG": {
+    "TITLE": "Confirmar",
+    "MESSAGE": "¿Está seguro?"
+  },
+  "TIMELINE": {
+    "BY": "por"
+  },
+  "LANG": {
+    "ES": "Español",
+    "EN": "English"
+  },
+  "DELETE_CONFIRM": {
+    "DOCUMENT": "¿Está seguro de que desea eliminar este documento?"
+  },
+  "AUTH": {
+    "INVALID_CREDENTIALS": "Credenciales inválidas"
+  }
+}

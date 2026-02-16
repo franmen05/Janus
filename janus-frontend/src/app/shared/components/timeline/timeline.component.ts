@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface TimelineEvent {
   title: string;
@@ -11,7 +12,7 @@ export interface TimelineEvent {
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, TranslateModule],
   template: `
     <div class="timeline">
       @for (event of events(); track $index) {
@@ -26,7 +27,7 @@ export interface TimelineEvent {
             </div>
             <p class="mb-0 text-muted">{{ event.description }}</p>
             @if (event.user) {
-              <small class="text-muted">by {{ event.user }}</small>
+              <small class="text-muted">{{ 'TIMELINE.BY' | translate }} {{ event.user }}</small>
             }
           </div>
         </div>

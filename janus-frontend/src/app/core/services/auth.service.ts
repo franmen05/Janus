@@ -1,6 +1,7 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
 import { User } from '../models/user.model';
 
@@ -8,6 +9,7 @@ import { User } from '../models/user.model';
 export class AuthService {
   private currentUser = signal<User | null>(null);
   private credentials = signal<string | null>(null);
+  private translate = inject(TranslateService);
 
   isAuthenticated = computed(() => this.currentUser() !== null);
   user = computed(() => this.currentUser());
@@ -28,7 +30,7 @@ export class AuthService {
       },
       error: () => {
         this.credentials.set(null);
-        alert('Invalid credentials');
+        alert(this.translate.instant('AUTH.INVALID_CREDENTIALS'));
       }
     });
   }

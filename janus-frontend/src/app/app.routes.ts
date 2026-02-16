@@ -41,7 +41,13 @@ export const routes: Routes = [
       {
         path: 'operations/:id/documents/upload',
         loadComponent: () => import('./features/documents/document-upload/document-upload.component').then(m => m.DocumentUploadComponent),
-        data: { roles: ['ADMIN', 'AGENT', 'CLIENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'operations/:operationId/documents/:documentId/versions',
+        loadComponent: () => import('./features/documents/document-versions/document-versions.component').then(m => m.DocumentVersionsComponent),
+        data: { roles: ['ADMIN', 'AGENT', 'ACCOUNTING', 'CLIENT'] },
         canActivate: [roleGuard]
       },
       {

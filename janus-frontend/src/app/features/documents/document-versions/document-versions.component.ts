@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { DocumentService } from '../../../core/services/document.service';
 import { DocumentVersion } from '../../../core/models/document.model';
 import { FileSizePipe } from '../../../shared/pipes/file-size.pipe';
@@ -8,14 +9,14 @@ import { FileSizePipe } from '../../../shared/pipes/file-size.pipe';
 @Component({
   selector: 'app-document-versions',
   standalone: true,
-  imports: [CommonModule, FileSizePipe],
+  imports: [CommonModule, TranslateModule, FileSizePipe],
   template: `
-    <h2 class="mb-4">Document Versions</h2>
+    <h2 class="mb-4">{{ 'DOCUMENTS.VERSIONS_TITLE' | translate }}</h2>
     <div class="card">
       <div class="card-body p-0">
         <table class="table table-hover mb-0">
           <thead class="table-light">
-            <tr><th>Version</th><th>File Name</th><th>Size</th><th>Uploaded By</th><th>Date</th><th>Action</th></tr>
+            <tr><th>{{ 'DOCUMENTS.VERSION' | translate }}</th><th>{{ 'DOCUMENTS.FILE_NAME' | translate }}</th><th>{{ 'DOCUMENTS.SIZE' | translate }}</th><th>{{ 'DOCUMENTS.UPLOADED_BY' | translate }}</th><th>{{ 'DOCUMENTS.DATE' | translate }}</th><th>{{ 'AUDIT.ACTION' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (v of versions(); track v.id) {
@@ -25,7 +26,7 @@ import { FileSizePipe } from '../../../shared/pipes/file-size.pipe';
                 <td>{{ v.fileSize | fileSize }}</td>
                 <td>{{ v.uploadedByUsername }}</td>
                 <td>{{ v.uploadedAt | date:'medium' }}</td>
-                <td><button class="btn btn-sm btn-outline-primary" (click)="downloadVersion(v)">Download</button></td>
+                <td><button class="btn btn-sm btn-outline-primary" (click)="downloadVersion(v)">{{ 'ACTIONS.DOWNLOAD' | translate }}</button></td>
               </tr>
             }
           </tbody>

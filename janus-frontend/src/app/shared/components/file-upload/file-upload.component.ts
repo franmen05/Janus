@@ -1,10 +1,11 @@
-import { Component, output, input } from '@angular/core';
+import { Component, output, input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-file-upload',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <div class="upload-zone border rounded p-4 text-center"
          [class.border-primary]="isDragging"
@@ -13,18 +14,18 @@ import { CommonModule } from '@angular/common';
          (drop)="onDrop($event)">
       @if (!selectedFile) {
         <div>
-          <p class="mb-2">Drag & drop a file here, or</p>
+          <p class="mb-2">{{ 'FILE_UPLOAD.DRAG_DROP' | translate }}</p>
           <label class="btn btn-outline-primary">
-            Browse Files
+            {{ 'FILE_UPLOAD.BROWSE' | translate }}
             <input type="file" class="d-none" accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelect($event)">
           </label>
-          <p class="text-muted mt-2"><small>Allowed: PDF, JPG, PNG. Max: {{ maxSizeMb }}MB</small></p>
+          <p class="text-muted mt-2"><small>{{ 'FILE_UPLOAD.ALLOWED' | translate:{ size: maxSizeMb } }}</small></p>
         </div>
       } @else {
         <div>
           <p class="mb-1 fw-bold">{{ selectedFile.name }}</p>
           <p class="text-muted mb-2"><small>{{ formatSize(selectedFile.size) }}</small></p>
-          <button class="btn btn-sm btn-outline-danger" (click)="clear()">Remove</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="clear()">{{ 'FILE_UPLOAD.REMOVE' | translate }}</button>
         </div>
       }
     </div>
@@ -32,6 +33,7 @@ import { CommonModule } from '@angular/common';
   styles: [`.upload-zone { cursor: pointer; border-style: dashed !important; transition: border-color 0.2s; }`]
 })
 export class FileUploadComponent {
+  private translate = inject(TranslateService);
   maxSize = input<number>(10485760);
   fileSelected = output<File>();
 
@@ -60,7 +62,7 @@ export class FileUploadComponent {
 
   selectFile(file: File): void {
     if (file.size > this.maxSize()) {
-      alert('File exceeds maximum size of ' + this.maxSizeMb + 'MB');
+      alert(this.translate.instant('FILE_UPLOAD.FILE_TOO_LARGE', { size: this.maxSizeMb }));
       return;
     }
     this.selectedFile = file;

@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
 import { Client } from '../../../core/models/client.model';
@@ -10,17 +11,17 @@ import { CargoType, InspectionType } from '../../../core/models/operation.model'
 @Component({
   selector: 'app-operation-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   template: `
-    <h2 class="mb-4">{{ isEdit() ? 'Edit' : 'New' }} Operation</h2>
+    <h2 class="mb-4">{{ (isEdit() ? 'OPERATIONS.EDIT_TITLE' : 'OPERATIONS.NEW_TITLE') | translate }}</h2>
     <div class="card">
       <div class="card-body">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">Client</label>
+              <label class="form-label">{{ 'OPERATIONS.CLIENT' | translate }}</label>
               <select class="form-select" formControlName="clientId">
-                <option value="">Select client...</option>
+                <option value="">{{ 'OPERATIONS.SELECT_CLIENT' | translate }}</option>
                 @for (client of clients(); track client.id) {
                   <option [value]="client.id">{{ client.name }} ({{ client.taxId }})</option>
                 }
@@ -29,25 +30,25 @@ import { CargoType, InspectionType } from '../../../core/models/operation.model'
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">Cargo Type</label>
+              <label class="form-label">{{ 'OPERATIONS.CARGO_TYPE' | translate }}</label>
               <select class="form-select" formControlName="cargoType">
                 @for (t of cargoTypes; track t) { <option [value]="t">{{ t }}</option> }
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label">Inspection Type</label>
+              <label class="form-label">{{ 'OPERATIONS.INSPECTION_TYPE' | translate }}</label>
               <select class="form-select" formControlName="inspectionType">
                 @for (t of inspectionTypes; track t) { <option [value]="t">{{ t }}</option> }
               </select>
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label">Notes</label>
+            <label class="form-label">{{ 'OPERATIONS.NOTES' | translate }}</label>
             <textarea class="form-control" formControlName="notes" rows="3"></textarea>
           </div>
           <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ isEdit() ? 'Update' : 'Create' }}</button>
-            <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ (isEdit() ? 'ACTIONS.UPDATE' : 'ACTIONS.CREATE') | translate }}</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">{{ 'ACTIONS.CANCEL' | translate }}</button>
           </div>
         </form>
       </div>

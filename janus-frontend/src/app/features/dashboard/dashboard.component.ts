@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../core/services/operation.service';
 import { Operation, OperationStatus } from '../../core/models/operation.model';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
@@ -8,14 +9,14 @@ import { StatusBadgeComponent } from '../../shared/components/status-badge/statu
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, StatusBadgeComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent],
   template: `
-    <h2 class="mb-4">Dashboard</h2>
+    <h2 class="mb-4">{{ 'DASHBOARD.TITLE' | translate }}</h2>
     <div class="row mb-4">
       <div class="col-md-3">
         <div class="card card-dashboard border-primary">
           <div class="card-body">
-            <h5 class="card-title text-primary">Active</h5>
+            <h5 class="card-title text-primary">{{ 'DASHBOARD.ACTIVE' | translate }}</h5>
             <h2 class="mb-0">{{ activeCount() }}</h2>
           </div>
         </div>
@@ -23,7 +24,7 @@ import { StatusBadgeComponent } from '../../shared/components/status-badge/statu
       <div class="col-md-3">
         <div class="card card-dashboard border-warning">
           <div class="card-body">
-            <h5 class="card-title text-warning">Draft</h5>
+            <h5 class="card-title text-warning">{{ 'DASHBOARD.DRAFT' | translate }}</h5>
             <h2 class="mb-0">{{ draftCount() }}</h2>
           </div>
         </div>
@@ -31,7 +32,7 @@ import { StatusBadgeComponent } from '../../shared/components/status-badge/statu
       <div class="col-md-3">
         <div class="card card-dashboard border-success">
           <div class="card-body">
-            <h5 class="card-title text-success">Closed</h5>
+            <h5 class="card-title text-success">{{ 'DASHBOARD.CLOSED' | translate }}</h5>
             <h2 class="mb-0">{{ closedCount() }}</h2>
           </div>
         </div>
@@ -39,7 +40,7 @@ import { StatusBadgeComponent } from '../../shared/components/status-badge/statu
       <div class="col-md-3">
         <div class="card card-dashboard border-danger">
           <div class="card-body">
-            <h5 class="card-title text-danger">Cancelled</h5>
+            <h5 class="card-title text-danger">{{ 'DASHBOARD.CANCELLED' | translate }}</h5>
             <h2 class="mb-0">{{ cancelledCount() }}</h2>
           </div>
         </div>
@@ -47,12 +48,12 @@ import { StatusBadgeComponent } from '../../shared/components/status-badge/statu
     </div>
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">Recent Operations</h5>
-        <a routerLink="/operations" class="btn btn-sm btn-outline-primary">View All</a>
+        <h5 class="mb-0">{{ 'DASHBOARD.RECENT_OPERATIONS' | translate }}</h5>
+        <a routerLink="/operations" class="btn btn-sm btn-outline-primary">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
       </div>
       <div class="card-body p-0">
         <table class="table table-hover mb-0">
-          <thead><tr><th>Reference</th><th>Client</th><th>Status</th><th>Created</th></tr></thead>
+          <thead><tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'OPERATIONS.CREATED' | translate }}</th></tr></thead>
           <tbody>
             @for (op of recentOperations(); track op.id) {
               <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
@@ -63,7 +64,7 @@ import { StatusBadgeComponent } from '../../shared/components/status-badge/statu
               </tr>
             }
             @if (recentOperations().length === 0) {
-              <tr><td colspan="4" class="text-center text-muted py-3">No operations yet</td></tr>
+              <tr><td colspan="4" class="text-center text-muted py-3">{{ 'DASHBOARD.NO_OPERATIONS' | translate }}</td></tr>
             }
           </tbody>
         </table>

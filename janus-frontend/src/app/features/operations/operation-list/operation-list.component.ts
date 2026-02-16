@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { Operation, OperationStatus } from '../../../core/models/operation.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
@@ -10,12 +11,12 @@ import { AuthService } from '../../../core/services/auth.service';
 @Component({
   selector: 'app-operation-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, StatusBadgeComponent],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, StatusBadgeComponent],
   template: `
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2>Operations</h2>
+      <h2>{{ 'OPERATIONS.TITLE' | translate }}</h2>
       @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-        <a routerLink="/operations/new" class="btn btn-primary">New Operation</a>
+        <a routerLink="/operations/new" class="btn btn-primary">{{ 'OPERATIONS.NEW' | translate }}</a>
       }
     </div>
     <div class="card mb-3">
@@ -23,7 +24,7 @@ import { AuthService } from '../../../core/services/auth.service';
         <div class="row g-3">
           <div class="col-md-4">
             <select class="form-select" [(ngModel)]="filterStatus" (ngModelChange)="loadOperations()">
-              <option value="">All Statuses</option>
+              <option value="">{{ 'OPERATIONS.ALL_STATUSES' | translate }}</option>
               @for (s of statuses; track s) { <option [value]="s">{{ s }}</option> }
             </select>
           </div>
@@ -34,7 +35,7 @@ import { AuthService } from '../../../core/services/auth.service';
       <div class="card-body p-0">
         <table class="table table-hover mb-0">
           <thead class="table-light">
-            <tr><th>Reference</th><th>Client</th><th>Cargo</th><th>Inspection</th><th>Status</th><th>Agent</th><th>Created</th></tr>
+            <tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th>{{ 'OPERATIONS.CARGO' | translate }}</th><th>{{ 'OPERATIONS.INSPECTION' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'OPERATIONS.AGENT' | translate }}</th><th>{{ 'OPERATIONS.CREATED' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (op of operations(); track op.id) {
@@ -49,7 +50,7 @@ import { AuthService } from '../../../core/services/auth.service';
               </tr>
             }
             @if (operations().length === 0) {
-              <tr><td colspan="7" class="text-center text-muted py-4">No operations found</td></tr>
+              <tr><td colspan="7" class="text-center text-muted py-4">{{ 'OPERATIONS.NO_OPERATIONS' | translate }}</td></tr>
             }
           </tbody>
         </table>

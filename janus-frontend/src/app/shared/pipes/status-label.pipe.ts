@@ -1,30 +1,34 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
-@Pipe({ name: 'statusLabel', standalone: true })
+@Pipe({ name: 'statusLabel', standalone: true, pure: false })
 export class StatusLabelPipe implements PipeTransform {
-  private labels: Record<string, string> = {
-    'DRAFT': 'Draft',
-    'DOCUMENTATION_COMPLETE': 'Documentation Complete',
-    'DECLARATION_IN_PROGRESS': 'Declaration in Progress',
-    'SUBMITTED_TO_CUSTOMS': 'Submitted to Customs',
-    'VALUATION_REVIEW': 'Valuation Review',
-    'PAYMENT_PREPARATION': 'Payment Preparation',
-    'IN_TRANSIT': 'In Transit',
-    'CLOSED': 'Closed',
-    'CANCELLED': 'Cancelled',
-    'BL': 'Bill of Lading',
-    'COMMERCIAL_INVOICE': 'Commercial Invoice',
-    'PACKING_LIST': 'Packing List',
-    'CERTIFICATE': 'Certificate',
-    'OTHER': 'Other',
-    'FCL': 'Full Container Load',
-    'LCL': 'Less than Container Load',
-    'EXPRESS': 'Express',
-    'VISUAL': 'Visual',
-    'PHYSICAL': 'Physical'
+  private translate = inject(TranslateService);
+
+  private keyMap: Record<string, string> = {
+    'DRAFT': 'STATUS.DRAFT',
+    'DOCUMENTATION_COMPLETE': 'STATUS.DOCUMENTATION_COMPLETE',
+    'DECLARATION_IN_PROGRESS': 'STATUS.DECLARATION_IN_PROGRESS',
+    'SUBMITTED_TO_CUSTOMS': 'STATUS.SUBMITTED_TO_CUSTOMS',
+    'VALUATION_REVIEW': 'STATUS.VALUATION_REVIEW',
+    'PAYMENT_PREPARATION': 'STATUS.PAYMENT_PREPARATION',
+    'IN_TRANSIT': 'STATUS.IN_TRANSIT',
+    'CLOSED': 'STATUS.CLOSED',
+    'CANCELLED': 'STATUS.CANCELLED',
+    'BL': 'DOCUMENT_TYPES.BL',
+    'COMMERCIAL_INVOICE': 'DOCUMENT_TYPES.COMMERCIAL_INVOICE',
+    'PACKING_LIST': 'DOCUMENT_TYPES.PACKING_LIST',
+    'CERTIFICATE': 'DOCUMENT_TYPES.CERTIFICATE',
+    'OTHER': 'DOCUMENT_TYPES.OTHER',
+    'FCL': 'CARGO_TYPES.FCL',
+    'LCL': 'CARGO_TYPES.LCL',
+    'EXPRESS': 'INSPECTION_TYPES.EXPRESS',
+    'VISUAL': 'INSPECTION_TYPES.VISUAL',
+    'PHYSICAL': 'INSPECTION_TYPES.PHYSICAL'
   };
 
   transform(value: string): string {
-    return this.labels[value] ?? value;
+    const key = this.keyMap[value];
+    return key ? this.translate.instant(key) : value;
   }
 }
