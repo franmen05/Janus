@@ -22,7 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
           <small class="text-muted">{{ 'COMPLETENESS.MISSING' | translate }}</small>
           <ul class="list-unstyled mb-0 ms-2">
             @for (doc of missing(); track doc) {
-              <li><small class="text-danger">{{ doc.replace('_', ' ') }}</small></li>
+              <li><small class="text-danger">{{ 'DOCUMENT_TYPES.' + doc | translate }}</small></li>
             }
           </ul>
         </div>

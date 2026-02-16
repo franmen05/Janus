@@ -10,7 +10,7 @@ import java.util.List;
 public class StatusHistoryRepository implements PanacheRepository<StatusHistory> {
 
     public List<StatusHistory> findByOperationId(Long operationId) {
-        return list("operation.id ORDER BY changedAt DESC", operationId);
+        return list("operation.id = ?1 ORDER BY changedAt DESC", operationId);
     }
 
     @Transactional

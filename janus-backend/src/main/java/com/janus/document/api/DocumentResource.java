@@ -58,7 +58,7 @@ public class DocumentResource {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @RolesAllowed({"ADMIN", "AGENT", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response upload(@PathParam("operationId") Long operationId,
                            @RestForm("file") FileUpload file,
                            @RestForm("documentType") DocumentType documentType,
@@ -136,7 +136,7 @@ public class DocumentResource {
 
     @GET
     @Path("/completeness")
-    @RolesAllowed({"ADMIN", "AGENT", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
     public CompletenessResponse getCompleteness(@PathParam("operationId") Long operationId) {
         return CompletenessResponse.from(documentService.getCompleteness(operationId));
     }

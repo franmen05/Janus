@@ -10,11 +10,11 @@ import java.util.Optional;
 public class DocumentVersionRepository implements PanacheRepository<DocumentVersion> {
 
     public List<DocumentVersion> findByDocumentId(Long documentId) {
-        return list("document.id ORDER BY versionNumber DESC", documentId);
+        return list("document.id = ?1 ORDER BY versionNumber DESC", documentId);
     }
 
     public Optional<DocumentVersion> findLatestByDocumentId(Long documentId) {
-        return find("document.id ORDER BY versionNumber DESC", documentId).firstResultOptional();
+        return find("document.id = ?1 ORDER BY versionNumber DESC", documentId).firstResultOptional();
     }
 
     public int getNextVersionNumber(Long documentId) {

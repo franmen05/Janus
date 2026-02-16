@@ -97,7 +97,7 @@ public class OperationResource {
 
     @GET
     @Path("/{id}/history")
-    @RolesAllowed({"ADMIN", "AGENT", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
     public List<StatusHistoryResponse> getHistory(@PathParam("id") Long id) {
         return operationService.getHistory(id).stream()
                 .map(StatusHistoryResponse::from)
