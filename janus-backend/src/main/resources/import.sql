@@ -1,0 +1,2 @@
+-- Data is seeded programmatically via DataSeeder.java
+-- This file is kept for reference and manual overrides if needed
