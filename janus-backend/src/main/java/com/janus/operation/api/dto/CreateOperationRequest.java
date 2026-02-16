@@ -9,5 +9,6 @@ public record CreateOperationRequest(
         @NotNull CargoType cargoType,
         @NotNull InspectionType inspectionType,
         Long assignedAgentId,
-        String notes
+        String notes,
+        java.time.LocalDateTime deadline
 ) {}

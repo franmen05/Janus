@@ -6,6 +6,8 @@ import com.janus.document.api.dto.DocumentVersionResponse;
 import com.janus.document.application.DocumentService;
 import com.janus.document.domain.model.DocumentType;
 import com.janus.document.infrastructure.storage.StorageService;
+import com.janus.operation.application.OperationService;
+import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -20,7 +22,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 import org.jboss.resteasy.reactive.RestForm;
@@ -36,9 +37,16 @@ public class DocumentResource {
     @Inject
     StorageService storageService;
 
+    @Inject
+    OperationService operationService;
+
+    @Inject
+    SecurityHelper securityHelper;
+
     @GET
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
-    public List<DocumentResponse> list(@PathParam("operationId") Long operationId) {
+    public List<DocumentResponse> list(@PathParam("operationId") Long operationId, @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         return documentService.findByOperationId(operationId).stream()
                 .map(doc -> {
                     var latestVersion = documentService.getLatestVersionOrNull(doc.id);
@@ -53,7 +61,10 @@ public class DocumentResource {
     @GET
     @Path("/{id}")
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
-    public DocumentResponse getById(@PathParam("id") Long id) {
+    public DocumentResponse getById(@PathParam("operationId") Long operationId,
+                                     @PathParam("id") Long id,
+                                     @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         return DocumentResponse.from(documentService.findById(id));
     }
 
@@ -87,7 +98,10 @@ public class DocumentResource {
     @Path("/{id}/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
-    public Response downloadLatest(@PathParam("id") Long id) {
+    public Response downloadLatest(@PathParam("operationId") Long operationId,
+                                    @PathParam("id") Long id,
+                                    @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         var version = documentService.getLatestVersion(id);
         var path = storageService.resolve(version.filePath);
         try {
@@ -103,7 +117,10 @@ public class DocumentResource {
     @GET
     @Path("/{id}/versions")
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
-    public List<DocumentVersionResponse> getVersions(@PathParam("id") Long id) {
+    public List<DocumentVersionResponse> getVersions(@PathParam("operationId") Long operationId,
+                                                      @PathParam("id") Long id,
+                                                      @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         return documentService.getVersions(id).stream()
                 .map(DocumentVersionResponse::from)
                 .toList();
@@ -113,8 +130,11 @@ public class DocumentResource {
     @Path("/{id}/versions/{versionNumber}/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
-    public Response downloadVersion(@PathParam("id") Long id,
-                                     @PathParam("versionNumber") int versionNumber) {
+    public Response downloadVersion(@PathParam("operationId") Long operationId,
+                                     @PathParam("id") Long id,
+                                     @PathParam("versionNumber") int versionNumber,
+                                     @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         var version = documentService.getVersion(id, versionNumber);
         var path = storageService.resolve(version.filePath);
         try {
@@ -130,15 +150,17 @@ public class DocumentResource {
     @DELETE
     @Path("/{id}")
     @RolesAllowed({"ADMIN", "AGENT"})
-    public Response softDelete(@PathParam("id") Long id) {
-        documentService.softDelete(id);
+    public Response softDelete(@PathParam("id") Long id, @Context SecurityContext sec) {
+        documentService.softDelete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
     }
 
     @GET
     @Path("/completeness")
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
-    public CompletenessResponse getCompleteness(@PathParam("operationId") Long operationId) {
+    public CompletenessResponse getCompleteness(@PathParam("operationId") Long operationId,
+                                                 @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         return CompletenessResponse.from(documentService.getCompleteness(operationId));
     }
 }

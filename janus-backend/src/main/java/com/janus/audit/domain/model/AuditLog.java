@@ -32,6 +32,15 @@ public class AuditLog extends PanacheEntity {
     @Column(columnDefinition = "TEXT")
     public String details;
 
+    @Column(name = "previous_data", columnDefinition = "TEXT")
+    public String previousData;
+
+    @Column(name = "new_data", columnDefinition = "TEXT")
+    public String newData;
+
+    @Column(name = "operation_id")
+    public Long operationId;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     public LocalDateTime createdAt;
 

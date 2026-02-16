@@ -11,6 +11,9 @@ public record AuditLogResponse(
         AuditAction action,
         String entityName,
         Long entityId,
+        Long operationId,
+        String previousData,
+        String newData,
         String details,
         LocalDateTime createdAt
 ) {
@@ -22,6 +25,9 @@ public record AuditLogResponse(
                 log.action,
                 log.entityName,
                 log.entityId,
+                log.operationId,
+                log.previousData,
+                log.newData,
                 log.details,
                 log.createdAt
         );

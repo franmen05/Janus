@@ -42,4 +42,6 @@ public class Operation extends BaseEntity {
 
     @Column(name = "closed_at")
     public LocalDateTime closedAt;
+
+    public LocalDateTime deadline;
 }

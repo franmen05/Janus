@@ -1,6 +1,7 @@
 package com.janus.shared.infrastructure.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -15,6 +16,12 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
 
     @Override
     public Response toResponse(Exception exception) {
+        if (exception instanceof ForbiddenException) {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(Map.of("error", exception.getMessage()))
+                    .build();
+        }
+
         if (exception instanceof NotFoundException) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(Map.of("error", exception.getMessage()))

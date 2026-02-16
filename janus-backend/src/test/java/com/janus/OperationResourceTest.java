@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -18,6 +22,33 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 class OperationResourceTest {
 
     private static Long createdOperationId;
+
+    private static File createTempPdf() {
+        try {
+            var tempFile = File.createTempFile("test-doc", ".pdf");
+            tempFile.deleteOnExit();
+            Files.write(tempFile.toPath(), "%PDF-1.4 test content".getBytes());
+            return tempFile;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void uploadDocument(Long operationId, String documentType) {
+        given()
+                .auth().basic("admin", "admin123")
+                .multiPart("file", createTempPdf(), "application/pdf")
+                .multiPart("documentType", documentType)
+                .when().post("/api/operations/{opId}/documents", operationId)
+                .then()
+                .statusCode(201);
+    }
+
+    private static void uploadAllMandatoryDocs(Long operationId) {
+        uploadDocument(operationId, "BL");
+        uploadDocument(operationId, "COMMERCIAL_INVOICE");
+        uploadDocument(operationId, "PACKING_LIST");
+    }
 
     // ---- Auth tests ----
 
@@ -77,7 +108,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "FCL", "inspectionType": "EXPRESS", "notes": "Test operation"}
+                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS", "notes": "Test operation"}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -85,7 +116,7 @@ class OperationResourceTest {
                 .body("id", notNullValue())
                 .body("referenceNumber", notNullValue())
                 .body("status", is("DRAFT"))
-                .body("cargoType", is("FCL"))
+                .body("cargoType", is("LCL"))
                 .body("inspectionType", is("EXPRESS"))
                 .body("notes", is("Test operation"))
                 .extract().jsonPath().getLong("id");
@@ -186,6 +217,9 @@ class OperationResourceTest {
     @Test
     @Order(20)
     void testValidStatusTransition() {
+        // Upload mandatory docs before transitioning to DOCUMENTATION_COMPLETE
+        uploadAllMandatoryDocs(createdOperationId);
+
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -222,21 +256,36 @@ class OperationResourceTest {
     @Test
     @Order(22)
     void testClosedSetsClosedAt() {
+        // Create LCL/EXPRESS operation (simpler compliance path)
         var opId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "FCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
-        var transitions = new String[]{
-                "DOCUMENTATION_COMPLETE", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+        // Upload mandatory docs
+        uploadAllMandatoryDocs(opId);
+
+        // DRAFT → DOCUMENTATION_COMPLETE
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"newStatus": "DOCUMENTATION_COMPLETE"}
+                        """)
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then().statusCode(200);
+
+        // Remaining transitions (DECLARATION_IN_PROGRESS requires validated invoice - already validated by upload)
+        var remaining = new String[]{
+                "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
         };
-        for (var status : transitions) {
+        for (var status : remaining) {
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)

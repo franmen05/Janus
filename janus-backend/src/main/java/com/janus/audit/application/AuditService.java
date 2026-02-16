@@ -1,9 +1,12 @@
 package com.janus.audit.application;
 
 import com.janus.audit.domain.model.AuditAction;
+import com.janus.audit.domain.model.AuditEvent;
 import com.janus.audit.domain.model.AuditLog;
 import com.janus.audit.domain.repository.AuditLogRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.event.TransactionPhase;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -13,6 +16,20 @@ public class AuditService {
 
     @Inject
     AuditLogRepository auditLogRepository;
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void onAuditEvent(@Observes(during = TransactionPhase.AFTER_SUCCESS) AuditEvent event) {
+        var log = new AuditLog();
+        log.username = event.username();
+        log.action = event.action();
+        log.entityName = event.entityName();
+        log.entityId = event.entityId();
+        log.operationId = event.operationId();
+        log.previousData = event.previousData();
+        log.newData = event.newData();
+        log.details = event.details();
+        auditLogRepository.persist(log);
+    }
 
     @Transactional
     public void log(String username, String ipAddress, AuditAction action,
@@ -37,5 +54,9 @@ public class AuditService {
 
     public List<AuditLog> findByUsername(String username) {
         return auditLogRepository.findByUsername(username);
+    }
+
+    public List<AuditLog> findByOperationId(Long operationId) {
+        return auditLogRepository.findByOperationId(operationId);
     }
 }

@@ -17,6 +17,7 @@ public record OperationResponse(
         Long assignedAgentId,
         String assignedAgentName,
         String notes,
+        LocalDateTime deadline,
         LocalDateTime closedAt,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
@@ -33,6 +34,7 @@ public record OperationResponse(
                 op.assignedAgent != null ? op.assignedAgent.id : null,
                 op.assignedAgent != null ? op.assignedAgent.fullName : null,
                 op.notes,
+                op.deadline,
                 op.closedAt,
                 op.createdAt,
                 op.updatedAt

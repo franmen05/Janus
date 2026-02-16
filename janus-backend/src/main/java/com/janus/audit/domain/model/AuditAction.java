@@ -8,5 +8,10 @@ public enum AuditAction {
     UPLOAD,
     DOWNLOAD,
     LOGIN,
-    LOGOUT
+    LOGOUT,
+    COMMENT_ADDED,
+    APPROVAL,
+    REJECTION,
+    DOCUMENT_REPLACED,
+    ALERT_GENERATED
 }

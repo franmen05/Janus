@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -163,6 +167,27 @@ class DocumentResourceTest {
                 .statusCode(404);
     }
 
+    private static File createTempPdf() {
+        try {
+            var tempFile = File.createTempFile("test-doc", ".pdf");
+            tempFile.deleteOnExit();
+            Files.write(tempFile.toPath(), "%PDF-1.4 test content".getBytes());
+            return tempFile;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void uploadDoc(Long opId, String docType) {
+        given()
+                .auth().basic("admin", "admin123")
+                .multiPart("file", createTempPdf(), "application/pdf")
+                .multiPart("documentType", docType)
+                .when().post("/api/operations/{opId}/documents", opId)
+                .then()
+                .statusCode(201);
+    }
+
     @Test
     @Order(31)
     void testSetupCreateAndCloseOperation() {
@@ -170,11 +195,16 @@ class DocumentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "FCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
+
+        // Upload mandatory docs for compliance
+        uploadDoc(closedOperationId, "BL");
+        uploadDoc(closedOperationId, "COMMERCIAL_INVOICE");
+        uploadDoc(closedOperationId, "PACKING_LIST");
 
         var transitions = new String[]{
                 "DOCUMENTATION_COMPLETE", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",

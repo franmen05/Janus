@@ -17,6 +17,10 @@ public class DocumentVersionRepository implements PanacheRepository<DocumentVers
         return find("document.id = ?1 ORDER BY versionNumber DESC", documentId).firstResultOptional();
     }
 
+    public List<DocumentVersion> findByOperationId(Long operationId) {
+        return list("document.operation.id = ?1 ORDER BY uploadedAt ASC", operationId);
+    }
+
     public int getNextVersionNumber(Long documentId) {
         return findByDocumentId(documentId).stream()
                 .mapToInt(v -> v.versionNumber)

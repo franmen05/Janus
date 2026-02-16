@@ -15,4 +15,12 @@ public class AuditLogRepository implements PanacheRepository<AuditLog> {
     public List<AuditLog> findByUsername(String username) {
         return list("username = ?1 ORDER BY createdAt DESC", username);
     }
+
+    public List<AuditLog> findByOperationId(Long operationId) {
+        return list("operationId = ?1 ORDER BY createdAt DESC", operationId);
+    }
+
+    public List<AuditLog> findByDateRange(java.time.LocalDateTime from, java.time.LocalDateTime to) {
+        return list("createdAt >= ?1 AND createdAt <= ?2 ORDER BY createdAt DESC", from, to);
+    }
 }
