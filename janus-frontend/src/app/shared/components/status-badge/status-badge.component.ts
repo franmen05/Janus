@@ -31,7 +31,16 @@ export class StatusBadgeComponent {
     'DELETE': 'bg-danger',
     'STATUS_CHANGE': 'bg-warning text-dark',
     'UPLOAD': 'bg-primary',
-    'DOWNLOAD': 'bg-secondary'
+    'DOWNLOAD': 'bg-secondary',
+    'MATCH': 'bg-success',
+    'DISCREPANCY': 'bg-danger',
+    'RESOLVED': 'bg-info',
+    'PRELIMINARY': 'bg-warning text-dark',
+    'FINAL': 'bg-primary',
+    'INACTIVITY_48H': 'bg-warning text-dark',
+    'DEADLINE_APPROACHING': 'bg-danger',
+    'ACTIVE': 'bg-danger',
+    'ACKNOWLEDGED': 'bg-secondary'
   };
 
   getBadgeClass(): string {

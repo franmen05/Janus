@@ -8,6 +8,7 @@
     "OPERATIONS": "Operaciones",
     "CLIENTS": "Clientes",
     "AUDIT_LOG": "Registro de Auditoría",
+    "ALERTS": "Alertas",
     "LOGOUT": "Cerrar Sesión"
   },
   "LOGIN": {
@@ -21,9 +22,28 @@
     "DRAFT": "Borrador",
     "CLOSED": "Cerradas",
     "CANCELLED": "Canceladas",
+    "OVERDUE": "Vencidas",
+    "REJECTION_RATE": "Tasa de Rechazo",
     "RECENT_OPERATIONS": "Operaciones Recientes",
     "VIEW_ALL": "Ver Todas",
-    "NO_OPERATIONS": "Aún no hay operaciones"
+    "NO_OPERATIONS": "Aún no hay operaciones",
+    "FILTER_FROM": "Desde",
+    "FILTER_TO": "Hasta",
+    "FILTER_CARGO": "Tipo de Carga",
+    "FILTER_INSPECTION": "Tipo de Inspección",
+    "FILTER_AGENT": "Agente",
+    "FILTER_ALL": "Todos",
+    "FILTER_APPLY": "Aplicar Filtros",
+    "OPS_BY_STATUS": "Operaciones por Estado",
+    "AVG_TIME_STAGE": "Tiempo Promedio por Etapa",
+    "STAGE": "Etapa",
+    "HOURS": "Horas",
+    "AGENT_PRODUCTIVITY": "Productividad de Agentes",
+    "AGENT_NAME": "Agente",
+    "OPS_HANDLED": "Gestionadas",
+    "OPS_CLOSED": "Cerradas",
+    "CLOSE_RATE": "Tasa de Cierre",
+    "COUNT": "Cantidad"
   },
   "OPERATIONS": {
     "TITLE": "Operaciones",
@@ -38,6 +58,7 @@
     "CARGO_TYPE": "Tipo de Carga",
     "INSPECTION_TYPE": "Tipo de Inspección",
     "NOTES": "Notas",
+    "DEADLINE": "Fecha Límite",
     "ASSIGNED_AGENT": "Agente Asignado",
     "NOT_ASSIGNED": "Sin asignar",
     "CREATED": "Creado",
@@ -90,6 +111,9 @@
   "TABS": {
     "INFO": "Info",
     "DOCUMENTS": "Documentos",
+    "TIMELINE": "Línea de Tiempo",
+    "COMMENTS": "Comentarios",
+    "DECLARATIONS": "Declaraciones",
     "HISTORY": "Historial",
     "AUDIT": "Auditoría"
   },
@@ -127,7 +151,16 @@
     "DELETE": "Eliminar",
     "STATUS_CHANGE": "Cambio Estado",
     "UPLOAD": "Subir",
-    "DOWNLOAD": "Descargar"
+    "DOWNLOAD": "Descargar",
+    "MATCH": "Coincide",
+    "DISCREPANCY": "Discrepancia",
+    "RESOLVED": "Resuelto",
+    "PRELIMINARY": "Preliminar",
+    "FINAL": "Final",
+    "INACTIVITY_48H": "Inactividad 48h",
+    "DEADLINE_APPROACHING": "Fecha Límite",
+    "ACTIVE": "Activa",
+    "ACKNOWLEDGED": "Reconocida"
   },
   "PROGRESS": {
     "DRAFT": "Borrador",
@@ -155,6 +188,10 @@
     "VISUAL": "Visual",
     "PHYSICAL": "Física"
   },
+  "DECLARATION_TYPES": {
+    "PRELIMINARY": "Preliminar",
+    "FINAL": "Final"
+  },
   "ACTIONS": {
     "CREATE": "Crear",
     "UPDATE": "Actualizar",
@@ -164,12 +201,20 @@
     "CONFIRM": "Confirmar",
     "DOWNLOAD": "Descargar",
     "VERSIONS": "Versiones",
-    "UPLOAD": "Subir"
+    "UPLOAD": "Subir",
+    "ACKNOWLEDGE": "Reconocer",
+    "ADD": "Agregar",
+    "EXECUTE": "Ejecutar",
+    "RESOLVE": "Resolver",
+    "SAVE": "Guardar",
+    "CLOSE": "Cerrar"
   },
   "COMMON": {
     "ARE_YOU_SURE": "¿Está seguro?",
     "STATUS": "Estado",
-    "ACTIONS": "Acciones"
+    "ACTIONS": "Acciones",
+    "LOADING": "Cargando...",
+    "NO_DATA": "No hay datos disponibles"
   },
   "FILE_UPLOAD": {
     "DRAG_DROP": "Arrastre y suelte un archivo aquí, o",
@@ -193,7 +238,8 @@
     "HISTORY": "Historial de Estados",
     "MISSING_DOCS": "No se puede avanzar a DOCUMENTACIÓN COMPLETA.\n\nDocumentos faltantes: {{missing}}\nCompletitud: {{percentage}}%",
     "BLOCKED_DOCS": "No se puede avanzar a DOCUMENTACIÓN COMPLETA.\n\n{{count}} documento(s) tienen estado OBSERVADO o REQUIERE REEMPLAZO y deben resolverse primero.",
-    "FAILED": "Error al cambiar estado"
+    "FAILED": "Error al cambiar estado",
+    "VALIDATING": "Validando cumplimiento..."
   },
   "COMPLETENESS": {
     "TITLE": "Completitud de Documentos",
@@ -204,7 +250,103 @@
     "MESSAGE": "¿Está seguro?"
   },
   "TIMELINE": {
+    "BY": "por",
+    "TITLE": "Línea de Tiempo",
+    "FILTER_ALL": "Todos los Eventos",
+    "STATUS_CHANGE": "Cambio de Estado",
+    "DOCUMENT_UPLOAD": "Subida de Documento",
+    "DOCUMENT_VERSION": "Versión de Documento",
+    "COMMENT": "Comentario",
+    "APPROVAL": "Aprobación",
+    "REJECTION": "Rechazo",
+    "ALERT": "Alerta",
+    "NO_EVENTS": "Sin eventos en la línea de tiempo"
+  },
+  "COMMENTS": {
+    "TITLE": "Comentarios",
+    "ADD": "Agregar Comentario",
+    "PLACEHOLDER": "Escriba un comentario...",
+    "SUBMIT": "Publicar Comentario",
+    "NO_COMMENTS": "Sin comentarios aún",
     "BY": "por"
+  },
+  "DECLARATIONS": {
+    "TITLE": "Declaraciones",
+    "REGISTER_PRELIMINARY": "Registrar Preliminar",
+    "REGISTER_FINAL": "Registrar Final",
+    "DECLARATION_NUMBER": "Número de Declaración",
+    "TYPE": "Tipo",
+    "FOB_VALUE": "Valor FOB",
+    "CIF_VALUE": "Valor CIF",
+    "TAXABLE_BASE": "Base Imponible",
+    "TOTAL_TAXES": "Impuestos Totales",
+    "FREIGHT_VALUE": "Valor del Flete",
+    "INSURANCE_VALUE": "Valor del Seguro",
+    "GATT_METHOD": "Método GATT",
+    "NOTES": "Notas",
+    "SUBMITTED_AT": "Presentada",
+    "NO_DECLARATIONS": "Sin declaraciones registradas",
+    "DETAIL_TITLE": "Detalle de Declaración",
+    "TARIFF_LINES": "Líneas Arancelarias",
+    "ADD_TARIFF_LINE": "Agregar Línea Arancelaria",
+    "LINE_NUMBER": "Línea #",
+    "TARIFF_CODE": "Código Arancelario",
+    "DESCRIPTION": "Descripción",
+    "QUANTITY": "Cantidad",
+    "UNIT_VALUE": "Valor Unitario",
+    "TOTAL_VALUE": "Valor Total",
+    "TAX_RATE": "Tasa Impositiva (%)",
+    "TAX_AMOUNT": "Monto de Impuesto",
+    "NO_TARIFF_LINES": "Sin líneas arancelarias"
+  },
+  "CROSSING": {
+    "TITLE": "Cruce Aduanero",
+    "EXECUTE": "Ejecutar Cruce",
+    "RESOLVE": "Resolver Discrepancias",
+    "STATUS": "Estado del Cruce",
+    "MATCH": "Coincide",
+    "DISCREPANCY": "Discrepancia",
+    "RESOLVED": "Resuelto",
+    "PENDING": "Pendiente",
+    "DISCREPANCIES": "Discrepancias",
+    "FIELD": "Campo",
+    "PRELIMINARY_VALUE": "Preliminar",
+    "FINAL_VALUE": "Final",
+    "DIFFERENCE": "Diferencia",
+    "TARIFF_LINE": "Línea Arancelaria",
+    "RESOLUTION_COMMENT": "Comentario de Resolución",
+    "RESOLVED_BY": "Resuelto Por",
+    "NO_CROSSING": "Sin resultado de cruce disponible. Deben registrarse ambas declaraciones (preliminar y final) primero.",
+    "RESOLVE_PLACEHOLDER": "Ingrese comentario de resolución..."
+  },
+  "ALERTS": {
+    "TITLE": "Alertas",
+    "ACTIVE_ALERTS": "Alertas Activas",
+    "NO_ALERTS": "Sin alertas activas",
+    "OPERATION": "Operación",
+    "TYPE": "Tipo",
+    "MESSAGE": "Mensaje",
+    "CREATED": "Creada",
+    "ACKNOWLEDGED_BY": "Reconocida Por",
+    "ACKNOWLEDGED_AT": "Reconocida En",
+    "BANNER_WARNING": "Esta operación tiene alertas activas"
+  },
+  "ALERT_TYPES": {
+    "INACTIVITY_48H": "Inactividad (48h)",
+    "DEADLINE_APPROACHING": "Fecha Límite Próxima"
+  },
+  "ALERT_STATUS": {
+    "ACTIVE": "Activa",
+    "ACKNOWLEDGED": "Reconocida",
+    "RESOLVED": "Resuelta"
+  },
+  "COMPLIANCE": {
+    "TITLE": "Validación de Cumplimiento",
+    "PASSED": "Todas las validaciones de cumplimiento pasaron",
+    "FAILED": "Validación de cumplimiento fallida",
+    "ERRORS": "Errores de Validación",
+    "RULE": "Regla",
+    "MESSAGE": "Mensaje"
   },
   "LANG": {
     "ES": "Español",

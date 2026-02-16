@@ -43,6 +43,12 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
               </select>
             </div>
           </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{ 'OPERATIONS.DEADLINE' | translate }}</label>
+              <input type="datetime-local" class="form-control" formControlName="deadline">
+            </div>
+          </div>
           <div class="mb-3">
             <label class="form-label">{{ 'OPERATIONS.NOTES' | translate }}</label>
             <textarea class="form-control" formControlName="notes" rows="3"></textarea>
@@ -72,7 +78,8 @@ export class OperationFormComponent implements OnInit {
     clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     cargoType: new FormControl(CargoType.FCL, { nonNullable: true, validators: [Validators.required] }),
     inspectionType: new FormControl(InspectionType.EXPRESS, { nonNullable: true, validators: [Validators.required] }),
-    notes: new FormControl('', { nonNullable: true })
+    notes: new FormControl('', { nonNullable: true }),
+    deadline: new FormControl('', { nonNullable: true })
   });
 
   ngOnInit(): void {
@@ -82,7 +89,7 @@ export class OperationFormComponent implements OnInit {
       this.isEdit.set(true);
       this.operationId = +id;
       this.operationService.getById(+id).subscribe(op => {
-        this.form.patchValue({ clientId: op.clientId?.toString() ?? '', cargoType: op.cargoType, inspectionType: op.inspectionType, notes: op.notes ?? '' });
+        this.form.patchValue({ clientId: op.clientId?.toString() ?? '', cargoType: op.cargoType, inspectionType: op.inspectionType, notes: op.notes ?? '', deadline: op.deadline ?? '' });
       });
     }
   }
@@ -90,7 +97,7 @@ export class OperationFormComponent implements OnInit {
   onSubmit(): void {
     if (this.form.invalid) return;
     const val = this.form.getRawValue();
-    const request = { clientId: +val.clientId, cargoType: val.cargoType, inspectionType: val.inspectionType, notes: val.notes || undefined };
+    const request = { clientId: +val.clientId, cargoType: val.cargoType, inspectionType: val.inspectionType, notes: val.notes || undefined, deadline: val.deadline || undefined };
     const obs = this.isEdit() ? this.operationService.update(this.operationId!, request) : this.operationService.create(request);
     obs.subscribe(op => this.router.navigate(['/operations', op.id]));
   }

@@ -39,6 +39,12 @@ export const routes: Routes = [
         canActivate: [roleGuard]
       },
       {
+        path: 'operations/:operationId/declarations/:declarationId',
+        loadComponent: () => import('./features/declarations/declaration-detail/declaration-detail.component').then(m => m.DeclarationDetailComponent),
+        data: { roles: ['ADMIN', 'AGENT', 'ACCOUNTING'] },
+        canActivate: [roleGuard]
+      },
+      {
         path: 'operations/:id/documents/upload',
         loadComponent: () => import('./features/documents/document-upload/document-upload.component').then(m => m.DocumentUploadComponent),
         data: { roles: ['ADMIN', 'AGENT'] },
@@ -66,6 +72,12 @@ export const routes: Routes = [
         path: 'clients/:id/edit',
         loadComponent: () => import('./features/clients/client-form/client-form.component').then(m => m.ClientFormComponent),
         data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'alerts',
+        loadComponent: () => import('./features/alerts/alert-list/alert-list.component').then(m => m.AlertListComponent),
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {

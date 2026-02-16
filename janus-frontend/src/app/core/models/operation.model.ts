@@ -32,6 +32,7 @@ export interface Operation {
   assignedAgentId: number | null;
   assignedAgentName: string | null;
   notes: string | null;
+  deadline: string | null;
   closedAt: string | null;
   createdAt: string;
   updatedAt: string;
@@ -43,6 +44,7 @@ export interface CreateOperationRequest {
   inspectionType: InspectionType;
   assignedAgentId?: number;
   notes?: string;
+  deadline?: string;
 }
 
 export interface ChangeStatusRequest {

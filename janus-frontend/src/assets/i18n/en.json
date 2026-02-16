@@ -8,6 +8,7 @@
     "OPERATIONS": "Operations",
     "CLIENTS": "Clients",
     "AUDIT_LOG": "Audit Log",
+    "ALERTS": "Alerts",
     "LOGOUT": "Logout"
   },
   "LOGIN": {
@@ -21,9 +22,28 @@
     "DRAFT": "Draft",
     "CLOSED": "Closed",
     "CANCELLED": "Cancelled",
+    "OVERDUE": "Overdue",
+    "REJECTION_RATE": "Rejection Rate",
     "RECENT_OPERATIONS": "Recent Operations",
     "VIEW_ALL": "View All",
-    "NO_OPERATIONS": "No operations yet"
+    "NO_OPERATIONS": "No operations yet",
+    "FILTER_FROM": "From",
+    "FILTER_TO": "To",
+    "FILTER_CARGO": "Cargo Type",
+    "FILTER_INSPECTION": "Inspection Type",
+    "FILTER_AGENT": "Agent",
+    "FILTER_ALL": "All",
+    "FILTER_APPLY": "Apply Filters",
+    "OPS_BY_STATUS": "Operations by Status",
+    "AVG_TIME_STAGE": "Average Time per Stage",
+    "STAGE": "Stage",
+    "HOURS": "Hours",
+    "AGENT_PRODUCTIVITY": "Agent Productivity",
+    "AGENT_NAME": "Agent",
+    "OPS_HANDLED": "Handled",
+    "OPS_CLOSED": "Closed",
+    "CLOSE_RATE": "Close Rate",
+    "COUNT": "Count"
   },
   "OPERATIONS": {
     "TITLE": "Operations",
@@ -38,6 +58,7 @@
     "CARGO_TYPE": "Cargo Type",
     "INSPECTION_TYPE": "Inspection Type",
     "NOTES": "Notes",
+    "DEADLINE": "Deadline",
     "ASSIGNED_AGENT": "Assigned Agent",
     "NOT_ASSIGNED": "Not assigned",
     "CREATED": "Created",
@@ -90,6 +111,9 @@
   "TABS": {
     "INFO": "Info",
     "DOCUMENTS": "Documents",
+    "TIMELINE": "Timeline",
+    "COMMENTS": "Comments",
+    "DECLARATIONS": "Declarations",
     "HISTORY": "History",
     "AUDIT": "Audit"
   },
@@ -127,7 +151,16 @@
     "DELETE": "Delete",
     "STATUS_CHANGE": "Status Change",
     "UPLOAD": "Upload",
-    "DOWNLOAD": "Download"
+    "DOWNLOAD": "Download",
+    "MATCH": "Match",
+    "DISCREPANCY": "Discrepancy",
+    "RESOLVED": "Resolved",
+    "PRELIMINARY": "Preliminary",
+    "FINAL": "Final",
+    "INACTIVITY_48H": "Inactivity 48h",
+    "DEADLINE_APPROACHING": "Deadline",
+    "ACTIVE": "Active",
+    "ACKNOWLEDGED": "Acknowledged"
   },
   "PROGRESS": {
     "DRAFT": "Draft",
@@ -155,6 +188,10 @@
     "VISUAL": "Visual",
     "PHYSICAL": "Physical"
   },
+  "DECLARATION_TYPES": {
+    "PRELIMINARY": "Preliminary",
+    "FINAL": "Final"
+  },
   "ACTIONS": {
     "CREATE": "Create",
     "UPDATE": "Update",
@@ -164,12 +201,20 @@
     "CONFIRM": "Confirm",
     "DOWNLOAD": "Download",
     "VERSIONS": "Versions",
-    "UPLOAD": "Upload"
+    "UPLOAD": "Upload",
+    "ACKNOWLEDGE": "Acknowledge",
+    "ADD": "Add",
+    "EXECUTE": "Execute",
+    "RESOLVE": "Resolve",
+    "SAVE": "Save",
+    "CLOSE": "Close"
   },
   "COMMON": {
     "ARE_YOU_SURE": "Are you sure?",
     "STATUS": "Status",
-    "ACTIONS": "Actions"
+    "ACTIONS": "Actions",
+    "LOADING": "Loading...",
+    "NO_DATA": "No data available"
   },
   "FILE_UPLOAD": {
     "DRAG_DROP": "Drag & drop a file here, or",
@@ -193,7 +238,8 @@
     "HISTORY": "Status History",
     "MISSING_DOCS": "Cannot advance to DOCUMENTATION COMPLETE.\n\nMissing documents: {{missing}}\nCompleteness: {{percentage}}%",
     "BLOCKED_DOCS": "Cannot advance to DOCUMENTATION COMPLETE.\n\n{{count}} document(s) have status OBSERVED or REQUIRES_REPLACEMENT and must be resolved first.",
-    "FAILED": "Failed to change status"
+    "FAILED": "Failed to change status",
+    "VALIDATING": "Validating compliance..."
   },
   "COMPLETENESS": {
     "TITLE": "Document Completeness",
@@ -204,7 +250,103 @@
     "MESSAGE": "Are you sure?"
   },
   "TIMELINE": {
+    "BY": "by",
+    "TITLE": "Timeline",
+    "FILTER_ALL": "All Events",
+    "STATUS_CHANGE": "Status Change",
+    "DOCUMENT_UPLOAD": "Document Upload",
+    "DOCUMENT_VERSION": "Document Version",
+    "COMMENT": "Comment",
+    "APPROVAL": "Approval",
+    "REJECTION": "Rejection",
+    "ALERT": "Alert",
+    "NO_EVENTS": "No timeline events"
+  },
+  "COMMENTS": {
+    "TITLE": "Comments",
+    "ADD": "Add Comment",
+    "PLACEHOLDER": "Write a comment...",
+    "SUBMIT": "Post Comment",
+    "NO_COMMENTS": "No comments yet",
     "BY": "by"
+  },
+  "DECLARATIONS": {
+    "TITLE": "Declarations",
+    "REGISTER_PRELIMINARY": "Register Preliminary",
+    "REGISTER_FINAL": "Register Final",
+    "DECLARATION_NUMBER": "Declaration Number",
+    "TYPE": "Type",
+    "FOB_VALUE": "FOB Value",
+    "CIF_VALUE": "CIF Value",
+    "TAXABLE_BASE": "Taxable Base",
+    "TOTAL_TAXES": "Total Taxes",
+    "FREIGHT_VALUE": "Freight Value",
+    "INSURANCE_VALUE": "Insurance Value",
+    "GATT_METHOD": "GATT Method",
+    "NOTES": "Notes",
+    "SUBMITTED_AT": "Submitted",
+    "NO_DECLARATIONS": "No declarations registered",
+    "DETAIL_TITLE": "Declaration Detail",
+    "TARIFF_LINES": "Tariff Lines",
+    "ADD_TARIFF_LINE": "Add Tariff Line",
+    "LINE_NUMBER": "Line #",
+    "TARIFF_CODE": "Tariff Code",
+    "DESCRIPTION": "Description",
+    "QUANTITY": "Quantity",
+    "UNIT_VALUE": "Unit Value",
+    "TOTAL_VALUE": "Total Value",
+    "TAX_RATE": "Tax Rate (%)",
+    "TAX_AMOUNT": "Tax Amount",
+    "NO_TARIFF_LINES": "No tariff lines added"
+  },
+  "CROSSING": {
+    "TITLE": "Customs Crossing",
+    "EXECUTE": "Execute Crossing",
+    "RESOLVE": "Resolve Discrepancies",
+    "STATUS": "Crossing Status",
+    "MATCH": "Match",
+    "DISCREPANCY": "Discrepancy",
+    "RESOLVED": "Resolved",
+    "PENDING": "Pending",
+    "DISCREPANCIES": "Discrepancies",
+    "FIELD": "Field",
+    "PRELIMINARY_VALUE": "Preliminary",
+    "FINAL_VALUE": "Final",
+    "DIFFERENCE": "Difference",
+    "TARIFF_LINE": "Tariff Line",
+    "RESOLUTION_COMMENT": "Resolution Comment",
+    "RESOLVED_BY": "Resolved By",
+    "NO_CROSSING": "No crossing result available. Both preliminary and final declarations must be registered first.",
+    "RESOLVE_PLACEHOLDER": "Enter resolution comment..."
+  },
+  "ALERTS": {
+    "TITLE": "Alerts",
+    "ACTIVE_ALERTS": "Active Alerts",
+    "NO_ALERTS": "No active alerts",
+    "OPERATION": "Operation",
+    "TYPE": "Type",
+    "MESSAGE": "Message",
+    "CREATED": "Created",
+    "ACKNOWLEDGED_BY": "Acknowledged By",
+    "ACKNOWLEDGED_AT": "Acknowledged At",
+    "BANNER_WARNING": "This operation has active alerts"
+  },
+  "ALERT_TYPES": {
+    "INACTIVITY_48H": "Inactivity (48h)",
+    "DEADLINE_APPROACHING": "Deadline Approaching"
+  },
+  "ALERT_STATUS": {
+    "ACTIVE": "Active",
+    "ACKNOWLEDGED": "Acknowledged",
+    "RESOLVED": "Resolved"
+  },
+  "COMPLIANCE": {
+    "TITLE": "Compliance Validation",
+    "PASSED": "All compliance checks passed",
+    "FAILED": "Compliance validation failed",
+    "ERRORS": "Validation Errors",
+    "RULE": "Rule",
+    "MESSAGE": "Message"
   },
   "LANG": {
     "ES": "Español",

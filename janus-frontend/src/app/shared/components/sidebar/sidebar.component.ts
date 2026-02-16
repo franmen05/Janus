@@ -1,13 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
+import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, AlertBadgeComponent],
   template: `
     <nav class="sidebar p-3">
       <ul class="nav flex-column">
@@ -20,6 +21,14 @@ import { AuthService } from '../../../core/services/auth.service';
         @if (authService.hasRole(['ADMIN', 'AGENT'])) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/clients" routerLinkActive="active">{{ 'NAV.CLIENTS' | translate }}</a>
+          </li>
+        }
+        @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+          <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center" routerLink="/alerts" routerLinkActive="active">
+              {{ 'NAV.ALERTS' | translate }}
+              <app-alert-badge />
+            </a>
           </li>
         }
         @if (authService.hasRole(['ADMIN'])) {

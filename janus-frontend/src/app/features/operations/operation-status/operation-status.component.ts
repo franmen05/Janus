@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
+import { ComplianceService } from '../../../core/services/compliance.service';
 import { OperationStatus, StatusHistory } from '../../../core/models/operation.model';
 import { CompletenessResponse, DocumentStatus } from '../../../core/models/document.model';
+import { ValidationError } from '../../../core/models/compliance.model';
 import { TimelineComponent, TimelineEvent } from '../../../shared/components/timeline/timeline.component';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
@@ -29,9 +31,25 @@ import { AuthService } from '../../../core/services/auth.service';
               <input type="text" class="form-control" [placeholder]="'STATUS_CHANGE.COMMENT_PLACEHOLDER' | translate" [(ngModel)]="comment">
             </div>
             <div class="col-md-3">
-              <button class="btn btn-primary w-100" (click)="onChangeStatus()" [disabled]="!selectedStatus">{{ 'STATUS_CHANGE.BUTTON' | translate }}</button>
+              <button class="btn btn-primary w-100" (click)="onChangeStatus()" [disabled]="!selectedStatus || isValidating()">
+                @if (isValidating()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span>{{ 'STATUS_CHANGE.VALIDATING' | translate }}
+                } @else {
+                  {{ 'STATUS_CHANGE.BUTTON' | translate }}
+                }
+              </button>
             </div>
           </div>
+          @if (validationErrors().length > 0) {
+            <div class="alert alert-danger mt-3 mb-0">
+              <strong>{{ 'COMPLIANCE.VALIDATION_FAILED' | translate }}</strong>
+              <ul class="mb-0 mt-1">
+                @for (err of validationErrors(); track err.ruleCode) {
+                  <li>{{ err.message }}</li>
+                }
+              </ul>
+            </div>
+          }
         </div>
       </div>
     }
@@ -51,9 +69,12 @@ export class OperationStatusComponent implements OnInit {
   statusChanged = output<void>();
 
   private operationService = inject(OperationService);
+  private complianceService = inject(ComplianceService);
   private translate = inject(TranslateService);
   authService = inject(AuthService);
   timelineEvents = signal<TimelineEvent[]>([]);
+  validationErrors = signal<ValidationError[]>([]);
+  isValidating = signal(false);
   selectedStatus = '';
   comment = '';
   availableStatuses = Object.values(OperationStatus);
@@ -73,29 +94,31 @@ export class OperationStatusComponent implements OnInit {
 
   onChangeStatus(): void {
     if (!this.selectedStatus) return;
+    this.validationErrors.set([]);
+    this.isValidating.set(true);
 
-    if (this.selectedStatus === OperationStatus.DOCUMENTATION_COMPLETE) {
-      const comp = this.completeness();
-      if (comp && comp.percentage < 100) {
-        const missing = comp.missingDocuments.join(', ');
-        alert(this.translate.instant('STATUS_CHANGE.MISSING_DOCS', { missing, percentage: comp.percentage }));
-        return;
+    this.complianceService.validate(this.operationId(), this.selectedStatus).subscribe({
+      next: (result) => {
+        this.isValidating.set(false);
+        if (!result.passed) {
+          this.validationErrors.set(result.errors);
+          return;
+        }
+        this.executeStatusChange();
+      },
+      error: () => {
+        this.isValidating.set(false);
+        this.executeStatusChange();
       }
+    });
+  }
 
-      const blockedDocs = this.documents().filter(
-        d => d.status === DocumentStatus.OBSERVED || d.status === DocumentStatus.REQUIRES_REPLACEMENT
-      );
-      if (blockedDocs.length > 0) {
-        alert(this.translate.instant('STATUS_CHANGE.BLOCKED_DOCS', { count: blockedDocs.length }));
-        return;
-      }
-    }
-
+  private executeStatusChange(): void {
     this.operationService.changeStatus(this.operationId(), {
       newStatus: this.selectedStatus as OperationStatus,
       comment: this.comment || undefined
     }).subscribe({
-      next: () => { this.selectedStatus = ''; this.comment = ''; this.loadHistory(); this.statusChanged.emit(); },
+      next: () => { this.selectedStatus = ''; this.comment = ''; this.validationErrors.set([]); this.loadHistory(); this.statusChanged.emit(); },
       error: (err) => alert(err.error?.error ?? this.translate.instant('STATUS_CHANGE.FAILED'))
     });
   }

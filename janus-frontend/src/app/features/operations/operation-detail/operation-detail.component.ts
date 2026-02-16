@@ -16,6 +16,11 @@ import { OperationStatusComponent } from '../operation-status/operation-status.c
 import { DocumentListComponent } from '../../documents/document-list/document-list.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
+import { OperationTimelineComponent } from '../operation-timeline/operation-timeline.component';
+import { OperationCommentsComponent } from '../operation-comments/operation-comments.component';
+import { DeclarationListComponent } from '../../declarations/declaration-list/declaration-list.component';
+import { CrossingResultComponent } from '../../declarations/crossing-result/crossing-result.component';
+import { OperationAlertsComponent } from '../../alerts/operation-alerts/operation-alerts.component';
 
 @Component({
   selector: 'app-operation-detail',
@@ -23,10 +28,13 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
   imports: [
     CommonModule, RouterModule, NgbNavModule, TranslateModule,
     StatusBadgeComponent, ProgressBarComponent, CompletenessIndicatorComponent,
-    OperationStatusComponent, DocumentListComponent, StatusLabelPipe
+    OperationStatusComponent, DocumentListComponent, StatusLabelPipe,
+    OperationTimelineComponent, OperationCommentsComponent,
+    DeclarationListComponent, CrossingResultComponent, OperationAlertsComponent
   ],
   template: `
     @if (operation()) {
+      <app-operation-alerts [operationId]="operation()!.id" />
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h2 class="mb-0">{{ operation()!.referenceNumber }}</h2>
@@ -63,6 +71,9 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                     <dl>
                       <dt>{{ 'OPERATIONS.CREATED' | translate }}</dt><dd>{{ operation()!.createdAt | date:'medium' }}</dd>
                       <dt>{{ 'OPERATIONS.LAST_UPDATED' | translate }}</dt><dd>{{ operation()!.updatedAt | date:'medium' }}</dd>
+                      @if (operation()!.deadline) {
+                        <dt>{{ 'OPERATIONS.DEADLINE' | translate }}</dt><dd>{{ operation()!.deadline | date:'medium' }}</dd>
+                      }
                     </dl>
                   </div>
                 </div>
@@ -83,6 +94,29 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
             <button ngbNavLink>{{ 'TABS.DOCUMENTS' | translate }}</button>
             <ng-template ngbNavContent>
               <div class="mt-3"><app-document-list [operationId]="operation()!.id" /></div>
+            </ng-template>
+          </li>
+        }
+        <li [ngbNavItem]="'timeline'">
+          <button ngbNavLink>{{ 'TABS.TIMELINE' | translate }}</button>
+          <ng-template ngbNavContent>
+            <div class="mt-3"><app-operation-timeline [operationId]="operation()!.id" /></div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="'comments'">
+          <button ngbNavLink>{{ 'TABS.COMMENTS' | translate }}</button>
+          <ng-template ngbNavContent>
+            <div class="mt-3"><app-operation-comments [operationId]="operation()!.id" /></div>
+          </ng-template>
+        </li>
+        @if (authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {
+          <li [ngbNavItem]="'declarations'">
+            <button ngbNavLink>{{ 'TABS.DECLARATIONS' | translate }}</button>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <app-declaration-list [operationId]="operation()!.id" />
+                <app-crossing-result [operationId]="operation()!.id" />
+              </div>
             </ng-template>
           </li>
         }

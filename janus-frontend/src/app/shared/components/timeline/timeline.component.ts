@@ -7,6 +7,7 @@ export interface TimelineEvent {
   description: string;
   date: string;
   user?: string;
+  eventType?: string;
 }
 
 @Component({
@@ -18,7 +19,7 @@ export interface TimelineEvent {
       @for (event of events(); track $index) {
         <div class="d-flex mb-3">
           <div class="me-3">
-            <div class="rounded-circle bg-primary" style="width: 12px; height: 12px; margin-top: 5px;"></div>
+            <div class="rounded-circle" [ngClass]="getCircleClass(event.eventType)" style="width: 12px; height: 12px; margin-top: 5px;"></div>
           </div>
           <div class="flex-grow-1">
             <div class="d-flex justify-content-between">
@@ -37,4 +38,18 @@ export interface TimelineEvent {
 })
 export class TimelineComponent {
   events = input.required<TimelineEvent[]>();
+
+  private circleClassMap: Record<string, string> = {
+    'STATUS_CHANGE': 'bg-primary',
+    'DOCUMENT_UPLOAD': 'bg-success',
+    'DOCUMENT_VERSION': 'bg-info',
+    'COMMENT': 'bg-warning',
+    'APPROVAL': 'bg-success',
+    'REJECTION': 'bg-danger',
+    'ALERT': 'bg-danger'
+  };
+
+  getCircleClass(eventType?: string): string {
+    return eventType ? (this.circleClassMap[eventType] ?? 'bg-primary') : 'bg-primary';
+  }
 }
