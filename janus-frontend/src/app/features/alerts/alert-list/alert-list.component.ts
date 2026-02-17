@@ -16,16 +16,16 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
     <h2 class="mb-4">{{ 'ALERTS.TITLE' | translate }}</h2>
 
     <div class="card">
-      <div class="card-body p-0">
+      <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
           <thead class="table-light">
             <tr>
               <th>{{ 'ALERTS.OPERATION' | translate }}</th>
               <th>{{ 'ALERTS.TYPE' | translate }}</th>
               <th>{{ 'COMMON.STATUS' | translate }}</th>
-              <th>{{ 'ALERTS.MESSAGE' | translate }}</th>
-              <th>{{ 'ALERTS.CREATED_AT' | translate }}</th>
-              <th>{{ 'ACTIONS.TITLE' | translate }}</th>
+              <th class="d-none d-md-table-cell">{{ 'ALERTS.MESSAGE' | translate }}</th>
+              <th class="d-none d-sm-table-cell">{{ 'ALERTS.CREATED_AT' | translate }}</th>
+              <th>{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
           </thead>
           <tbody>
@@ -34,8 +34,8 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                 <td><a [routerLink]="['/operations', alert.operationId]">{{ alert.operationRef }}</a></td>
                 <td><app-status-badge [status]="alert.alertType" /></td>
                 <td><app-status-badge [status]="alert.status" /></td>
-                <td>{{ alert.message }}</td>
-                <td>{{ alert.createdAt | date:'medium' }}</td>
+                <td class="d-none d-md-table-cell">{{ alert.message }}</td>
+                <td class="d-none d-sm-table-cell">{{ alert.createdAt | date:'medium' }}</td>
                 <td>
                   @if (alert.status === 'ACTIVE') {
                     <button class="btn btn-sm btn-outline-warning" (click)="acknowledge(alert)">

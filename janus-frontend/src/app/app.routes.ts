@@ -75,6 +75,24 @@ export const routes: Routes = [
         canActivate: [roleGuard]
       },
       {
+        path: 'users',
+        loadComponent: () => import('./features/users/user-list/user-list.component').then(m => m.UserListComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'users/new',
+        loadComponent: () => import('./features/users/user-form/user-form.component').then(m => m.UserFormComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'users/:id/edit',
+        loadComponent: () => import('./features/users/user-form/user-form.component').then(m => m.UserFormComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
         path: 'alerts',
         loadComponent: () => import('./features/alerts/alert-list/alert-list.component').then(m => m.AlertListComponent),
         data: { roles: ['ADMIN', 'AGENT'] },

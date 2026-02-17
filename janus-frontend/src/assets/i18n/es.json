@@ -9,6 +9,7 @@
     "CLIENTS": "Clientes",
     "AUDIT_LOG": "Registro de Auditoría",
     "ALERTS": "Alertas",
+    "USERS": "Usuarios",
     "LOGOUT": "Cerrar Sesión"
   },
   "LOGIN": {
@@ -43,7 +44,8 @@
     "OPS_HANDLED": "Gestionadas",
     "OPS_CLOSED": "Cerradas",
     "CLOSE_RATE": "Tasa de Cierre",
-    "COUNT": "Cantidad"
+    "COUNT": "Cantidad",
+    "ACTIVE_ALERTS": "Alertas Activas"
   },
   "OPERATIONS": {
     "TITLE": "Operaciones",
@@ -81,7 +83,9 @@
     "VERSIONS_TITLE": "Versiones del Documento",
     "VERSION": "Versión",
     "UPLOADED_BY": "Subido Por",
-    "DATE": "Fecha"
+    "DATE": "Fecha",
+    "CHANGE_REASON": "Motivo del Cambio",
+    "CHANGE_REASON_PLACEHOLDER": "¿Por qué se sube/reemplaza este documento?"
   },
   "CLIENTS": {
     "TITLE": "Clientes",
@@ -89,7 +93,7 @@
     "EDIT_TITLE": "Editar Cliente",
     "NEW_TITLE": "Nuevo Cliente",
     "NAME": "Nombre",
-    "TAX_ID": "RUC / NIT",
+    "TAX_ID": "RNC",
     "EMAIL": "Correo Electrónico",
     "PHONE": "Teléfono",
     "ADDRESS": "Dirección",
@@ -239,6 +243,7 @@
     "MISSING_DOCS": "No se puede avanzar a DOCUMENTACIÓN COMPLETA.\n\nDocumentos faltantes: {{missing}}\nCompletitud: {{percentage}}%",
     "BLOCKED_DOCS": "No se puede avanzar a DOCUMENTACIÓN COMPLETA.\n\n{{count}} documento(s) tienen estado OBSERVADO o REQUIERE REEMPLAZO y deben resolverse primero.",
     "FAILED": "Error al cambiar estado",
+    "INVALID_TRANSITION": "No se puede cambiar de <strong>{{from}}</strong> a <strong>{{to}}</strong>. Solo se permite avanzar al siguiente paso.",
     "VALIDATING": "Validando cumplimiento..."
   },
   "COMPLETENESS": {
@@ -327,6 +332,8 @@
     "TYPE": "Tipo",
     "MESSAGE": "Mensaje",
     "CREATED": "Creada",
+    "CREATED_AT": "Fecha de Creación",
+    "ACKNOWLEDGE": "Reconocer",
     "ACKNOWLEDGED_BY": "Reconocida Por",
     "ACKNOWLEDGED_AT": "Reconocida En",
     "BANNER_WARNING": "Esta operación tiene alertas activas"
@@ -346,7 +353,17 @@
     "FAILED": "Validación de cumplimiento fallida",
     "ERRORS": "Errores de Validación",
     "RULE": "Regla",
-    "MESSAGE": "Mensaje"
+    "MESSAGE": "Mensaje",
+    "BL_NOT_VALIDATED": "El Conocimiento de Embarque (BL) debe estar VALIDADO antes de la Revisión de Valoración",
+    "CROSSING_UNRESOLVED": "Las discrepancias del cruce deben resolverse antes de la Revisión de Valoración",
+    "RESTRICTED_COUNTRY": "El país de origen está restringido — se requiere revisión adicional",
+    "MISSING_DOC_BL": "Documento obligatorio faltante: Conocimiento de Embarque (BL)",
+    "MISSING_DOC_COMMERCIAL_INVOICE": "Documento obligatorio faltante: Factura Comercial",
+    "MISSING_DOC_PACKING_LIST": "Documento obligatorio faltante: Lista de Empaque",
+    "MISSING_DOC_CERTIFICATE": "Documento obligatorio faltante: Certificado",
+    "PHYSICAL_ALL_DOCS_VALIDATED": "Todos los documentos deben estar VALIDADOS antes de la Revisión de Valoración para inspección Física",
+    "HIGH_VALUE_CERT_REQUIRED": "Las operaciones FCL requieren un documento de Certificado",
+    "INVOICE_NOT_VALIDATED": "La Factura Comercial debe estar VALIDADA antes de la Declaración en Proceso"
   },
   "LANG": {
     "ES": "Español",
@@ -354,6 +371,29 @@
   },
   "DELETE_CONFIRM": {
     "DOCUMENT": "¿Está seguro de que desea eliminar este documento?"
+  },
+  "USERS": {
+    "TITLE": "Usuarios",
+    "NEW": "Nuevo Usuario",
+    "EDIT_TITLE": "Editar Usuario",
+    "NEW_TITLE": "Nuevo Usuario",
+    "USERNAME": "Usuario",
+    "FULL_NAME": "Nombre Completo",
+    "PASSWORD": "Contraseña",
+    "PASSWORD_HINT": "Dejar en blanco para mantener la contraseña actual",
+    "EMAIL": "Correo Electrónico",
+    "ROLE": "Rol",
+    "CLIENT": "Cliente",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo",
+    "NO_USERS": "No se encontraron usuarios"
+  },
+  "ROLES": {
+    "ADMIN": "Administrador",
+    "AGENT": "Agente",
+    "ACCOUNTING": "Contabilidad",
+    "CLIENT": "Cliente",
+    "CARRIER": "Transportista"
   },
   "AUTH": {
     "INVALID_CREDENTIALS": "Credenciales inválidas"

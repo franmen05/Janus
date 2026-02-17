@@ -3,6 +3,7 @@ package com.janus.user.application;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.NotFoundException;
 import com.janus.user.api.dto.CreateUserRequest;
+import com.janus.user.api.dto.UpdateUserRequest;
 import com.janus.user.domain.model.User;
 import com.janus.user.domain.repository.UserRepository;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -45,6 +46,27 @@ public class UserService {
         user.role = request.role().name();
         user.clientId = request.clientId();
         userRepository.persist(user);
+        return user;
+    }
+
+    @Transactional
+    public User update(Long id, UpdateUserRequest request) {
+        var user = findById(id);
+        user.fullName = request.fullName();
+        user.email = request.email();
+        user.role = request.role().name();
+        user.clientId = request.clientId();
+        user.active = request.active();
+        if (request.password() != null && !request.password().isBlank()) {
+            user.password = BcryptUtil.bcryptHash(request.password());
+        }
+        return user;
+    }
+
+    @Transactional
+    public User toggleActive(Long id) {
+        var user = findById(id);
+        user.active = !user.active;
         return user;
     }
 }

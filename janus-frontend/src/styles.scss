@@ -28,6 +28,21 @@ body {
   padding: 1.5rem;
 }
 
+@media (max-width: 575.98px) {
+  .content-area {
+    padding: 0.75rem;
+  }
+}
+
+input[type="date"],
+input[type="datetime-local"] {
+  cursor: pointer;
+
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+}
+
 .card-dashboard {
   transition: transform 0.15s ease-in-out;
   cursor: pointer;

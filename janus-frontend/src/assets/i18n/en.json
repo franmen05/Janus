@@ -9,6 +9,7 @@
     "CLIENTS": "Clients",
     "AUDIT_LOG": "Audit Log",
     "ALERTS": "Alerts",
+    "USERS": "Users",
     "LOGOUT": "Logout"
   },
   "LOGIN": {
@@ -43,7 +44,8 @@
     "OPS_HANDLED": "Handled",
     "OPS_CLOSED": "Closed",
     "CLOSE_RATE": "Close Rate",
-    "COUNT": "Count"
+    "COUNT": "Count",
+    "ACTIVE_ALERTS": "Active Alerts"
   },
   "OPERATIONS": {
     "TITLE": "Operations",
@@ -81,7 +83,9 @@
     "VERSIONS_TITLE": "Document Versions",
     "VERSION": "Version",
     "UPLOADED_BY": "Uploaded By",
-    "DATE": "Date"
+    "DATE": "Date",
+    "CHANGE_REASON": "Change Reason",
+    "CHANGE_REASON_PLACEHOLDER": "Why is this document being uploaded/replaced?"
   },
   "CLIENTS": {
     "TITLE": "Clients",
@@ -239,6 +243,7 @@
     "MISSING_DOCS": "Cannot advance to DOCUMENTATION COMPLETE.\n\nMissing documents: {{missing}}\nCompleteness: {{percentage}}%",
     "BLOCKED_DOCS": "Cannot advance to DOCUMENTATION COMPLETE.\n\n{{count}} document(s) have status OBSERVED or REQUIRES_REPLACEMENT and must be resolved first.",
     "FAILED": "Failed to change status",
+    "INVALID_TRANSITION": "Cannot change from <strong>{{from}}</strong> to <strong>{{to}}</strong>. Only the next step is allowed.",
     "VALIDATING": "Validating compliance..."
   },
   "COMPLETENESS": {
@@ -327,6 +332,8 @@
     "TYPE": "Type",
     "MESSAGE": "Message",
     "CREATED": "Created",
+    "CREATED_AT": "Created At",
+    "ACKNOWLEDGE": "Acknowledge",
     "ACKNOWLEDGED_BY": "Acknowledged By",
     "ACKNOWLEDGED_AT": "Acknowledged At",
     "BANNER_WARNING": "This operation has active alerts"
@@ -346,7 +353,17 @@
     "FAILED": "Compliance validation failed",
     "ERRORS": "Validation Errors",
     "RULE": "Rule",
-    "MESSAGE": "Message"
+    "MESSAGE": "Message",
+    "BL_NOT_VALIDATED": "Bill of Lading must be VALIDATED before Valuation Review",
+    "CROSSING_UNRESOLVED": "Crossing discrepancies must be resolved before Valuation Review",
+    "RESTRICTED_COUNTRY": "Origin country is restricted — additional review required",
+    "MISSING_DOC_BL": "Required document missing: Bill of Lading",
+    "MISSING_DOC_COMMERCIAL_INVOICE": "Required document missing: Commercial Invoice",
+    "MISSING_DOC_PACKING_LIST": "Required document missing: Packing List",
+    "MISSING_DOC_CERTIFICATE": "Required document missing: Certificate",
+    "PHYSICAL_ALL_DOCS_VALIDATED": "All documents must be VALIDATED before Valuation Review for Physical inspection",
+    "HIGH_VALUE_CERT_REQUIRED": "FCL operations require a Certificate document",
+    "INVOICE_NOT_VALIDATED": "Commercial Invoice must be VALIDATED before Declaration in Progress"
   },
   "LANG": {
     "ES": "Español",
@@ -354,6 +371,29 @@
   },
   "DELETE_CONFIRM": {
     "DOCUMENT": "Are you sure you want to delete this document?"
+  },
+  "USERS": {
+    "TITLE": "Users",
+    "NEW": "New User",
+    "EDIT_TITLE": "Edit User",
+    "NEW_TITLE": "New User",
+    "USERNAME": "Username",
+    "FULL_NAME": "Full Name",
+    "PASSWORD": "Password",
+    "PASSWORD_HINT": "Leave blank to keep current password",
+    "EMAIL": "Email",
+    "ROLE": "Role",
+    "CLIENT": "Client",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "NO_USERS": "No users found"
+  },
+  "ROLES": {
+    "ADMIN": "Administrator",
+    "AGENT": "Agent",
+    "ACCOUNTING": "Accounting",
+    "CLIENT": "Client",
+    "CARRIER": "Carrier"
   },
   "AUTH": {
     "INVALID_CREDENTIALS": "Invalid credentials"

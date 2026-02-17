@@ -11,7 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
   template: `
     <div class="container">
       <div class="row justify-content-center mt-5">
-        <div class="col-md-4">
+        <div class="col-11 col-sm-8 col-md-5 col-lg-4">
           <div class="card shadow">
             <div class="card-body p-4">
               <h3 class="card-title text-center mb-4">{{ 'APP.TITLE' | translate }}</h3>

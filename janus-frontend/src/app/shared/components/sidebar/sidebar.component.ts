@@ -23,6 +23,11 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
             <a class="nav-link" routerLink="/clients" routerLinkActive="active">{{ 'NAV.CLIENTS' | translate }}</a>
           </li>
         }
+        @if (authService.hasRole(['ADMIN'])) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/users" routerLinkActive="active">{{ 'NAV.USERS' | translate }}</a>
+          </li>
+        }
         @if (authService.hasRole(['ADMIN', 'AGENT'])) {
           <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center" routerLink="/alerts" routerLinkActive="active">

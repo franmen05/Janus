@@ -22,10 +22,10 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
       </div>
     </div>
     <div class="card">
-      <div class="card-body p-0">
+      <div class="card-body p-0 table-responsive">
         <table class="table table-hover table-sm mb-0">
           <thead class="table-light">
-            <tr><th>{{ 'AUDIT.DATE' | translate }}</th><th>{{ 'AUDIT.USER' | translate }}</th><th>{{ 'AUDIT.ACTION' | translate }}</th><th>{{ 'AUDIT.ENTITY' | translate }}</th><th>{{ 'AUDIT.ID' | translate }}</th><th>{{ 'AUDIT.DETAILS' | translate }}</th><th>{{ 'AUDIT.IP' | translate }}</th></tr>
+            <tr><th>{{ 'AUDIT.DATE' | translate }}</th><th>{{ 'AUDIT.USER' | translate }}</th><th>{{ 'AUDIT.ACTION' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.ENTITY' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.ID' | translate }}</th><th class="d-none d-md-table-cell">{{ 'AUDIT.DETAILS' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'AUDIT.IP' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (log of logs(); track log.id) {
@@ -33,10 +33,10 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                 <td><small>{{ log.createdAt | date:'medium' }}</small></td>
                 <td>{{ log.username }}</td>
                 <td><app-status-badge [status]="log.action" /></td>
-                <td>{{ log.entityName }}</td>
-                <td>{{ log.entityId }}</td>
-                <td><small>{{ log.details }}</small></td>
-                <td><small>{{ log.ipAddress }}</small></td>
+                <td class="d-none d-sm-table-cell">{{ log.entityName }}</td>
+                <td class="d-none d-sm-table-cell">{{ log.entityId }}</td>
+                <td class="d-none d-md-table-cell"><small>{{ log.details }}</small></td>
+                <td class="d-none d-lg-table-cell"><small>{{ log.ipAddress }}</small></td>
               </tr>
             }
             @if (logs().length === 0) {

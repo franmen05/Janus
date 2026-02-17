@@ -5,9 +5,11 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../core/services/operation.service';
 import { DashboardService } from '../../core/services/dashboard.service';
+import { AlertService } from '../../core/services/alert.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Operation, OperationStatus, CargoType, InspectionType } from '../../core/models/operation.model';
 import { DashboardMetrics, DashboardFilter } from '../../core/models/dashboard.model';
+import { Alert } from '../../core/models/alert.model';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
 
@@ -23,33 +25,33 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
       <div class="card mb-3">
         <div class="card-body py-2">
           <div class="row g-2 align-items-end">
-            <div class="col-md-2">
+            <div class="col-6 col-md-2">
               <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_FROM' | translate }}</label>
               <input type="date" class="form-control form-control-sm" [(ngModel)]="filterFrom">
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-2">
               <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_TO' | translate }}</label>
               <input type="date" class="form-control form-control-sm" [(ngModel)]="filterTo">
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-2">
               <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_CARGO' | translate }}</label>
               <select class="form-select form-select-sm" [(ngModel)]="filterCargo">
                 <option value="">{{ 'DASHBOARD.FILTER_ALL' | translate }}</option>
                 @for (t of cargoTypes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
               </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-2">
               <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_INSPECTION' | translate }}</label>
               <select class="form-select form-select-sm" [(ngModel)]="filterInspection">
                 <option value="">{{ 'DASHBOARD.FILTER_ALL' | translate }}</option>
                 @for (t of inspectionTypes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
               </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-2">
               <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_AGENT' | translate }}</label>
               <input type="text" class="form-control form-control-sm" [(ngModel)]="filterAgent">
             </div>
-            <div class="col-md-2">
+            <div class="col-6 col-md-2">
               <button class="btn btn-sm btn-primary w-100" (click)="applyFilters()">{{ 'DASHBOARD.FILTER_APPLY' | translate }}</button>
             </div>
           </div>
@@ -58,7 +60,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
 
       <!-- KPI cards -->
       <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
           <div class="card card-dashboard border-primary">
             <div class="card-body">
               <h5 class="card-title text-primary">{{ 'DASHBOARD.ACTIVE' | translate }}</h5>
@@ -66,7 +68,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
           <div class="card card-dashboard border-danger">
             <div class="card-body">
               <h5 class="card-title text-danger">{{ 'DASHBOARD.OVERDUE' | translate }}</h5>
@@ -74,15 +76,15 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
           <div class="card card-dashboard border-warning">
             <div class="card-body">
               <h5 class="card-title text-warning">{{ 'DASHBOARD.REJECTION_RATE' | translate }}</h5>
-              <h2 class="mb-0">{{ (metrics()?.rejectionRate ?? 0) * 100 | number:'1.1-1' }}%</h2>
+              <h2 class="mb-0">{{ (metrics()?.rejectionRate ?? 0) | number:'1.1-1' }}%</h2>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
           <div class="card card-dashboard border-success">
             <div class="card-body">
               <h5 class="card-title text-success">{{ 'DASHBOARD.CLOSED' | translate }}</h5>
@@ -94,10 +96,10 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
 
       <div class="row mb-4">
         <!-- Operations by Status -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6 mb-3 mb-md-0">
           <div class="card h-100">
             <div class="card-header"><h6 class="mb-0">{{ 'DASHBOARD.OPS_BY_STATUS' | translate }}</h6></div>
-            <div class="card-body p-0">
+            <div class="card-body p-0 table-responsive">
               <table class="table table-sm mb-0">
                 <thead class="table-light"><tr><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'DASHBOARD.COUNT' | translate }}</th></tr></thead>
                 <tbody>
@@ -110,10 +112,10 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
           </div>
         </div>
         <!-- Average Time per Stage -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
           <div class="card h-100">
             <div class="card-header"><h6 class="mb-0">{{ 'DASHBOARD.AVG_TIME_STAGE' | translate }}</h6></div>
-            <div class="card-body p-0">
+            <div class="card-body p-0 table-responsive">
               <table class="table table-sm mb-0">
                 <thead class="table-light"><tr><th>{{ 'DASHBOARD.STAGE' | translate }}</th><th>{{ 'DASHBOARD.HOURS' | translate }}</th></tr></thead>
                 <tbody>
@@ -131,7 +133,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
       @if (metrics()?.productivityByAgent?.length) {
         <div class="card mb-4">
           <div class="card-header"><h6 class="mb-0">{{ 'DASHBOARD.AGENT_PRODUCTIVITY' | translate }}</h6></div>
-          <div class="card-body p-0">
+          <div class="card-body p-0 table-responsive">
             <table class="table table-sm mb-0">
               <thead class="table-light">
                 <tr>
@@ -155,10 +157,37 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
           </div>
         </div>
       }
+
+      <!-- Active Alerts -->
+      @if (activeAlerts().length > 0) {
+        <div class="card mb-4 border-warning">
+          <div class="card-header bg-warning bg-opacity-10 d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">{{ 'DASHBOARD.ACTIVE_ALERTS' | translate }} ({{ activeAlerts().length }})</h6>
+            <a routerLink="/alerts" class="btn btn-sm btn-outline-warning">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
+          </div>
+          <div class="card-body p-0 table-responsive">
+            <table class="table table-sm mb-0">
+              <thead class="table-light">
+                <tr><th>{{ 'ALERTS.OPERATION' | translate }}</th><th>{{ 'ALERTS.TYPE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'ALERTS.MESSAGE' | translate }}</th><th>{{ 'ALERTS.CREATED' | translate }}</th></tr>
+              </thead>
+              <tbody>
+                @for (alert of activeAlerts().slice(0, 5); track alert.id) {
+                  <tr>
+                    <td><a [routerLink]="['/operations', alert.operationId]">{{ alert.operationRef }}</a></td>
+                    <td><span class="badge" [class]="alert.alertType === 'DEADLINE_APPROACHING' ? 'bg-danger' : 'bg-warning text-dark'">{{ alert.alertType | statusLabel }}</span></td>
+                    <td class="d-none d-md-table-cell">{{ alert.message }}</td>
+                    <td>{{ alert.createdAt | date:'short' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
     } @else {
       <!-- Simple view for CLIENT/CARRIER -->
       <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
           <div class="card card-dashboard border-primary">
             <div class="card-body">
               <h5 class="card-title text-primary">{{ 'DASHBOARD.ACTIVE' | translate }}</h5>
@@ -166,7 +195,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
           <div class="card card-dashboard border-success">
             <div class="card-body">
               <h5 class="card-title text-success">{{ 'DASHBOARD.CLOSED' | translate }}</h5>
@@ -180,16 +209,16 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
           <h5 class="mb-0">{{ 'DASHBOARD.RECENT_OPERATIONS' | translate }}</h5>
           <a routerLink="/operations" class="btn btn-sm btn-outline-primary">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body p-0 table-responsive">
           <table class="table table-hover mb-0">
-            <thead><tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'OPERATIONS.CREATED' | translate }}</th></tr></thead>
+            <thead><tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr></thead>
             <tbody>
               @for (op of recentOperations(); track op.id) {
                 <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
                   <td>{{ op.referenceNumber }}</td>
                   <td>{{ op.clientName }}</td>
                   <td><app-status-badge [status]="op.status" /></td>
-                  <td>{{ op.createdAt | date:'shortDate' }}</td>
+                  <td class="d-none d-sm-table-cell">{{ op.createdAt | date:'shortDate' }}</td>
                 </tr>
               }
               @if (recentOperations().length === 0) {
@@ -205,6 +234,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
 export class DashboardComponent implements OnInit {
   private operationService = inject(OperationService);
   private dashboardService = inject(DashboardService);
+  private alertService = inject(AlertService);
   authService = inject(AuthService);
 
   recentOperations = signal<Operation[]>([]);
@@ -213,6 +243,7 @@ export class DashboardComponent implements OnInit {
   closedCount = signal(0);
   statusEntries = signal<[string, number][]>([]);
   stageEntries = signal<[string, number][]>([]);
+  activeAlerts = signal<Alert[]>([]);
 
   filterFrom = '';
   filterTo = '';
@@ -235,6 +266,7 @@ export class DashboardComponent implements OnInit {
 
     if (this.authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {
       this.loadMetrics();
+      this.alertService.getActiveAlerts().subscribe(alerts => this.activeAlerts.set(alerts));
     }
   }
 

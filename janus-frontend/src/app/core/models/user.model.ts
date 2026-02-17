@@ -16,3 +16,21 @@ export interface User {
   clientId: number | null;
   createdAt: string;
 }
+
+export interface CreateUserRequest {
+  username: string;
+  password: string;
+  fullName: string;
+  email: string;
+  role: Role;
+  clientId: number | null;
+}
+
+export interface UpdateUserRequest {
+  fullName: string;
+  email: string;
+  role: Role;
+  clientId: number | null;
+  active: boolean;
+  password: string | null;
+}

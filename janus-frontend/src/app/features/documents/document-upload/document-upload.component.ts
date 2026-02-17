@@ -22,6 +22,10 @@ import { FileUploadComponent } from '../../../shared/components/file-upload/file
           </select>
         </div>
         <div class="mb-3">
+          <label class="form-label">{{ 'DOCUMENTS.CHANGE_REASON' | translate }}</label>
+          <input type="text" class="form-control" [(ngModel)]="changeReason" [placeholder]="'DOCUMENTS.CHANGE_REASON_PLACEHOLDER' | translate">
+        </div>
+        <div class="mb-3">
           <app-file-upload (fileSelected)="onFileSelected($event)" />
         </div>
         @if (uploading()) {
@@ -45,6 +49,7 @@ export class DocumentUploadComponent {
 
   selectedType = DocumentType.BL;
   selectedFile: File | null = null;
+  changeReason = '';
   uploading = signal(false);
 
   documentTypes = [
@@ -61,7 +66,7 @@ export class DocumentUploadComponent {
     if (!this.selectedFile) return;
     const operationId = +this.route.snapshot.paramMap.get('id')!;
     this.uploading.set(true);
-    this.documentService.upload(operationId, this.selectedFile, this.selectedType).subscribe({
+    this.documentService.upload(operationId, this.selectedFile, this.selectedType, this.changeReason || undefined).subscribe({
       next: (doc) => {
         this.uploading.set(false);
         const statusMessages: Record<string, string> = {
@@ -71,7 +76,7 @@ export class DocumentUploadComponent {
           [DocumentStatus.PENDING]: this.translate.instant('UPLOAD.PENDING')
         };
         alert(statusMessages[doc.status] ?? `${this.translate.instant('ACTIONS.UPLOAD')}: ${doc.status}`);
-        this.router.navigate(['/operations', operationId]);
+        this.router.navigate(['/operations', operationId], { queryParams: { tab: 'documents' } });
       },
       error: (err) => { this.uploading.set(false); alert(err.error?.error ?? this.translate.instant('UPLOAD.FAILED')); }
     });

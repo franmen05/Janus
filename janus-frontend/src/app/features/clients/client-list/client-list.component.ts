@@ -18,18 +18,18 @@ import { AuthService } from '../../../core/services/auth.service';
       }
     </div>
     <div class="card">
-      <div class="card-body p-0">
+      <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
           <thead class="table-light">
-            <tr><th>{{ 'CLIENTS.NAME' | translate }}</th><th>{{ 'CLIENTS.TAX_ID' | translate }}</th><th>{{ 'CLIENTS.EMAIL' | translate }}</th><th>{{ 'CLIENTS.PHONE' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'COMMON.ACTIONS' | translate }}</th></tr>
+            <tr><th>{{ 'CLIENTS.NAME' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'CLIENTS.TAX_ID' | translate }}</th><th class="d-none d-md-table-cell">{{ 'CLIENTS.EMAIL' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'CLIENTS.PHONE' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'COMMON.ACTIONS' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (client of clients(); track client.id) {
               <tr>
                 <td class="fw-bold">{{ client.name }}</td>
-                <td>{{ client.taxId }}</td>
-                <td>{{ client.email }}</td>
-                <td>{{ client.phone ?? '-' }}</td>
+                <td class="d-none d-sm-table-cell">{{ client.taxId }}</td>
+                <td class="d-none d-md-table-cell">{{ client.email }}</td>
+                <td class="d-none d-lg-table-cell">{{ client.phone ?? '-' }}</td>
                 <td><span class="badge" [class]="client.active ? 'bg-success' : 'bg-secondary'">{{ (client.active ? 'CLIENTS.ACTIVE' : 'CLIENTS.INACTIVE') | translate }}</span></td>
                 <td>
                   @if (authService.hasRole(['ADMIN'])) {
