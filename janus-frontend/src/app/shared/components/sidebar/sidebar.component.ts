@@ -41,6 +41,11 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
             <a class="nav-link" routerLink="/audit" routerLinkActive="active">{{ 'NAV.AUDIT_LOG' | translate }}</a>
           </li>
         }
+        @if (authService.hasRole(['ADMIN'])) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/compliance-config" routerLinkActive="active">{{ 'NAV.COMPLIANCE_CONFIG' | translate }}</a>
+          </li>
+        }
       </ul>
     </nav>
   `

@@ -10,6 +10,7 @@
     "AUDIT_LOG": "Registro de Auditoría",
     "ALERTS": "Alertas",
     "USERS": "Usuarios",
+    "COMPLIANCE_CONFIG": "Reglas de Cumplimiento",
     "LOGOUT": "Cerrar Sesión"
   },
   "LOGIN": {
@@ -394,6 +395,40 @@
     "ACCOUNTING": "Contabilidad",
     "CLIENT": "Cliente",
     "CARRIER": "Transportista"
+  },
+  "COMPLIANCE_CONFIG": {
+    "TITLE": "Configuración de Reglas de Cumplimiento",
+    "RULE_CODE": "Código de Regla",
+    "DESCRIPTION": "Descripción",
+    "PARAM_KEY": "Parámetro",
+    "PARAM_VALUE": "Valor",
+    "ENABLED": "Habilitada",
+    "DISABLED": "Deshabilitada",
+    "ACTIONS": "Acciones",
+    "EDIT": "Editar",
+    "SAVE": "Guardar",
+    "CANCEL": "Cancelar",
+    "NO_RULES": "No hay reglas de cumplimiento configuradas",
+    "UPDATED": "Regla actualizada correctamente",
+    "ERROR": "Error al cargar las reglas de cumplimiento",
+    "CREATE": "Nueva Regla",
+    "CREATE_TITLE": "Crear Regla de Cumplimiento",
+    "DELETE": "Eliminar",
+    "DELETE_CONFIRM": "¿Está seguro de que desea eliminar esta regla?",
+    "DELETED": "Regla eliminada correctamente",
+    "CREATED": "Regla creada correctamente",
+    "SELECT_RULE": "Seleccione una regla...",
+    "TRANSITION": {
+      "LABEL": "Aplica en",
+      "COMPLETENESS_REQUIRED": "Documentación Completa",
+      "HIGH_VALUE_ADDITIONAL_DOC": "Documentación Completa (solo FCL)",
+      "RESTRICTED_COUNTRY": "Documentación Completa / Declaración",
+      "COMMERCIAL_INVOICE_REQUIRED": "Declaración en Curso",
+      "BL_VERIFIED_FOR_VALUATION": "Revisión de Valoración",
+      "PHYSICAL_INSPECTION_GATT": "Revisión de Valoración (solo física)",
+      "CROSSING_RESOLVED": "Aduana a Revisión de Valoración",
+      "UNKNOWN": "No definida"
+    }
   },
   "AUTH": {
     "INVALID_CREDENTIALS": "Credenciales inválidas"

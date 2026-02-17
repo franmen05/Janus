@@ -10,6 +10,7 @@
     "AUDIT_LOG": "Audit Log",
     "ALERTS": "Alerts",
     "USERS": "Users",
+    "COMPLIANCE_CONFIG": "Compliance Rules",
     "LOGOUT": "Logout"
   },
   "LOGIN": {
@@ -394,6 +395,40 @@
     "ACCOUNTING": "Accounting",
     "CLIENT": "Client",
     "CARRIER": "Carrier"
+  },
+  "COMPLIANCE_CONFIG": {
+    "TITLE": "Compliance Rules Configuration",
+    "RULE_CODE": "Rule Code",
+    "DESCRIPTION": "Description",
+    "PARAM_KEY": "Parameter",
+    "PARAM_VALUE": "Value",
+    "ENABLED": "Enabled",
+    "DISABLED": "Disabled",
+    "ACTIONS": "Actions",
+    "EDIT": "Edit",
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "NO_RULES": "No compliance rules configured",
+    "UPDATED": "Rule updated successfully",
+    "ERROR": "Error loading compliance rules",
+    "CREATE": "New Rule",
+    "CREATE_TITLE": "Create Compliance Rule",
+    "DELETE": "Delete",
+    "DELETE_CONFIRM": "Are you sure you want to delete this rule?",
+    "DELETED": "Rule deleted successfully",
+    "CREATED": "Rule created successfully",
+    "SELECT_RULE": "Select a rule...",
+    "TRANSITION": {
+      "LABEL": "Applies To",
+      "COMPLETENESS_REQUIRED": "Documentation Complete",
+      "HIGH_VALUE_ADDITIONAL_DOC": "Documentation Complete (FCL only)",
+      "RESTRICTED_COUNTRY": "Documentation Complete / Declaration",
+      "COMMERCIAL_INVOICE_REQUIRED": "Declaration in Progress",
+      "BL_VERIFIED_FOR_VALUATION": "Valuation Review",
+      "PHYSICAL_INSPECTION_GATT": "Valuation Review (Physical only)",
+      "CROSSING_RESOLVED": "Customs to Valuation Review",
+      "UNKNOWN": "Not defined"
+    }
   },
   "AUTH": {
     "INVALID_CREDENTIALS": "Invalid credentials"

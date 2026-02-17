@@ -103,6 +103,12 @@ export const routes: Routes = [
         loadComponent: () => import('./features/audit/audit-log/audit-log.component').then(m => m.AuditLogComponent),
         data: { roles: ['ADMIN'] },
         canActivate: [roleGuard]
+      },
+      {
+        path: 'compliance-config',
+        loadComponent: () => import('./features/compliance/compliance-config/compliance-config.component').then(m => m.ComplianceConfigComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
       }
     ]
   },
