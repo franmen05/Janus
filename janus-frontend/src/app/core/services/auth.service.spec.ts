@@ -7,33 +7,38 @@ import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
 import { environment } from '../../../environments/environment';
 
+const mockUser: User = {
+  id: 1,
+  username: 'admin',
+  fullName: 'Admin User',
+  email: 'admin@test.com',
+  role: 'ADMIN',
+  active: true,
+  clientId: null,
+  createdAt: '2024-01-01T00:00:00'
+};
+
+function createTranslateSpy(): jasmine.SpyObj<TranslateService> {
+  const spy = jasmine.createSpyObj('TranslateService', ['instant']);
+  spy.instant.and.callFake((key: string) => key);
+  return spy;
+}
+
 describe('AuthService', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
   let router: Router;
-  let translateService: jasmine.SpyObj<TranslateService>;
-
-  const mockUser: User = {
-    id: 1,
-    username: 'admin',
-    fullName: 'Admin User',
-    email: 'admin@test.com',
-    role: 'ADMIN',
-    active: true,
-    clientId: null,
-    createdAt: '2024-01-01T00:00:00'
-  };
 
   beforeEach(async () => {
-    translateService = jasmine.createSpyObj('TranslateService', ['instant']);
-    translateService.instant.and.callFake((key: string) => key);
+    localStorage.removeItem('janus_credentials');
+    localStorage.removeItem('janus_user');
 
     await TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: TranslateService, useValue: translateService }
+        { provide: TranslateService, useValue: createTranslateSpy() }
       ]
     }).compileComponents();
 
@@ -43,6 +48,8 @@ describe('AuthService', () => {
   });
 
   afterEach(() => {
+    localStorage.removeItem('janus_credentials');
+    localStorage.removeItem('janus_user');
     httpMock.verify();
   });
 
@@ -73,6 +80,8 @@ describe('AuthService', () => {
       expect(service.user()).toEqual(mockUser);
       expect(service.role()).toBe('ADMIN');
       expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
+      expect(localStorage.getItem('janus_credentials')).toBe(btoa('admin:password'));
+      expect(localStorage.getItem('janus_user')).toBe(JSON.stringify(mockUser));
     });
 
     it('should clear credentials and alert on error', () => {
@@ -93,19 +102,19 @@ describe('AuthService', () => {
     it('should clear user and navigate to /login', () => {
       spyOn(router, 'navigate');
 
-      // First login to set state
       service.login('admin', 'password');
       const req = httpMock.expectOne(`${environment.apiUrl}/api/users/me`);
       req.flush(mockUser);
 
       expect(service.isAuthenticated()).toBeTrue();
 
-      // Now logout
       service.logout();
 
       expect(service.isAuthenticated()).toBeFalse();
       expect(service.user()).toBeNull();
       expect(service.getAuthHeader()).toBeNull();
+      expect(localStorage.getItem('janus_credentials')).toBeNull();
+      expect(localStorage.getItem('janus_user')).toBeNull();
       expect(router.navigate).toHaveBeenCalledWith(['/login']);
     });
   });
@@ -142,5 +151,55 @@ describe('AuthService', () => {
     it('should return false when no user is logged in', () => {
       expect(service.hasRole(['ADMIN'])).toBeFalse();
     });
+  });
+});
+
+describe('AuthService session restore', () => {
+  afterEach(() => {
+    localStorage.removeItem('janus_credentials');
+    localStorage.removeItem('janus_user');
+  });
+
+  it('should restore session from localStorage on init without HTTP validation', async () => {
+    const creds = btoa('admin:password');
+    localStorage.setItem('janus_credentials', creds);
+    localStorage.setItem('janus_user', JSON.stringify(mockUser));
+
+    await TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: TranslateService, useValue: createTranslateSpy() }
+      ]
+    }).compileComponents();
+
+    const service = TestBed.inject(AuthService);
+    const httpMock = TestBed.inject(HttpTestingController);
+
+    expect(service.isAuthenticated()).toBeTrue();
+    expect(service.user()).toEqual(mockUser);
+    expect(service.getAuthHeader()).toBe(creds);
+
+    httpMock.expectNone(`${environment.apiUrl}/api/users/me`);
+  });
+
+  it('should not be authenticated if localStorage is empty', async () => {
+    await TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: TranslateService, useValue: createTranslateSpy() }
+      ]
+    }).compileComponents();
+
+    const service = TestBed.inject(AuthService);
+    const httpMock = TestBed.inject(HttpTestingController);
+
+    expect(service.isAuthenticated()).toBeFalse();
+    expect(service.getAuthHeader()).toBeNull();
+
+    httpMock.expectNone(`${environment.apiUrl}/api/users/me`);
   });
 });

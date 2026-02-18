@@ -9,6 +9,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error) => {
       if (error.status === 401) {
+        localStorage.removeItem('janus_credentials');
+        localStorage.removeItem('janus_user');
         router.navigate(['/login']);
       }
       return throwError(() => error);
