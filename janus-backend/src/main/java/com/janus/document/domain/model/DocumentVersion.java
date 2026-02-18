@@ -38,6 +38,9 @@ public class DocumentVersion extends PanacheEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     public User uploadedBy;
 
+    @Column(name = "change_reason")
+    public String changeReason;
+
     @Column(name = "uploaded_at", nullable = false, updatable = false)
     public LocalDateTime uploadedAt;
 

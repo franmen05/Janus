@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
@@ -10,6 +10,7 @@ import { AuditService } from '../../../core/services/audit.service';
 import { DocumentService } from '../../../core/services/document.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
+import { ComplianceService } from '../../../core/services/compliance.service';
 import { OperationStatus, CargoType, InspectionType, Operation } from '../../../core/models/operation.model';
 import { DocumentType } from '../../../core/models/document.model';
 
@@ -24,7 +25,7 @@ describe('OperationDetailComponent', () => {
   const mockOperation: Operation = {
     id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
     cargoType: CargoType.FCL, inspectionType: InspectionType.EXPRESS,
-    status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
+    status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null, originCountry: null,
     notes: 'Test notes', deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
   };
 
@@ -45,6 +46,9 @@ describe('OperationDetailComponent', () => {
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['getByOperation', 'acknowledge']);
     alertServiceSpy.getByOperation.and.returnValue(of([]));
 
+    const complianceServiceSpy = jasmine.createSpyObj('ComplianceService', ['validate']);
+    complianceServiceSpy.validate.and.returnValue(of({ valid: true, errors: [] }));
+
     await TestBed.configureTestingModule({
       imports: [OperationDetailComponent, RouterTestingModule, TranslateModule.forRoot()],
       providers: [
@@ -53,11 +57,15 @@ describe('OperationDetailComponent', () => {
         { provide: DocumentService, useValue: documentServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
+        { provide: ComplianceService, useValue: complianceServiceSpy },
         {
           provide: ActivatedRoute,
           useValue: {
             paramMap: of(convertToParamMap({ id: '1' })),
-            snapshot: { paramMap: convertToParamMap({ id: '1' }) }
+            snapshot: {
+              paramMap: convertToParamMap({ id: '1' }),
+              queryParamMap: convertToParamMap({})
+            }
           }
         }
       ],

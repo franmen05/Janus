@@ -10,6 +10,7 @@ public record DocumentVersionResponse(
         long fileSize,
         String mimeType,
         String uploadedByUsername,
+        String changeReason,
         LocalDateTime uploadedAt
 ) {
     public static DocumentVersionResponse from(DocumentVersion v) {
@@ -20,6 +21,7 @@ public record DocumentVersionResponse(
                 v.fileSize,
                 v.mimeType,
                 v.uploadedBy != null ? v.uploadedBy.username : null,
+                v.changeReason,
                 v.uploadedAt
         );
     }

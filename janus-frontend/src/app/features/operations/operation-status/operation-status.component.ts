@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { ComplianceService } from '../../../core/services/compliance.service';
-import { OperationStatus, StatusHistory } from '../../../core/models/operation.model';
-import { CompletenessResponse, DocumentStatus } from '../../../core/models/document.model';
+import { OperationStatus } from '../../../core/models/operation.model';
+import { CompletenessResponse } from '../../../core/models/document.model';
 import { ValidationError } from '../../../core/models/compliance.model';
 import { TimelineComponent, TimelineEvent } from '../../../shared/components/timeline/timeline.component';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
@@ -45,7 +45,7 @@ import { AuthService } from '../../../core/services/auth.service';
               <strong>{{ 'COMPLIANCE.VALIDATION_FAILED' | translate }}</strong>
               <ul class="mb-0 mt-1">
                 @for (err of validationErrors(); track err.ruleCode) {
-                  <li>{{ err.message }}</li>
+                  <li>{{ translateError(err) }}</li>
                 }
               </ul>
             </div>
@@ -119,8 +119,24 @@ export class OperationStatusComponent implements OnInit {
       comment: this.comment || undefined
     }).subscribe({
       next: () => { this.selectedStatus = ''; this.comment = ''; this.validationErrors.set([]); this.loadHistory(); this.statusChanged.emit(); },
-      error: (err) => alert(err.error?.error ?? this.translate.instant('STATUS_CHANGE.FAILED'))
+      error: (err) => {
+        const msg = err.error?.error ?? '';
+        const match = msg.match(/Invalid status transition from (\w+) to (\w+)/);
+        if (match) {
+          const from = this.translate.instant('STATUS.' + match[1]);
+          const to = this.translate.instant('STATUS.' + match[2]);
+          alert(this.translate.instant('STATUS_CHANGE.INVALID_TRANSITION', { from, to }));
+        } else {
+          alert(msg || this.translate.instant('STATUS_CHANGE.FAILED'));
+        }
+      }
     });
+  }
+
+  translateError(err: ValidationError): string {
+    const key = 'COMPLIANCE.' + err.ruleCode;
+    const translated = this.translate.instant(key);
+    return translated !== key ? translated : err.message;
   }
 
   private translateStatus(status: string): string {

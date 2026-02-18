@@ -15,6 +15,9 @@ import java.util.List;
 public class PhysicalInspectionGattRule implements ComplianceRule {
 
     @Override
+    public String ruleCode() { return "PHYSICAL_INSPECTION_GATT"; }
+
+    @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, CargoType cargo, InspectionType inspection) {
         return to == OperationStatus.VALUATION_REVIEW && inspection == InspectionType.PHYSICAL;
     }

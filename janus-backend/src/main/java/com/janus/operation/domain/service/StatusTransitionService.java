@@ -9,6 +9,14 @@ import java.util.Set;
 @ApplicationScoped
 public class StatusTransitionService {
 
+    private static final Set<OperationStatus> DOCUMENT_UPLOAD_ALLOWED_STATUSES = Set.of(
+            OperationStatus.DRAFT,
+            OperationStatus.DOCUMENTATION_COMPLETE,
+            OperationStatus.DECLARATION_IN_PROGRESS,
+            OperationStatus.SUBMITTED_TO_CUSTOMS,
+            OperationStatus.VALUATION_REVIEW
+    );
+
     private static final Map<OperationStatus, Set<OperationStatus>> ALLOWED_TRANSITIONS = Map.of(
             OperationStatus.DRAFT, Set.of(OperationStatus.DOCUMENTATION_COMPLETE, OperationStatus.CANCELLED),
             OperationStatus.DOCUMENTATION_COMPLETE, Set.of(OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.CANCELLED),
@@ -31,5 +39,9 @@ public class StatusTransitionService {
 
     public boolean isFinalStatus(OperationStatus status) {
         return status == OperationStatus.CLOSED || status == OperationStatus.CANCELLED;
+    }
+
+    public boolean allowsDocumentUpload(OperationStatus status) {
+        return DOCUMENT_UPLOAD_ALLOWED_STATUSES.contains(status);
     }
 }

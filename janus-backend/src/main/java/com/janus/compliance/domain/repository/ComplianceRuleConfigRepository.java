@@ -20,7 +20,7 @@ public class ComplianceRuleConfigRepository implements PanacheRepository<Complia
     public boolean isRuleEnabled(String ruleCode) {
         return find("ruleCode = ?1 AND paramKey = 'enabled'", ruleCode)
                 .firstResultOptional()
-                .map(c -> Boolean.parseBoolean(c.paramValue))
+                .map(c -> c.enabled)
                 .orElse(true);
     }
 

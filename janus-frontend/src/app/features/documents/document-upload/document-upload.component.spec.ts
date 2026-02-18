@@ -56,8 +56,8 @@ describe('DocumentUploadComponent', () => {
 
     component.onUpload();
 
-    expect(documentServiceSpy.upload).toHaveBeenCalledWith(5, mockFile, DocumentType.BL);
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/operations', 5]);
+    expect(documentServiceSpy.upload).toHaveBeenCalledWith(5, mockFile, DocumentType.BL, undefined);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/operations', 5], { queryParams: { tab: 'documents' } });
   });
 
   it('should show document type selector', () => {

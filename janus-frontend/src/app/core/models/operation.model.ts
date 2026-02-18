@@ -31,6 +31,7 @@ export interface Operation {
   status: OperationStatus;
   assignedAgentId: number | null;
   assignedAgentName: string | null;
+  originCountry: string | null;
   notes: string | null;
   deadline: string | null;
   closedAt: string | null;
@@ -43,6 +44,7 @@ export interface CreateOperationRequest {
   cargoType: CargoType;
   inspectionType: InspectionType;
   assignedAgentId?: number;
+  originCountry?: string;
   notes?: string;
   deadline?: string;
 }

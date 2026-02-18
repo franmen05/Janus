@@ -16,6 +16,9 @@ import java.util.List;
 public class CommercialInvoiceRequiredRule implements ComplianceRule {
 
     @Override
+    public String ruleCode() { return "COMMERCIAL_INVOICE_REQUIRED"; }
+
+    @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, CargoType cargo, InspectionType inspection) {
         return to == OperationStatus.DECLARATION_IN_PROGRESS;
     }

@@ -74,6 +74,7 @@ public class DocumentResource {
     public Response upload(@PathParam("operationId") Long operationId,
                            @RestForm("file") FileUpload file,
                            @RestForm("documentType") DocumentType documentType,
+                           @RestForm("changeReason") String changeReason,
                            @Context SecurityContext sec) {
         try {
             var inputStream = Files.newInputStream(file.uploadedFile());
@@ -84,7 +85,8 @@ public class DocumentResource {
                     file.fileName(),
                     file.contentType(),
                     Files.size(file.uploadedFile()),
-                    sec.getUserPrincipal().getName()
+                    sec.getUserPrincipal().getName(),
+                    changeReason
             );
             return Response.status(Response.Status.CREATED)
                     .entity(DocumentResponse.from(doc))

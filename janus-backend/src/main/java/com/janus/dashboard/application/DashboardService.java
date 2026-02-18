@@ -10,9 +10,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class DashboardService {
+
+    private static final Logger LOG = Logger.getLogger(DashboardService.class);
 
     @Inject
     EntityManager em;
@@ -57,25 +60,38 @@ public class DashboardService {
 
     @SuppressWarnings("unchecked")
     private Map<String, Double> getAverageTimePerStage(DashboardFilter filter) {
-        // Simple implementation: compute from status history
         try {
-            var jpql = "SELECT sh.newStatus, AVG("
-                    + "FUNCTION('TIMESTAMPDIFF', HOUR, sh.changedAt,"
+            var jpql = "SELECT sh.newStatus, sh.changedAt, sh.operation.id,"
                     + " (SELECT MIN(sh2.changedAt) FROM StatusHistory sh2"
-                    + " WHERE sh2.operation = sh.operation AND sh2.changedAt > sh.changedAt))"
-                    + ") FROM StatusHistory sh"
+                    + " WHERE sh2.operation = sh.operation AND sh2.changedAt > sh.changedAt)"
+                    + " FROM StatusHistory sh"
                     + " WHERE sh.newStatus NOT IN (com.janus.operation.domain.model.OperationStatus.CLOSED,"
-                    + " com.janus.operation.domain.model.OperationStatus.CANCELLED)"
-                    + " GROUP BY sh.newStatus";
+                    + " com.janus.operation.domain.model.OperationStatus.CANCELLED)";
             var query = em.createQuery(jpql);
-            var result = new LinkedHashMap<String, Double>();
-            for (var row : (List<Object[]>) query.getResultList()) {
+            var rows = (List<Object[]>) query.getResultList();
+
+            var sumByStatus = new LinkedHashMap<OperationStatus, Double>();
+            var countByStatus = new LinkedHashMap<OperationStatus, Long>();
+
+            for (var row : rows) {
                 var status = (OperationStatus) row[0];
-                var avg = row[1] != null ? ((Number) row[1]).doubleValue() : 0.0;
-                result.put(status.name(), avg);
+                var startTime = (java.time.LocalDateTime) row[1];
+                var endTime = (java.time.LocalDateTime) row[3];
+                if (endTime == null) continue;
+
+                double hours = java.time.Duration.between(startTime, endTime).toMinutes() / 60.0;
+                sumByStatus.merge(status, hours, Double::sum);
+                countByStatus.merge(status, 1L, Long::sum);
+            }
+
+            var result = new LinkedHashMap<String, Double>();
+            for (var entry : sumByStatus.entrySet()) {
+                long cnt = countByStatus.getOrDefault(entry.getKey(), 1L);
+                result.put(entry.getKey().name(), entry.getValue() / cnt);
             }
             return result;
         } catch (Exception e) {
+            LOG.error("Failed to compute average time per stage", e);
             return Map.of();
         }
     }

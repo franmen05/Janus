@@ -17,10 +17,13 @@ export class DocumentService {
     return this.http.get<Document>(`${this.baseUrl}/api/operations/${operationId}/documents/${id}`);
   }
 
-  upload(operationId: number, file: File, documentType: string): Observable<Document> {
+  upload(operationId: number, file: File, documentType: string, changeReason?: string): Observable<Document> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('documentType', documentType);
+    if (changeReason) {
+      formData.append('changeReason', changeReason);
+    }
     return this.http.post<Document>(
       `${this.baseUrl}/api/operations/${operationId}/documents`,
       formData

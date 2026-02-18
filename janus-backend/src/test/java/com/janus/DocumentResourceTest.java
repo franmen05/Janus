@@ -233,7 +233,100 @@ class DocumentResourceTest {
                 .when().post("/api/operations/{operationId}/documents", closedOperationId)
                 .then()
                 .statusCode(400)
-                .body("error", containsString("closed or cancelled"));
+                .body("error", containsString("VALUATION_REVIEW"));
+    }
+
+    @Test
+    @Order(33)
+    void testUploadBlockedAfterValuationReview() {
+        // Create operation and advance to PAYMENT_PREPARATION (use LCL to avoid FCL-specific rules)
+        var opId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS"}
+                        """)
+                .when().post("/api/operations")
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        // Upload mandatory docs before advancing
+        uploadDoc(opId, "BL");
+        uploadDoc(opId, "COMMERCIAL_INVOICE");
+        uploadDoc(opId, "PACKING_LIST");
+
+        // Advance to PAYMENT_PREPARATION (past VALUATION_REVIEW)
+        var transitions = new String[]{
+                "DOCUMENTATION_COMPLETE", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+                "VALUATION_REVIEW", "PAYMENT_PREPARATION"
+        };
+        for (var status : transitions) {
+            given()
+                    .auth().basic("admin", "admin123")
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {"newStatus": "%s"}
+                            """.formatted(status))
+                    .when().post("/api/operations/{id}/change-status", opId)
+                    .then()
+                    .statusCode(200);
+        }
+
+        // Upload should be blocked at PAYMENT_PREPARATION
+        given()
+                .auth().preemptive().basic("admin", "admin123")
+                .multiPart("file", "blocked.pdf", "content".getBytes(), "application/pdf")
+                .multiPart("documentType", "BL")
+                .when().post("/api/operations/{operationId}/documents", opId)
+                .then()
+                .statusCode(400)
+                .body("error", containsString("VALUATION_REVIEW"));
+    }
+
+    @Test
+    @Order(34)
+    void testUploadAllowedAtValuationReview() {
+        // Create operation and advance to VALUATION_REVIEW (use LCL to avoid FCL-specific rules)
+        var opId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS"}
+                        """)
+                .when().post("/api/operations")
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        // Upload mandatory docs before advancing
+        uploadDoc(opId, "BL");
+        uploadDoc(opId, "COMMERCIAL_INVOICE");
+        uploadDoc(opId, "PACKING_LIST");
+
+        // Advance to VALUATION_REVIEW
+        var transitions = new String[]{
+                "DOCUMENTATION_COMPLETE", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+                "VALUATION_REVIEW"
+        };
+        for (var status : transitions) {
+            given()
+                    .auth().basic("admin", "admin123")
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {"newStatus": "%s"}
+                            """.formatted(status))
+                    .when().post("/api/operations/{id}/change-status", opId)
+                    .then()
+                    .statusCode(200);
+        }
+
+        // Upload should still be allowed at VALUATION_REVIEW
+        given()
+                .auth().preemptive().basic("admin", "admin123")
+                .multiPart("file", "allowed.pdf", "content".getBytes(), "application/pdf")
+                .multiPart("documentType", "OTHER")
+                .when().post("/api/operations/{operationId}/documents", opId)
+                .then()
+                .statusCode(201);
     }
 
     // ---- Delete tests ----

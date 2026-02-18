@@ -16,7 +16,7 @@ import { FileSizePipe } from '../../../shared/pipes/file-size.pipe';
       <div class="card-body p-0">
         <table class="table table-hover mb-0">
           <thead class="table-light">
-            <tr><th>{{ 'DOCUMENTS.VERSION' | translate }}</th><th>{{ 'DOCUMENTS.FILE_NAME' | translate }}</th><th>{{ 'DOCUMENTS.SIZE' | translate }}</th><th>{{ 'DOCUMENTS.UPLOADED_BY' | translate }}</th><th>{{ 'DOCUMENTS.DATE' | translate }}</th><th>{{ 'AUDIT.ACTION' | translate }}</th></tr>
+            <tr><th>{{ 'DOCUMENTS.VERSION' | translate }}</th><th>{{ 'DOCUMENTS.FILE_NAME' | translate }}</th><th>{{ 'DOCUMENTS.SIZE' | translate }}</th><th>{{ 'DOCUMENTS.CHANGE_REASON' | translate }}</th><th>{{ 'DOCUMENTS.UPLOADED_BY' | translate }}</th><th>{{ 'DOCUMENTS.DATE' | translate }}</th><th>{{ 'AUDIT.ACTION' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (v of versions(); track v.id) {
@@ -24,6 +24,7 @@ import { FileSizePipe } from '../../../shared/pipes/file-size.pipe';
                 <td><span class="badge bg-secondary">v{{ v.versionNumber }}</span></td>
                 <td>{{ v.originalName }}</td>
                 <td>{{ v.fileSize | fileSize }}</td>
+                <td>{{ v.changeReason || '-' }}</td>
                 <td>{{ v.uploadedByUsername }}</td>
                 <td>{{ v.uploadedAt | date:'medium' }}</td>
                 <td><button class="btn btn-sm btn-outline-primary" (click)="downloadVersion(v)">{{ 'ACTIONS.DOWNLOAD' | translate }}</button></td>

@@ -146,12 +146,19 @@ import { OperationAlertsComponent } from '../../alerts/operation-alerts/operatio
             <div class="card mt-3">
               <div class="card-body p-0 table-responsive">
                 <table class="table table-sm mb-0">
-                  <thead class="table-light"><tr><th>{{ 'AUDIT.ACTION' | translate }}</th><th>{{ 'AUDIT.USER' | translate }}</th><th class="d-none d-md-table-cell">{{ 'AUDIT.IP' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.DETAILS' | translate }}</th><th>{{ 'AUDIT.DATE' | translate }}</th></tr></thead>
+                  <thead class="table-light"><tr><th>{{ 'AUDIT.ACTION' | translate }}</th><th>{{ 'AUDIT.USER' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.ENTITY' | translate }}</th><th class="d-none d-md-table-cell">{{ 'AUDIT.IP' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.DETAILS' | translate }}</th><th>{{ 'AUDIT.DATE' | translate }}</th></tr></thead>
                   <tbody>
                     @for (log of auditLogs(); track log.id) {
                       <tr>
                         <td><app-status-badge [status]="log.action" /></td>
                         <td>{{ log.username }}</td>
+                        <td class="d-none d-sm-table-cell">
+                          @if (log.entityName === 'Document' && log.entityId) {
+                            <a [routerLink]="['/operations', operation()!.id, 'documents', log.entityId, 'versions']">{{ log.entityName }} #{{ log.entityId }}</a>
+                          } @else {
+                            {{ log.entityName }}
+                          }
+                        </td>
                         <td class="d-none d-md-table-cell"><small class="text-muted">{{ log.ipAddress ?? '-' }}</small></td>
                         <td class="d-none d-sm-table-cell"><small>{{ log.details }}</small></td>
                         <td>{{ log.createdAt | date:'medium' }}</td>

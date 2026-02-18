@@ -18,6 +18,7 @@ describe('AuditService', () => {
     action: AuditAction.CREATE,
     entityName: 'Operation',
     entityId: 1,
+    operationId: 1,
     details: 'Created operation OP-2024-0001',
     createdAt: '2024-01-01T00:00:00'
   };

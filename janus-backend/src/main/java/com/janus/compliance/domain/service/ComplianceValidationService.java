@@ -1,6 +1,7 @@
 package com.janus.compliance.domain.service;
 
 import com.janus.compliance.domain.model.ValidationResult;
+import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
 import com.janus.document.domain.model.Document;
 import com.janus.document.domain.repository.DocumentRepository;
 import com.janus.operation.domain.model.Operation;
@@ -20,11 +21,17 @@ public class ComplianceValidationService {
     @Inject
     DocumentRepository documentRepository;
 
+    @Inject
+    ComplianceRuleConfigRepository configRepository;
+
     public ValidationResult validate(Operation operation, OperationStatus targetStatus) {
         var documents = documentRepository.findByOperationId(operation.id);
         var errors = new ArrayList<ValidationResult.ValidationError>();
 
         for (var rule : rules) {
+            if (!configRepository.isRuleEnabled(rule.ruleCode())) {
+                continue;
+            }
             if (rule.appliesTo(operation.status, targetStatus, operation.cargoType, operation.inspectionType)) {
                 var result = rule.validate(operation, documents);
                 if (!result.passed()) {

@@ -32,6 +32,7 @@ export interface DocumentVersion {
   fileSize: number;
   mimeType: string;
   uploadedByUsername: string;
+  changeReason?: string;
   uploadedAt: string;
 }
 

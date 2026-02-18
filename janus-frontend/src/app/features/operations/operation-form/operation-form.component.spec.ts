@@ -20,7 +20,7 @@ describe('OperationFormComponent', () => {
     operationServiceSpy.create.and.returnValue(of({
       id: 10, referenceNumber: 'OP-010', clientId: 1, clientName: 'Client A',
       cargoType: CargoType.FCL, inspectionType: InspectionType.EXPRESS,
-      status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
+      status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null, originCountry: null,
       notes: null, deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     }));
 

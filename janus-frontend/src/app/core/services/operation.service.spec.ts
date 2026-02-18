@@ -25,6 +25,7 @@ describe('OperationService', () => {
     status: OperationStatus.DRAFT,
     assignedAgentId: 1,
     assignedAgentName: 'Agent One',
+    originCountry: null,
     notes: null,
     deadline: null,
     closedAt: null,

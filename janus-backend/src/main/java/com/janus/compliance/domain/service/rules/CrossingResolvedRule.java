@@ -19,6 +19,9 @@ public class CrossingResolvedRule implements ComplianceRule {
     CrossingResultRepository crossingResultRepository;
 
     @Override
+    public String ruleCode() { return "CROSSING_RESOLVED"; }
+
+    @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, CargoType cargo, InspectionType inspection) {
         return from == OperationStatus.SUBMITTED_TO_CUSTOMS && to == OperationStatus.VALUATION_REVIEW;
     }

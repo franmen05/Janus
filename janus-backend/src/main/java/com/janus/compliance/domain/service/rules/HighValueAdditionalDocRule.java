@@ -15,6 +15,9 @@ import java.util.List;
 public class HighValueAdditionalDocRule implements ComplianceRule {
 
     @Override
+    public String ruleCode() { return "HIGH_VALUE_ADDITIONAL_DOC"; }
+
+    @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, CargoType cargo, InspectionType inspection) {
         return to == OperationStatus.DOCUMENTATION_COMPLETE && cargo == CargoType.FCL;
     }

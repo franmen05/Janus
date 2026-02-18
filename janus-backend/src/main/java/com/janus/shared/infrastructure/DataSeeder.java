@@ -2,6 +2,8 @@ package com.janus.shared.infrastructure;
 
 import com.janus.client.domain.model.Client;
 import com.janus.client.domain.repository.ClientRepository;
+import com.janus.compliance.domain.model.ComplianceRuleConfig;
+import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
 import com.janus.user.domain.model.Role;
 import com.janus.user.domain.model.User;
 import com.janus.user.domain.repository.UserRepository;
@@ -24,6 +26,9 @@ public class DataSeeder {
     @Inject
     ClientRepository clientRepository;
 
+    @Inject
+    ComplianceRuleConfigRepository complianceRuleConfigRepository;
+
     @Transactional
     void onStart(@Observes StartupEvent event) {
         if (userRepository.count() == 0) {
@@ -31,6 +36,11 @@ public class DataSeeder {
             seedClients();
             seedUsers();
             LOG.info("Data seeding complete.");
+        }
+        if (complianceRuleConfigRepository.count() == 0) {
+            LOG.info("Seeding compliance rule configs...");
+            seedComplianceRuleConfigs();
+            LOG.info("Compliance rule config seeding complete.");
         }
     }
 
@@ -61,6 +71,31 @@ public class DataSeeder {
         createUser("accounting", "acc123", "Accounting User", "accounting@janus.com", Role.ACCOUNTING, null);
         createUser("client", "client123", "Demo Client User", "client@demo.com", Role.CLIENT, firstClientId);
         createUser("carrier", "carrier123", "Demo Carrier", "carrier@demo.com", Role.CARRIER, null);
+    }
+
+    private void seedComplianceRuleConfigs() {
+        createConfig("COMPLETENESS_REQUIRED", "enabled", "true", "Enable completeness check rule");
+        createConfig("COMPLETENESS_REQUIRED", "mandatory_documents_FCL", "BL,COMMERCIAL_INVOICE,PACKING_LIST,CERTIFICATE",
+                "Mandatory documents for FCL cargo");
+        createConfig("COMPLETENESS_REQUIRED", "mandatory_documents_LCL", "BL,COMMERCIAL_INVOICE,PACKING_LIST",
+                "Mandatory documents for LCL cargo");
+        createConfig("COMMERCIAL_INVOICE_REQUIRED", "enabled", "true", "Enable commercial invoice validation rule");
+        createConfig("HIGH_VALUE_ADDITIONAL_DOC", "enabled", "true", "Enable high value additional document rule");
+        createConfig("PHYSICAL_INSPECTION_GATT", "enabled", "true", "Enable physical inspection GATT rule");
+        createConfig("BL_VERIFIED_FOR_VALUATION", "enabled", "true", "Enable BL verification for valuation rule");
+        createConfig("CROSSING_RESOLVED", "enabled", "true", "Enable crossing resolved rule");
+        createConfig("RESTRICTED_COUNTRY", "enabled", "true", "Enable restricted country rule");
+        createConfig("RESTRICTED_COUNTRY", "restricted_countries", "CU,KP,IR,SY,VE",
+                "Comma-separated ISO country codes that are restricted");
+    }
+
+    private void createConfig(String ruleCode, String paramKey, String paramValue, String description) {
+        var config = new ComplianceRuleConfig();
+        config.ruleCode = ruleCode;
+        config.paramKey = paramKey;
+        config.paramValue = paramValue;
+        config.description = description;
+        complianceRuleConfigRepository.persist(config);
     }
 
     private void createUser(String username, String password, String fullName,

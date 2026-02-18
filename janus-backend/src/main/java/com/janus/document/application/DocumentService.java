@@ -69,11 +69,12 @@ public class DocumentService {
     @Transactional
     public Document upload(Long operationId, DocumentType documentType,
                            InputStream fileStream, String originalName,
-                           String mimeType, long fileSize, String username) {
+                           String mimeType, long fileSize, String username,
+                           String changeReason) {
         var operation = operationService.findById(operationId);
 
-        if (statusTransitionService.isFinalStatus(operation.status)) {
-            throw new BusinessException("Cannot upload documents to a closed or cancelled operation");
+        if (!statusTransitionService.allowsDocumentUpload(operation.status)) {
+            throw new BusinessException("Documents can only be uploaded until VALUATION_REVIEW status");
         }
 
         validationService.validateFile(mimeType, fileSize);
@@ -99,6 +100,7 @@ public class DocumentService {
         version.filePath = filePath;
         version.fileSize = fileSize;
         version.mimeType = mimeType;
+        version.changeReason = changeReason;
 
         userRepository.findByUsername(username).ifPresent(u -> version.uploadedBy = u);
 
@@ -106,14 +108,16 @@ public class DocumentService {
 
         document.status = validationService.determineStatus(mimeType, fileSize);
 
+        var auditAction = version.versionNumber > 1 ? AuditAction.DOCUMENT_REPLACED : AuditAction.UPLOAD;
         auditEvent.fire(new AuditEvent(
-                username, AuditAction.UPLOAD, "Document", document.id, operationId,
+                username, auditAction, "Document", document.id, operationId,
                 null, JsonUtil.toJson(Map.of(
                         "documentType", documentType.name(),
                         "fileName", originalName,
                         "version", version.versionNumber
                 )),
-                "Document uploaded: " + documentType + " v" + version.versionNumber
+                (version.versionNumber > 1 ? "Document replaced: " : "Document uploaded: ")
+                        + documentType + " v" + version.versionNumber
         ));
 
         return document;

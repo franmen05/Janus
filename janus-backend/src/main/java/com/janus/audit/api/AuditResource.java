@@ -36,7 +36,7 @@ public class AuditResource {
     @Path("/operations/{operationId}")
     @RolesAllowed({"ADMIN", "AGENT"})
     public List<AuditLogResponse> getByOperation(@PathParam("operationId") Long operationId) {
-        return auditService.findByEntity("Operation", operationId).stream()
+        return auditService.findByOperationId(operationId).stream()
                 .map(AuditLogResponse::from)
                 .toList();
     }

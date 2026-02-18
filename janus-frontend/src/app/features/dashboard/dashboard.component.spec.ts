@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { DashboardComponent } from './dashboard.component';
 import { OperationService } from '../../core/services/operation.service';
 import { DashboardService } from '../../core/services/dashboard.service';
+import { AlertService } from '../../core/services/alert.service';
 import { AuthService } from '../../core/services/auth.service';
 import { OperationStatus, CargoType, InspectionType, Operation } from '../../core/models/operation.model';
 import { DashboardMetrics } from '../../core/models/dashboard.model';
@@ -16,25 +17,26 @@ describe('DashboardComponent', () => {
   let fixture: ComponentFixture<DashboardComponent>;
   let operationServiceSpy: jasmine.SpyObj<OperationService>;
   let dashboardServiceSpy: jasmine.SpyObj<DashboardService>;
+  let alertServiceSpy: jasmine.SpyObj<AlertService>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   const mockOperations: Operation[] = [
     {
       id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
       cargoType: CargoType.FCL, inspectionType: InspectionType.EXPRESS,
-      status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
+      status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null, originCountry: null,
       notes: null, deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     },
     {
       id: 2, referenceNumber: 'OP-002', clientId: 2, clientName: 'Client B',
       cargoType: CargoType.LCL, inspectionType: InspectionType.VISUAL,
-      status: OperationStatus.CLOSED, assignedAgentId: null, assignedAgentName: null,
+      status: OperationStatus.CLOSED, assignedAgentId: null, assignedAgentName: null, originCountry: null,
       notes: null, deadline: null, closedAt: '2024-01-10', createdAt: '2024-01-02', updatedAt: '2024-01-10'
     },
     {
       id: 3, referenceNumber: 'OP-003', clientId: 1, clientName: 'Client A',
       cargoType: CargoType.FCL, inspectionType: InspectionType.PHYSICAL,
-      status: OperationStatus.CANCELLED, assignedAgentId: null, assignedAgentName: null,
+      status: OperationStatus.CANCELLED, assignedAgentId: null, assignedAgentName: null, originCountry: null,
       notes: null, deadline: null, closedAt: null, createdAt: '2024-01-03', updatedAt: '2024-01-03'
     }
   ];
@@ -56,6 +58,9 @@ describe('DashboardComponent', () => {
     dashboardServiceSpy = jasmine.createSpyObj('DashboardService', ['getMetrics']);
     dashboardServiceSpy.getMetrics.and.returnValue(of(mockMetrics));
 
+    alertServiceSpy = jasmine.createSpyObj('AlertService', ['getActiveAlerts']);
+    alertServiceSpy.getActiveAlerts.and.returnValue(of([]));
+
     authServiceSpy = jasmine.createSpyObj('AuthService', ['hasRole']);
     authServiceSpy.hasRole.and.returnValue(true);
 
@@ -64,6 +69,7 @@ describe('DashboardComponent', () => {
       providers: [
         { provide: OperationService, useValue: operationServiceSpy },
         { provide: DashboardService, useValue: dashboardServiceSpy },
+        { provide: AlertService, useValue: alertServiceSpy },
         { provide: AuthService, useValue: authServiceSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]

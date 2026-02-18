@@ -37,6 +37,9 @@ public class Operation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     public User assignedAgent;
 
+    @Column(name = "origin_country", length = 2)
+    public String originCountry;
+
     @Column(columnDefinition = "TEXT")
     public String notes;
 

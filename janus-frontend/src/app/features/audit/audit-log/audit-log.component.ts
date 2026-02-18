@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuditService } from '../../../core/services/audit.service';
 import { AuditLog } from '../../../core/models/audit.model';
@@ -9,7 +10,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
 @Component({
   selector: 'app-audit-log',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, StatusBadgeComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, StatusBadgeComponent, RouterModule],
   template: `
     <h2 class="mb-4">{{ 'AUDIT.TITLE' | translate }}</h2>
     <div class="card mb-3">
@@ -33,8 +34,20 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                 <td><small>{{ log.createdAt | date:'medium' }}</small></td>
                 <td>{{ log.username }}</td>
                 <td><app-status-badge [status]="log.action" /></td>
-                <td class="d-none d-sm-table-cell">{{ log.entityName }}</td>
-                <td class="d-none d-sm-table-cell">{{ log.entityId }}</td>
+                <td class="d-none d-sm-table-cell">
+                  @if (log.entityName === 'Document' && log.operationId && log.entityId) {
+                    <a [routerLink]="['/operations', log.operationId, 'documents', log.entityId, 'versions']">{{ log.entityName }}</a>
+                  } @else {
+                    {{ log.entityName }}
+                  }
+                </td>
+                <td class="d-none d-sm-table-cell">
+                  @if (log.entityName === 'Document' && log.operationId && log.entityId) {
+                    <a [routerLink]="['/operations', log.operationId, 'documents', log.entityId, 'versions']">{{ log.entityId }}</a>
+                  } @else {
+                    {{ log.entityId }}
+                  }
+                </td>
                 <td class="d-none d-md-table-cell"><small>{{ log.details }}</small></td>
                 <td class="d-none d-lg-table-cell"><small>{{ log.ipAddress }}</small></td>
               </tr>

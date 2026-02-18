@@ -16,6 +16,7 @@ export interface AuditLog {
   action: AuditAction;
   entityName: string;
   entityId: number | null;
+  operationId: number | null;
   details: string | null;
   createdAt: string;
 }

@@ -16,6 +16,9 @@ import java.util.List;
 public class BLVerifiedForValuationRule implements ComplianceRule {
 
     @Override
+    public String ruleCode() { return "BL_VERIFIED_FOR_VALUATION"; }
+
+    @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, CargoType cargo, InspectionType inspection) {
         return to == OperationStatus.VALUATION_REVIEW;
     }

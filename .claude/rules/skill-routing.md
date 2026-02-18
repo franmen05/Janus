@@ -1,53 +1,203 @@
-# Skill Routing Rules
+# Task Routing Rules
 
-This document defines when to delegate tasks to specialized Claude Code skills based on user requests.
-
-## Automation & Configuration Skills
-
-### claude-automation-recommender
-**Trigger when user asks about:**
-- "What automations should I set up?"
-- "How do I optimize my Claude Code setup?"
-- "Recommend Claude Code features for this project"
-- "How should I configure Claude Code for this codebase?"
-- "What hooks/skills/plugins should I use?"
-
-**Capabilities:**
-- Analyzes codebase structure
-- Recommends hooks, subagents, skills, plugins, MCP servers
-- Provides setup guidance for Claude Code features
-- Read-only analysis (no file modifications)
-
-### claude-md-improver
-**Trigger when user asks to:**
-- "Check/audit CLAUDE.md"
-- "Improve CLAUDE.md"
-- "Fix/update CLAUDE.md"
-- "Review project documentation"
-
-**Capabilities:**
-- Scans for all CLAUDE.md files
-- Evaluates quality against best practice templates
-- Outputs quality report
-- Makes targeted improvements
-
-### writing-hookify-rules
-**Trigger when user asks to:**
-- "Create a hookify rule"
-- "Write a hook rule"
-- "Configure hookify"
-- "Add hookify automation"
-
-**Capabilities:**
-- Guidance on hookify rule syntax
-- Pattern recommendations
-- Hook configuration best practices
+This document defines when and how to delegate tasks using sub-agents (Task tool) and skills (Skill tool).
 
 ---
 
-## Development & Design Skills
+## Core Principle: Sub-Agents First
 
-### frontend-design
+**Prefer spawning Task sub-agents** for any non-trivial work. The main context should act as an **orchestrator** — planning, coordinating, and verifying — not executing large blocks of code directly.
+
+### When to use Sub-Agents (Task tool)
+- Any task touching 3+ files
+- Backend or frontend implementation work
+- Bug investigation requiring exploration
+- Infrastructure/DevOps tasks
+- Parallel workstreams
+
+### When to handle directly (no sub-agent)
+- Trivial edits (< 3 files, obvious fix)
+- Quick questions about the codebase
+- Commit/PR creation
+- Simple file reads or explanations
+
+---
+
+## Sub-Agent Definitions
+
+### Backend Agent
+**subagent_type**: `general-purpose`
+
+**Trigger when user asks to:**
+- Add/modify REST endpoints, services, entities, DTOs
+- Fix backend bugs, database issues, query problems
+- Add business logic, validation rules
+- Configure Quarkus settings, dependencies
+- Write or fix backend tests
+
+**Prompt must include:**
+```
+You are working on janus-backend (Quarkus 3.27.2, Java 21, Gradle).
+Package: com.janus. DTOs are Java records. Use Jakarta EE APIs (jakarta.*).
+Conventions: see .claude/rules/backend.md
+
+Task: [specific task description]
+
+After implementation, run: cd janus-backend && ./gradlew test
+Report: files changed, test results, any issues.
+```
+
+**Context to provide:**
+- Relevant existing file paths (entities, services, resources involved)
+- API contract if coordinating with frontend
+- Business rules and validation requirements
+
+---
+
+### Frontend Agent
+**subagent_type**: `general-purpose`
+
+**Trigger when user asks to:**
+- Create/modify Angular components, services, pipes, guards
+- Add routing, navigation, i18n translations
+- Fix frontend bugs, template issues
+- Implement forms, tables, modals
+- Update styling (non-design tasks)
+
+**Prompt must include:**
+```
+You are working on janus-frontend (Angular 20, Bootstrap 5, TypeScript).
+Use standalone components, signals, inject(). Follow existing patterns
+in src/app/features/ and src/app/core/. i18n in src/assets/i18n/.
+Conventions: see .claude/rules/frontend.md
+
+Task: [specific task description]
+
+After implementation, verify: cd janus-frontend && npx ng build
+Report: files changed, build result, any issues.
+```
+
+**Context to provide:**
+- API contract (endpoint URLs, request/response shapes)
+- Reference components to follow patterns from
+- i18n keys needed (both en.json and es.json)
+- Role-based visibility requirements
+
+---
+
+### Infra Agent
+**subagent_type**: `general-purpose`
+
+**Trigger when user asks to:**
+- Set up Docker, Docker Compose
+- Configure CI/CD pipelines
+- Manage deployment scripts
+- Environment configuration
+- Build tooling changes (Gradle, npm)
+
+**Prompt must include:**
+```
+You are working on Janus infrastructure.
+Backend: Quarkus (Dockerfile.jvm, Dockerfile.native). Gradle build.
+Frontend: Angular CLI. Build output: dist/janus-frontend/.
+
+Task: [specific task description]
+```
+
+---
+
+### Explore Agent
+**subagent_type**: `Explore`
+
+**Trigger when:**
+- Need to understand how a feature works across the codebase
+- Investigating a bug (unknown root cause)
+- Finding all usages of a pattern, entity, or endpoint
+- Understanding data flow between layers
+- Research before planning
+
+**Use directly** — no special prompt template needed. Just describe what you're looking for.
+
+---
+
+## Cross-Layer Communication
+
+When a feature spans both backend and frontend, follow these orchestration patterns.
+
+### Pattern A: Full-Stack Feature (Sequential)
+
+```
+Step 1: PLAN
+  → EnterPlanMode
+  → Design API contract: endpoints, methods, DTOs, auth roles
+  → Get user approval
+
+Step 2: BACKEND (spawn Backend Agent)
+  → Provide: endpoint specs, DTO fields, validation rules, business logic
+  → Agent implements and runs tests
+  → Agent reports: files created, endpoint URLs, DTO shapes, test results
+
+Step 3: FRONTEND (spawn Frontend Agent)
+  → Provide: confirmed API contract from Backend Agent results
+  → Provide: UI requirements (components, routing, i18n, role guards)
+  → Agent implements and verifies build
+  → Agent reports: files created, build status
+
+Step 4: VERIFY
+  → Main context confirms both agents succeeded
+  → Run integration check if needed
+```
+
+### Pattern B: Full-Stack Feature (Parallel)
+
+Use when backend and frontend work are independent (API contract already known):
+
+```
+Step 1: Define API contract in main context
+
+Step 2: Spawn BOTH agents in parallel (single message, two Task calls)
+  → Backend Agent: implement endpoints + tests
+  → Frontend Agent: implement UI + build verification
+
+Step 3: Collect results from both, verify consistency
+```
+
+### Pattern C: Cross-Layer Bug Fix
+
+```
+Step 1: Spawn Explore Agent
+  → "Find root cause of [bug description] across janus-backend and janus-frontend"
+
+Step 2: Based on findings, spawn appropriate agent(s)
+  → If backend issue: Backend Agent with fix instructions
+  → If frontend issue: Frontend Agent with fix instructions
+  → If both: Sequential — fix backend first, then frontend
+
+Step 3: Verify fix with tests
+```
+
+### API Contract Format
+
+When communicating API details between agents, use this structure:
+
+```
+Endpoint: [METHOD] /api/[resource]
+Path Params: id (Long)
+Request Body: { field: type (constraints), ... }
+Response Body: { field: type, ... }
+Auth: @RolesAllowed(["ADMIN", "AGENT"])
+Status Codes: 200 OK, 201 Created, 404 Not Found
+```
+
+---
+
+## Skill Routing
+
+Skills are invoked via the **Skill tool** for specialized knowledge. Skills differ from sub-agents: they inject expert knowledge into the current context rather than spawning an autonomous worker.
+
+### Development Skills
+
+#### frontend-design
 **Trigger when user asks to:**
 - "Build a web component/page/app"
 - "Create a UI for..."
@@ -55,168 +205,112 @@ This document defines when to delegate tasks to specialized Claude Code skills b
 - "Make this look better"
 - "Create a dashboard/interface"
 
-**Capabilities:**
-- Creates distinctive, production-grade frontend code
-- High design quality (avoids generic AI aesthetics)
-- Modern web component development
-- Visual polish and creative interfaces
+**Capabilities:** Production-grade frontend design with high visual quality. Avoids generic AI aesthetics. Use when **aesthetic quality matters**, not just functionality.
 
-**Important:** Use when aesthetic/design quality matters
+**Note:** For functional Angular work (add a table, fix a form), use a Frontend Agent instead.
 
-### playground
+#### playground
 **Trigger when user asks to:**
 - "Create a playground for..."
 - "Make an interactive tool/explorer"
 - "Build a visual configurator"
 - "Create a demo with live preview"
 
-**Capabilities:**
-- Self-contained single-file HTML explorers
-- Interactive controls + live preview
-- Copy-paste prompt generation
-- Visual configuration interfaces
+**Capabilities:** Self-contained single-file HTML tools with interactive controls and live preview.
 
----
-
-## Domain-Specific Skills
-
-### stripe-best-practices
+#### stripe-best-practices
 **Trigger when implementing:**
-- Payment processing
-- Checkout flows
-- Subscription systems
-- Stripe webhooks
-- Stripe Connect platforms
+- Payment processing, checkout flows, subscriptions
+- Stripe webhooks, Stripe Connect
 - Any Stripe API integration
 
-**Capabilities:**
-- Best practices for Stripe integrations
-- Security patterns
-- Webhook handling
-- Error recovery strategies
+**Capabilities:** Best practices for Stripe integrations, security patterns, webhook handling.
 
 ---
 
-## Plugin Development Skills
+### Claude Code Configuration Skills
 
-### plugin-structure
-**Trigger when user asks to:**
-- "Create a plugin"
-- "Scaffold a plugin"
-- "Understand plugin structure"
-- "Organize plugin components"
+#### claude-automation-recommender
+**Trigger:** "What automations should I set up?", "Optimize my Claude Code setup", "What hooks/skills/plugins should I use?"
 
-**Capabilities:**
-- Plugin directory layout guidance
-- Manifest configuration
-- Plugin architecture patterns
-- Component organization
+**Capabilities:** Analyzes codebase and recommends Claude Code automations. Read-only.
 
-### command-development
-**Trigger when user asks to:**
-- "Create a slash command"
-- "Add a command"
-- "Write a custom /command"
+#### claude-md-improver
+**Trigger:** "Check/audit CLAUDE.md", "Improve CLAUDE.md", "Fix CLAUDE.md"
 
-**Capabilities:**
-- Slash command structure
-- YAML frontmatter configuration
-- Dynamic arguments
-- Bash execution patterns
-- Command best practices
+**Capabilities:** Scans, evaluates, and improves CLAUDE.md files.
 
-### skill-development
-**Trigger when user asks to:**
-- "Create a skill"
-- "Add a skill to plugin"
-- "Write a new skill"
+#### writing-hookify-rules
+**Trigger:** "Create a hookify rule", "Configure hookify"
 
-**Capabilities:**
-- Skill structure and organization
-- Progressive disclosure patterns
-- SKILL.md formatting
-- Skill development best practices
-
-### agent-development
-**Trigger when user asks to:**
-- "Create an agent"
-- "Add a subagent"
-- "Write an agent for..."
-
-**Capabilities:**
-- Agent structure and frontmatter
-- System prompt design
-- Triggering conditions
-- Agent development patterns
-
-### hook-development
-**Trigger when user asks to:**
-- "Create a hook"
-- "Add a PreToolUse/PostToolUse hook"
-- "Validate tool usage"
-- "Add automation on Stop event"
-
-**Capabilities:**
-- Event-driven automation scripts
-- Prompt-based hooks
-- Tool validation patterns
-- Hook lifecycle management
-
-### mcp-integration
-**Trigger when user asks to:**
-- "Add MCP server"
-- "Integrate MCP"
-- "Configure MCP in plugin"
-- "Use .mcp.json"
-
-**Capabilities:**
-- Model Context Protocol integration
-- MCP server configuration
-- Plugin MCP integration patterns
-
-### plugin-settings
-**Trigger when user asks about:**
-- "Plugin settings"
-- "Store plugin configuration"
-- ".local.md files"
-- "Plugin state files"
-
-**Capabilities:**
-- Plugin-specific configuration patterns
-- `.claude/plugin-name.local.md` usage
-- Settings file organization
+**Capabilities:** Hookify rule syntax, patterns, configuration.
 
 ---
 
-## General Routing Logic
+### Plugin Development Skills
 
-1. **Check for skill match first** - If user request maps to a skill trigger, delegate to that skill
-2. **Use skills for specialized tasks** - Don't reinvent skill capabilities in main conversation
-3. **Combine skills when needed** - Multiple skills can be used for complex requests
-4. **Default to main agent** - For general coding, debugging, file operations not covered by skills
+| Skill | Trigger | Capabilities |
+|-------|---------|--------------|
+| `plugin-structure` | "Create/scaffold a plugin" | Plugin layout, manifest, organization |
+| `command-development` | "Create a slash command" | YAML frontmatter, arguments, bash execution |
+| `skill-development` | "Create a skill" | SKILL.md, progressive disclosure patterns |
+| `agent-development` | "Create an agent" | Agent frontmatter, system prompts, triggers |
+| `hook-development` | "Create a hook" | PreToolUse/PostToolUse/Stop events |
+| `mcp-integration` | "Add MCP server" | .mcp.json, stdio/SSE/HTTP server config |
+| `plugin-settings` | "Plugin settings" | .local.md files, YAML frontmatter settings |
 
-## Skill Usage Examples
+---
+
+## Routing Decision Examples
 
 ```
-User: "How should I set up Claude Code for this Java project?"
-→ Delegate to: claude-automation-recommender
+User: "Add a new REST endpoint for reports"
+→ Spawn Backend Agent
 
-User: "Create a beautiful dashboard for monitoring"
-→ Delegate to: frontend-design
+User: "Create a reports page with filters and table"
+→ Spawn Frontend Agent
 
-User: "Add a slash command to run tests"
-→ Delegate to: command-development
+User: "Add a reports feature end-to-end"
+→ Orchestrate: Plan → Backend Agent (API) → Frontend Agent (UI)
 
-User: "Build an interactive regex tester"
-→ Delegate to: playground
+User: "Add a reports feature, I already know the API contract"
+→ Parallel: Backend Agent + Frontend Agent simultaneously
 
-User: "Implement Stripe checkout"
-→ Delegate to: stripe-best-practices
+User: "Make the dashboard look better"
+→ Skill: frontend-design
 
-User: "Fix the authentication bug in UserService.java"
-→ Handle directly (no skill delegation needed)
+User: "Fix the bug where operations don't save"
+→ Explore Agent (find cause) → Backend or Frontend Agent (fix)
+
+User: "How does the compliance validation work?"
+→ Explore Agent
+
+User: "Set up Docker Compose for dev"
+→ Spawn Infra Agent
+
+User: "Review this PR"
+→ Handle directly (main context)
+
+User: "Fix typo in translation file"
+→ Handle directly (trivial)
+
+User: "Create a slash command to run tests"
+→ Skill: command-development
+
+User: "What Claude Code automations should I use?"
+→ Skill: claude-automation-recommender
 ```
 
 ---
 
-**Remember:** Skills are specialized tools. Use them when user requests align with their capabilities to provide expert-level assistance.
+## Summary
+
+| Layer | Tool | Type | When |
+|-------|------|------|------|
+| Backend | Task | `general-purpose` | Java/Quarkus implementation |
+| Frontend | Task | `general-purpose` | Angular implementation |
+| Infra | Task | `general-purpose` | Docker, CI/CD, deployment |
+| Explore | Task | `Explore` | Codebase research, bug investigation |
+| Plan | EnterPlanMode | — | Complex features needing design |
+| Skills | Skill | — | Specialized knowledge (design, Stripe, plugins) |
+| Direct | — | — | Trivial tasks, commits, explanations |

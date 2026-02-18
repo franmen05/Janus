@@ -9,6 +9,7 @@ public record CreateOperationRequest(
         @NotNull CargoType cargoType,
         @NotNull InspectionType inspectionType,
         Long assignedAgentId,
+        String originCountry,
         String notes,
         java.time.LocalDateTime deadline
 ) {}

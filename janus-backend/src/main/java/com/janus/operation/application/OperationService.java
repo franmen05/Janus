@@ -73,6 +73,7 @@ public class OperationService {
 
     @Transactional
     public Operation create(CreateOperationRequest request, String username) {
+
         var client = clientRepository.findByIdOptional(request.clientId())
                 .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
 
@@ -82,6 +83,7 @@ public class OperationService {
         op.cargoType = request.cargoType();
         op.inspectionType = request.inspectionType();
         op.status = OperationStatus.DRAFT;
+        op.originCountry = request.originCountry();
         op.notes = request.notes();
         op.deadline = request.deadline();
 
@@ -95,7 +97,10 @@ public class OperationService {
         recordStatusChange(op, null, OperationStatus.DRAFT, username, "Operation created", null);
 
         auditEvent.fire(new AuditEvent(
-                username, AuditAction.CREATE, "Operation", op.id, op.id,
+                username, AuditAction.CREATE,
+                "Operation",
+                op.id,
+                op.id,
                 null, JsonUtil.toJson(Map.of(
                         "referenceNumber", op.referenceNumber,
                         "status", op.status.name(),
@@ -126,6 +131,7 @@ public class OperationService {
                 .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
         op.cargoType = request.cargoType();
         op.inspectionType = request.inspectionType();
+        op.originCountry = request.originCountry();
         op.notes = request.notes();
         op.deadline = request.deadline();
 
@@ -180,6 +186,21 @@ public class OperationService {
                 JsonUtil.toJson(Map.of("status", request.newStatus().name())),
                 "Status changed from " + previousStatus + " to " + request.newStatus()
         ));
+
+        // Fire approval/rejection audit events for specific transitions
+        if (request.newStatus() == OperationStatus.CLOSED) {
+            auditEvent.fire(new AuditEvent(
+                    username, AuditAction.APPROVAL, "Operation", op.id, op.id,
+                    null, JsonUtil.toJson(Map.of("status", request.newStatus().name())),
+                    "Operation approved: " + op.referenceNumber + " → " + request.newStatus()
+            ));
+        } else if (request.newStatus() == OperationStatus.CANCELLED) {
+            auditEvent.fire(new AuditEvent(
+                    username, AuditAction.REJECTION, "Operation", op.id, op.id,
+                    null, JsonUtil.toJson(Map.of("status", request.newStatus().name())),
+                    "Operation rejected/cancelled: " + op.referenceNumber
+            ));
+        }
 
         notificationService.sendStatusChangeNotification(
                 op.id, op.client.email, op.referenceNumber, request.newStatus().name()
