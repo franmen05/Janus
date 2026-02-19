@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
@@ -6,8 +6,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { ComplianceService } from '../../../core/services/compliance.service';
 import { AuditService } from '../../../core/services/audit.service';
+import { DeclarationService } from '../../../core/services/declaration.service';
 import { Operation, OperationStatus } from '../../../core/models/operation.model';
 import { CompletenessResponse, Document } from '../../../core/models/document.model';
+import { Declaration } from '../../../core/models/declaration.model';
 import { AuditLog } from '../../../core/models/audit.model';
 import { DocumentService } from '../../../core/services/document.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
@@ -22,6 +24,7 @@ import { OperationCommentsComponent } from '../operation-comments/operation-comm
 import { DeclarationListComponent } from '../../declarations/declaration-list/declaration-list.component';
 import { CrossingResultComponent } from '../../declarations/crossing-result/crossing-result.component';
 import { OperationAlertsComponent } from '../../alerts/operation-alerts/operation-alerts.component';
+const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED'];
 
 @Component({
   selector: 'app-operation-detail',
@@ -43,7 +46,7 @@ import { OperationAlertsComponent } from '../../alerts/operation-alerts/operatio
         </div>
         <div class="d-flex gap-2 align-items-center flex-wrap">
           <app-status-badge [status]="operation()!.status" />
-          @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+          @if (authService.hasRole(['ADMIN', 'AGENT']) && operation()!.status !== 'CLOSED' && operation()!.status !== 'CANCELLED') {
             <a [routerLink]="['/operations', operation()!.id, 'edit']" class="btn btn-sm btn-outline-primary">{{ 'ACTIONS.EDIT' | translate }}</a>
           }
           @if (authService.hasRole(['ADMIN']) && operation()!.status === 'DRAFT') {
@@ -65,6 +68,74 @@ import { OperationAlertsComponent } from '../../alerts/operation-alerts/operatio
         </div>
       }
 
+      @if (isInReviewStatus()) {
+        <div class="card mb-3 border-info">
+          <div class="card-header bg-info bg-opacity-10">
+            <h6 class="mb-0">{{ 'review.approvalPanel' | translate }}</h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <dt>{{ 'review.subStatus' | translate }}</dt>
+                <dd>
+                  <span class="badge" [ngClass]="operation()!.status === 'PENDING_CORRECTION' ? 'bg-warning text-dark' : 'bg-info'">
+                    {{ operation()!.status | statusLabel }}
+                  </span>
+                </dd>
+              </div>
+              <div class="col-md-8">
+                <p class="text-muted mb-2">{{ getReviewDescription() }}</p>
+                @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+                  <div class="d-flex gap-2 flex-wrap">
+                    @switch (operation()!.status) {
+                      @case ('IN_REVIEW') {
+                        <button class="btn btn-sm btn-primary" (click)="changeToStatus('PRELIQUIDATION_REVIEW')">
+                          <i class="bi bi-arrow-right-circle me-1"></i>{{ 'review.advanceToPreliq' | translate }}
+                        </button>
+                        <button class="btn btn-sm btn-warning" (click)="changeToStatus('PENDING_CORRECTION')">
+                          <i class="bi bi-arrow-return-left me-1"></i>{{ 'review.sendBackForCorrection' | translate }}
+                        </button>
+                      }
+                      @case ('PENDING_CORRECTION') {
+                        <div class="alert alert-warning py-2 px-3 mb-0 flex-grow-1">
+                          <small><i class="bi bi-hourglass-split me-1"></i>{{ 'review.pendingCorrection' | translate }}</small>
+                        </div>
+                        <button class="btn btn-sm btn-info" (click)="changeToStatus('IN_REVIEW')">
+                          <i class="bi bi-arrow-repeat me-1"></i>{{ 'review.returnToReview' | translate }}
+                        </button>
+                      }
+                      @case ('PRELIQUIDATION_REVIEW') {
+                        @if (declarations().length > 0) {
+                          <button class="btn btn-sm btn-success" (click)="approveTechnical()" [disabled]="declarations()[0].technicalApprovedBy != null">{{ 'preliquidation.approveTechnical' | translate }}</button>
+                          @if (authService.hasRole(['ADMIN'])) {
+                            <button class="btn btn-sm btn-primary" (click)="approveFinal()" [disabled]="declarations()[0].technicalApprovedBy == null || declarations()[0].finalApprovedBy != null">{{ 'preliquidation.approveFinal' | translate }}</button>
+                          }
+                          <button class="btn btn-sm btn-danger" (click)="rejectDeclaration()" [disabled]="declarations()[0].rejectedBy != null">{{ 'preliquidation.reject' | translate }}</button>
+                          <a [routerLink]="['/operations', operation()!.id, 'declarations', declarations()[0].id, 'preliquidation']" class="btn btn-sm btn-outline-info">{{ 'preliquidation.title' | translate }}</a>
+                        } @else {
+                          <div class="alert alert-info py-2 px-3 mb-0 flex-grow-1">
+                            <small><i class="bi bi-info-circle me-1"></i>{{ 'review.noDeclarationsYet' | translate }}
+                            <a href="javascript:void(0)" (click)="activeTab = 'declarations'" class="alert-link">{{ 'review.createDeclarationPrompt' | translate }}</a></small>
+                          </div>
+                        }
+                        <button class="btn btn-sm btn-warning" (click)="changeToStatus('PENDING_CORRECTION')">
+                          <i class="bi bi-arrow-return-left me-1"></i>{{ 'review.sendBackForCorrection' | translate }}
+                        </button>
+                      }
+                      @case ('ANALYST_ASSIGNED') {
+                        <button class="btn btn-sm btn-primary" (click)="changeToStatus('DECLARATION_IN_PROGRESS')">
+                          <i class="bi bi-arrow-right-circle me-1"></i>{{ 'review.proceedToDeclaration' | translate }}
+                        </button>
+                      }
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
       <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeTab">
         <li [ngbNavItem]="'info'">
           <button ngbNavLink>{{ 'TABS.INFO' | translate }}</button>
@@ -74,18 +145,35 @@ import { OperationAlertsComponent } from '../../alerts/operation-alerts/operatio
                 <div class="row">
                   <div class="col-md-6">
                     <dl>
-                      <dt>{{ 'OPERATIONS.CARGO_TYPE' | translate }}</dt><dd>{{ operation()!.cargoType | statusLabel }}</dd>
-                      <dt>{{ 'OPERATIONS.INSPECTION_TYPE' | translate }}</dt><dd>{{ operation()!.inspectionType | statusLabel }}</dd>
+                      <dt>{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</dt><dd>{{ operation()!.transportMode | statusLabel }}</dd>
+                      <dt>{{ 'OPERATIONS.OPERATION_CATEGORY' | translate }}</dt><dd>{{ operation()!.operationCategory | statusLabel }}</dd>
                       <dt>{{ 'OPERATIONS.ASSIGNED_AGENT' | translate }}</dt><dd>{{ operation()!.assignedAgentName ?? ('OPERATIONS.NOT_ASSIGNED' | translate) }}</dd>
+                      @if (operation()!.blNumber) {
+                        <dt>{{ 'OPERATIONS.BL_NUMBER' | translate }}</dt><dd>{{ operation()!.blNumber }}</dd>
+                      }
+                      @if (operation()!.containerNumber) {
+                        <dt>{{ 'OPERATIONS.CONTAINER_NUMBER' | translate }}</dt><dd>{{ operation()!.containerNumber }}</dd>
+                      }
                     </dl>
                   </div>
                   <div class="col-md-6">
                     <dl>
                       <dt>{{ 'OPERATIONS.CREATED' | translate }}</dt><dd>{{ operation()!.createdAt | date:'medium' }}</dd>
                       <dt>{{ 'OPERATIONS.LAST_UPDATED' | translate }}</dt><dd>{{ operation()!.updatedAt | date:'medium' }}</dd>
+                      @if (operation()!.estimatedArrival) {
+                        <dt>{{ 'OPERATIONS.ESTIMATED_ARRIVAL' | translate }}</dt><dd>{{ operation()!.estimatedArrival | date:'medium' }}</dd>
+                      }
                       @if (operation()!.deadline) {
                         <dt>{{ 'OPERATIONS.DEADLINE' | translate }}</dt><dd>{{ operation()!.deadline | date:'medium' }}</dd>
                       }
+                      <dt>{{ 'OPERATIONS.BL_ORIGINAL_AVAILABLE' | translate }}</dt>
+                      <dd>
+                        @if (operation()!.blOriginalAvailable) {
+                          <span class="badge bg-success">{{ 'COMMON.YES' | translate }}</span>
+                        } @else {
+                          <span class="badge bg-warning text-dark">{{ 'COMMON.NO' | translate }}</span>
+                        }
+                      </dd>
                     </dl>
                   </div>
                 </div>
@@ -105,6 +193,19 @@ import { OperationAlertsComponent } from '../../alerts/operation-alerts/operatio
                   </div>
                 </div>
               }
+              <div class="card mt-3">
+                <div class="card-body">
+                  <h6>{{ 'DOCUMENTS.TEMPLATES_SECTION' | translate }}</h6>
+                  <div class="d-flex gap-2">
+                    <a href="assets/templates/commercial_invoice_template.csv" download class="btn btn-sm btn-outline-secondary">
+                      <i class="bi bi-download me-1"></i>{{ 'DOCUMENTS.INVOICE_TEMPLATE' | translate }}
+                    </a>
+                    <a href="assets/templates/packing_list_template.csv" download class="btn btn-sm btn-outline-secondary">
+                      <i class="bi bi-download me-1"></i>{{ 'DOCUMENTS.PACKING_LIST_TEMPLATE' | translate }}
+                    </a>
+                  </div>
+                </div>
+              </div>
               <div class="mt-3"><app-document-list [operationId]="operation()!.id" /></div>
             </ng-template>
           </li>
@@ -180,6 +281,7 @@ export class OperationDetailComponent implements OnInit {
   private router = inject(Router);
   private operationService = inject(OperationService);
   private complianceService = inject(ComplianceService);
+  private declarationService = inject(DeclarationService);
   private auditService = inject(AuditService);
   private documentService = inject(DocumentService);
   private translate = inject(TranslateService);
@@ -189,8 +291,14 @@ export class OperationDetailComponent implements OnInit {
   auditLogs = signal<AuditLog[]>([]);
   completeness = signal<CompletenessResponse | null>(null);
   documents = signal<Document[]>([]);
+  declarations = signal<Declaration[]>([]);
   statusChangeErrors = signal<string[]>([]);
   activeTab = 'info';
+
+  isInReviewStatus = computed(() => {
+    const op = this.operation();
+    return op !== null && REVIEW_STATUSES.includes(op.status);
+  });
 
   ngOnInit(): void {
     const tab = this.route.snapshot.queryParamMap.get('tab');
@@ -204,6 +312,58 @@ export class OperationDetailComponent implements OnInit {
     this.operationService.getCompleteness(id).subscribe(c => this.completeness.set(c));
     this.auditService.getByOperation(id).subscribe(logs => this.auditLogs.set(logs));
     this.documentService.getByOperation(id).subscribe(docs => this.documents.set(docs));
+    this.declarationService.getDeclarations(id).subscribe(decls => this.declarations.set(decls));
+  }
+
+  getReviewDescription(): string {
+    const status = this.operation()?.status;
+    switch (status) {
+      case 'IN_REVIEW': return this.translate.instant('review.inReview');
+      case 'PENDING_CORRECTION': return this.translate.instant('review.pendingCorrection');
+      case 'PRELIQUIDATION_REVIEW': return this.translate.instant('review.preliquidationReview');
+      case 'ANALYST_ASSIGNED': return this.translate.instant('review.analystAssigned');
+      default: return '';
+    }
+  }
+
+  approveTechnical(): void {
+    const decl = this.declarations()[0];
+    if (!decl) return;
+    const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    this.declarationService.approveTechnical(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
+  }
+
+  approveFinal(): void {
+    const decl = this.declarations()[0];
+    if (!decl) return;
+    const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    this.declarationService.approveFinal(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
+  }
+
+  rejectDeclaration(): void {
+    const decl = this.declarations()[0];
+    if (!decl) return;
+    const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    this.declarationService.reject(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
+  }
+
+  changeToStatus(newStatus: string): void {
+
+    this.statusChangeErrors.set([]);
+    this.complianceService.validate(this.operation()!.id, newStatus).subscribe({
+      next: (result) => {
+        if (!result.passed) {
+          this.statusChangeErrors.set(result.errors.map(e => {
+            const key = 'COMPLIANCE.' + e.ruleCode;
+            const translated = this.translate.instant(key);
+            return translated !== key ? translated : e.message;
+          }));
+          return;
+        }
+        this.executeProgressStatusChange(newStatus);
+      },
+      error: () => this.executeProgressStatusChange(newStatus)
+    });
   }
 
   onProgressStepClick(newStatus: string): void {
@@ -228,6 +388,7 @@ export class OperationDetailComponent implements OnInit {
   }
 
   private executeProgressStatusChange(newStatus: string): void {
+
     this.operationService.changeStatus(this.operation()!.id, {
       newStatus: newStatus as OperationStatus
     }).subscribe({
@@ -236,9 +397,13 @@ export class OperationDetailComponent implements OnInit {
         const msg = err.error?.error ?? '';
         const match = msg.match(/Invalid status transition from (\w+) to (\w+)/);
         if (match) {
-          const from = this.translate.instant('STATUS.' + match[1]);
-          const to = this.translate.instant('STATUS.' + match[2]);
-          this.statusChangeErrors.set([this.translate.instant('STATUS_CHANGE.INVALID_TRANSITION', { from, to })]);
+          if(match[1] === match[2] ) {
+            this.reload()
+          }else {
+            const from = this.translate.instant('STATUS.' + match[1]);
+            const to = this.translate.instant('STATUS.' + match[2]);
+            this.statusChangeErrors.set([this.translate.instant('STATUS_CHANGE.INVALID_TRANSITION', {from, to})]);
+          }
         } else {
           this.statusChangeErrors.set([msg || this.translate.instant('STATUS_CHANGE.FAILED')]);
         }

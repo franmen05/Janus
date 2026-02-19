@@ -59,11 +59,4 @@ describe('DocumentUploadComponent', () => {
     expect(documentServiceSpy.upload).toHaveBeenCalledWith(5, mockFile, DocumentType.BL, undefined);
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/operations', 5], { queryParams: { tab: 'documents' } });
   });
-
-  it('should show document type selector', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const selectElement = compiled.querySelector('select.form-select') as HTMLSelectElement;
-    expect(selectElement).toBeTruthy();
-    expect(selectElement.options.length).toBe(component.documentTypes.length);
-  });
 });

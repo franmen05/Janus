@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
@@ -34,7 +35,7 @@ class DocumentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "FCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -188,6 +189,40 @@ class DocumentResourceTest {
                 .statusCode(201);
     }
 
+    private static void setupDeclarationWithApprovals(Long opId) {
+        // Create a preliminary declaration
+        var declId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"declarationNumber": "PRELIM-DOC-TEST", "fobValue": 1000.00, "cifValue": 1200.00,
+                         "taxableBase": 1200.00, "totalTaxes": 180.00, "freightValue": 150.00, "insuranceValue": 50.00}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/preliminary", opId)
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        // Technical approval
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Technical OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", opId, declId)
+                .then().statusCode(200);
+
+        // Final approval
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Final OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", opId, declId)
+                .then().statusCode(200);
+    }
+
     @Test
     @Order(31)
     void testSetupCreateAndCloseOperation() {
@@ -195,7 +230,7 @@ class DocumentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -206,8 +241,12 @@ class DocumentResourceTest {
         uploadDoc(closedOperationId, "COMMERCIAL_INVOICE");
         uploadDoc(closedOperationId, "PACKING_LIST");
 
+        // Setup declaration with approvals for review compliance rules
+        setupDeclarationWithApprovals(closedOperationId);
+
         var transitions = new String[]{
-                "DOCUMENTATION_COMPLETE", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW", "ANALYST_ASSIGNED",
+                "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
         };
         for (var status : transitions) {
@@ -226,14 +265,14 @@ class DocumentResourceTest {
     @Test
     @Order(32)
     void testUploadToClosedOperation() {
+        // After removing status-based upload restriction, ADMIN/AGENT can upload in any status
         given()
                 .auth().preemptive().basic("admin", "admin123")
                 .multiPart("file", "late.pdf", "content".getBytes(), "application/pdf")
                 .multiPart("documentType", "BL")
                 .when().post("/api/operations/{operationId}/documents", closedOperationId)
                 .then()
-                .statusCode(400)
-                .body("error", containsString("VALUATION_REVIEW"));
+                .statusCode(anyOf(is(200), is(201)));
     }
 
     @Test
@@ -244,7 +283,7 @@ class DocumentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -255,9 +294,13 @@ class DocumentResourceTest {
         uploadDoc(opId, "COMMERCIAL_INVOICE");
         uploadDoc(opId, "PACKING_LIST");
 
+        // Setup declaration with approvals for review compliance rules
+        setupDeclarationWithApprovals(opId);
+
         // Advance to PAYMENT_PREPARATION (past VALUATION_REVIEW)
         var transitions = new String[]{
-                "DOCUMENTATION_COMPLETE", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW", "ANALYST_ASSIGNED",
+                "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION"
         };
         for (var status : transitions) {
@@ -272,26 +315,46 @@ class DocumentResourceTest {
                     .statusCode(200);
         }
 
-        // Upload should be blocked at PAYMENT_PREPARATION
+        // After removing status-based upload restriction, upload succeeds in any status
         given()
                 .auth().preemptive().basic("admin", "admin123")
                 .multiPart("file", "blocked.pdf", "content".getBytes(), "application/pdf")
                 .multiPart("documentType", "BL")
                 .when().post("/api/operations/{operationId}/documents", opId)
                 .then()
-                .statusCode(400)
-                .body("error", containsString("VALUATION_REVIEW"));
+                .statusCode(anyOf(is(200), is(201)));
     }
 
     @Test
     @Order(34)
+    void testDeleteDocumentFromClosedOperationBlocked() {
+        // Get a document from the closed operation
+        var closedDocId = given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/operations/{operationId}/documents", closedOperationId)
+                .then()
+                .statusCode(200)
+                .body("size()", greaterThanOrEqualTo(1))
+                .extract().jsonPath().getLong("[0].id");
+
+        // Attempt to delete — should be blocked because operation is CLOSED
+        given()
+                .auth().basic("admin", "admin123")
+                .when().delete("/api/operations/{operationId}/documents/{id}", closedOperationId, closedDocId)
+                .then()
+                .statusCode(400)
+                .body("error", containsString("closed or cancelled"));
+    }
+
+    @Test
+    @Order(35)
     void testUploadAllowedAtValuationReview() {
         // Create operation and advance to VALUATION_REVIEW (use LCL to avoid FCL-specific rules)
         var opId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -302,9 +365,13 @@ class DocumentResourceTest {
         uploadDoc(opId, "COMMERCIAL_INVOICE");
         uploadDoc(opId, "PACKING_LIST");
 
+        // Setup declaration with approvals for review compliance rules
+        setupDeclarationWithApprovals(opId);
+
         // Advance to VALUATION_REVIEW
         var transitions = new String[]{
-                "DOCUMENTATION_COMPLETE", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW", "ANALYST_ASSIGNED",
+                "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
                 "VALUATION_REVIEW"
         };
         for (var status : transitions) {

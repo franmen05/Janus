@@ -73,10 +73,6 @@ public class DocumentService {
                            String changeReason) {
         var operation = operationService.findById(operationId);
 
-        if (!statusTransitionService.allowsDocumentUpload(operation.status)) {
-            throw new BusinessException("Documents can only be uploaded until VALUATION_REVIEW status");
-        }
-
         validationService.validateFile(mimeType, fileSize);
 
         var document = documentRepository.findByOperationAndType(operationId, documentType)
@@ -148,6 +144,11 @@ public class DocumentService {
     @Transactional
     public void softDelete(Long documentId, String username) {
         var document = findById(documentId);
+
+        if (document.operation != null && statusTransitionService.isFinalStatus(document.operation.status)) {
+            throw new BusinessException("Cannot delete documents from a closed or cancelled operation");
+        }
+
         document.active = false;
 
         auditEvent.fire(new AuditEvent(
