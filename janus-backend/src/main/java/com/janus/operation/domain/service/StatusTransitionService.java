@@ -12,21 +12,36 @@ public class StatusTransitionService {
     private static final Set<OperationStatus> DOCUMENT_UPLOAD_ALLOWED_STATUSES = Set.of(
             OperationStatus.DRAFT,
             OperationStatus.DOCUMENTATION_COMPLETE,
+            OperationStatus.IN_REVIEW,
+            OperationStatus.PENDING_CORRECTION,
+            OperationStatus.PRELIQUIDATION_REVIEW,
+            OperationStatus.ANALYST_ASSIGNED,
             OperationStatus.DECLARATION_IN_PROGRESS,
             OperationStatus.SUBMITTED_TO_CUSTOMS,
             OperationStatus.VALUATION_REVIEW
     );
 
-    private static final Map<OperationStatus, Set<OperationStatus>> ALLOWED_TRANSITIONS = Map.of(
-            OperationStatus.DRAFT, Set.of(OperationStatus.DOCUMENTATION_COMPLETE, OperationStatus.CANCELLED),
-            OperationStatus.DOCUMENTATION_COMPLETE, Set.of(OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.CANCELLED),
-            OperationStatus.DECLARATION_IN_PROGRESS, Set.of(OperationStatus.SUBMITTED_TO_CUSTOMS, OperationStatus.CANCELLED),
-            OperationStatus.SUBMITTED_TO_CUSTOMS, Set.of(OperationStatus.VALUATION_REVIEW, OperationStatus.CANCELLED),
-            OperationStatus.VALUATION_REVIEW, Set.of(OperationStatus.PAYMENT_PREPARATION, OperationStatus.CANCELLED),
-            OperationStatus.PAYMENT_PREPARATION, Set.of(OperationStatus.IN_TRANSIT, OperationStatus.CANCELLED),
-            OperationStatus.IN_TRANSIT, Set.of(OperationStatus.CLOSED, OperationStatus.CANCELLED),
-            OperationStatus.CLOSED, Set.of(),
-            OperationStatus.CANCELLED, Set.of()
+    private static final Set<OperationStatus> INTERNAL_REVIEW_STATUSES = Set.of(
+            OperationStatus.IN_REVIEW,
+            OperationStatus.PENDING_CORRECTION,
+            OperationStatus.PRELIQUIDATION_REVIEW,
+            OperationStatus.ANALYST_ASSIGNED
+    );
+
+    private static final Map<OperationStatus, Set<OperationStatus>> ALLOWED_TRANSITIONS = Map.ofEntries(
+            Map.entry(OperationStatus.DRAFT, Set.of(OperationStatus.DOCUMENTATION_COMPLETE, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.DOCUMENTATION_COMPLETE, Set.of(OperationStatus.IN_REVIEW, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.IN_REVIEW, Set.of(OperationStatus.PRELIQUIDATION_REVIEW, OperationStatus.PENDING_CORRECTION, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.PENDING_CORRECTION, Set.of(OperationStatus.IN_REVIEW, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.PRELIQUIDATION_REVIEW, Set.of(OperationStatus.ANALYST_ASSIGNED, OperationStatus.PENDING_CORRECTION, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.ANALYST_ASSIGNED, Set.of(OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.DECLARATION_IN_PROGRESS, Set.of(OperationStatus.SUBMITTED_TO_CUSTOMS, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.SUBMITTED_TO_CUSTOMS, Set.of(OperationStatus.VALUATION_REVIEW, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.VALUATION_REVIEW, Set.of(OperationStatus.PAYMENT_PREPARATION, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.PAYMENT_PREPARATION, Set.of(OperationStatus.IN_TRANSIT, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.IN_TRANSIT, Set.of(OperationStatus.CLOSED, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.CLOSED, Set.of()),
+            Map.entry(OperationStatus.CANCELLED, Set.of())
     );
 
     public void validateTransition(OperationStatus from, OperationStatus to) {
@@ -43,5 +58,13 @@ public class StatusTransitionService {
 
     public boolean allowsDocumentUpload(OperationStatus status) {
         return DOCUMENT_UPLOAD_ALLOWED_STATUSES.contains(status);
+    }
+
+    public boolean isInternalReviewStatus(OperationStatus status) {
+        return INTERNAL_REVIEW_STATUSES.contains(status);
+    }
+
+    public Set<OperationStatus> getAllowedTransitions(OperationStatus from) {
+        return ALLOWED_TRANSITIONS.getOrDefault(from, Set.of());
     }
 }

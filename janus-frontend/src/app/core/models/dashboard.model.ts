@@ -16,7 +16,7 @@ export interface AgentProductivity {
 export interface DashboardFilter {
   from?: string;
   to?: string;
-  cargoType?: string;
-  inspectionType?: string;
+  transportMode?: string;
+  operationCategory?: string;
   agentUsername?: string;
 }

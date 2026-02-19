@@ -13,8 +13,11 @@ import com.janus.declaration.domain.repository.CrossingResultRepository;
 import com.janus.declaration.domain.repository.DeclarationRepository;
 import com.janus.declaration.domain.repository.TariffLineRepository;
 import com.janus.declaration.domain.service.CrossingEngine;
+import com.janus.declaration.domain.service.PreliquidationService;
 import com.janus.notification.application.NotificationService;
+import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.application.OperationService;
+import com.janus.operation.domain.model.OperationStatus;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.NotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -41,6 +44,9 @@ public class DeclarationService {
 
     @Inject
     CrossingEngine crossingEngine;
+
+    @Inject
+    PreliquidationService preliquidationService;
 
     @Inject
     OperationService operationService;
@@ -190,5 +196,112 @@ public class DeclarationService {
 
     public List<CrossingDiscrepancy> getDiscrepancies(Long crossingResultId) {
         return crossingDiscrepancyRepository.findByCrossingResultId(crossingResultId);
+    }
+
+    @Transactional
+    public Declaration generatePreliquidation(Long operationId, Long declarationId, String username) {
+        var declaration = findById(operationId, declarationId);
+        var tariffLines = tariffLineRepository.findByDeclarationId(declarationId);
+
+        var result = preliquidationService.calculate(declaration, tariffLines);
+        declaration.cifValue = result.cifValue();
+        declaration.taxableBase = result.taxableBase();
+        declaration.totalTaxes = result.totalTaxes();
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.UPDATE, "Declaration", declarationId, operationId,
+                null, null, "Preliquidation generated for declaration " + declaration.declarationNumber
+        ));
+
+        return declaration;
+    }
+
+    @Transactional
+    public Declaration approveTechnical(Long operationId, Long declarationId, String comment, String username) {
+        var declaration = findById(operationId, declarationId);
+
+        if (declaration.technicalApprovedBy != null) {
+            throw new BusinessException("Declaration already has technical approval");
+        }
+
+        declaration.technicalApprovedBy = username;
+        declaration.technicalApprovedAt = LocalDateTime.now();
+        declaration.technicalApprovalComment = comment;
+        // Clear any previous rejection
+        declaration.rejectedBy = null;
+        declaration.rejectedAt = null;
+        declaration.rejectionComment = null;
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.APPROVAL, "Declaration", declarationId, operationId,
+                null, null, "Technical approval by " + username
+        ));
+
+        return declaration;
+    }
+
+    @Transactional
+    public Declaration approveFinal(Long operationId, Long declarationId, String comment, String username) {
+        var declaration = findById(operationId, declarationId);
+
+        if (declaration.technicalApprovedBy == null) {
+            throw new BusinessException("Technical approval is required before final approval");
+        }
+        if (declaration.finalApprovedBy != null) {
+            throw new BusinessException("Declaration already has final approval");
+        }
+
+        declaration.finalApprovedBy = username;
+        declaration.finalApprovedAt = LocalDateTime.now();
+        declaration.finalApprovalComment = comment;
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.APPROVAL, "Declaration", declarationId, operationId,
+                null, null, "Final approval by " + username
+        ));
+
+        // Flush approval changes so compliance rules can read them
+        declarationRepository.flush();
+
+        // Auto-advance operation from PRELIQUIDATION_REVIEW to ANALYST_ASSIGNED
+        var operation = declaration.operation;
+        if (operation.status == OperationStatus.PRELIQUIDATION_REVIEW) {
+            operationService.changeStatus(operationId,
+                    new ChangeStatusRequest(OperationStatus.ANALYST_ASSIGNED, "Auto-advanced after final approval"),
+                    username, null);
+        }
+
+        return declaration;
+    }
+
+    @Transactional
+    public Declaration reject(Long operationId, Long declarationId, String comment, String username) {
+        var declaration = findById(operationId, declarationId);
+
+        declaration.rejectedBy = username;
+        declaration.rejectedAt = LocalDateTime.now();
+        declaration.rejectionComment = comment;
+        // Clear approvals on rejection
+        declaration.technicalApprovedBy = null;
+        declaration.technicalApprovedAt = null;
+        declaration.technicalApprovalComment = null;
+        declaration.finalApprovedBy = null;
+        declaration.finalApprovedAt = null;
+        declaration.finalApprovalComment = null;
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.REJECTION, "Declaration", declarationId, operationId,
+                null, null, "Declaration rejected by " + username
+        ));
+
+        // Auto-return operation to PENDING_CORRECTION on rejection
+        var operation = declaration.operation;
+        if (operation.status == OperationStatus.PRELIQUIDATION_REVIEW) {
+            operationService.changeStatus(operationId,
+                    new ChangeStatusRequest(OperationStatus.PENDING_CORRECTION, "Auto-returned after rejection"),
+                    username, null);
+        }
+
+        return declaration;
     }
 }

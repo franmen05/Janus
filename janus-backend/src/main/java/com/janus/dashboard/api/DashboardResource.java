@@ -3,8 +3,8 @@ package com.janus.dashboard.api;
 import com.janus.dashboard.api.dto.DashboardFilter;
 import com.janus.dashboard.api.dto.DashboardMetrics;
 import com.janus.dashboard.application.DashboardService;
-import com.janus.operation.domain.model.CargoType;
-import com.janus.operation.domain.model.InspectionType;
+import com.janus.operation.domain.model.OperationCategory;
+import com.janus.operation.domain.model.TransportMode;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -27,10 +27,10 @@ public class DashboardResource {
     public DashboardMetrics getMetrics(
             @QueryParam("from") LocalDate from,
             @QueryParam("to") LocalDate to,
-            @QueryParam("cargoType") CargoType cargoType,
-            @QueryParam("inspectionType") InspectionType inspectionType,
+            @QueryParam("transportMode") TransportMode transportMode,
+            @QueryParam("operationCategory") OperationCategory operationCategory,
             @QueryParam("agentUsername") String agentUsername) {
-        var filter = new DashboardFilter(from, to, cargoType, inspectionType, agentUsername);
+        var filter = new DashboardFilter(from, to, transportMode, operationCategory, agentUsername);
         return dashboardService.getMetrics(filter);
     }
 }

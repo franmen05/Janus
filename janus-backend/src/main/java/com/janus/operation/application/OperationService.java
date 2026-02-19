@@ -9,8 +9,10 @@ import com.janus.operation.api.dto.CreateOperationRequest;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.model.StatusHistory;
+import com.janus.operation.domain.model.TransportMode;
 import com.janus.operation.domain.repository.OperationRepository;
 import com.janus.operation.domain.repository.StatusHistoryRepository;
+import com.janus.operation.domain.service.AnalystAssignmentService;
 import com.janus.operation.domain.service.StatusTransitionService;
 import com.janus.compliance.domain.service.ComplianceValidationService;
 import com.janus.shared.infrastructure.exception.BusinessException;
@@ -46,6 +48,9 @@ public class OperationService {
     StatusTransitionService statusTransitionService;
 
     @Inject
+    AnalystAssignmentService analystAssignmentService;
+
+    @Inject
     NotificationService notificationService;
 
     @Inject
@@ -77,13 +82,22 @@ public class OperationService {
         var client = clientRepository.findByIdOptional(request.clientId())
                 .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
 
+        // Validate containerNumber required for MARITIME
+        if (request.transportMode() == TransportMode.MARITIME
+                && (request.containerNumber() == null || request.containerNumber().isBlank())) {
+            throw new BusinessException("Container number is required for MARITIME transport mode");
+        }
+
         var op = new Operation();
         op.referenceNumber = generateReferenceNumber();
         op.client = client;
-        op.cargoType = request.cargoType();
-        op.inspectionType = request.inspectionType();
+        op.transportMode = request.transportMode();
+        op.operationCategory = request.operationCategory();
         op.status = OperationStatus.DRAFT;
-        op.originCountry = request.originCountry();
+        op.blNumber = request.blNumber();
+        op.containerNumber = request.containerNumber();
+        op.estimatedArrival = request.estimatedArrival();
+        op.blOriginalAvailable = request.blOriginalAvailable();
         op.notes = request.notes();
         op.deadline = request.deadline();
 
@@ -93,6 +107,25 @@ public class OperationService {
         }
 
         operationRepository.persist(op);
+
+        // Category-specific business logic
+        switch (op.operationCategory) {
+            case CATEGORY_2 -> {
+                if (op.notes == null || op.notes.isBlank()) {
+                    op.notes = "Pendiente de validación de valores";
+                } else {
+                    op.notes = op.notes + " | Pendiente de validación de valores";
+                }
+            }
+            case CATEGORY_3 -> {
+                if (op.notes == null || op.notes.isBlank()) {
+                    op.notes = "Lista para liquidación interna";
+                } else {
+                    op.notes = op.notes + " | Lista para liquidación interna";
+                }
+            }
+            default -> {} // CATEGORY_1: no special note
+        }
 
         recordStatusChange(op, null, OperationStatus.DRAFT, username, "Operation created", null);
 
@@ -104,8 +137,8 @@ public class OperationService {
                 null, JsonUtil.toJson(Map.of(
                         "referenceNumber", op.referenceNumber,
                         "status", op.status.name(),
-                        "cargoType", op.cargoType.name(),
-                        "inspectionType", op.inspectionType.name()
+                        "transportMode", op.transportMode.name(),
+                        "operationCategory", op.operationCategory.name()
                 )),
                 "Operation created: " + op.referenceNumber
         ));
@@ -121,17 +154,26 @@ public class OperationService {
             throw new BusinessException("Cannot update a closed or cancelled operation");
         }
 
+        // Validate containerNumber required for MARITIME
+        if (request.transportMode() == TransportMode.MARITIME
+                && (request.containerNumber() == null || request.containerNumber().isBlank())) {
+            throw new BusinessException("Container number is required for MARITIME transport mode");
+        }
+
         var previousData = JsonUtil.toJson(Map.of(
-                "cargoType", op.cargoType.name(),
-                "inspectionType", op.inspectionType.name(),
+                "transportMode", op.transportMode.name(),
+                "operationCategory", op.operationCategory.name(),
                 "notes", op.notes != null ? op.notes : ""
         ));
 
         op.client = clientRepository.findByIdOptional(request.clientId())
                 .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
-        op.cargoType = request.cargoType();
-        op.inspectionType = request.inspectionType();
-        op.originCountry = request.originCountry();
+        op.transportMode = request.transportMode();
+        op.operationCategory = request.operationCategory();
+        op.blNumber = request.blNumber();
+        op.containerNumber = request.containerNumber();
+        op.estimatedArrival = request.estimatedArrival();
+        op.blOriginalAvailable = request.blOriginalAvailable();
         op.notes = request.notes();
         op.deadline = request.deadline();
 
@@ -141,8 +183,8 @@ public class OperationService {
         }
 
         var newData = JsonUtil.toJson(Map.of(
-                "cargoType", op.cargoType.name(),
-                "inspectionType", op.inspectionType.name(),
+                "transportMode", op.transportMode.name(),
+                "operationCategory", op.operationCategory.name(),
                 "notes", op.notes != null ? op.notes : ""
         ));
 
@@ -173,6 +215,11 @@ public class OperationService {
         }
 
         op.status = request.newStatus();
+
+        // Auto-assign least-loaded analyst when transitioning to ANALYST_ASSIGNED
+        if (request.newStatus() == OperationStatus.ANALYST_ASSIGNED && op.assignedAgent == null) {
+            analystAssignmentService.findLeastLoadedAgent().ifPresent(agent -> op.assignedAgent = agent);
+        }
 
         if (request.newStatus() == OperationStatus.CLOSED) {
             op.closedAt = LocalDateTime.now();

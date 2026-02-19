@@ -2,6 +2,8 @@ import { Component, input, computed, output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 
+const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED'];
+
 @Component({
   selector: 'app-progress-bar',
   standalone: true,
@@ -22,6 +24,13 @@ import { TranslateService } from '@ngx-translate/core';
         <div class="progress-bar" [style.width.%]="progressPercent()"
              [ngClass]="status() === 'CANCELLED' ? 'bg-danger' : (isFinal() ? 'bg-success' : 'bg-primary')"></div>
       </div>
+      @if (isInReviewStatus()) {
+        <div class="mt-2 text-center">
+          <span class="badge" [ngClass]="status() === 'PENDING_CORRECTION' ? 'bg-warning text-dark' : 'bg-info'">
+            {{ getReviewSubStatusLabel() }}
+          </span>
+        </div>
+      }
     </div>
   `,
   styles: [`
@@ -51,6 +60,7 @@ export class ProgressBarComponent {
   steps = [
     { key: 'DRAFT', translationKey: 'PROGRESS.DRAFT' },
     { key: 'DOCUMENTATION_COMPLETE', translationKey: 'PROGRESS.DOCS' },
+    { key: 'IN_REVIEW', translationKey: 'PROGRESS.REVIEW' },
     { key: 'DECLARATION_IN_PROGRESS', translationKey: 'PROGRESS.DECLARATION' },
     { key: 'SUBMITTED_TO_CUSTOMS', translationKey: 'PROGRESS.SUBMITTED' },
     { key: 'VALUATION_REVIEW', translationKey: 'PROGRESS.VALUATION' },
@@ -63,13 +73,25 @@ export class ProgressBarComponent {
     return this.translate.instant(key);
   }
 
+  isInReviewStatus = computed(() => REVIEW_STATUSES.includes(this.status()));
+
   currentIndex = computed(() => {
-    const idx = this.steps.findIndex(s => s.key === this.status());
+    const s = this.status();
+    if (REVIEW_STATUSES.includes(s)) {
+      return this.steps.findIndex(step => step.key === 'IN_REVIEW');
+    }
+    const idx = this.steps.findIndex(step => step.key === s);
     return idx >= 0 ? idx : 0;
   });
 
   progressPercent = computed(() => ((this.currentIndex() + 1) / this.steps.length) * 100);
   isFinal = computed(() => this.status() === 'CLOSED' || this.status() === 'CANCELLED');
+
+  getReviewSubStatusLabel(): string {
+    const key = 'STATUS.' + this.status();
+    const translated = this.translate.instant(key);
+    return translated !== key ? translated : this.status();
+  }
 
   onStepClick(stepKey: string, index: number): void {
     if (!this.interactive() || index === this.currentIndex() || this.isFinal()) return;

@@ -1,6 +1,10 @@
 export enum OperationStatus {
   DRAFT = 'DRAFT',
   DOCUMENTATION_COMPLETE = 'DOCUMENTATION_COMPLETE',
+  IN_REVIEW = 'IN_REVIEW',
+  PENDING_CORRECTION = 'PENDING_CORRECTION',
+  PRELIQUIDATION_REVIEW = 'PRELIQUIDATION_REVIEW',
+  ANALYST_ASSIGNED = 'ANALYST_ASSIGNED',
   DECLARATION_IN_PROGRESS = 'DECLARATION_IN_PROGRESS',
   SUBMITTED_TO_CUSTOMS = 'SUBMITTED_TO_CUSTOMS',
   VALUATION_REVIEW = 'VALUATION_REVIEW',
@@ -10,15 +14,15 @@ export enum OperationStatus {
   CANCELLED = 'CANCELLED'
 }
 
-export enum CargoType {
-  FCL = 'FCL',
-  LCL = 'LCL'
+export enum TransportMode {
+  MARITIME = 'MARITIME',
+  AIR = 'AIR'
 }
 
-export enum InspectionType {
-  EXPRESS = 'EXPRESS',
-  VISUAL = 'VISUAL',
-  PHYSICAL = 'PHYSICAL'
+export enum OperationCategory {
+  CATEGORY_1 = 'CATEGORY_1',
+  CATEGORY_2 = 'CATEGORY_2',
+  CATEGORY_3 = 'CATEGORY_3'
 }
 
 export interface Operation {
@@ -26,12 +30,15 @@ export interface Operation {
   referenceNumber: string;
   clientId: number;
   clientName: string;
-  cargoType: CargoType;
-  inspectionType: InspectionType;
+  transportMode: TransportMode;
+  operationCategory: OperationCategory;
   status: OperationStatus;
   assignedAgentId: number | null;
   assignedAgentName: string | null;
-  originCountry: string | null;
+  blNumber: string | null;
+  containerNumber: string | null;
+  estimatedArrival: string | null;
+  blOriginalAvailable: boolean;
   notes: string | null;
   deadline: string | null;
   closedAt: string | null;
@@ -41,10 +48,13 @@ export interface Operation {
 
 export interface CreateOperationRequest {
   clientId: number;
-  cargoType: CargoType;
-  inspectionType: InspectionType;
+  transportMode: TransportMode;
+  operationCategory: OperationCategory;
   assignedAgentId?: number;
-  originCountry?: string;
+  blNumber?: string;
+  containerNumber?: string;
+  estimatedArrival?: string;
+  blOriginalAvailable?: boolean;
   notes?: string;
   deadline?: string;
 }

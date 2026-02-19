@@ -38,6 +38,15 @@ export interface Declaration {
   notes: string | null;
   submittedAt: string | null;
   createdAt: string;
+  technicalApprovedBy: string | null;
+  technicalApprovedAt: string | null;
+  technicalApprovalComment: string | null;
+  finalApprovedBy: string | null;
+  finalApprovedAt: string | null;
+  finalApprovalComment: string | null;
+  rejectedBy: string | null;
+  rejectedAt: string | null;
+  rejectionComment: string | null;
 }
 
 export interface CreateDeclarationRequest {

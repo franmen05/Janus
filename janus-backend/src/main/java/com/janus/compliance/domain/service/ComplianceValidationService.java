@@ -32,7 +32,7 @@ public class ComplianceValidationService {
             if (!configRepository.isRuleEnabled(rule.ruleCode())) {
                 continue;
             }
-            if (rule.appliesTo(operation.status, targetStatus, operation.cargoType, operation.inspectionType)) {
+            if (rule.appliesTo(operation.status, targetStatus, operation.transportMode, operation.operationCategory)) {
                 var result = rule.validate(operation, documents);
                 if (!result.passed()) {
                     errors.addAll(result.errors());

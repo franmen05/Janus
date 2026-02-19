@@ -37,15 +37,15 @@ import { AuthService } from '../../../core/services/auth.service';
         <div class="table-responsive">
         <table class="table table-hover mb-0">
           <thead class="table-light">
-            <tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.CARGO' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.INSPECTION' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'OPERATIONS.AGENT' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr>
+            <tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.OPERATION_CATEGORY' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'OPERATIONS.AGENT' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (op of operations(); track op.id) {
               <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
                 <td class="fw-bold">{{ op.referenceNumber }}</td>
                 <td>{{ op.clientName }}</td>
-                <td class="d-none d-md-table-cell">{{ op.cargoType | statusLabel }}</td>
-                <td class="d-none d-md-table-cell">{{ op.inspectionType | statusLabel }}</td>
+                <td class="d-none d-md-table-cell">{{ op.transportMode | statusLabel }}</td>
+                <td class="d-none d-md-table-cell">{{ op.operationCategory | statusLabel }}</td>
                 <td><app-status-badge [status]="op.status" /></td>
                 <td class="d-none d-lg-table-cell">{{ op.assignedAgentName ?? '-' }}</td>
                 <td class="d-none d-sm-table-cell">{{ op.createdAt | date:'shortDate' }}</td>

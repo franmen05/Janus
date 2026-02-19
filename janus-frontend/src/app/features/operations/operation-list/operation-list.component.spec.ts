@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { OperationListComponent } from './operation-list.component';
 import { OperationService } from '../../../core/services/operation.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { OperationStatus, CargoType, InspectionType, Operation } from '../../../core/models/operation.model';
+import { OperationStatus, TransportMode, OperationCategory, Operation } from '../../../core/models/operation.model';
 
 describe('OperationListComponent', () => {
   let component: OperationListComponent;
@@ -18,8 +18,9 @@ describe('OperationListComponent', () => {
   const mockOperations: Operation[] = [
     {
       id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
-      cargoType: CargoType.FCL, inspectionType: InspectionType.EXPRESS,
-      status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null, originCountry: null,
+      transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
+      status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
+      blNumber: null, containerNumber: 'CONT-001', estimatedArrival: null, blOriginalAvailable: false,
       notes: null, deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     }
   ];

@@ -19,14 +19,26 @@ public record DeclarationResponse(
         String gattMethod,
         String notes,
         LocalDateTime submittedAt,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        String technicalApprovedBy,
+        LocalDateTime technicalApprovedAt,
+        String technicalApprovalComment,
+        String finalApprovedBy,
+        LocalDateTime finalApprovedAt,
+        String finalApprovalComment,
+        String rejectedBy,
+        LocalDateTime rejectedAt,
+        String rejectionComment
 ) {
     public static DeclarationResponse from(Declaration d) {
         return new DeclarationResponse(
                 d.id, d.operation.id, d.declarationType, d.declarationNumber,
                 d.fobValue, d.cifValue, d.taxableBase, d.totalTaxes,
                 d.freightValue, d.insuranceValue, d.gattMethod, d.notes,
-                d.submittedAt, d.createdAt
+                d.submittedAt, d.createdAt,
+                d.technicalApprovedBy, d.technicalApprovedAt, d.technicalApprovalComment,
+                d.finalApprovedBy, d.finalApprovedAt, d.finalApprovalComment,
+                d.rejectedBy, d.rejectedAt, d.rejectionComment
         );
     }
 }

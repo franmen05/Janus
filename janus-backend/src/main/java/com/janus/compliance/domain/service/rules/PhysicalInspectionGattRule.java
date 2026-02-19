@@ -4,10 +4,10 @@ import com.janus.compliance.domain.model.ValidationResult;
 import com.janus.compliance.domain.service.ComplianceRule;
 import com.janus.document.domain.model.Document;
 import com.janus.document.domain.model.DocumentStatus;
-import com.janus.operation.domain.model.CargoType;
-import com.janus.operation.domain.model.InspectionType;
+import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
+import com.janus.operation.domain.model.TransportMode;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class PhysicalInspectionGattRule implements ComplianceRule {
     public String ruleCode() { return "PHYSICAL_INSPECTION_GATT"; }
 
     @Override
-    public boolean appliesTo(OperationStatus from, OperationStatus to, CargoType cargo, InspectionType inspection) {
-        return to == OperationStatus.VALUATION_REVIEW && inspection == InspectionType.PHYSICAL;
+    public boolean appliesTo(OperationStatus from, OperationStatus to, TransportMode transportMode, OperationCategory category) {
+        return to == OperationStatus.VALUATION_REVIEW && category == OperationCategory.CATEGORY_3;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class PhysicalInspectionGattRule implements ComplianceRule {
             return ValidationResult.failure(List.of(
                     new ValidationResult.ValidationError(
                             "PHYSICAL_ALL_DOCS_VALIDATED",
-                            "All documents must be VALIDATED before VALUATION_REVIEW for PHYSICAL inspection"
+                            "All documents must be VALIDATED before VALUATION_REVIEW for CATEGORY_3 operations"
                     )
             ));
         }

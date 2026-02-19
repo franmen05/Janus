@@ -9,6 +9,7 @@ public record CommentResponse(
         String authorUsername,
         String authorFullName,
         String content,
+        boolean internal,
         LocalDateTime createdAt
 ) {
     public static CommentResponse from(OperationComment comment) {
@@ -18,6 +19,7 @@ public record CommentResponse(
                 comment.author != null ? comment.author.username : null,
                 comment.author != null ? comment.author.fullName : null,
                 comment.content,
+                comment.internal,
                 comment.createdAt
         );
     }

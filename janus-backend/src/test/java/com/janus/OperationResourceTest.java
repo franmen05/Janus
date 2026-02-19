@@ -50,6 +50,37 @@ class OperationResourceTest {
         uploadDocument(operationId, "PACKING_LIST");
     }
 
+    private static void setupDeclarationWithApprovals(Long operationId) {
+        var declId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"declarationNumber": "PRELIM-OP-TEST", "fobValue": 1000.00, "cifValue": 1200.00,
+                         "taxableBase": 1200.00, "totalTaxes": 180.00, "freightValue": 150.00, "insuranceValue": 50.00}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/preliminary", operationId)
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Technical OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", operationId, declId)
+                .then().statusCode(200);
+
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Final OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", operationId, declId)
+                .then().statusCode(200);
+    }
+
     // ---- Auth tests ----
 
     @Test
@@ -78,7 +109,7 @@ class OperationResourceTest {
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "FCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -92,7 +123,7 @@ class OperationResourceTest {
                 .auth().basic("accounting", "acc123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "FCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -108,7 +139,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS", "notes": "Test operation"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true, "notes": "Test operation"}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -116,8 +147,8 @@ class OperationResourceTest {
                 .body("id", notNullValue())
                 .body("referenceNumber", notNullValue())
                 .body("status", is("DRAFT"))
-                .body("cargoType", is("LCL"))
-                .body("inspectionType", is("EXPRESS"))
+                .body("transportMode", is("AIR"))
+                .body("operationCategory", is("CATEGORY_1"))
                 .body("notes", is("Test operation"))
                 .extract().jsonPath().getLong("id");
     }
@@ -152,13 +183,13 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "PHYSICAL", "notes": "Updated notes"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_3", "blNumber": "BL-TEST-001", "blOriginalAvailable": true, "notes": "Updated notes"}
                         """)
                 .when().put("/api/operations/{id}", createdOperationId)
                 .then()
                 .statusCode(200)
-                .body("cargoType", is("LCL"))
-                .body("inspectionType", is("PHYSICAL"))
+                .body("transportMode", is("AIR"))
+                .body("operationCategory", is("CATEGORY_3"))
                 .body("notes", is("Updated notes"));
     }
 
@@ -193,7 +224,7 @@ class OperationResourceTest {
                 .auth().basic("agent", "agent123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 2, "cargoType": "LCL", "inspectionType": "VISUAL"}
+                        {"clientId": 2, "transportMode": "AIR", "operationCategory": "CATEGORY_2", "blNumber": "BL-TEST-002", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -241,6 +272,8 @@ class OperationResourceTest {
     @Test
     @Order(21)
     void testInvalidStatusTransition() {
+        // createdOperationId is now DOCUMENTATION_COMPLETE (from testValidStatusTransition)
+        // DOCUMENTATION_COMPLETE can only go to IN_REVIEW or CANCELLED, not CLOSED
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -256,12 +289,12 @@ class OperationResourceTest {
     @Test
     @Order(22)
     void testClosedSetsClosedAt() {
-        // Create LCL/EXPRESS operation (simpler compliance path)
+        // Create AIR/CATEGORY_1 operation (simpler compliance path)
         var opId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -269,6 +302,9 @@ class OperationResourceTest {
 
         // Upload mandatory docs
         uploadAllMandatoryDocs(opId);
+
+        // Setup declaration with approvals for review compliance rules
+        setupDeclarationWithApprovals(opId);
 
         // DRAFT → DOCUMENTATION_COMPLETE
         given()
@@ -280,8 +316,9 @@ class OperationResourceTest {
                 .when().post("/api/operations/{id}/change-status", opId)
                 .then().statusCode(200);
 
-        // Remaining transitions (DECLARATION_IN_PROGRESS requires validated invoice - already validated by upload)
+        // Remaining transitions through new review flow
         var remaining = new String[]{
+                "IN_REVIEW", "PRELIQUIDATION_REVIEW", "ANALYST_ASSIGNED",
                 "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
         };
@@ -306,6 +343,56 @@ class OperationResourceTest {
                 .body("closedAt", notNullValue());
     }
 
+    @Test
+    @Order(23)
+    void testUpdateClosedOperationForbidden() {
+        // Create a fresh operation
+        var opId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-CLOSED", "blOriginalAvailable": true}
+                        """)
+                .when().post("/api/operations")
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        // Upload mandatory docs
+        uploadAllMandatoryDocs(opId);
+
+        // Setup declaration with approvals for compliance rules
+        setupDeclarationWithApprovals(opId);
+
+        // Advance through all statuses to CLOSED
+        var statuses = new String[]{
+                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW",
+                "ANALYST_ASSIGNED", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+                "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
+        };
+        for (var status : statuses) {
+            given()
+                    .auth().basic("admin", "admin123")
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {"newStatus": "%s"}
+                            """.formatted(status))
+                    .when().post("/api/operations/{id}/change-status", opId)
+                    .then().statusCode(200);
+        }
+
+        // Attempt to update the CLOSED operation — should fail
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-UPDATED", "blOriginalAvailable": true, "notes": "Should not work"}
+                        """)
+                .when().put("/api/operations/{id}", opId)
+                .then()
+                .statusCode(400)
+                .body("error", containsString("Cannot update a closed or cancelled operation"));
+    }
+
     // ---- Delete tests ----
 
     @Test
@@ -315,7 +402,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "FCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then()

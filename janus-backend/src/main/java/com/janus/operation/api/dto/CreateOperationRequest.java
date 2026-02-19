@@ -1,15 +1,19 @@
 package com.janus.operation.api.dto;
 
-import com.janus.operation.domain.model.CargoType;
-import com.janus.operation.domain.model.InspectionType;
+import com.janus.operation.domain.model.OperationCategory;
+import com.janus.operation.domain.model.TransportMode;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateOperationRequest(
         @NotNull Long clientId,
-        @NotNull CargoType cargoType,
-        @NotNull InspectionType inspectionType,
+        @NotNull TransportMode transportMode,
+        @NotNull OperationCategory operationCategory,
         Long assignedAgentId,
-        String originCountry,
+        @NotNull @NotBlank String blNumber,
+        String containerNumber,
+        java.time.LocalDateTime estimatedArrival,
+        @NotNull Boolean blOriginalAvailable,
         String notes,
         java.time.LocalDateTime deadline
 ) {}

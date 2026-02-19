@@ -5,7 +5,7 @@ import { OperationService } from './operation.service';
 import { environment } from '../../../environments/environment';
 import {
   Operation, CreateOperationRequest, ChangeStatusRequest,
-  OperationStatus, CargoType, InspectionType, StatusHistory
+  OperationStatus, TransportMode, OperationCategory, StatusHistory
 } from '../models/operation.model';
 import { CompletenessResponse } from '../models/document.model';
 
@@ -20,12 +20,15 @@ describe('OperationService', () => {
     referenceNumber: 'OP-2024-0001',
     clientId: 1,
     clientName: 'Test Client',
-    cargoType: CargoType.FCL,
-    inspectionType: InspectionType.EXPRESS,
+    transportMode: TransportMode.MARITIME,
+    operationCategory: OperationCategory.CATEGORY_1,
     status: OperationStatus.DRAFT,
     assignedAgentId: 1,
     assignedAgentName: 'Agent One',
-    originCountry: null,
+    blNumber: 'BL-001',
+    containerNumber: 'CONT-001',
+    estimatedArrival: '2024-02-01T10:00:00',
+    blOriginalAvailable: false,
     notes: null,
     deadline: null,
     closedAt: null,
@@ -109,8 +112,8 @@ describe('OperationService', () => {
     it('should call POST /api/operations', () => {
       const request: CreateOperationRequest = {
         clientId: 1,
-        cargoType: CargoType.FCL,
-        inspectionType: InspectionType.EXPRESS
+        transportMode: TransportMode.MARITIME,
+        operationCategory: OperationCategory.CATEGORY_1
       };
 
       service.create(request).subscribe(op => {
@@ -128,8 +131,8 @@ describe('OperationService', () => {
     it('should call PUT /api/operations/{id}', () => {
       const request: CreateOperationRequest = {
         clientId: 1,
-        cargoType: CargoType.LCL,
-        inspectionType: InspectionType.VISUAL
+        transportMode: TransportMode.AIR,
+        operationCategory: OperationCategory.CATEGORY_2
       };
 
       service.update(1, request).subscribe(op => {

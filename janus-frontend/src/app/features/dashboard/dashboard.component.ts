@@ -7,7 +7,7 @@ import { OperationService } from '../../core/services/operation.service';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { AlertService } from '../../core/services/alert.service';
 import { AuthService } from '../../core/services/auth.service';
-import { Operation, OperationStatus, CargoType, InspectionType } from '../../core/models/operation.model';
+import { Operation, OperationStatus, TransportMode, OperationCategory } from '../../core/models/operation.model';
 import { DashboardMetrics, DashboardFilter } from '../../core/models/dashboard.model';
 import { Alert } from '../../core/models/alert.model';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
@@ -34,17 +34,17 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
               <input type="date" class="form-control form-control-sm" [(ngModel)]="filterTo">
             </div>
             <div class="col-6 col-md-2">
-              <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_CARGO' | translate }}</label>
-              <select class="form-select form-select-sm" [(ngModel)]="filterCargo">
+              <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_TRANSPORT' | translate }}</label>
+              <select class="form-select form-select-sm" [(ngModel)]="filterTransport">
                 <option value="">{{ 'DASHBOARD.FILTER_ALL' | translate }}</option>
-                @for (t of cargoTypes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
+                @for (t of transportModes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
               </select>
             </div>
             <div class="col-6 col-md-2">
-              <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_INSPECTION' | translate }}</label>
-              <select class="form-select form-select-sm" [(ngModel)]="filterInspection">
+              <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_CATEGORY' | translate }}</label>
+              <select class="form-select form-select-sm" [(ngModel)]="filterCategory">
                 <option value="">{{ 'DASHBOARD.FILTER_ALL' | translate }}</option>
-                @for (t of inspectionTypes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
+                @for (t of operationCategories; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
               </select>
             </div>
             <div class="col-6 col-md-2">
@@ -247,11 +247,11 @@ export class DashboardComponent implements OnInit {
 
   filterFrom = '';
   filterTo = '';
-  filterCargo = '';
-  filterInspection = '';
+  filterTransport = '';
+  filterCategory = '';
   filterAgent = '';
-  cargoTypes = Object.values(CargoType);
-  inspectionTypes = Object.values(InspectionType);
+  transportModes = Object.values(TransportMode);
+  operationCategories = Object.values(OperationCategory);
 
   ngOnInit(): void {
     this.loadData();
@@ -274,8 +274,8 @@ export class DashboardComponent implements OnInit {
     const filter: DashboardFilter = {};
     if (this.filterFrom) filter.from = this.filterFrom;
     if (this.filterTo) filter.to = this.filterTo;
-    if (this.filterCargo) filter.cargoType = this.filterCargo;
-    if (this.filterInspection) filter.inspectionType = this.filterInspection;
+    if (this.filterTransport) filter.transportMode = this.filterTransport;
+    if (this.filterCategory) filter.operationCategory = this.filterCategory;
     if (this.filterAgent) filter.agentUsername = this.filterAgent;
 
     this.dashboardService.getMetrics(filter).subscribe(m => {

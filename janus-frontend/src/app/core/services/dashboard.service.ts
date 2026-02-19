@@ -14,8 +14,8 @@ export class DashboardService {
     if (filter) {
       if (filter.from) params = params.set('from', filter.from);
       if (filter.to) params = params.set('to', filter.to);
-      if (filter.cargoType) params = params.set('cargoType', filter.cargoType);
-      if (filter.inspectionType) params = params.set('inspectionType', filter.inspectionType);
+      if (filter.transportMode) params = params.set('transportMode', filter.transportMode);
+      if (filter.operationCategory) params = params.set('operationCategory', filter.operationCategory);
       if (filter.agentUsername) params = params.set('agentUsername', filter.agentUsername);
     }
     return this.http.get<DashboardMetrics>(`${this.apiUrl}/metrics`, { params });

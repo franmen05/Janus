@@ -2,10 +2,10 @@ package com.janus.compliance.domain.service;
 
 import com.janus.compliance.domain.model.ComplianceRuleConfig;
 import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
-import com.janus.operation.domain.model.CargoType;
-import com.janus.operation.domain.model.InspectionType;
+import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
+import com.janus.operation.domain.model.TransportMode;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -30,10 +30,10 @@ class ComplianceValidationServiceTest {
     /**
      * Creates a transient Operation (not persisted) for validation testing.
      */
-    private Operation createTestOperation(CargoType cargo, InspectionType inspection, OperationStatus status) {
+    private Operation createTestOperation(TransportMode transportMode, OperationCategory category, OperationStatus status) {
         var op = new Operation();
-        op.cargoType = cargo;
-        op.inspectionType = inspection;
+        op.transportMode = transportMode;
+        op.operationCategory = category;
         op.status = status;
         return op;
     }
@@ -44,7 +44,7 @@ class ComplianceValidationServiceTest {
     @Order(1)
     void testValidationFailsWhenMandatoryDocsAreMissing() {
         // Operation has no documents uploaded — completeness rule should fail
-        var operation = createTestOperation(CargoType.LCL, InspectionType.EXPRESS, OperationStatus.DRAFT);
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.DRAFT);
         // We need a persisted operation for document lookup; use a real one
         // Instead, test via the REST endpoint (already covered in ComplianceValidationTest)
         // Here we test the service directly with a non-persisted operation that has an id
@@ -59,13 +59,13 @@ class ComplianceValidationServiceTest {
     @Test
     @Order(2)
     void testValidationReturnsSpecificErrorCodes() {
-        var operation = createTestOperation(CargoType.LCL, InspectionType.EXPRESS, OperationStatus.DRAFT);
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.DRAFT);
         operation.id = -999L;
 
         var result = validationService.validate(operation, OperationStatus.DOCUMENTATION_COMPLETE);
 
         assertFalse(result.passed());
-        // LCL requires BL, COMMERCIAL_INVOICE, PACKING_LIST — errors use MISSING_DOC_* codes
+        // AIR requires BL, COMMERCIAL_INVOICE, PACKING_LIST — errors use MISSING_DOC_* codes
         var ruleCodes = result.errors().stream()
                 .map(e -> e.ruleCode())
                 .toList();
@@ -85,7 +85,7 @@ class ComplianceValidationServiceTest {
         var originalEnabled = enabledConfig.enabled;
         enabledConfig.enabled = false;
 
-        var operation = createTestOperation(CargoType.LCL, InspectionType.EXPRESS, OperationStatus.DRAFT);
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.DRAFT);
         operation.id = -999L;
 
         var result = validationService.validate(operation, OperationStatus.DOCUMENTATION_COMPLETE);
@@ -115,7 +115,7 @@ class ComplianceValidationServiceTest {
             config.enabled = false;
         }
 
-        var operation = createTestOperation(CargoType.LCL, InspectionType.EXPRESS, OperationStatus.DRAFT);
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.DRAFT);
         operation.id = -999L;
 
         var result = validationService.validate(operation, OperationStatus.DOCUMENTATION_COMPLETE);
@@ -140,7 +140,7 @@ class ComplianceValidationServiceTest {
     void testValidationPassesWhenNoRulesApply() {
         // Use a transition that no rule applies to (e.g., VALUATION_REVIEW -> PAYMENT_PREPARATION)
         // Most rules apply to DRAFT -> DOCUMENTATION_COMPLETE; other transitions may have fewer rules
-        var operation = createTestOperation(CargoType.LCL, InspectionType.EXPRESS, OperationStatus.PAYMENT_PREPARATION);
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.PAYMENT_PREPARATION);
         operation.id = -999L;
 
         var result = validationService.validate(operation, OperationStatus.IN_TRANSIT);
@@ -149,27 +149,27 @@ class ComplianceValidationServiceTest {
                 "Validation should pass when no rules apply to this transition, errors: " + result.errors());
     }
 
-    // ---- FCL requires more documents than LCL ----
+    // ---- MARITIME requires more documents than AIR ----
 
     @Test
     @Order(30)
-    void testFCLHasMoreErrors() {
-        var lclOp = createTestOperation(CargoType.LCL, InspectionType.EXPRESS, OperationStatus.DRAFT);
-        lclOp.id = -999L;
+    void testMARITIMEHasMoreErrors() {
+        var airOp = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.DRAFT);
+        airOp.id = -999L;
 
-        var fclOp = createTestOperation(CargoType.FCL, InspectionType.EXPRESS, OperationStatus.DRAFT);
-        fclOp.id = -998L;
+        var maritimeOp = createTestOperation(TransportMode.MARITIME, OperationCategory.CATEGORY_1, OperationStatus.DRAFT);
+        maritimeOp.id = -998L;
 
-        var lclResult = validationService.validate(lclOp, OperationStatus.DOCUMENTATION_COMPLETE);
-        var fclResult = validationService.validate(fclOp, OperationStatus.DOCUMENTATION_COMPLETE);
+        var airResult = validationService.validate(airOp, OperationStatus.DOCUMENTATION_COMPLETE);
+        var maritimeResult = validationService.validate(maritimeOp, OperationStatus.DOCUMENTATION_COMPLETE);
 
-        assertFalse(lclResult.passed());
-        assertFalse(fclResult.passed());
+        assertFalse(airResult.passed());
+        assertFalse(maritimeResult.passed());
 
-        // FCL requires CERTIFICATE in addition to LCL's mandatory docs, so should have >= LCL errors
-        assertTrue(fclResult.errors().size() >= lclResult.errors().size(),
-                "FCL should have at least as many errors as LCL. FCL=" + fclResult.errors().size()
-                        + " LCL=" + lclResult.errors().size());
+        // MARITIME requires CERTIFICATE in addition to AIR's mandatory docs, so should have >= AIR errors
+        assertTrue(maritimeResult.errors().size() >= airResult.errors().size(),
+                "MARITIME should have at least as many errors as AIR. MARITIME=" + maritimeResult.errors().size()
+                        + " AIR=" + airResult.errors().size());
     }
 
     // ---- Rule re-enable takes effect ----
@@ -185,7 +185,7 @@ class ComplianceValidationServiceTest {
         // Disable
         enabledConfig.enabled = false;
 
-        var operation = createTestOperation(CargoType.LCL, InspectionType.EXPRESS, OperationStatus.DRAFT);
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.DRAFT);
         operation.id = -999L;
 
         var disabledResult = validationService.validate(operation, OperationStatus.DOCUMENTATION_COMPLETE);

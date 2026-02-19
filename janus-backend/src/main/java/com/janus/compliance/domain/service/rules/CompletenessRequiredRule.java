@@ -5,10 +5,10 @@ import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
 import com.janus.compliance.domain.service.ComplianceRule;
 import com.janus.document.domain.model.Document;
 import com.janus.document.domain.model.DocumentType;
-import com.janus.operation.domain.model.CargoType;
-import com.janus.operation.domain.model.InspectionType;
+import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
+import com.janus.operation.domain.model.TransportMode;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -31,13 +31,13 @@ public class CompletenessRequiredRule implements ComplianceRule {
     public String ruleCode() { return "COMPLETENESS_REQUIRED"; }
 
     @Override
-    public boolean appliesTo(OperationStatus from, OperationStatus to, CargoType cargo, InspectionType inspection) {
+    public boolean appliesTo(OperationStatus from, OperationStatus to, TransportMode transportMode, OperationCategory category) {
         return to == OperationStatus.DOCUMENTATION_COMPLETE;
     }
 
     @Override
     public ValidationResult validate(Operation operation, List<Document> documents) {
-        var mandatory = getMandatoryDocuments(operation.cargoType);
+        var mandatory = getMandatoryDocuments(operation.transportMode);
 
         var present = documents.stream()
                 .filter(d -> d.active)
@@ -56,8 +56,8 @@ public class CompletenessRequiredRule implements ComplianceRule {
         return errors.isEmpty() ? ValidationResult.success() : ValidationResult.failure(errors);
     }
 
-    private Set<DocumentType> getMandatoryDocuments(CargoType cargoType) {
-        var key = "mandatory_documents_" + cargoType.name();
+    private Set<DocumentType> getMandatoryDocuments(TransportMode transportMode) {
+        var key = "mandatory_documents_" + transportMode.name();
         return configRepository.getParamValue(ruleCode(), key)
                 .map(value -> Arrays.stream(value.split(","))
                         .map(String::trim)

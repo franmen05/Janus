@@ -17,6 +17,7 @@ describe('CommentService', () => {
     authorUsername: 'admin',
     authorFullName: 'Admin User',
     content: 'Test comment',
+    internal: false,
     createdAt: '2024-01-01T00:00:00'
   };
 
@@ -47,7 +48,7 @@ describe('CommentService', () => {
 
   describe('addComment', () => {
     it('should call POST /api/operations/{id}/comments', () => {
-      const request: CreateCommentRequest = { content: 'New comment' };
+      const request: CreateCommentRequest = { content: 'New comment', internal: false };
       service.addComment(1, request).subscribe(comment => {
         expect(comment).toEqual(mockComment);
       });

@@ -1,7 +1,9 @@
 package com.janus.alert.application;
 
 import com.janus.alert.domain.model.AlertType;
+import com.janus.document.domain.service.DocumentCompletenessService;
 import com.janus.notification.application.NotificationService;
+import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.repository.OperationRepository;
 import io.quarkus.scheduler.Scheduled;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,6 +27,9 @@ public class AlertCheckerScheduler {
     @Inject
     NotificationService notificationService;
 
+    @Inject
+    DocumentCompletenessService completenessService;
+
     @ConfigProperty(name = "janus.alerts.inactivity-hours", defaultValue = "48")
     int inactivityHours;
 
@@ -37,6 +42,8 @@ public class AlertCheckerScheduler {
         LOG.info("Running alert checks...");
         checkInactivity();
         checkDeadlineApproaching();
+        checkMissingCriticalDocuments();
+        checkBLUnavailable();
     }
 
     void checkInactivity() {
@@ -73,6 +80,38 @@ public class AlertCheckerScheduler {
                         "Deadline Approaching - " + op.referenceNumber,
                         "Operation " + op.referenceNumber + " deadline is approaching."
                 );
+            }
+        }
+    }
+
+    void checkMissingCriticalDocuments() {
+        var operations = operationRepository.findByStatus(OperationStatus.IN_REVIEW);
+
+        for (var op : operations) {
+            var completeness = completenessService.calculate(op.id);
+            if ("RED".equals(completeness.color()) || "YELLOW".equals(completeness.color())) {
+                alertService.createAlert(op, AlertType.MISSING_CRITICAL_DOCUMENT,
+                        "Operation " + op.referenceNumber + " is in review but has incomplete documentation ("
+                                + completeness.percentage() + "% complete)");
+            }
+        }
+    }
+
+    void checkBLUnavailable() {
+        // Check operations in IN_REVIEW or later review statuses where BL original is not available
+        var reviewStatuses = java.util.List.of(
+                OperationStatus.IN_REVIEW,
+                OperationStatus.PRELIQUIDATION_REVIEW,
+                OperationStatus.ANALYST_ASSIGNED
+        );
+
+        for (var status : reviewStatuses) {
+            var operations = operationRepository.findByStatus(status);
+            for (var op : operations) {
+                if (op.blOriginalAvailable == null || !op.blOriginalAvailable) {
+                    alertService.createAlert(op, AlertType.BL_UNAVAILABLE,
+                            "Operation " + op.referenceNumber + " does not have original BL available");
+                }
             }
         }
     }

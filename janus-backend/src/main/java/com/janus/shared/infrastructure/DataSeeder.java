@@ -75,18 +75,17 @@ public class DataSeeder {
 
     private void seedComplianceRuleConfigs() {
         createConfig("COMPLETENESS_REQUIRED", "enabled", "true", "Enable completeness check rule");
-        createConfig("COMPLETENESS_REQUIRED", "mandatory_documents_FCL", "BL,COMMERCIAL_INVOICE,PACKING_LIST,CERTIFICATE",
-                "Mandatory documents for FCL cargo");
-        createConfig("COMPLETENESS_REQUIRED", "mandatory_documents_LCL", "BL,COMMERCIAL_INVOICE,PACKING_LIST",
-                "Mandatory documents for LCL cargo");
+        createConfig("COMPLETENESS_REQUIRED", "mandatory_documents_MARITIME", "BL,COMMERCIAL_INVOICE,PACKING_LIST,CERTIFICATE",
+                "Mandatory documents for MARITIME transport");
+        createConfig("COMPLETENESS_REQUIRED", "mandatory_documents_AIR", "BL,COMMERCIAL_INVOICE,PACKING_LIST",
+                "Mandatory documents for AIR transport");
         createConfig("COMMERCIAL_INVOICE_REQUIRED", "enabled", "true", "Enable commercial invoice validation rule");
         createConfig("HIGH_VALUE_ADDITIONAL_DOC", "enabled", "true", "Enable high value additional document rule");
         createConfig("PHYSICAL_INSPECTION_GATT", "enabled", "true", "Enable physical inspection GATT rule");
         createConfig("BL_VERIFIED_FOR_VALUATION", "enabled", "true", "Enable BL verification for valuation rule");
         createConfig("CROSSING_RESOLVED", "enabled", "true", "Enable crossing resolved rule");
-        createConfig("RESTRICTED_COUNTRY", "enabled", "true", "Enable restricted country rule");
-        createConfig("RESTRICTED_COUNTRY", "restricted_countries", "CU,KP,IR,SY,VE",
-                "Comma-separated ISO country codes that are restricted");
+        createConfig("INTERNAL_REVIEW_COMPLETE", "enabled", "true", "Enable internal review completeness check");
+        createConfig("PRELIQUIDATION_APPROVED", "enabled", "true", "Enable preliquidation approval gate");
     }
 
     private void createConfig(String ruleCode, String paramKey, String paramValue, String description) {

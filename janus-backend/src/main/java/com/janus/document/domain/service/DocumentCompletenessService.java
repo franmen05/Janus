@@ -3,7 +3,7 @@ package com.janus.document.domain.service;
 import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
 import com.janus.document.domain.model.DocumentType;
 import com.janus.document.domain.repository.DocumentRepository;
-import com.janus.operation.domain.model.CargoType;
+import com.janus.operation.domain.model.TransportMode;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.repository.OperationRepository;
 import com.janus.shared.infrastructure.exception.NotFoundException;
@@ -38,7 +38,7 @@ public class DocumentCompletenessService {
         var operation = operationRepository.findByIdOptional(operationId)
                 .orElseThrow(() -> new NotFoundException("Operation", operationId));
 
-        var mandatory = getEffectiveMandatoryDocuments(operation.cargoType);
+        var mandatory = getEffectiveMandatoryDocuments(operation.transportMode);
 
         if (mandatory.isEmpty()) {
             return new CompletenessResult(100, List.of(), "GREEN");
@@ -74,22 +74,22 @@ public class DocumentCompletenessService {
     /**
      * Aggregates mandatory documents from all enabled compliance rules.
      */
-    private Set<DocumentType> getEffectiveMandatoryDocuments(CargoType cargoType) {
+    private Set<DocumentType> getEffectiveMandatoryDocuments(TransportMode transportMode) {
         var mandatory = new HashSet<DocumentType>();
 
         if (configRepository.isRuleEnabled("COMPLETENESS_REQUIRED")) {
-            mandatory.addAll(getMandatoryFromConfig(cargoType));
+            mandatory.addAll(getMandatoryFromConfig(transportMode));
         }
 
-        if (configRepository.isRuleEnabled("HIGH_VALUE_ADDITIONAL_DOC") && cargoType == CargoType.FCL) {
+        if (configRepository.isRuleEnabled("HIGH_VALUE_ADDITIONAL_DOC") && transportMode == TransportMode.MARITIME) {
             mandatory.add(DocumentType.CERTIFICATE);
         }
 
         return mandatory;
     }
 
-    private Set<DocumentType> getMandatoryFromConfig(CargoType cargoType) {
-        var key = "mandatory_documents_" + cargoType.name();
+    private Set<DocumentType> getMandatoryFromConfig(TransportMode transportMode) {
+        var key = "mandatory_documents_" + transportMode.name();
         return configRepository.getParamValue("COMPLETENESS_REQUIRED", key)
                 .map(value -> Arrays.stream(value.split(","))
                         .map(String::trim)

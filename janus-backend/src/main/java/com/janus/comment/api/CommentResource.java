@@ -39,7 +39,8 @@ public class CommentResource {
     public Response addComment(@PathParam("operationId") Long operationId,
                                 @Valid CreateCommentRequest request,
                                 @Context SecurityContext sec) {
-        var comment = commentService.addComment(operationId, request.content(), sec.getUserPrincipal().getName());
+        var comment = commentService.addComment(operationId, request.content(), request.internal(),
+                sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
                 .entity(CommentResponse.from(comment))
                 .build();
@@ -50,7 +51,9 @@ public class CommentResource {
     public List<CommentResponse> list(@PathParam("operationId") Long operationId,
                                        @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
-        return commentService.getComments(operationId).stream()
+        // Filter internal comments for CLIENT and ACCOUNTING roles
+        boolean filterInternal = sec.isUserInRole("CLIENT") || sec.isUserInRole("ACCOUNTING");
+        return commentService.getComments(operationId, filterInternal).stream()
                 .map(CommentResponse::from)
                 .toList();
     }

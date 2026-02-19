@@ -1,5 +1,6 @@
 package com.janus.declaration.api;
 
+import com.janus.declaration.api.dto.ApprovalRequest;
 import com.janus.declaration.api.dto.CreateDeclarationRequest;
 import com.janus.declaration.api.dto.CreateTariffLineRequest;
 import com.janus.declaration.api.dto.CrossingDiscrepancyResponse;
@@ -158,6 +159,56 @@ public class DeclarationResource {
         d.gattMethod = r.gattMethod();
         d.notes = r.notes();
         return d;
+    }
+
+    @POST
+    @Path("/{id}/generate-preliquidation")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public DeclarationResponse generatePreliquidation(@PathParam("operationId") Long operationId,
+                                                       @PathParam("id") Long declarationId,
+                                                       @Context SecurityContext sec) {
+        var result = declarationService.generatePreliquidation(operationId, declarationId,
+                sec.getUserPrincipal().getName());
+        return DeclarationResponse.from(result);
+    }
+
+    @POST
+    @Path("/{id}/approve-technical")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public DeclarationResponse approveTechnical(@PathParam("operationId") Long operationId,
+                                                 @PathParam("id") Long declarationId,
+                                                 ApprovalRequest request,
+                                                 @Context SecurityContext sec) {
+        var comment = request != null ? request.comment() : null;
+        var result = declarationService.approveTechnical(operationId, declarationId, comment,
+                sec.getUserPrincipal().getName());
+        return DeclarationResponse.from(result);
+    }
+
+    @POST
+    @Path("/{id}/approve-final")
+    @RolesAllowed({"ADMIN"})
+    public DeclarationResponse approveFinal(@PathParam("operationId") Long operationId,
+                                             @PathParam("id") Long declarationId,
+                                             ApprovalRequest request,
+                                             @Context SecurityContext sec) {
+        var comment = request != null ? request.comment() : null;
+        var result = declarationService.approveFinal(operationId, declarationId, comment,
+                sec.getUserPrincipal().getName());
+        return DeclarationResponse.from(result);
+    }
+
+    @POST
+    @Path("/{id}/reject")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public DeclarationResponse reject(@PathParam("operationId") Long operationId,
+                                       @PathParam("id") Long declarationId,
+                                       ApprovalRequest request,
+                                       @Context SecurityContext sec) {
+        var comment = request != null ? request.comment() : null;
+        var result = declarationService.reject(operationId, declarationId, comment,
+                sec.getUserPrincipal().getName());
+        return DeclarationResponse.from(result);
     }
 
     private TariffLine toTariffLine(CreateTariffLineRequest r) {

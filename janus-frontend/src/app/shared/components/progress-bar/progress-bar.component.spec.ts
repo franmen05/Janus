@@ -32,8 +32,8 @@ describe('ProgressBarComponent', () => {
     expect(component.currentIndex()).toBe(0);
   });
 
-  it('should calculate progressPercent as 12.5 for DRAFT (1/8 * 100)', () => {
-    expect(component.progressPercent()).toBe(12.5);
+  it('should calculate progressPercent for DRAFT (1/9 * 100)', () => {
+    expect(component.progressPercent()).toBeCloseTo(11.11, 1);
   });
 
   it('should have isFinal true for CLOSED', () => {
@@ -52,7 +52,7 @@ describe('ProgressBarComponent', () => {
     expect(component.isFinal()).toBeFalse();
   });
 
-  it('should calculate progressPercent as 100 for CLOSED (8/8 * 100)', () => {
+  it('should calculate progressPercent as 100 for CLOSED (9/9 * 100)', () => {
     fixture.componentRef.setInput('status', 'CLOSED');
     fixture.detectChanges();
     expect(component.progressPercent()).toBe(100);

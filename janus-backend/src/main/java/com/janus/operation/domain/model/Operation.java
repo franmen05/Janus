@@ -23,12 +23,12 @@ public class Operation extends BaseEntity {
     public Client client;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "cargo_type", nullable = false)
-    public CargoType cargoType;
+    @Column(name = "transport_mode", nullable = false)
+    public TransportMode transportMode;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "inspection_type", nullable = false)
-    public InspectionType inspectionType;
+    @Column(name = "operation_category", nullable = false)
+    public OperationCategory operationCategory;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -37,8 +37,17 @@ public class Operation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     public User assignedAgent;
 
-    @Column(name = "origin_country", length = 2)
-    public String originCountry;
+    @Column(name = "bl_number")
+    public String blNumber;
+
+    @Column(name = "container_number")
+    public String containerNumber;
+
+    @Column(name = "estimated_arrival")
+    public LocalDateTime estimatedArrival;
+
+    @Column(name = "bl_original_available")
+    public Boolean blOriginalAvailable = false;
 
     @Column(columnDefinition = "TEXT")
     public String notes;

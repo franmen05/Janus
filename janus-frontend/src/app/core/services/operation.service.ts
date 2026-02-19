@@ -44,4 +44,8 @@ export class OperationService {
   getCompleteness(id: number): Observable<CompletenessResponse> {
     return this.http.get<CompletenessResponse>(`${this.apiUrl}/${id}/documents/completeness`);
   }
+
+  getAllowedTransitions(id: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/${id}/allowed-transitions`);
+  }
 }

@@ -140,8 +140,8 @@ public class DashboardService {
         var sb = new StringBuilder();
         if (filter.from() != null) sb.append(" AND o.createdAt >= :fromDate");
         if (filter.to() != null) sb.append(" AND o.createdAt <= :toDate");
-        if (filter.cargoType() != null) sb.append(" AND o.cargoType = :cargoType");
-        if (filter.inspectionType() != null) sb.append(" AND o.inspectionType = :inspectionType");
+        if (filter.transportMode() != null) sb.append(" AND o.transportMode = :transportMode");
+        if (filter.operationCategory() != null) sb.append(" AND o.operationCategory = :operationCategory");
         if (filter.agentUsername() != null) sb.append(" AND o.assignedAgent.username = :agentUsername");
         return sb.toString();
     }
@@ -149,8 +149,8 @@ public class DashboardService {
     private void applyFilterParams(jakarta.persistence.Query query, DashboardFilter filter) {
         if (filter.from() != null) query.setParameter("fromDate", filter.from().atStartOfDay());
         if (filter.to() != null) query.setParameter("toDate", filter.to().atTime(23, 59, 59));
-        if (filter.cargoType() != null) query.setParameter("cargoType", filter.cargoType());
-        if (filter.inspectionType() != null) query.setParameter("inspectionType", filter.inspectionType());
+        if (filter.transportMode() != null) query.setParameter("transportMode", filter.transportMode());
+        if (filter.operationCategory() != null) query.setParameter("operationCategory", filter.operationCategory());
         if (filter.agentUsername() != null) query.setParameter("agentUsername", filter.agentUsername());
     }
 }

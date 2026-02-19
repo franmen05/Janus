@@ -1,9 +1,9 @@
 package com.janus.operation.api.dto;
 
-import com.janus.operation.domain.model.CargoType;
-import com.janus.operation.domain.model.InspectionType;
+import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
+import com.janus.operation.domain.model.TransportMode;
 import java.time.LocalDateTime;
 
 public record OperationResponse(
@@ -11,12 +11,15 @@ public record OperationResponse(
         String referenceNumber,
         Long clientId,
         String clientName,
-        CargoType cargoType,
-        InspectionType inspectionType,
+        TransportMode transportMode,
+        OperationCategory operationCategory,
         OperationStatus status,
         Long assignedAgentId,
         String assignedAgentName,
-        String originCountry,
+        String blNumber,
+        String containerNumber,
+        LocalDateTime estimatedArrival,
+        Boolean blOriginalAvailable,
         String notes,
         LocalDateTime deadline,
         LocalDateTime closedAt,
@@ -29,12 +32,15 @@ public record OperationResponse(
                 op.referenceNumber,
                 op.client != null ? op.client.id : null,
                 op.client != null ? op.client.name : null,
-                op.cargoType,
-                op.inspectionType,
+                op.transportMode,
+                op.operationCategory,
                 op.status,
                 op.assignedAgent != null ? op.assignedAgent.id : null,
                 op.assignedAgent != null ? op.assignedAgent.fullName : null,
-                op.originCountry,
+                op.blNumber,
+                op.containerNumber,
+                op.estimatedArrival,
+                op.blOriginalAvailable,
                 op.notes,
                 op.deadline,
                 op.closedAt,

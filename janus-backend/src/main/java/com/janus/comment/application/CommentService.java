@@ -29,7 +29,7 @@ public class CommentService {
     Event<AuditEvent> auditEvent;
 
     @Transactional
-    public OperationComment addComment(Long operationId, String content, String username) {
+    public OperationComment addComment(Long operationId, String content, boolean internal, String username) {
         var operation = operationService.findById(operationId);
         var user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("User", username));
@@ -38,6 +38,7 @@ public class CommentService {
         comment.operation = operation;
         comment.author = user;
         comment.content = content;
+        comment.internal = internal;
         commentRepository.persist(comment);
 
         auditEvent.fire(new AuditEvent(
@@ -48,8 +49,14 @@ public class CommentService {
         return comment;
     }
 
-    public List<OperationComment> getComments(Long operationId) {
+    public List<OperationComment> getComments(Long operationId, boolean filterInternal) {
         operationService.findById(operationId);
-        return commentRepository.findByOperationId(operationId);
+        var comments = commentRepository.findByOperationId(operationId);
+        if (filterInternal) {
+            return comments.stream()
+                    .filter(c -> !c.internal)
+                    .toList();
+        }
+        return comments;
     }
 }

@@ -6,6 +6,7 @@ import com.janus.operation.api.dto.OperationResponse;
 import com.janus.operation.api.dto.StatusHistoryResponse;
 import com.janus.operation.application.OperationService;
 import com.janus.operation.domain.model.OperationStatus;
+import com.janus.operation.domain.service.StatusTransitionService;
 import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -24,6 +25,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Set;
 
 @Path("/api/operations")
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,6 +34,9 @@ public class OperationResource {
 
     @Inject
     OperationService operationService;
+
+    @Inject
+    StatusTransitionService statusTransitionService;
 
     @Inject
     SecurityHelper securityHelper;
@@ -107,6 +112,14 @@ public class OperationResource {
     public Response delete(@PathParam("id") Long id, @Context SecurityContext sec) {
         operationService.delete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/{id}/allowed-transitions")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public Set<OperationStatus> getAllowedTransitions(@PathParam("id") Long id) {
+        var op = operationService.findById(id);
+        return statusTransitionService.getAllowedTransitions(op.status);
     }
 
     @GET

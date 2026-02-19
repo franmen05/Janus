@@ -30,7 +30,7 @@ class DashboardResourceTest {
     void testMetricsWithFilters() {
         given()
                 .auth().basic("admin", "admin123")
-                .queryParam("cargoType", "FCL")
+                .queryParam("transportMode", "MARITIME")
                 .when().get("/api/dashboard/metrics")
                 .then()
                 .statusCode(200)

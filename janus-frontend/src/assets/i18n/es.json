@@ -31,8 +31,8 @@
     "NO_OPERATIONS": "Aún no hay operaciones",
     "FILTER_FROM": "Desde",
     "FILTER_TO": "Hasta",
-    "FILTER_CARGO": "Tipo de Carga",
-    "FILTER_INSPECTION": "Tipo de Inspección",
+    "FILTER_TRANSPORT": "Modo de Transporte",
+    "FILTER_CATEGORY": "Categoría de Operación",
     "FILTER_AGENT": "Agente",
     "FILTER_ALL": "Todos",
     "FILTER_APPLY": "Aplicar Filtros",
@@ -58,8 +58,14 @@
     "REFERENCE": "Referencia",
     "CLIENT": "Cliente",
     "SELECT_CLIENT": "Seleccionar cliente...",
-    "CARGO_TYPE": "Tipo de Carga",
-    "INSPECTION_TYPE": "Tipo de Inspección",
+    "TRANSPORT_MODE": "Modo de Transporte",
+    "OPERATION_CATEGORY": "Categoría de Operación",
+    "BL_NUMBER": "Número de BL",
+    "CONTAINER_NUMBER": "Número de Contenedor",
+    "CONTAINER_NUMBER_REQUIRED": "El número de contenedor es obligatorio para operaciones marítimas",
+    "ESTIMATED_ARRIVAL": "Llegada Estimada",
+    "BL_ORIGINAL_AVAILABLE": "BL Original Disponible",
+    "BL_ORIGINAL_WARNING": "El conocimiento de embarque original no está disponible. Esto puede retrasar el procesamiento aduanero.",
     "NOTES": "Notas",
     "DEADLINE": "Fecha Límite",
     "ASSIGNED_AGENT": "Agente Asignado",
@@ -67,13 +73,18 @@
     "CREATED": "Creado",
     "LAST_UPDATED": "Última Actualización",
     "AGENT": "Agente",
-    "CARGO": "Carga",
-    "INSPECTION": "Inspección"
+    "TRANSPORT": "Transporte",
+    "CATEGORY": "Categoría",
+    "BL_NUMBER_REQUIRED": "El número de BL es obligatorio",
+    "BL_ORIGINAL_REQUIRED": "Por favor seleccione si el BL original está disponible",
+    "SELECT_BL_ORIGINAL": "Seleccionar...",
+    "IMMUTABLE": "Esta operación no puede ser modificada (cerrada/cancelada)"
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
     "UPLOAD": "Subir Documento",
     "UPLOAD_TITLE": "Subir Documento",
+    "UPLOAD_NOT_ALLOWED": "No se permite subir documentos para operaciones en este estado.",
     "DOCUMENT_TYPE": "Tipo de Documento",
     "UPLOADING": "Subiendo...",
     "TYPE": "Tipo",
@@ -86,7 +97,11 @@
     "UPLOADED_BY": "Subido Por",
     "DATE": "Fecha",
     "CHANGE_REASON": "Motivo del Cambio",
-    "CHANGE_REASON_PLACEHOLDER": "¿Por qué se sube/reemplaza este documento?"
+    "CHANGE_REASON_PLACEHOLDER": "¿Por qué se sube/reemplaza este documento?",
+    "DOWNLOAD_TEMPLATE": "Descargar Plantilla",
+    "INVOICE_TEMPLATE": "Plantilla de Factura Comercial",
+    "PACKING_LIST_TEMPLATE": "Plantilla de Lista de Empaque",
+    "TEMPLATES_SECTION": "Plantillas de Documentos"
   },
   "CLIENTS": {
     "TITLE": "Clientes",
@@ -125,6 +140,10 @@
   "STATUS": {
     "DRAFT": "Borrador",
     "DOCUMENTATION_COMPLETE": "Documentación Completa",
+    "IN_REVIEW": "En Revisión",
+    "PENDING_CORRECTION": "Pendiente de Corrección",
+    "PRELIQUIDATION_REVIEW": "Revisión de Preliquidación",
+    "ANALYST_ASSIGNED": "Analista Asignado",
     "DECLARATION_IN_PROGRESS": "Declaración en Proceso",
     "SUBMITTED_TO_CUSTOMS": "Presentado a Aduanas",
     "VALUATION_REVIEW": "Revisión de Valoración",
@@ -140,6 +159,10 @@
   "STATUS_SHORT": {
     "DRAFT": "Borrador",
     "DOCUMENTATION_COMPLETE": "Docs Completos",
+    "IN_REVIEW": "En Revisión",
+    "PENDING_CORRECTION": "Corrección",
+    "PRELIQUIDATION_REVIEW": "Preliquidación",
+    "ANALYST_ASSIGNED": "Analista",
     "DECLARATION_IN_PROGRESS": "Declaración",
     "SUBMITTED_TO_CUSTOMS": "Presentado",
     "VALUATION_REVIEW": "Valoración",
@@ -164,12 +187,15 @@
     "FINAL": "Final",
     "INACTIVITY_48H": "Inactividad 48h",
     "DEADLINE_APPROACHING": "Fecha Límite",
+    "MISSING_CRITICAL_DOCUMENT": "Doc Faltante",
+    "BL_UNAVAILABLE": "BL No Disponible",
     "ACTIVE": "Activa",
     "ACKNOWLEDGED": "Reconocida"
   },
   "PROGRESS": {
     "DRAFT": "Borrador",
     "DOCS": "Docs",
+    "REVIEW": "Revisión Interna",
     "DECLARATION": "Declaración",
     "SUBMITTED": "Presentado",
     "VALUATION": "Valoración",
@@ -184,14 +210,17 @@
     "CERTIFICATE": "Certificado",
     "OTHER": "Otro"
   },
-  "CARGO_TYPES": {
-    "FCL": "Contenedor Completo (FCL)",
-    "LCL": "Carga Consolidada (LCL)"
+  "TRANSPORT_MODES": {
+    "MARITIME": "Barco",
+    "AIR": "Avión"
   },
-  "INSPECTION_TYPES": {
-    "EXPRESS": "Express",
-    "VISUAL": "Visual",
-    "PHYSICAL": "Física"
+  "OPERATION_CATEGORIES": {
+    "CATEGORY_1": "Categoría 1",
+    "CATEGORY_2": "Categoría 2",
+    "CATEGORY_3": "Categoría 3",
+    "CATEGORY_1_DESC": "Requiere adjuntar factura comercial obligatoriamente",
+    "CATEGORY_2_DESC": "Se marcará como 'Pendiente de validación de valores'",
+    "CATEGORY_3_DESC": "Se registra automáticamente como 'Lista para liquidación interna'"
   },
   "DECLARATION_TYPES": {
     "PRELIMINARY": "Preliminar",
@@ -219,7 +248,9 @@
     "STATUS": "Estado",
     "ACTIONS": "Acciones",
     "LOADING": "Cargando...",
-    "NO_DATA": "No hay datos disponibles"
+    "NO_DATA": "No hay datos disponibles",
+    "YES": "Sí",
+    "NO": "No"
   },
   "FILE_UPLOAD": {
     "DRAG_DROP": "Arrastre y suelte un archivo aquí, o",
@@ -274,7 +305,9 @@
     "PLACEHOLDER": "Escriba un comentario...",
     "SUBMIT": "Publicar Comentario",
     "NO_COMMENTS": "Sin comentarios aún",
-    "BY": "por"
+    "BY": "por",
+    "INTERNAL": "Interno",
+    "INTERNAL_TOGGLE": "Marcar como interno"
   },
   "DECLARATIONS": {
     "TITLE": "Declaraciones",
@@ -341,7 +374,9 @@
   },
   "ALERT_TYPES": {
     "INACTIVITY_48H": "Inactividad (48h)",
-    "DEADLINE_APPROACHING": "Fecha Límite Próxima"
+    "DEADLINE_APPROACHING": "Fecha Límite Próxima",
+    "MISSING_CRITICAL_DOCUMENT": "Documento Crítico Faltante",
+    "BL_UNAVAILABLE": "BL No Disponible"
   },
   "ALERT_STATUS": {
     "ACTIVE": "Activa",
@@ -363,7 +398,7 @@
     "MISSING_DOC_PACKING_LIST": "Documento obligatorio faltante: Lista de Empaque",
     "MISSING_DOC_CERTIFICATE": "Documento obligatorio faltante: Certificado",
     "PHYSICAL_ALL_DOCS_VALIDATED": "Todos los documentos deben estar VALIDADOS antes de la Revisión de Valoración para inspección Física",
-    "HIGH_VALUE_CERT_REQUIRED": "Las operaciones FCL requieren un documento de Certificado",
+    "HIGH_VALUE_CERT_REQUIRED": "Las operaciones marítimas requieren un documento de Certificado",
     "INVOICE_NOT_VALIDATED": "La Factura Comercial debe estar VALIDADA antes de la Declaración en Proceso"
   },
   "LANG": {
@@ -421,7 +456,7 @@
     "TRANSITION": {
       "LABEL": "Aplica en",
       "COMPLETENESS_REQUIRED": "Documentación Completa",
-      "HIGH_VALUE_ADDITIONAL_DOC": "Documentación Completa (solo FCL)",
+      "HIGH_VALUE_ADDITIONAL_DOC": "Documentación Completa (solo marítimo)",
       "RESTRICTED_COUNTRY": "Documentación Completa / Declaración",
       "COMMERCIAL_INVOICE_REQUIRED": "Declaración en Curso",
       "BL_VERIFIED_FOR_VALUATION": "Revisión de Valoración",
@@ -432,5 +467,46 @@
   },
   "AUTH": {
     "INVALID_CREDENTIALS": "Credenciales inválidas"
+  },
+  "statuses": {
+    "IN_REVIEW": "En Revisión",
+    "PENDING_CORRECTION": "Pendiente de Corrección",
+    "PRELIQUIDATION_REVIEW": "Revisión de Preliquidación",
+    "ANALYST_ASSIGNED": "Analista Asignado"
+  },
+  "review": {
+    "title": "Revisión Interna",
+    "subStatus": "Sub-estado",
+    "approvalPanel": "Revisión y Aprobación",
+    "technicalApproval": "Aprobación Técnica",
+    "finalApproval": "Aprobación Final",
+    "approvedBy": "Aprobado por",
+    "rejectedBy": "Rechazado por",
+    "pendingCorrection": "Pendiente de corrección del cliente",
+    "inReview": "En revisión interna",
+    "preliquidationReview": "Preliquidación en revisión",
+    "analystAssigned": "Analista asignado",
+    "advanceToPreliq": "Avanzar a Revisión de Preliquidación",
+    "sendBackForCorrection": "Devolver para Corrección",
+    "returnToReview": "Regresar a Revisión",
+    "proceedToDeclaration": "Proceder a Declaración",
+    "noDeclarationsYet": "No hay declaraciones registradas aún.",
+    "createDeclarationPrompt": "Ir a la pestaña Declaraciones para crear una."
+  },
+  "preliquidation": {
+    "title": "Preliquidación",
+    "taxSummary": "Resumen de Impuestos",
+    "fobValue": "Valor FOB",
+    "cifValue": "Valor CIF",
+    "taxableBase": "Base Imponible",
+    "totalTaxes": "Total Impuestos",
+    "generate": "Generar Preliquidación",
+    "approveTechnical": "Aprobar (Técnica)",
+    "approveFinal": "Aprobar (Final)",
+    "reject": "Rechazar"
+  },
+  "alerts": {
+    "MISSING_CRITICAL_DOCUMENT": "Documento Crítico Faltante",
+    "BL_UNAVAILABLE": "BL No Disponible"
   }
 }

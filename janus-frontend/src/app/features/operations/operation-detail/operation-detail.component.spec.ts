@@ -11,7 +11,8 @@ import { DocumentService } from '../../../core/services/document.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ComplianceService } from '../../../core/services/compliance.service';
-import { OperationStatus, CargoType, InspectionType, Operation } from '../../../core/models/operation.model';
+import { DeclarationService } from '../../../core/services/declaration.service';
+import { OperationStatus, TransportMode, OperationCategory, Operation } from '../../../core/models/operation.model';
 import { DocumentType } from '../../../core/models/document.model';
 
 describe('OperationDetailComponent', () => {
@@ -24,8 +25,9 @@ describe('OperationDetailComponent', () => {
 
   const mockOperation: Operation = {
     id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
-    cargoType: CargoType.FCL, inspectionType: InspectionType.EXPRESS,
-    status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null, originCountry: null,
+    transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
+    status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
+    blNumber: 'BL-001', containerNumber: 'CONT-001', estimatedArrival: '2024-02-01T10:00:00', blOriginalAvailable: false,
     notes: 'Test notes', deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
   };
 
@@ -49,6 +51,9 @@ describe('OperationDetailComponent', () => {
     const complianceServiceSpy = jasmine.createSpyObj('ComplianceService', ['validate']);
     complianceServiceSpy.validate.and.returnValue(of({ valid: true, errors: [] }));
 
+    const declarationServiceSpy = jasmine.createSpyObj('DeclarationService', ['getDeclarations', 'approveTechnical', 'approveFinal', 'reject']);
+    declarationServiceSpy.getDeclarations.and.returnValue(of([]));
+
     await TestBed.configureTestingModule({
       imports: [OperationDetailComponent, RouterTestingModule, TranslateModule.forRoot()],
       providers: [
@@ -58,6 +63,7 @@ describe('OperationDetailComponent', () => {
         { provide: AuthService, useValue: authServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
         { provide: ComplianceService, useValue: complianceServiceSpy },
+        { provide: DeclarationService, useValue: declarationServiceSpy },
         {
           provide: ActivatedRoute,
           useValue: {

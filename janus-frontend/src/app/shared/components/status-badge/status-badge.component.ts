@@ -15,6 +15,10 @@ export class StatusBadgeComponent {
   private classMap: Record<string, string> = {
     'DRAFT': 'bg-secondary',
     'DOCUMENTATION_COMPLETE': 'bg-info',
+    'IN_REVIEW': 'bg-info',
+    'PENDING_CORRECTION': 'bg-warning text-dark',
+    'PRELIQUIDATION_REVIEW': 'bg-info',
+    'ANALYST_ASSIGNED': 'bg-info',
     'DECLARATION_IN_PROGRESS': 'bg-primary',
     'SUBMITTED_TO_CUSTOMS': 'bg-warning text-dark',
     'VALUATION_REVIEW': 'bg-warning text-dark',
@@ -39,6 +43,8 @@ export class StatusBadgeComponent {
     'FINAL': 'bg-primary',
     'INACTIVITY_48H': 'bg-warning text-dark',
     'DEADLINE_APPROACHING': 'bg-danger',
+    'MISSING_CRITICAL_DOCUMENT': 'bg-danger',
+    'BL_UNAVAILABLE': 'bg-warning text-dark',
     'ACTIVE': 'bg-danger',
     'ACKNOWLEDGED': 'bg-secondary'
   };

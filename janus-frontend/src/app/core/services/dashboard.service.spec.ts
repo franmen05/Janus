@@ -46,11 +46,11 @@ describe('DashboardService', () => {
     });
 
     it('should pass filter params when provided', () => {
-      service.getMetrics({ from: '2024-01-01', to: '2024-12-31', cargoType: 'FCL' }).subscribe();
+      service.getMetrics({ from: '2024-01-01', to: '2024-12-31', transportMode: 'MARITIME' }).subscribe();
       const req = httpMock.expectOne(r => r.url === `${apiUrl}/metrics`);
       expect(req.request.params.get('from')).toBe('2024-01-01');
       expect(req.request.params.get('to')).toBe('2024-12-31');
-      expect(req.request.params.get('cargoType')).toBe('FCL');
+      expect(req.request.params.get('transportMode')).toBe('MARITIME');
       req.flush(mockMetrics);
     });
   });

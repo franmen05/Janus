@@ -4,10 +4,10 @@ import com.janus.compliance.domain.model.ValidationResult;
 import com.janus.compliance.domain.service.ComplianceRule;
 import com.janus.document.domain.model.Document;
 import com.janus.document.domain.model.DocumentType;
-import com.janus.operation.domain.model.CargoType;
-import com.janus.operation.domain.model.InspectionType;
+import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
+import com.janus.operation.domain.model.TransportMode;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class HighValueAdditionalDocRule implements ComplianceRule {
     public String ruleCode() { return "HIGH_VALUE_ADDITIONAL_DOC"; }
 
     @Override
-    public boolean appliesTo(OperationStatus from, OperationStatus to, CargoType cargo, InspectionType inspection) {
-        return to == OperationStatus.DOCUMENTATION_COMPLETE && cargo == CargoType.FCL;
+    public boolean appliesTo(OperationStatus from, OperationStatus to, TransportMode transportMode, OperationCategory category) {
+        return to == OperationStatus.DOCUMENTATION_COMPLETE && transportMode == TransportMode.MARITIME;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class HighValueAdditionalDocRule implements ComplianceRule {
             return ValidationResult.failure(List.of(
                     new ValidationResult.ValidationError(
                             "HIGH_VALUE_CERT_REQUIRED",
-                            "FCL operations require a CERTIFICATE document"
+                            "MARITIME operations require a CERTIFICATE document"
                     )
             ));
         }

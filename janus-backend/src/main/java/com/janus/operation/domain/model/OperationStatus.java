@@ -3,6 +3,10 @@ package com.janus.operation.domain.model;
 public enum OperationStatus {
     DRAFT,
     DOCUMENTATION_COMPLETE,
+    IN_REVIEW,
+    PENDING_CORRECTION,
+    PRELIQUIDATION_REVIEW,
+    ANALYST_ASSIGNED,
     DECLARATION_IN_PROGRESS,
     SUBMITTED_TO_CUSTOMS,
     VALUATION_REVIEW,

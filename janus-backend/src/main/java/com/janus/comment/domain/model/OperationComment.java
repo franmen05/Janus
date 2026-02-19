@@ -24,6 +24,9 @@ public class OperationComment extends PanacheEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     public String content;
 
+    @Column(nullable = false)
+    public boolean internal = false;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     public LocalDateTime createdAt;
 

@@ -31,8 +31,8 @@
     "NO_OPERATIONS": "No operations yet",
     "FILTER_FROM": "From",
     "FILTER_TO": "To",
-    "FILTER_CARGO": "Cargo Type",
-    "FILTER_INSPECTION": "Inspection Type",
+    "FILTER_TRANSPORT": "Transport Mode",
+    "FILTER_CATEGORY": "Operation Category",
     "FILTER_AGENT": "Agent",
     "FILTER_ALL": "All",
     "FILTER_APPLY": "Apply Filters",
@@ -58,8 +58,14 @@
     "REFERENCE": "Reference",
     "CLIENT": "Client",
     "SELECT_CLIENT": "Select client...",
-    "CARGO_TYPE": "Cargo Type",
-    "INSPECTION_TYPE": "Inspection Type",
+    "TRANSPORT_MODE": "Transport Mode",
+    "OPERATION_CATEGORY": "Operation Category",
+    "BL_NUMBER": "BL Number",
+    "CONTAINER_NUMBER": "Container Number",
+    "CONTAINER_NUMBER_REQUIRED": "Container number is required for maritime operations",
+    "ESTIMATED_ARRIVAL": "Estimated Arrival",
+    "BL_ORIGINAL_AVAILABLE": "BL Original Available",
+    "BL_ORIGINAL_WARNING": "The original Bill of Lading is not available. This may delay customs processing.",
     "NOTES": "Notes",
     "DEADLINE": "Deadline",
     "ASSIGNED_AGENT": "Assigned Agent",
@@ -67,13 +73,18 @@
     "CREATED": "Created",
     "LAST_UPDATED": "Last Updated",
     "AGENT": "Agent",
-    "CARGO": "Cargo",
-    "INSPECTION": "Inspection"
+    "TRANSPORT": "Transport",
+    "CATEGORY": "Category",
+    "BL_NUMBER_REQUIRED": "BL number is required",
+    "BL_ORIGINAL_REQUIRED": "Please select whether the original BL is available",
+    "SELECT_BL_ORIGINAL": "Select...",
+    "IMMUTABLE": "This operation cannot be modified (closed/cancelled)"
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
     "UPLOAD": "Upload Document",
     "UPLOAD_TITLE": "Upload Document",
+    "UPLOAD_NOT_ALLOWED": "Document uploads are not allowed for operations in this status.",
     "DOCUMENT_TYPE": "Document Type",
     "UPLOADING": "Uploading...",
     "TYPE": "Type",
@@ -86,7 +97,11 @@
     "UPLOADED_BY": "Uploaded By",
     "DATE": "Date",
     "CHANGE_REASON": "Change Reason",
-    "CHANGE_REASON_PLACEHOLDER": "Why is this document being uploaded/replaced?"
+    "CHANGE_REASON_PLACEHOLDER": "Why is this document being uploaded/replaced?",
+    "DOWNLOAD_TEMPLATE": "Download Template",
+    "INVOICE_TEMPLATE": "Commercial Invoice Template",
+    "PACKING_LIST_TEMPLATE": "Packing List Template",
+    "TEMPLATES_SECTION": "Document Templates"
   },
   "CLIENTS": {
     "TITLE": "Clients",
@@ -125,6 +140,10 @@
   "STATUS": {
     "DRAFT": "Draft",
     "DOCUMENTATION_COMPLETE": "Documentation Complete",
+    "IN_REVIEW": "In Review",
+    "PENDING_CORRECTION": "Pending Correction",
+    "PRELIQUIDATION_REVIEW": "Preliquidation Review",
+    "ANALYST_ASSIGNED": "Analyst Assigned",
     "DECLARATION_IN_PROGRESS": "Declaration in Progress",
     "SUBMITTED_TO_CUSTOMS": "Submitted to Customs",
     "VALUATION_REVIEW": "Valuation Review",
@@ -140,6 +159,10 @@
   "STATUS_SHORT": {
     "DRAFT": "Draft",
     "DOCUMENTATION_COMPLETE": "Docs Complete",
+    "IN_REVIEW": "In Review",
+    "PENDING_CORRECTION": "Correction",
+    "PRELIQUIDATION_REVIEW": "Preliquidation",
+    "ANALYST_ASSIGNED": "Analyst",
     "DECLARATION_IN_PROGRESS": "Declaration",
     "SUBMITTED_TO_CUSTOMS": "Submitted",
     "VALUATION_REVIEW": "Valuation",
@@ -164,12 +187,15 @@
     "FINAL": "Final",
     "INACTIVITY_48H": "Inactivity 48h",
     "DEADLINE_APPROACHING": "Deadline",
+    "MISSING_CRITICAL_DOCUMENT": "Missing Doc",
+    "BL_UNAVAILABLE": "BL Unavailable",
     "ACTIVE": "Active",
     "ACKNOWLEDGED": "Acknowledged"
   },
   "PROGRESS": {
     "DRAFT": "Draft",
     "DOCS": "Docs",
+    "REVIEW": "Internal Review",
     "DECLARATION": "Declaration",
     "SUBMITTED": "Submitted",
     "VALUATION": "Valuation",
@@ -184,14 +210,17 @@
     "CERTIFICATE": "Certificate",
     "OTHER": "Other"
   },
-  "CARGO_TYPES": {
-    "FCL": "Full Container Load",
-    "LCL": "Less than Container Load"
+  "TRANSPORT_MODES": {
+    "MARITIME": "Maritime",
+    "AIR": "Air"
   },
-  "INSPECTION_TYPES": {
-    "EXPRESS": "Express",
-    "VISUAL": "Visual",
-    "PHYSICAL": "Physical"
+  "OPERATION_CATEGORIES": {
+    "CATEGORY_1": "Category 1",
+    "CATEGORY_2": "Category 2",
+    "CATEGORY_3": "Category 3",
+    "CATEGORY_1_DESC": "Requires mandatory commercial invoice attachment",
+    "CATEGORY_2_DESC": "Will be marked as 'Pending value validation'",
+    "CATEGORY_3_DESC": "Automatically registered as 'Ready for internal settlement'"
   },
   "DECLARATION_TYPES": {
     "PRELIMINARY": "Preliminary",
@@ -219,7 +248,9 @@
     "STATUS": "Status",
     "ACTIONS": "Actions",
     "LOADING": "Loading...",
-    "NO_DATA": "No data available"
+    "NO_DATA": "No data available",
+    "YES": "Yes",
+    "NO": "No"
   },
   "FILE_UPLOAD": {
     "DRAG_DROP": "Drag & drop a file here, or",
@@ -274,7 +305,9 @@
     "PLACEHOLDER": "Write a comment...",
     "SUBMIT": "Post Comment",
     "NO_COMMENTS": "No comments yet",
-    "BY": "by"
+    "BY": "by",
+    "INTERNAL": "Internal",
+    "INTERNAL_TOGGLE": "Mark as internal"
   },
   "DECLARATIONS": {
     "TITLE": "Declarations",
@@ -341,7 +374,9 @@
   },
   "ALERT_TYPES": {
     "INACTIVITY_48H": "Inactivity (48h)",
-    "DEADLINE_APPROACHING": "Deadline Approaching"
+    "DEADLINE_APPROACHING": "Deadline Approaching",
+    "MISSING_CRITICAL_DOCUMENT": "Missing Critical Document",
+    "BL_UNAVAILABLE": "BL Unavailable"
   },
   "ALERT_STATUS": {
     "ACTIVE": "Active",
@@ -363,7 +398,7 @@
     "MISSING_DOC_PACKING_LIST": "Required document missing: Packing List",
     "MISSING_DOC_CERTIFICATE": "Required document missing: Certificate",
     "PHYSICAL_ALL_DOCS_VALIDATED": "All documents must be VALIDATED before Valuation Review for Physical inspection",
-    "HIGH_VALUE_CERT_REQUIRED": "FCL operations require a Certificate document",
+    "HIGH_VALUE_CERT_REQUIRED": "Maritime operations require a Certificate document",
     "INVOICE_NOT_VALIDATED": "Commercial Invoice must be VALIDATED before Declaration in Progress"
   },
   "LANG": {
@@ -421,7 +456,7 @@
     "TRANSITION": {
       "LABEL": "Applies To",
       "COMPLETENESS_REQUIRED": "Documentation Complete",
-      "HIGH_VALUE_ADDITIONAL_DOC": "Documentation Complete (FCL only)",
+      "HIGH_VALUE_ADDITIONAL_DOC": "Documentation Complete (Maritime only)",
       "RESTRICTED_COUNTRY": "Documentation Complete / Declaration",
       "COMMERCIAL_INVOICE_REQUIRED": "Declaration in Progress",
       "BL_VERIFIED_FOR_VALUATION": "Valuation Review",
@@ -432,5 +467,46 @@
   },
   "AUTH": {
     "INVALID_CREDENTIALS": "Invalid credentials"
+  },
+  "statuses": {
+    "IN_REVIEW": "In Review",
+    "PENDING_CORRECTION": "Pending Correction",
+    "PRELIQUIDATION_REVIEW": "Preliquidation Review",
+    "ANALYST_ASSIGNED": "Analyst Assigned"
+  },
+  "review": {
+    "title": "Internal Review",
+    "subStatus": "Sub-status",
+    "approvalPanel": "Review & Approval",
+    "technicalApproval": "Technical Approval",
+    "finalApproval": "Final Approval",
+    "approvedBy": "Approved by",
+    "rejectedBy": "Rejected by",
+    "pendingCorrection": "Pending client correction",
+    "inReview": "Under internal review",
+    "preliquidationReview": "Preliquidation under review",
+    "analystAssigned": "Analyst assigned",
+    "advanceToPreliq": "Advance to Preliquidation Review",
+    "sendBackForCorrection": "Send Back for Correction",
+    "returnToReview": "Return to Review",
+    "proceedToDeclaration": "Proceed to Declaration",
+    "noDeclarationsYet": "No declarations registered yet.",
+    "createDeclarationPrompt": "Go to Declarations tab to create one."
+  },
+  "preliquidation": {
+    "title": "Preliquidation",
+    "taxSummary": "Tax Summary",
+    "fobValue": "FOB Value",
+    "cifValue": "CIF Value",
+    "taxableBase": "Taxable Base",
+    "totalTaxes": "Total Taxes",
+    "generate": "Generate Preliquidation",
+    "approveTechnical": "Approve (Technical)",
+    "approveFinal": "Approve (Final)",
+    "reject": "Reject"
+  },
+  "alerts": {
+    "MISSING_CRITICAL_DOCUMENT": "Missing Critical Document",
+    "BL_UNAVAILABLE": "BL Unavailable"
   }
 }

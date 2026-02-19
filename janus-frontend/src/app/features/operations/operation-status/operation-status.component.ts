@@ -24,7 +24,7 @@ import { AuthService } from '../../../core/services/auth.service';
             <div class="col-md-4">
               <select class="form-select" [(ngModel)]="selectedStatus">
                 <option value="">{{ 'STATUS_CHANGE.SELECT_STATUS' | translate }}</option>
-                @for (s of availableStatuses; track s) { <option [value]="s">{{ s | statusLabel }}</option> }
+                @for (s of availableStatuses(); track s) { <option [value]="s">{{ s | statusLabel }}</option> }
               </select>
             </div>
             <div class="col-md-5">
@@ -77,9 +77,14 @@ export class OperationStatusComponent implements OnInit {
   isValidating = signal(false);
   selectedStatus = '';
   comment = '';
-  availableStatuses = Object.values(OperationStatus);
+  availableStatuses = signal<string[]>([]);
 
-  ngOnInit(): void { this.loadHistory(); }
+  ngOnInit(): void {
+    this.loadHistory();
+    this.operationService.getAllowedTransitions(this.operationId()).subscribe(
+      statuses => this.availableStatuses.set(statuses)
+    );
+  }
 
   loadHistory(): void {
     this.operationService.getHistory(this.operationId()).subscribe(h => {
@@ -118,7 +123,12 @@ export class OperationStatusComponent implements OnInit {
       newStatus: this.selectedStatus as OperationStatus,
       comment: this.comment || undefined
     }).subscribe({
-      next: () => { this.selectedStatus = ''; this.comment = ''; this.validationErrors.set([]); this.loadHistory(); this.statusChanged.emit(); },
+      next: () => {
+        this.selectedStatus = ''; this.comment = ''; this.validationErrors.set([]); this.loadHistory(); this.statusChanged.emit();
+        this.operationService.getAllowedTransitions(this.operationId()).subscribe(
+          statuses => this.availableStatuses.set(statuses)
+        );
+      },
       error: (err) => {
         const msg = err.error?.error ?? '';
         const match = msg.match(/Invalid status transition from (\w+) to (\w+)/);

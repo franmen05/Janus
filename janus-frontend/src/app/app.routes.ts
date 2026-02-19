@@ -45,6 +45,12 @@ export const routes: Routes = [
         canActivate: [roleGuard]
       },
       {
+        path: 'operations/:operationId/declarations/:declarationId/preliquidation',
+        loadComponent: () => import('./features/declarations/preliquidation/preliquidation.component').then(m => m.PreliquidationComponent),
+        data: { roles: ['ADMIN', 'AGENT', 'ACCOUNTING'] },
+        canActivate: [roleGuard]
+      },
+      {
         path: 'operations/:id/documents/upload',
         loadComponent: () => import('./features/documents/document-upload/document-upload.component').then(m => m.DocumentUploadComponent),
         data: { roles: ['ADMIN', 'AGENT'] },

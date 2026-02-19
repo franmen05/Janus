@@ -28,9 +28,10 @@ describe('OperationStatusComponent', () => {
   ];
 
   beforeEach(async () => {
-    operationServiceSpy = jasmine.createSpyObj('OperationService', ['getHistory', 'changeStatus']);
+    operationServiceSpy = jasmine.createSpyObj('OperationService', ['getHistory', 'changeStatus', 'getAllowedTransitions']);
     operationServiceSpy.getHistory.and.returnValue(of(mockHistory));
     operationServiceSpy.changeStatus.and.returnValue(of(void 0));
+    operationServiceSpy.getAllowedTransitions.and.returnValue(of([]));
 
     complianceServiceSpy = jasmine.createSpyObj('ComplianceService', ['validate']);
     complianceServiceSpy.validate.and.returnValue(of({ passed: true, errors: [] }));

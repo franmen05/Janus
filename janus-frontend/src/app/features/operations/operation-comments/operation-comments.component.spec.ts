@@ -15,7 +15,7 @@ describe('OperationCommentsComponent', () => {
 
   const mockComment = {
     id: 1, operationId: 1, authorUsername: 'admin', authorFullName: 'Admin User',
-    content: 'Test comment', createdAt: '2024-01-01T00:00:00'
+    content: 'Test comment', internal: false, createdAt: '2024-01-01T00:00:00'
   };
 
   beforeEach(async () => {
@@ -56,7 +56,7 @@ describe('OperationCommentsComponent', () => {
   it('should add a comment', () => {
     component.newComment = 'New comment';
     component.addComment();
-    expect(commentServiceSpy.addComment).toHaveBeenCalledWith(1, { content: 'New comment' });
+    expect(commentServiceSpy.addComment).toHaveBeenCalledWith(1, { content: 'New comment', internal: false });
   });
 
   it('should not add empty comment', () => {

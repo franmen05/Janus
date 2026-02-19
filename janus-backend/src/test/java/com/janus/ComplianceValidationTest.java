@@ -24,7 +24,7 @@ class ComplianceValidationTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "LCL", "inspectionType": "EXPRESS", "notes": "Compliance test"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true, "notes": "Compliance test"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -34,7 +34,7 @@ class ComplianceValidationTest {
     @Test
     @Order(2)
     void testBlockedTransitionWithoutDocs() {
-        // LCL only needs BL, INVOICE, PACKING_LIST (no CERTIFICATE required)
+        // AIR only needs BL, INVOICE, PACKING_LIST (no CERTIFICATE required)
         // Trying to go to DOCUMENTATION_COMPLETE without any docs should fail
         given()
                 .auth().basic("admin", "admin123")
@@ -89,23 +89,23 @@ class ComplianceValidationTest {
 
     @Test
     @Order(10)
-    void testFCLRequiresCertificate() {
-        // Create an FCL operation
-        var fclOpId = given()
+    void testMARITIMERequiresCertificate() {
+        // Create a MARITIME operation
+        var maritimeOpId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "cargoType": "FCL", "inspectionType": "EXPRESS"}
+                        {"clientId": 1, "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
-        // Dry-run should show CERTIFICATE required for FCL
+        // Dry-run should show CERTIFICATE required for MARITIME
         given()
                 .auth().basic("admin", "admin123")
                 .queryParam("targetStatus", "DOCUMENTATION_COMPLETE")
-                .when().get("/api/operations/{id}/compliance/validate", fclOpId)
+                .when().get("/api/operations/{id}/compliance/validate", maritimeOpId)
                 .then()
                 .statusCode(200)
                 .body("passed", is(false));

@@ -52,4 +52,33 @@ public class Declaration extends BaseEntity {
 
     @Column(name = "submitted_at")
     public LocalDateTime submittedAt;
+
+    // --- Approval fields ---
+
+    @Column(name = "technical_approved_by")
+    public String technicalApprovedBy;
+
+    @Column(name = "technical_approved_at")
+    public LocalDateTime technicalApprovedAt;
+
+    @Column(name = "technical_approval_comment", columnDefinition = "TEXT")
+    public String technicalApprovalComment;
+
+    @Column(name = "final_approved_by")
+    public String finalApprovedBy;
+
+    @Column(name = "final_approved_at")
+    public LocalDateTime finalApprovedAt;
+
+    @Column(name = "final_approval_comment", columnDefinition = "TEXT")
+    public String finalApprovalComment;
+
+    @Column(name = "rejected_by")
+    public String rejectedBy;
+
+    @Column(name = "rejected_at")
+    public LocalDateTime rejectedAt;
+
+    @Column(name = "rejection_comment", columnDefinition = "TEXT")
+    public String rejectionComment;
 }

@@ -46,6 +46,34 @@ export class DeclarationService {
     return this.http.post<CrossingResult>(`${this.apiUrl}/api/operations/${operationId}/declarations/crossing/resolve`, request);
   }
 
+  approveTechnical(operationId: number, declarationId: number, comment?: string): Observable<Declaration> {
+    return this.http.post<Declaration>(
+      `${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}/approve-technical`,
+      { comment }
+    );
+  }
+
+  approveFinal(operationId: number, declarationId: number, comment?: string): Observable<Declaration> {
+    return this.http.post<Declaration>(
+      `${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}/approve-final`,
+      { comment }
+    );
+  }
+
+  reject(operationId: number, declarationId: number, comment?: string): Observable<Declaration> {
+    return this.http.post<Declaration>(
+      `${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}/reject`,
+      { comment }
+    );
+  }
+
+  generatePreliquidation(operationId: number, declarationId: number): Observable<Declaration> {
+    return this.http.post<Declaration>(
+      `${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}/generate-preliquidation`,
+      {}
+    );
+  }
+
   getCrossing(operationId: number): Observable<CrossingResult | null> {
     return this.http.get<CrossingResult>(`${this.apiUrl}/api/operations/${operationId}/declarations/crossing`, {
       observe: 'response'
