@@ -427,4 +427,73 @@ class DocumentResourceTest {
                 .then()
                 .statusCode(404);
     }
+
+    @Test
+    @Order(43)
+    void testAdminSeesDeletedDocumentsWithIncludeDeleted() {
+        given()
+                .auth().basic("admin", "admin123")
+                .queryParam("includeDeleted", true)
+                .when().get("/api/operations/{operationId}/documents", operationId)
+                .then()
+                .statusCode(200)
+                .body("size()", greaterThanOrEqualTo(1))
+                .body("find { it.id == " + documentId + " }.active", is(false));
+    }
+
+    @Test
+    @Order(44)
+    void testNonAdminIncludeDeletedIgnored() {
+        given()
+                .auth().basic("agent", "agent123")
+                .queryParam("includeDeleted", true)
+                .when().get("/api/operations/{operationId}/documents", operationId)
+                .then()
+                .statusCode(200)
+                .body("findAll { it.active == false }.size()", is(0));
+    }
+
+    @Test
+    @Order(45)
+    void testAdminCanDownloadDeletedDocument() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/operations/{operationId}/documents/{id}/download", operationId, documentId)
+                .then()
+                .statusCode(200)
+                .header("Content-Disposition", containsString("test-invoice.pdf"));
+    }
+
+    @Test
+    @Order(46)
+    void testAdminCanListVersionsOfDeletedDocument() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/operations/{operationId}/documents/{id}/versions", operationId, documentId)
+                .then()
+                .statusCode(200)
+                .body("size()", greaterThanOrEqualTo(1))
+                .body("[0].versionNumber", is(1));
+    }
+
+    @Test
+    @Order(47)
+    void testAdminCanDownloadVersionOfDeletedDocument() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/operations/{operationId}/documents/{id}/versions/{v}/download", operationId, documentId, 1)
+                .then()
+                .statusCode(200)
+                .header("Content-Disposition", containsString("test-invoice.pdf"));
+    }
+
+    @Test
+    @Order(48)
+    void testNonAdminCannotListVersionsOfDeletedDocument() {
+        given()
+                .auth().basic("agent", "agent123")
+                .when().get("/api/operations/{operationId}/documents/{id}/versions", operationId, documentId)
+                .then()
+                .statusCode(404);
+    }
 }

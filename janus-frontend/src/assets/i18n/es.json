@@ -101,7 +101,8 @@
     "DOWNLOAD_TEMPLATE": "Descargar Plantilla",
     "INVOICE_TEMPLATE": "Plantilla de Factura Comercial",
     "PACKING_LIST_TEMPLATE": "Plantilla de Lista de Empaque",
-    "TEMPLATES_SECTION": "Plantillas de Documentos"
+    "TEMPLATES_SECTION": "Plantillas de Documentos",
+    "DELETED": "Eliminado"
   },
   "CLIENTS": {
     "TITLE": "Clientes",

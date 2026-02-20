@@ -11,12 +11,14 @@ import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -45,9 +47,14 @@ public class DocumentResource {
 
     @GET
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
-    public List<DocumentResponse> list(@PathParam("operationId") Long operationId, @Context SecurityContext sec) {
+    public List<DocumentResponse> list(@PathParam("operationId") Long operationId,
+                                       @QueryParam("includeDeleted") @DefaultValue("false") boolean includeDeleted,
+                                       @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
-        return documentService.findByOperationId(operationId).stream()
+        var documents = (includeDeleted && sec.isUserInRole("ADMIN"))
+                ? documentService.findAllByOperationId(operationId)
+                : documentService.findByOperationId(operationId);
+        return documents.stream()
                 .map(doc -> {
                     var latestVersion = documentService.getLatestVersionOrNull(doc.id);
                     if (latestVersion != null) {
@@ -104,6 +111,11 @@ public class DocumentResource {
                                     @PathParam("id") Long id,
                                     @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        if (sec.isUserInRole("ADMIN")) {
+            documentService.findByIdIncludingDeleted(id);
+        } else {
+            documentService.findById(id);
+        }
         var version = documentService.getLatestVersion(id);
         var path = storageService.resolve(version.filePath);
         try {
@@ -123,7 +135,8 @@ public class DocumentResource {
                                                       @PathParam("id") Long id,
                                                       @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
-        return documentService.getVersions(id).stream()
+        var includeDeleted = sec.isUserInRole("ADMIN");
+        return documentService.getVersions(id, includeDeleted).stream()
                 .map(DocumentVersionResponse::from)
                 .toList();
     }
@@ -137,7 +150,8 @@ public class DocumentResource {
                                      @PathParam("versionNumber") int versionNumber,
                                      @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
-        var version = documentService.getVersion(id, versionNumber);
+        var includeDeleted = sec.isUserInRole("ADMIN");
+        var version = documentService.getVersion(id, versionNumber, includeDeleted);
         var path = storageService.resolve(version.filePath);
         try {
             return Response.ok(Files.newInputStream(path))

@@ -60,6 +60,15 @@ public class DocumentService {
         return documentRepository.findByOperationId(operationId);
     }
 
+    public List<Document> findAllByOperationId(Long operationId) {
+        return documentRepository.findAllByOperationId(operationId);
+    }
+
+    public Document findByIdIncludingDeleted(Long id) {
+        return documentRepository.findByIdOptional(id)
+                .orElseThrow(() -> new NotFoundException("Document", id));
+    }
+
     public Document findById(Long id) {
         return documentRepository.findByIdOptional(id)
                 .filter(d -> d.active)
@@ -124,6 +133,15 @@ public class DocumentService {
         return documentVersionRepository.findByDocumentId(documentId);
     }
 
+    public List<DocumentVersion> getVersions(Long documentId, boolean includeDeleted) {
+        if (includeDeleted) {
+            findByIdIncludingDeleted(documentId);
+        } else {
+            findById(documentId);
+        }
+        return documentVersionRepository.findByDocumentId(documentId);
+    }
+
     public DocumentVersion getLatestVersion(Long documentId) {
         return documentVersionRepository.findLatestByDocumentId(documentId)
                 .orElseThrow(() -> new NotFoundException("DocumentVersion for document", documentId));
@@ -135,6 +153,18 @@ public class DocumentService {
 
     public DocumentVersion getVersion(Long documentId, int versionNumber) {
         findById(documentId);
+        return documentVersionRepository.findByDocumentId(documentId).stream()
+                .filter(v -> v.versionNumber == versionNumber)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("DocumentVersion", versionNumber));
+    }
+
+    public DocumentVersion getVersion(Long documentId, int versionNumber, boolean includeDeleted) {
+        if (includeDeleted) {
+            findByIdIncludingDeleted(documentId);
+        } else {
+            findById(documentId);
+        }
         return documentVersionRepository.findByDocumentId(documentId).stream()
                 .filter(v -> v.versionNumber == versionNumber)
                 .findFirst()

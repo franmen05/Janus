@@ -28,9 +28,14 @@ import { AuthService } from '../../../core/services/auth.service';
           </thead>
           <tbody>
             @for (doc of documents(); track doc.id) {
-              <tr>
+              <tr [class.text-muted]="!doc.active" [style.text-decoration]="!doc.active ? 'line-through' : 'none'">
                 <td>{{ doc.documentType | statusLabel }}</td>
-                <td><app-status-badge [status]="doc.status" /></td>
+                <td>
+                  <app-status-badge [status]="doc.status" />
+                  @if (!doc.active) {
+                    <span class="badge bg-danger ms-1">{{ 'DOCUMENTS.DELETED' | translate }}</span>
+                  }
+                </td>
                 <td>{{ doc.latestVersionName ?? '-' }}</td>
                 <td>{{ doc.latestVersionSize | fileSize }}</td>
                 <td>{{ doc.createdAt | date:'medium' }}</td>
@@ -40,7 +45,7 @@ import { AuthService } from '../../../core/services/auth.service';
                       <button class="btn btn-outline-primary" (click)="download(doc)">{{ 'ACTIONS.DOWNLOAD' | translate }}</button>
                       <a [routerLink]="['/operations', operationId, 'documents', doc.id, 'versions']" class="btn btn-outline-secondary">{{ 'ACTIONS.VERSIONS' | translate }}</a>
                     }
-                    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+                    @if (authService.hasRole(['ADMIN', 'AGENT']) && doc.active) {
                       <button class="btn btn-outline-danger" (click)="deleteDoc(doc)">{{ 'ACTIONS.DELETE' | translate }}</button>
                     }
                   </div>
@@ -69,7 +74,8 @@ export class DocumentListComponent implements OnInit {
   }
 
   loadDocuments(): void {
-    this.documentService.getByOperation(this.operationId).subscribe(docs => this.documents.set(docs));
+    const includeDeleted = this.authService.hasRole(['ADMIN']);
+    this.documentService.getByOperation(this.operationId, includeDeleted).subscribe(docs => this.documents.set(docs));
   }
 
   download(doc: Document): void {

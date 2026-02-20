@@ -9,8 +9,12 @@ export class DocumentService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
-  getByOperation(operationId: number): Observable<Document[]> {
-    return this.http.get<Document[]>(`${this.baseUrl}/api/operations/${operationId}/documents`);
+  getByOperation(operationId: number, includeDeleted = false): Observable<Document[]> {
+    let url = `${this.baseUrl}/api/operations/${operationId}/documents`;
+    if (includeDeleted) {
+      url += '?includeDeleted=true';
+    }
+    return this.http.get<Document[]>(url);
   }
 
   getById(operationId: number, id: number): Observable<Document> {

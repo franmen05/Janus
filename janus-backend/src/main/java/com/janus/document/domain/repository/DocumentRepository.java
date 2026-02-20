@@ -19,6 +19,10 @@ public class DocumentRepository implements PanacheRepository<Document> {
                 .firstResultOptional();
     }
 
+    public List<Document> findAllByOperationId(Long operationId) {
+        return list("operation.id = ?1", operationId);
+    }
+
     public long countByOperationId(Long operationId) {
         return count("operation.id = ?1 AND active = true", operationId);
     }

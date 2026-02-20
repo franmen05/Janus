@@ -101,7 +101,8 @@
     "DOWNLOAD_TEMPLATE": "Download Template",
     "INVOICE_TEMPLATE": "Commercial Invoice Template",
     "PACKING_LIST_TEMPLATE": "Packing List Template",
-    "TEMPLATES_SECTION": "Document Templates"
+    "TEMPLATES_SECTION": "Document Templates",
+    "DELETED": "Deleted"
   },
   "CLIENTS": {
     "TITLE": "Clients",
