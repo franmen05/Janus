@@ -206,7 +206,7 @@ const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVI
                   </div>
                 </div>
               </div>
-              <div class="mt-3"><app-document-list [operationId]="operation()!.id" /></div>
+              <div class="mt-3"><app-document-list [operationId]="operation()!.id" [operationStatus]="operation()!.status" /></div>
             </ng-template>
           </li>
         }

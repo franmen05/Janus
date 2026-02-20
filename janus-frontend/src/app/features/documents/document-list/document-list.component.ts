@@ -45,7 +45,7 @@ import { AuthService } from '../../../core/services/auth.service';
                       <button class="btn btn-outline-primary" (click)="download(doc)">{{ 'ACTIONS.DOWNLOAD' | translate }}</button>
                       <a [routerLink]="['/operations', operationId, 'documents', doc.id, 'versions']" class="btn btn-outline-secondary">{{ 'ACTIONS.VERSIONS' | translate }}</a>
                     }
-                    @if (authService.hasRole(['ADMIN', 'AGENT']) && doc.active) {
+                    @if (authService.hasRole(['ADMIN', 'AGENT']) && doc.active && operationStatus !== 'CLOSED' && operationStatus !== 'CANCELLED') {
                       <button class="btn btn-outline-danger" (click)="deleteDoc(doc)">{{ 'ACTIONS.DELETE' | translate }}</button>
                     }
                   </div>
@@ -67,6 +67,7 @@ export class DocumentListComponent implements OnInit {
   authService = inject(AuthService);
 
   @Input() operationId!: number;
+  @Input() operationStatus?: string;
   documents = signal<Document[]>([]);
 
   ngOnInit(): void {
