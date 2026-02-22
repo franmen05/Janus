@@ -56,7 +56,7 @@ describe('DocumentListComponent', () => {
 
   it('should load documents on init', () => {
     fixture.detectChanges();
-    expect(documentServiceSpy.getByOperation).toHaveBeenCalledWith(1);
+    expect(documentServiceSpy.getByOperation).toHaveBeenCalledWith(1, true);
     expect(component.documents().length).toBe(2);
   });
 

@@ -50,6 +50,18 @@ class OperationResourceTest {
         uploadDocument(operationId, "PACKING_LIST");
     }
 
+    private static void setInspectionType(Long operationId) {
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"inspectionType": "VISUAL"}
+                        """)
+                .when().post("/api/operations/{id}/inspection/type", operationId)
+                .then()
+                .statusCode(200);
+    }
+
     private static void setupDeclarationWithApprovals(Long operationId) {
         var declId = given()
                 .auth().basic("admin", "admin123")
@@ -323,6 +335,10 @@ class OperationResourceTest {
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
         };
         for (var status : remaining) {
+            // Set inspection type before VALUATION_REVIEW transition
+            if ("VALUATION_REVIEW".equals(status)) {
+                setInspectionType(opId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
@@ -370,6 +386,10 @@ class OperationResourceTest {
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
         };
         for (var status : statuses) {
+            // Set inspection type before VALUATION_REVIEW transition
+            if ("VALUATION_REVIEW".equals(status)) {
+                setInspectionType(opId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)

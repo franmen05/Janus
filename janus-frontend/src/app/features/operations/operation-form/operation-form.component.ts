@@ -78,6 +78,13 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
+              <label class="form-label">{{ 'OPERATIONS.INCOTERM' | translate }}</label>
+              <select class="form-select" formControlName="incoterm">
+                <option value="">-</option>
+                @for (inc of incoterms; track inc) { <option [value]="inc">{{ inc }}</option> }
+              </select>
+            </div>
+            <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.BL_ORIGINAL_AVAILABLE' | translate }}</label>
               <select class="form-select" formControlName="blOriginalAvailable"
                       [class.is-invalid]="form.get('blOriginalAvailable')!.invalid && form.get('blOriginalAvailable')!.touched">
@@ -119,6 +126,7 @@ export class OperationFormComponent implements OnInit {
   operationId: number | null = null;
   transportModes = Object.values(TransportMode);
   operationCategories = Object.values(OperationCategory);
+  incoterms = ['FOB', 'CIF', 'EXW', 'CFR', 'CIP', 'DAP', 'DDP'];
 
   form = new FormGroup({
     clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -129,7 +137,8 @@ export class OperationFormComponent implements OnInit {
     estimatedArrival: new FormControl('', { nonNullable: true }),
     blOriginalAvailable: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     notes: new FormControl('', { nonNullable: true }),
-    deadline: new FormControl('', { nonNullable: true })
+    deadline: new FormControl('', { nonNullable: true }),
+    incoterm: new FormControl('', { nonNullable: true })
   });
 
   ngOnInit(): void {
@@ -160,7 +169,8 @@ export class OperationFormComponent implements OnInit {
           estimatedArrival: op.estimatedArrival ?? '',
           blOriginalAvailable: op.blOriginalAvailable ? 'true' : 'false',
           notes: op.notes ?? '',
-          deadline: op.deadline ?? ''
+          deadline: op.deadline ?? '',
+          incoterm: op.incoterm ?? ''
         });
       });
     }
@@ -188,7 +198,8 @@ export class OperationFormComponent implements OnInit {
       estimatedArrival: val.estimatedArrival || undefined,
       blOriginalAvailable: val.blOriginalAvailable === 'true',
       notes: val.notes || undefined,
-      deadline: val.deadline || undefined
+      deadline: val.deadline || undefined,
+      incoterm: val.incoterm || undefined
     };
     const obs = this.isEdit() ? this.operationService.update(this.operationId!, request) : this.operationService.create(request);
     obs.subscribe(op => this.router.navigate(['/operations', op.id]));

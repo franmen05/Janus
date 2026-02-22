@@ -3,6 +3,7 @@ package com.janus.declaration.api;
 import com.janus.declaration.api.dto.ApprovalRequest;
 import com.janus.declaration.api.dto.CreateDeclarationRequest;
 import com.janus.declaration.api.dto.CreateTariffLineRequest;
+import com.janus.declaration.api.dto.RegisterDuaRequest;
 import com.janus.declaration.api.dto.CrossingDiscrepancyResponse;
 import com.janus.declaration.api.dto.CrossingResultResponse;
 import com.janus.declaration.api.dto.DeclarationResponse;
@@ -207,6 +208,29 @@ public class DeclarationResource {
                                        @Context SecurityContext sec) {
         var comment = request != null ? request.comment() : null;
         var result = declarationService.reject(operationId, declarationId, comment,
+                sec.getUserPrincipal().getName());
+        return DeclarationResponse.from(result);
+    }
+
+    @POST
+    @Path("/{id}/register-dua")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public DeclarationResponse registerDua(@PathParam("operationId") Long operationId,
+                                            @PathParam("id") Long declarationId,
+                                            @Valid RegisterDuaRequest request,
+                                            @Context SecurityContext sec) {
+        var result = declarationService.registerDua(operationId, declarationId,
+                request.duaNumber(), sec.getUserPrincipal().getName());
+        return DeclarationResponse.from(result);
+    }
+
+    @POST
+    @Path("/{id}/submit-to-dga")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public DeclarationResponse submitToDga(@PathParam("operationId") Long operationId,
+                                            @PathParam("id") Long declarationId,
+                                            @Context SecurityContext sec) {
+        var result = declarationService.submitToDga(operationId, declarationId,
                 sec.getUserPrincipal().getName());
         return DeclarationResponse.from(result);
     }

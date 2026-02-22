@@ -25,6 +25,12 @@ export enum OperationCategory {
   CATEGORY_3 = 'CATEGORY_3'
 }
 
+export enum InspectionType {
+  EXPRESO = 'EXPRESO',
+  VISUAL = 'VISUAL',
+  FISICA = 'FISICA'
+}
+
 export interface Operation {
   id: number;
   referenceNumber: string;
@@ -42,6 +48,9 @@ export interface Operation {
   notes: string | null;
   deadline: string | null;
   closedAt: string | null;
+  inspectionType?: InspectionType | null;
+  inspectionSetAt?: string | null;
+  incoterm?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -57,6 +66,7 @@ export interface CreateOperationRequest {
   blOriginalAvailable?: boolean;
   notes?: string;
   deadline?: string;
+  incoterm?: string;
 }
 
 export interface ChangeStatusRequest {

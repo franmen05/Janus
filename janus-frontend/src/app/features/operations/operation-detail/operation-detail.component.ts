@@ -19,12 +19,13 @@ import { OperationStatusComponent } from '../operation-status/operation-status.c
 import { DocumentListComponent } from '../../documents/document-list/document-list.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
-import { OperationTimelineComponent } from '../operation-timeline/operation-timeline.component';
 import { OperationCommentsComponent } from '../operation-comments/operation-comments.component';
 import { DeclarationListComponent } from '../../declarations/declaration-list/declaration-list.component';
 import { CrossingResultComponent } from '../../declarations/crossing-result/crossing-result.component';
 import { OperationAlertsComponent } from '../../alerts/operation-alerts/operation-alerts.component';
+import { InspectionPanelComponent } from '../inspection-panel/inspection-panel.component';
 const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED'];
+const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 
 @Component({
   selector: 'app-operation-detail',
@@ -33,8 +34,9 @@ const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVI
     CommonModule, RouterModule, NgbNavModule, TranslateModule,
     StatusBadgeComponent, ProgressBarComponent, CompletenessIndicatorComponent,
     OperationStatusComponent, DocumentListComponent, StatusLabelPipe,
-    OperationTimelineComponent, OperationCommentsComponent,
-    DeclarationListComponent, CrossingResultComponent, OperationAlertsComponent
+    OperationCommentsComponent,
+    DeclarationListComponent, CrossingResultComponent, OperationAlertsComponent,
+    InspectionPanelComponent
   ],
   template: `
     @if (operation()) {
@@ -154,6 +156,12 @@ const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVI
                       @if (operation()!.containerNumber) {
                         <dt>{{ 'OPERATIONS.CONTAINER_NUMBER' | translate }}</dt><dd>{{ operation()!.containerNumber }}</dd>
                       }
+                      @if (operation()!.incoterm) {
+                        <dt>{{ 'OPERATIONS.INCOTERM' | translate }}</dt><dd>{{ operation()!.incoterm }}</dd>
+                      }
+                      @if (operation()!.inspectionType) {
+                        <dt>{{ 'OPERATIONS.INSPECTION_TYPE' | translate }}</dt><dd>{{ 'INSPECTION.TYPE_' + operation()!.inspectionType | translate }}</dd>
+                      }
                     </dl>
                   </div>
                   <div class="col-md-6">
@@ -210,12 +218,6 @@ const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVI
             </ng-template>
           </li>
         }
-        <li [ngbNavItem]="'timeline'">
-          <button ngbNavLink>{{ 'TABS.TIMELINE' | translate }}</button>
-          <ng-template ngbNavContent>
-            <div class="mt-3"><app-operation-timeline [operationId]="operation()!.id" /></div>
-          </ng-template>
-        </li>
         <li [ngbNavItem]="'comments'">
           <button ngbNavLink>{{ 'TABS.COMMENTS' | translate }}</button>
           <ng-template ngbNavContent>
@@ -227,8 +229,18 @@ const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVI
             <button ngbNavLink>{{ 'TABS.DECLARATIONS' | translate }}</button>
             <ng-template ngbNavContent>
               <div class="mt-3">
-                <app-declaration-list [operationId]="operation()!.id" />
+                <app-declaration-list [operationId]="operation()!.id" [operationStatus]="operation()!.status" />
                 <app-crossing-result [operationId]="operation()!.id" />
+              </div>
+            </ng-template>
+          </li>
+        }
+        @if (isInspectionVisible()) {
+          <li [ngbNavItem]="'inspection'">
+            <button ngbNavLink>{{ 'TABS.INSPECTION' | translate }}</button>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <app-inspection-panel [operationId]="operation()!.id" [operation]="operation()" (changed)="reload()" />
               </div>
             </ng-template>
           </li>
@@ -298,6 +310,12 @@ export class OperationDetailComponent implements OnInit {
   isInReviewStatus = computed(() => {
     const op = this.operation();
     return op !== null && REVIEW_STATUSES.includes(op.status);
+  });
+
+  isInspectionVisible = computed(() => {
+    const op = this.operation();
+    if (!op) return false;
+    return INSPECTION_VISIBLE_STATUSES.includes(op.status) || op.inspectionType != null;
   });
 
   ngOnInit(): void {

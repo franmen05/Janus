@@ -2,7 +2,7 @@ import { Component, input, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
 import { Declaration } from '../../../core/models/declaration.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -14,10 +14,14 @@ import { DeclarationFormComponent } from '../declaration-form/declaration-form.c
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent],
   template: `
-    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+    @if (authService.hasRole(['ADMIN', 'AGENT']) && !isTerminalStatus()) {
       <div class="mb-3 d-flex gap-2">
-        <button class="btn btn-sm btn-outline-primary" (click)="openForm('PRELIMINARY')">{{ 'DECLARATIONS.REGISTER_PRELIMINARY' | translate }}</button>
-        <button class="btn btn-sm btn-outline-primary" (click)="openForm('FINAL')">{{ 'DECLARATIONS.REGISTER_FINAL' | translate }}</button>
+        @if (!canRegisterFinal()) {
+          <button class="btn btn-sm btn-outline-primary" (click)="openForm('PRELIMINARY')">{{ 'DECLARATIONS.REGISTER_PRELIMINARY' | translate }}</button>
+        }
+        @if (canRegisterFinal()) {
+          <button class="btn btn-sm btn-outline-primary" (click)="openForm('FINAL')">{{ 'DECLARATIONS.REGISTER_FINAL' | translate }}</button>
+        }
       </div>
     }
     @if (declarations().length > 0) {
@@ -43,7 +47,19 @@ import { DeclarationFormComponent } from '../declaration-form/declaration-form.c
                 <td>{{ decl.cifValue | number:'1.2-2' }}</td>
                 <td>{{ decl.totalTaxes | number:'1.2-2' }}</td>
                 <td>{{ decl.createdAt | date:'shortDate' }}</td>
-                <td><a [routerLink]="['/operations', operationId(), 'declarations', decl.id]" class="btn btn-sm btn-outline-secondary">{{ 'ACTIONS.EDIT' | translate }}</a></td>
+                <td>
+                  <div class="d-flex gap-1 flex-wrap">
+                    <a [routerLink]="['/operations', operationId(), 'declarations', decl.id]" class="btn btn-sm btn-outline-secondary">{{ 'ACTIONS.EDIT' | translate }}</a>
+                    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+                      @if (!decl.declarationNumber) {
+                        <button class="btn btn-sm btn-outline-info" (click)="registerDua(decl)">{{ 'DECLARATIONS.REGISTER_DUA' | translate }}</button>
+                      }
+                      @if (decl.declarationNumber && !decl.submittedAt) {
+                        <button class="btn btn-sm btn-outline-success" (click)="submitToDga(decl)">{{ 'DECLARATIONS.SUBMIT_TO_DGA' | translate }}</button>
+                      }
+                    }
+                  </div>
+                </td>
               </tr>
             }
           </tbody>
@@ -56,11 +72,26 @@ import { DeclarationFormComponent } from '../declaration-form/declaration-form.c
 })
 export class DeclarationListComponent implements OnInit {
   operationId = input.required<number>();
+  operationStatus = input<string>('');
 
   private declarationService = inject(DeclarationService);
   private modal = inject(NgbModal);
+  private translate = inject(TranslateService);
   authService = inject(AuthService);
   declarations = signal<Declaration[]>([]);
+
+  private static readonly FINAL_ALLOWED_STATUSES = [
+    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
+    'PAYMENT_PREPARATION', 'IN_TRANSIT'
+  ];
+
+  canRegisterFinal(): boolean {
+    return DeclarationListComponent.FINAL_ALLOWED_STATUSES.includes(this.operationStatus());
+  }
+
+  isTerminalStatus(): boolean {
+    return ['CLOSED', 'CANCELLED'].includes(this.operationStatus());
+  }
 
   ngOnInit(): void { this.loadDeclarations(); }
 
@@ -73,5 +104,29 @@ export class DeclarationListComponent implements OnInit {
     ref.componentInstance.operationId = this.operationId();
     ref.componentInstance.declarationType = type;
     ref.result.then(() => this.loadDeclarations(), () => {});
+  }
+
+  registerDua(decl: Declaration): void {
+    const duaNumber = prompt(this.translate.instant('DECLARATIONS.DUA_NUMBER'));
+    if (!duaNumber) return;
+    this.declarationService.registerDua(this.operationId(), decl.id, duaNumber).subscribe({
+      next: () => {
+        alert(this.translate.instant('DECLARATIONS.DUA_REGISTERED'));
+        this.loadDeclarations();
+      },
+      error: (err) => alert(err.error?.error || 'Error')
+    });
+  }
+
+  submitToDga(decl: Declaration): void {
+    const msg = this.translate.instant('DECLARATIONS.DGA_SUBMISSION_CONFIRM');
+    if (!confirm(msg)) return;
+    this.declarationService.submitToDga(this.operationId(), decl.id).subscribe({
+      next: () => {
+        alert(this.translate.instant('DECLARATIONS.DGA_SUBMITTED'));
+        this.loadDeclarations();
+      },
+      error: (err) => alert(err.error?.error || 'Error')
+    });
   }
 }

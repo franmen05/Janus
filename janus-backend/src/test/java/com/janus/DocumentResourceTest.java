@@ -179,6 +179,18 @@ class DocumentResourceTest {
         }
     }
 
+    private static void setInspectionType(Long opId) {
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"inspectionType": "VISUAL"}
+                        """)
+                .when().post("/api/operations/{id}/inspection/type", opId)
+                .then()
+                .statusCode(200);
+    }
+
     private static void uploadDoc(Long opId, String docType) {
         given()
                 .auth().basic("admin", "admin123")
@@ -250,6 +262,9 @@ class DocumentResourceTest {
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
         };
         for (var status : transitions) {
+            if ("VALUATION_REVIEW".equals(status)) {
+                setInspectionType(closedOperationId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
@@ -304,6 +319,9 @@ class DocumentResourceTest {
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION"
         };
         for (var status : transitions) {
+            if ("VALUATION_REVIEW".equals(status)) {
+                setInspectionType(opId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
@@ -375,6 +393,9 @@ class DocumentResourceTest {
                 "VALUATION_REVIEW"
         };
         for (var status : transitions) {
+            if ("VALUATION_REVIEW".equals(status)) {
+                setInspectionType(opId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)

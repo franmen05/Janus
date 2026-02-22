@@ -1,6 +1,7 @@
 import { Component, input, output, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { ComplianceService } from '../../../core/services/compliance.service';
@@ -10,11 +11,12 @@ import { ValidationError } from '../../../core/models/compliance.model';
 import { TimelineComponent, TimelineEvent } from '../../../shared/components/timeline/timeline.component';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
+import { OperationTimelineComponent } from '../operation-timeline/operation-timeline.component';
 
 @Component({
   selector: 'app-operation-status',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, TimelineComponent, StatusLabelPipe],
+  imports: [CommonModule, FormsModule, NgbNavModule, TranslateModule, TimelineComponent, StatusLabelPipe, OperationTimelineComponent],
   template: `
     @if (authService.hasRole(['ADMIN', 'AGENT'])) {
       <div class="card mb-3">
@@ -53,12 +55,29 @@ import { AuthService } from '../../../core/services/auth.service';
         </div>
       </div>
     }
-    <div class="card">
-      <div class="card-header">{{ 'STATUS_CHANGE.HISTORY' | translate }}</div>
-      <div class="card-body">
-        <app-timeline [events]="timelineEvents()" />
-      </div>
-    </div>
+    <ul ngbNav #subNav="ngbNav" class="nav-pills nav-fill mb-3" [(activeId)]="activeSubTab">
+      <li [ngbNavItem]="'status-history'">
+        <button ngbNavLink>{{ 'STATUS_CHANGE.HISTORY' | translate }}</button>
+        <ng-template ngbNavContent>
+          <div class="card">
+            <div class="card-body">
+              <app-timeline [events]="timelineEvents()" />
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="'timeline'">
+        <button ngbNavLink>{{ 'TABS.TIMELINE' | translate }}</button>
+        <ng-template ngbNavContent>
+          <div class="card">
+            <div class="card-body">
+              <app-operation-timeline [operationId]="operationId()" />
+            </div>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="subNav"></div>
   `
 })
 export class OperationStatusComponent implements OnInit {
@@ -78,6 +97,7 @@ export class OperationStatusComponent implements OnInit {
   selectedStatus = '';
   comment = '';
   availableStatuses = signal<string[]>([]);
+  activeSubTab = 'status-history';
 
   ngOnInit(): void {
     this.loadHistory();

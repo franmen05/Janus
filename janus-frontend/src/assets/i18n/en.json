@@ -78,7 +78,9 @@
     "BL_NUMBER_REQUIRED": "BL number is required",
     "BL_ORIGINAL_REQUIRED": "Please select whether the original BL is available",
     "SELECT_BL_ORIGINAL": "Select...",
-    "IMMUTABLE": "This operation cannot be modified (closed/cancelled)"
+    "IMMUTABLE": "This operation cannot be modified (closed/cancelled)",
+    "INSPECTION_TYPE": "Inspection Type",
+    "INCOTERM": "Incoterm"
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -136,7 +138,8 @@
     "COMMENTS": "Comments",
     "DECLARATIONS": "Declarations",
     "HISTORY": "History",
-    "AUDIT": "Audit"
+    "AUDIT": "Audit",
+    "INSPECTION": "Inspection"
   },
   "STATUS": {
     "DRAFT": "Draft",
@@ -337,7 +340,14 @@
     "TOTAL_VALUE": "Total Value",
     "TAX_RATE": "Tax Rate (%)",
     "TAX_AMOUNT": "Tax Amount",
-    "NO_TARIFF_LINES": "No tariff lines added"
+    "NO_TARIFF_LINES": "No tariff lines added",
+    "REGISTER_DUA": "Register DUA",
+    "DUA_NUMBER": "DUA Number",
+    "SUBMIT_TO_DGA": "Submit to DGA",
+    "SUBMITTED_TO_DGA_AT": "Submitted to DGA",
+    "DGA_SUBMISSION_CONFIRM": "Are you sure you want to submit this declaration to DGA?",
+    "DUA_REGISTERED": "DUA number registered successfully",
+    "DGA_SUBMITTED": "Declaration submitted to DGA successfully"
   },
   "CROSSING": {
     "TITLE": "Customs Crossing",
@@ -400,7 +410,48 @@
     "MISSING_DOC_CERTIFICATE": "Required document missing: Certificate",
     "PHYSICAL_ALL_DOCS_VALIDATED": "All documents must be VALIDATED before Valuation Review for Physical inspection",
     "HIGH_VALUE_CERT_REQUIRED": "Maritime operations require a Certificate document",
-    "INVOICE_NOT_VALIDATED": "Commercial Invoice must be VALIDATED before Declaration in Progress"
+    "INVOICE_NOT_VALIDATED": "Commercial Invoice must be VALIDATED before Declaration in Progress",
+    "INSPECTION_TYPE_REQUIRED": "Inspection type must be set before advancing to Valuation Review"
+  },
+  "INSPECTION": {
+    "TYPE_LABEL": "Inspection Type",
+    "TYPE_EXPRESO": "Express",
+    "TYPE_VISUAL": "Visual",
+    "TYPE_FISICA": "Physical",
+    "CONFIRM_TYPE": "Are you sure you want to set this inspection type?",
+    "EXPRESO_NOTE": "Express inspection — operation will auto-advance after customs review",
+    "PHOTOS_TITLE": "Inspection Photos",
+    "NO_PHOTOS": "No inspection photos uploaded yet",
+    "UPLOAD_PHOTO": "Upload Photo",
+    "PHOTO_CAPTION": "Caption (optional)",
+    "UPLOAD_SUCCESS": "Photo uploaded successfully",
+    "SET_TYPE_SUCCESS": "Inspection type set successfully",
+    "PHOTO_UPLOAD_LABEL": "Select photo to upload",
+    "EXPENSES_TITLE": "Inspection Expenses",
+    "NO_EXPENSES": "No inspection expenses recorded yet",
+    "ADD_EXPENSE": "Add Expense",
+    "EDIT_EXPENSE": "Edit",
+    "DELETE_EXPENSE": "Delete",
+    "EXPENSE_CATEGORY": "Category",
+    "EXPENSE_DESCRIPTION": "Description",
+    "EXPENSE_AMOUNT": "Amount",
+    "EXPENSE_CURRENCY": "Currency",
+    "EXPENSE_DATE": "Date",
+    "EXPENSE_JUSTIFICATION": "Justification",
+    "EXPENSE_REGISTERED_BY": "Registered By",
+    "EXPENSE_TOTAL": "Total",
+    "EXPENSE_SAVE": "Save",
+    "EXPENSE_CANCEL": "Cancel",
+    "EXPENSE_ADDED": "Expense added successfully",
+    "EXPENSE_UPDATED": "Expense updated successfully",
+    "EXPENSE_DELETED": "Expense deleted successfully",
+    "CONFIRM_DELETE_EXPENSE": "Are you sure you want to delete this expense?",
+    "CATEGORY_LABOR": "Labor",
+    "CATEGORY_EQUIPMENT": "Equipment",
+    "CATEGORY_TRANSPORT": "Transport",
+    "CATEGORY_SECURITY": "Security",
+    "CATEGORY_OVERTIME": "Overtime",
+    "CATEGORY_OTHER": "Other"
   },
   "LANG": {
     "ES": "Español",

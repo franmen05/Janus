@@ -217,6 +217,57 @@ public class DeclarationService {
     }
 
     @Transactional
+    public Declaration registerDua(Long operationId, Long declarationId, String duaNumber, String username) {
+        var declaration = findById(operationId, declarationId);
+        declaration.declarationNumber = duaNumber;
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.UPDATE, "Declaration", declarationId, operationId,
+                null, null, "DUA number registered: " + duaNumber
+        ));
+
+        return declaration;
+    }
+
+    @Transactional
+    public Declaration submitToDga(Long operationId, Long declarationId, String username) {
+        var declaration = findById(operationId, declarationId);
+
+        if (declaration.submittedAt != null) {
+            throw new BusinessException("Declaration has already been submitted to DGA");
+        }
+
+        declaration.submittedAt = LocalDateTime.now();
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.UPDATE, "Declaration", declarationId, operationId,
+                null, null, "Declaration submitted to DGA"
+        ));
+
+        // Flush so compliance rules can read the updated submittedAt
+        declarationRepository.flush();
+
+        // Auto-transition: if operation is in DECLARATION_IN_PROGRESS, advance to SUBMITTED_TO_CUSTOMS
+        var operation = declaration.operation;
+        if (operation.status == OperationStatus.DECLARATION_IN_PROGRESS) {
+            operationService.changeStatus(operationId,
+                    new ChangeStatusRequest(OperationStatus.SUBMITTED_TO_CUSTOMS,
+                            "Auto-advanced after submission to DGA"),
+                    username, null);
+        }
+
+        // Notify client
+        if (operation.client != null && operation.client.email != null) {
+            notificationService.send(operationId, operation.client.email,
+                    "Declaration Submitted to DGA - " + operation.referenceNumber,
+                    "The declaration for operation " + operation.referenceNumber
+                            + " has been submitted to DGA. Please log in to the Janus platform for more details.");
+        }
+
+        return declaration;
+    }
+
+    @Transactional
     public Declaration approveTechnical(Long operationId, Long declarationId, String comment, String username) {
         var declaration = findById(operationId, declarationId);
 

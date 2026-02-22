@@ -15,5 +15,6 @@ public record CreateOperationRequest(
         java.time.LocalDateTime estimatedArrival,
         @NotNull Boolean blOriginalAvailable,
         String notes,
-        java.time.LocalDateTime deadline
+        java.time.LocalDateTime deadline,
+        String incoterm
 ) {}

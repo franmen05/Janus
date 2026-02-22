@@ -100,6 +100,7 @@ public class OperationService {
         op.blOriginalAvailable = request.blOriginalAvailable();
         op.notes = request.notes();
         op.deadline = request.deadline();
+        op.incoterm = request.incoterm();
 
         if (request.assignedAgentId() != null) {
             op.assignedAgent = userRepository.findByIdOptional(request.assignedAgentId())
@@ -176,6 +177,7 @@ public class OperationService {
         op.blOriginalAvailable = request.blOriginalAvailable();
         op.notes = request.notes();
         op.deadline = request.deadline();
+        op.incoterm = request.incoterm();
 
         if (request.assignedAgentId() != null) {
             op.assignedAgent = userRepository.findByIdOptional(request.assignedAgentId())

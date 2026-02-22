@@ -74,6 +74,20 @@ export class DeclarationService {
     );
   }
 
+  registerDua(operationId: number, declarationId: number, duaNumber: string): Observable<Declaration> {
+    return this.http.post<Declaration>(
+      `${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}/register-dua`,
+      { duaNumber }
+    );
+  }
+
+  submitToDga(operationId: number, declarationId: number): Observable<Declaration> {
+    return this.http.post<Declaration>(
+      `${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}/submit-to-dga`,
+      {}
+    );
+  }
+
   getCrossing(operationId: number): Observable<CrossingResult | null> {
     return this.http.get<CrossingResult>(`${this.apiUrl}/api/operations/${operationId}/declarations/crossing`, {
       observe: 'response'

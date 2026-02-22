@@ -1,5 +1,6 @@
 package com.janus.operation.api.dto;
 
+import com.janus.operation.domain.model.InspectionType;
 import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
@@ -23,6 +24,9 @@ public record OperationResponse(
         String notes,
         LocalDateTime deadline,
         LocalDateTime closedAt,
+        InspectionType inspectionType,
+        LocalDateTime inspectionSetAt,
+        String incoterm,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -44,6 +48,9 @@ public record OperationResponse(
                 op.notes,
                 op.deadline,
                 op.closedAt,
+                op.inspectionType,
+                op.inspectionSetAt,
+                op.incoterm,
                 op.createdAt,
                 op.updatedAt
         );

@@ -56,4 +56,14 @@ public class Operation extends BaseEntity {
     public LocalDateTime closedAt;
 
     public LocalDateTime deadline;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "inspection_type")
+    public InspectionType inspectionType;
+
+    @Column(name = "inspection_set_at")
+    public LocalDateTime inspectionSetAt;
+
+    @Column(length = 10)
+    public String incoterm;
 }
