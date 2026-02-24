@@ -60,9 +60,9 @@
     "SELECT_CLIENT": "Select client...",
     "TRANSPORT_MODE": "Transport Mode",
     "OPERATION_CATEGORY": "Operation Category",
-    "BL_NUMBER": "BL Number",
+    "BL_NUMBER": "House BL",
     "CONTAINER_NUMBER": "Container Number",
-    "CONTAINER_NUMBER_REQUIRED": "Container number is required for maritime operations",
+    "CONTAINER_NUMBER_REQUIRED": "Container number is required for maritime FCL operations",
     "ESTIMATED_ARRIVAL": "Estimated Arrival",
     "BL_ORIGINAL_AVAILABLE": "BL Original Available",
     "BL_ORIGINAL_WARNING": "The original Bill of Lading is not available. This may delay customs processing.",
@@ -80,7 +80,11 @@
     "SELECT_BL_ORIGINAL": "Select...",
     "IMMUTABLE": "This operation cannot be modified (closed/cancelled)",
     "INSPECTION_TYPE": "Inspection Type",
-    "INCOTERM": "Incoterm"
+    "INCOTERM": "Incoterm",
+    "CARGO_TYPE": "Cargo Type",
+    "BL_TYPE": "BL Type",
+    "CHILD_BL_NUMBER": "Child BL",
+    "CHILD_BL_REQUIRED": "Child BL is required for consolidated BL"
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -194,7 +198,9 @@
     "MISSING_CRITICAL_DOCUMENT": "Missing Doc",
     "BL_UNAVAILABLE": "BL Unavailable",
     "ACTIVE": "Active",
-    "ACKNOWLEDGED": "Acknowledged"
+    "ACKNOWLEDGED": "Acknowledged",
+    "FCL": "FCL",
+    "LCL": "LCL"
   },
   "PROGRESS": {
     "DRAFT": "Draft",
@@ -213,6 +219,14 @@
     "PACKING_LIST": "Packing List",
     "CERTIFICATE": "Certificate",
     "OTHER": "Other"
+  },
+  "CARGO_TYPES": {
+    "FCL": "FCL (Full Container Load)",
+    "LCL": "LCL (Less than Container Load)"
+  },
+  "BL_TYPES": {
+    "SIMPLE": "Simple",
+    "CONSOLIDATED": "Consolidated"
   },
   "TRANSPORT_MODES": {
     "MARITIME": "Maritime",
@@ -245,7 +259,9 @@
     "EXECUTE": "Execute",
     "RESOLVE": "Resolve",
     "SAVE": "Save",
-    "CLOSE": "Close"
+    "CLOSE": "Close",
+    "MARK_BL_AVAILABLE": "Mark BL as available",
+    "MARK_BL_UNAVAILABLE": "Mark BL as unavailable"
   },
   "COMMON": {
     "ARE_YOU_SURE": "Are you sure?",
@@ -411,7 +427,8 @@
     "PHYSICAL_ALL_DOCS_VALIDATED": "All documents must be VALIDATED before Valuation Review for Physical inspection",
     "HIGH_VALUE_CERT_REQUIRED": "Maritime operations require a Certificate document",
     "INVOICE_NOT_VALIDATED": "Commercial Invoice must be VALIDATED before Declaration in Progress",
-    "INSPECTION_TYPE_REQUIRED": "Inspection type must be set before advancing to Valuation Review"
+    "INSPECTION_TYPE_REQUIRED": "Inspection type must be set before advancing to Valuation Review",
+    "BL_ORIGINAL_NOT_AVAILABLE": "Original BL must be available to proceed"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Inspection Type",

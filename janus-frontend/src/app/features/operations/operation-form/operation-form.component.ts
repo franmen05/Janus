@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
 import { Client } from '../../../core/models/client.model';
-import { TransportMode, OperationCategory } from '../../../core/models/operation.model';
+import { TransportMode, OperationCategory, CargoType, BlType } from '../../../core/models/operation.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
 @Component({
@@ -48,8 +48,26 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
               }
             </div>
           </div>
+          @if (form.get('transportMode')!.value === 'MARITIME') {
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">{{ 'OPERATIONS.CARGO_TYPE' | translate }}</label>
+                <select class="form-select" formControlName="cargoType">
+                  @for (ct of cargoTypes; track ct) { <option [value]="ct">{{ 'CARGO_TYPES.' + ct | translate }}</option> }
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">{{ 'OPERATIONS.CONTAINER_NUMBER' | translate }}</label>
+                <input type="text" class="form-control" formControlName="containerNumber"
+                       [class.is-invalid]="form.get('containerNumber')!.invalid && form.get('containerNumber')!.touched">
+                @if (form.get('containerNumber')!.hasError('required') && form.get('containerNumber')!.touched) {
+                  <div class="invalid-feedback">{{ 'OPERATIONS.CONTAINER_NUMBER_REQUIRED' | translate }}</div>
+                }
+              </div>
+            </div>
+          }
           <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label">{{ 'OPERATIONS.BL_NUMBER' | translate }}</label>
               <input type="text" class="form-control" formControlName="blNumber"
                      [class.is-invalid]="form.get('blNumber')!.invalid && form.get('blNumber')!.touched">
@@ -57,14 +75,22 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                 <div class="invalid-feedback">{{ 'OPERATIONS.BL_NUMBER_REQUIRED' | translate }}</div>
               }
             </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.CONTAINER_NUMBER' | translate }}</label>
-              <input type="text" class="form-control" formControlName="containerNumber"
-                     [class.is-invalid]="form.get('containerNumber')!.invalid && form.get('containerNumber')!.touched">
-              @if (form.get('containerNumber')!.hasError('required') && form.get('containerNumber')!.touched) {
-                <div class="invalid-feedback">{{ 'OPERATIONS.CONTAINER_NUMBER_REQUIRED' | translate }}</div>
-              }
+            <div class="col-md-4">
+              <label class="form-label">{{ 'OPERATIONS.BL_TYPE' | translate }}</label>
+              <select class="form-select" formControlName="blType">
+                @for (bt of blTypes; track bt) { <option [value]="bt">{{ 'BL_TYPES.' + bt | translate }}</option> }
+              </select>
             </div>
+            @if (form.get('blType')!.value === 'CONSOLIDATED') {
+              <div class="col-md-4">
+                <label class="form-label">{{ 'OPERATIONS.CHILD_BL_NUMBER' | translate }}</label>
+                <input type="text" class="form-control" formControlName="childBlNumber"
+                       [class.is-invalid]="form.get('childBlNumber')!.invalid && form.get('childBlNumber')!.touched">
+                @if (form.get('childBlNumber')!.hasError('required') && form.get('childBlNumber')!.touched) {
+                  <div class="invalid-feedback">{{ 'OPERATIONS.CHILD_BL_REQUIRED' | translate }}</div>
+                }
+              </div>
+            }
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
@@ -125,14 +151,19 @@ export class OperationFormComponent implements OnInit {
   isEdit = signal(false);
   operationId: number | null = null;
   transportModes = Object.values(TransportMode);
+  cargoTypes = Object.values(CargoType);
   operationCategories = Object.values(OperationCategory);
+  blTypes = Object.values(BlType);
   incoterms = ['FOB', 'CIF', 'EXW', 'CFR', 'CIP', 'DAP', 'DDP'];
 
   form = new FormGroup({
     clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     transportMode: new FormControl(TransportMode.MARITIME, { nonNullable: true, validators: [Validators.required] }),
+    cargoType: new FormControl(CargoType.FCL, { nonNullable: true }),
     operationCategory: new FormControl(OperationCategory.CATEGORY_1, { nonNullable: true, validators: [Validators.required] }),
     blNumber: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    blType: new FormControl(BlType.SIMPLE, { nonNullable: true }),
+    childBlNumber: new FormControl('', { nonNullable: true }),
     containerNumber: new FormControl('', { nonNullable: true }),
     estimatedArrival: new FormControl('', { nonNullable: true }),
     blOriginalAvailable: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -144,12 +175,21 @@ export class OperationFormComponent implements OnInit {
   ngOnInit(): void {
     this.clientService.getAll().subscribe(clients => this.clients.set(clients));
 
-    // Add conditional validation for containerNumber when transportMode is MARITIME
+    // Add conditional validation for containerNumber when transportMode is MARITIME and cargoType is FCL
     this.form.get('transportMode')!.valueChanges.subscribe(mode => {
-      this.updateContainerNumberValidation(mode);
+      this.updateContainerNumberValidation(mode, this.form.get('cargoType')!.value);
+    });
+    this.form.get('cargoType')!.valueChanges.subscribe(cargoType => {
+      this.updateContainerNumberValidation(this.form.get('transportMode')!.value, cargoType);
     });
     // Set initial validation
-    this.updateContainerNumberValidation(this.form.get('transportMode')!.value);
+    this.updateContainerNumberValidation(this.form.get('transportMode')!.value, this.form.get('cargoType')!.value);
+
+    // Add conditional validation for childBlNumber when blType is CONSOLIDATED
+    this.form.get('blType')!.valueChanges.subscribe(blType => {
+      this.updateChildBlValidation(blType);
+    });
+    this.updateChildBlValidation(this.form.get('blType')!.value);
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -163,8 +203,11 @@ export class OperationFormComponent implements OnInit {
         this.form.patchValue({
           clientId: op.clientId?.toString() ?? '',
           transportMode: op.transportMode,
+          cargoType: op.cargoType ?? CargoType.FCL,
           operationCategory: op.operationCategory,
           blNumber: op.blNumber ?? '',
+          blType: op.blType ?? BlType.SIMPLE,
+          childBlNumber: op.childBlNumber ?? '',
           containerNumber: op.containerNumber ?? '',
           estimatedArrival: op.estimatedArrival ?? '',
           blOriginalAvailable: op.blOriginalAvailable ? 'true' : 'false',
@@ -176,14 +219,30 @@ export class OperationFormComponent implements OnInit {
     }
   }
 
-  private updateContainerNumberValidation(mode: TransportMode): void {
+  private updateContainerNumberValidation(mode: TransportMode, cargoType: string): void {
     const containerControl = this.form.get('containerNumber')!;
-    if (mode === TransportMode.MARITIME) {
+    if (mode === TransportMode.MARITIME && cargoType === CargoType.FCL) {
       containerControl.setValidators([Validators.required]);
+      containerControl.enable();
     } else {
       containerControl.clearValidators();
+      containerControl.setValue('');
+      containerControl.disable();
     }
     containerControl.updateValueAndValidity();
+  }
+
+  private updateChildBlValidation(blType: string): void {
+    const childBlControl = this.form.get('childBlNumber')!;
+    if (blType === BlType.CONSOLIDATED) {
+      childBlControl.setValidators([Validators.required]);
+      childBlControl.enable();
+    } else {
+      childBlControl.clearValidators();
+      childBlControl.setValue('');
+      childBlControl.disable();
+    }
+    childBlControl.updateValueAndValidity();
   }
 
   onSubmit(): void {
@@ -192,8 +251,11 @@ export class OperationFormComponent implements OnInit {
     const request = {
       clientId: +val.clientId,
       transportMode: val.transportMode,
+      cargoType: val.transportMode === TransportMode.MARITIME ? val.cargoType as CargoType : undefined,
       operationCategory: val.operationCategory,
       blNumber: val.blNumber || undefined,
+      blType: val.blType as BlType,
+      childBlNumber: val.blType === BlType.CONSOLIDATED ? (val.childBlNumber || undefined) : undefined,
       containerNumber: val.containerNumber || undefined,
       estimatedArrival: val.estimatedArrival || undefined,
       blOriginalAvailable: val.blOriginalAvailable === 'true',
@@ -207,3 +269,4 @@ export class OperationFormComponent implements OnInit {
 
   onCancel(): void { this.router.navigate(['/operations']); }
 }
+

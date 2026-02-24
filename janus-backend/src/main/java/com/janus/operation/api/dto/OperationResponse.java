@@ -1,5 +1,7 @@
 package com.janus.operation.api.dto;
 
+import com.janus.operation.domain.model.BlType;
+import com.janus.operation.domain.model.CargoType;
 import com.janus.operation.domain.model.InspectionType;
 import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.Operation;
@@ -13,6 +15,7 @@ public record OperationResponse(
         Long clientId,
         String clientName,
         TransportMode transportMode,
+        CargoType cargoType,
         OperationCategory operationCategory,
         OperationStatus status,
         Long assignedAgentId,
@@ -27,6 +30,8 @@ public record OperationResponse(
         InspectionType inspectionType,
         LocalDateTime inspectionSetAt,
         String incoterm,
+        BlType blType,
+        String childBlNumber,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -37,6 +42,7 @@ public record OperationResponse(
                 op.client != null ? op.client.id : null,
                 op.client != null ? op.client.name : null,
                 op.transportMode,
+                op.cargoType,
                 op.operationCategory,
                 op.status,
                 op.assignedAgent != null ? op.assignedAgent.id : null,
@@ -51,6 +57,8 @@ public record OperationResponse(
                 op.inspectionType,
                 op.inspectionSetAt,
                 op.incoterm,
+                op.blType,
+                op.childBlNumber,
                 op.createdAt,
                 op.updatedAt
         );

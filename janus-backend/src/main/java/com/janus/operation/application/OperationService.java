@@ -6,9 +6,11 @@ import com.janus.client.domain.repository.ClientRepository;
 import com.janus.notification.application.NotificationService;
 import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.api.dto.CreateOperationRequest;
+import com.janus.operation.domain.model.BlType;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.model.StatusHistory;
+import com.janus.operation.domain.model.CargoType;
 import com.janus.operation.domain.model.TransportMode;
 import com.janus.operation.domain.repository.OperationRepository;
 import com.janus.operation.domain.repository.StatusHistoryRepository;
@@ -82,16 +84,18 @@ public class OperationService {
         var client = clientRepository.findByIdOptional(request.clientId())
                 .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
 
-        // Validate containerNumber required for MARITIME
+        // Validate containerNumber required for MARITIME + FCL
         if (request.transportMode() == TransportMode.MARITIME
+                && request.cargoType() == CargoType.FCL
                 && (request.containerNumber() == null || request.containerNumber().isBlank())) {
-            throw new BusinessException("Container number is required for MARITIME transport mode");
+            throw new BusinessException("Container number is required for MARITIME FCL transport mode");
         }
 
         var op = new Operation();
         op.referenceNumber = generateReferenceNumber();
         op.client = client;
         op.transportMode = request.transportMode();
+        op.cargoType = request.cargoType();
         op.operationCategory = request.operationCategory();
         op.status = OperationStatus.DRAFT;
         op.blNumber = request.blNumber();
@@ -101,6 +105,14 @@ public class OperationService {
         op.notes = request.notes();
         op.deadline = request.deadline();
         op.incoterm = request.incoterm();
+        op.blType = request.blType();
+        op.childBlNumber = request.childBlNumber();
+
+        // Validate childBlNumber required for CONSOLIDATED BL
+        if (op.blType == BlType.CONSOLIDATED
+                && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
+            throw new BusinessException("Child BL number is required for consolidated BL");
+        }
 
         if (request.assignedAgentId() != null) {
             op.assignedAgent = userRepository.findByIdOptional(request.assignedAgentId())
@@ -155,10 +167,11 @@ public class OperationService {
             throw new BusinessException("Cannot update a closed or cancelled operation");
         }
 
-        // Validate containerNumber required for MARITIME
+        // Validate containerNumber required for MARITIME + FCL
         if (request.transportMode() == TransportMode.MARITIME
+                && request.cargoType() == CargoType.FCL
                 && (request.containerNumber() == null || request.containerNumber().isBlank())) {
-            throw new BusinessException("Container number is required for MARITIME transport mode");
+            throw new BusinessException("Container number is required for MARITIME FCL transport mode");
         }
 
         var previousData = JsonUtil.toJson(Map.of(
@@ -170,6 +183,7 @@ public class OperationService {
         op.client = clientRepository.findByIdOptional(request.clientId())
                 .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
         op.transportMode = request.transportMode();
+        op.cargoType = request.cargoType();
         op.operationCategory = request.operationCategory();
         op.blNumber = request.blNumber();
         op.containerNumber = request.containerNumber();
@@ -178,6 +192,14 @@ public class OperationService {
         op.notes = request.notes();
         op.deadline = request.deadline();
         op.incoterm = request.incoterm();
+        op.blType = request.blType();
+        op.childBlNumber = request.childBlNumber();
+
+        // Validate childBlNumber required for CONSOLIDATED BL
+        if (op.blType == BlType.CONSOLIDATED
+                && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
+            throw new BusinessException("Child BL number is required for consolidated BL");
+        }
 
         if (request.assignedAgentId() != null) {
             op.assignedAgent = userRepository.findByIdOptional(request.assignedAgentId())
@@ -194,6 +216,25 @@ public class OperationService {
                 username, AuditAction.UPDATE, "Operation", op.id, op.id,
                 previousData, newData, "Operation updated"
         ));
+
+        return op;
+    }
+
+    @Transactional
+    public Operation toggleBlOriginalAvailable(Long id, boolean value, String username) {
+        var op = findById(id);
+        op.blOriginalAvailable = value;
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.UPDATE, "Operation", op.id, op.id,
+                JsonUtil.toJson(Map.of("blOriginalAvailable", String.valueOf(!value))),
+                JsonUtil.toJson(Map.of("blOriginalAvailable", String.valueOf(value))),
+                "BL original available toggled to " + value
+        ));
+
+        // Force initialization of lazy associations for DTO mapping
+        if (op.client != null) { var ignored = op.client.name; }
+        if (op.assignedAgent != null) { var ignored = op.assignedAgent.fullName; }
 
         return op;
     }

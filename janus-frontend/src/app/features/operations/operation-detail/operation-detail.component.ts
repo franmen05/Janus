@@ -148,10 +148,19 @@ const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
                   <div class="col-md-6">
                     <dl>
                       <dt>{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</dt><dd>{{ operation()!.transportMode | statusLabel }}</dd>
+                      @if (operation()!.cargoType) {
+                        <dt>{{ 'OPERATIONS.CARGO_TYPE' | translate }}</dt><dd>{{ 'CARGO_TYPES.' + operation()!.cargoType | translate }}</dd>
+                      }
                       <dt>{{ 'OPERATIONS.OPERATION_CATEGORY' | translate }}</dt><dd>{{ operation()!.operationCategory | statusLabel }}</dd>
                       <dt>{{ 'OPERATIONS.ASSIGNED_AGENT' | translate }}</dt><dd>{{ operation()!.assignedAgentName ?? ('OPERATIONS.NOT_ASSIGNED' | translate) }}</dd>
                       @if (operation()!.blNumber) {
                         <dt>{{ 'OPERATIONS.BL_NUMBER' | translate }}</dt><dd>{{ operation()!.blNumber }}</dd>
+                      }
+                      @if (operation()!.blType) {
+                        <dt>{{ 'OPERATIONS.BL_TYPE' | translate }}</dt><dd>{{ 'BL_TYPES.' + operation()!.blType | translate }}</dd>
+                      }
+                      @if (operation()!.childBlNumber) {
+                        <dt>{{ 'OPERATIONS.CHILD_BL_NUMBER' | translate }}</dt><dd>{{ operation()!.childBlNumber }}</dd>
                       }
                       @if (operation()!.containerNumber) {
                         <dt>{{ 'OPERATIONS.CONTAINER_NUMBER' | translate }}</dt><dd>{{ operation()!.containerNumber }}</dd>
@@ -175,11 +184,17 @@ const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
                         <dt>{{ 'OPERATIONS.DEADLINE' | translate }}</dt><dd>{{ operation()!.deadline | date:'medium' }}</dd>
                       }
                       <dt>{{ 'OPERATIONS.BL_ORIGINAL_AVAILABLE' | translate }}</dt>
-                      <dd>
+                      <dd class="d-flex align-items-center gap-2">
                         @if (operation()!.blOriginalAvailable) {
                           <span class="badge bg-success">{{ 'COMMON.YES' | translate }}</span>
                         } @else {
                           <span class="badge bg-warning text-dark">{{ 'COMMON.NO' | translate }}</span>
+                        }
+                        @if (authService.hasRole(['ADMIN', 'AGENT']) && operation()!.status !== 'CLOSED' && operation()!.status !== 'CANCELLED') {
+                          <button class="btn btn-sm btn-outline-secondary py-0 px-1" (click)="toggleBlOriginalAvailable()" [title]="operation()!.blOriginalAvailable ? ('ACTIONS.MARK_BL_UNAVAILABLE' | translate) : ('ACTIONS.MARK_BL_AVAILABLE' | translate)">
+                            <i class="bi" [ngClass]="operation()!.blOriginalAvailable ? 'bi-toggle-on text-success' : 'bi-toggle-off'"></i>
+                            <small class="ms-1">{{ operation()!.blOriginalAvailable ? ('ACTIONS.MARK_BL_UNAVAILABLE' | translate) : ('ACTIONS.MARK_BL_AVAILABLE' | translate) }}</small>
+                          </button>
                         }
                       </dd>
                     </dl>
@@ -363,6 +378,13 @@ export class OperationDetailComponent implements OnInit {
     if (!decl) return;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
     this.declarationService.reject(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
+  }
+
+  toggleBlOriginalAvailable(): void {
+    const op = this.operation();
+    if (!op) return;
+    const newValue = !op.blOriginalAvailable;
+    this.operationService.toggleBlOriginalAvailable(op.id, newValue).subscribe(() => this.reload());
   }
 
   changeToStatus(newStatus: string): void {

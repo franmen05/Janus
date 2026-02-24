@@ -142,6 +142,7 @@ class ComplianceValidationServiceTest {
         // Most rules apply to DRAFT -> DOCUMENTATION_COMPLETE; other transitions may have fewer rules
         var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.PAYMENT_PREPARATION);
         operation.id = -999L;
+        operation.blOriginalAvailable = true;
 
         var result = validationService.validate(operation, OperationStatus.IN_TRANSIT);
 

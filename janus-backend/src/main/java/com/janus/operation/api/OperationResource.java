@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -112,6 +113,17 @@ public class OperationResource {
     public Response delete(@PathParam("id") Long id, @Context SecurityContext sec) {
         operationService.delete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
+    }
+
+    @PATCH
+    @Path("/{id}/bl-original-available")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public OperationResponse toggleBlOriginalAvailable(@PathParam("id") Long id,
+                                                        @Valid com.janus.operation.api.dto.BlOriginalAvailableRequest body,
+                                                        @Context SecurityContext sec) {
+        var value = body.blOriginalAvailable();
+        var op = operationService.toggleBlOriginalAvailable(id, value, sec.getUserPrincipal().getName());
+        return OperationResponse.from(op);
     }
 
     @GET

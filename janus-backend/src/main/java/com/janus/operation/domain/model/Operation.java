@@ -27,6 +27,10 @@ public class Operation extends BaseEntity {
     public TransportMode transportMode;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "cargo_type")
+    public CargoType cargoType;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "operation_category", nullable = false)
     public OperationCategory operationCategory;
 
@@ -66,4 +70,11 @@ public class Operation extends BaseEntity {
 
     @Column(length = 10)
     public String incoterm;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "bl_type")
+    public BlType blType;
+
+    @Column(name = "child_bl_number")
+    public String childBlNumber;
 }

@@ -47,7 +47,7 @@ public class InternalReviewCompleteRule implements ComplianceRule {
         // Check BL original is available
         if (operation.blOriginalAvailable == null || !operation.blOriginalAvailable) {
             errors.add(new ValidationResult.ValidationError(
-                    "BL_NOT_VALIDATED",
+                    "BL_ORIGINAL_NOT_AVAILABLE",
                     "Original BL must be available to proceed to preliquidation review"
             ));
         }

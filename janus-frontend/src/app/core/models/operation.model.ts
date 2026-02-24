@@ -19,6 +19,11 @@ export enum TransportMode {
   AIR = 'AIR'
 }
 
+export enum CargoType {
+  FCL = 'FCL',
+  LCL = 'LCL'
+}
+
 export enum OperationCategory {
   CATEGORY_1 = 'CATEGORY_1',
   CATEGORY_2 = 'CATEGORY_2',
@@ -31,17 +36,25 @@ export enum InspectionType {
   FISICA = 'FISICA'
 }
 
+export enum BlType {
+  SIMPLE = 'SIMPLE',
+  CONSOLIDATED = 'CONSOLIDATED'
+}
+
 export interface Operation {
   id: number;
   referenceNumber: string;
   clientId: number;
   clientName: string;
   transportMode: TransportMode;
+  cargoType?: CargoType | null;
   operationCategory: OperationCategory;
   status: OperationStatus;
   assignedAgentId: number | null;
   assignedAgentName: string | null;
   blNumber: string | null;
+  blType?: BlType | null;
+  childBlNumber?: string | null;
   containerNumber: string | null;
   estimatedArrival: string | null;
   blOriginalAvailable: boolean;
@@ -58,9 +71,12 @@ export interface Operation {
 export interface CreateOperationRequest {
   clientId: number;
   transportMode: TransportMode;
+  cargoType?: CargoType;
   operationCategory: OperationCategory;
   assignedAgentId?: number;
   blNumber?: string;
+  blType?: BlType;
+  childBlNumber?: string;
   containerNumber?: string;
   estimatedArrival?: string;
   blOriginalAvailable?: boolean;

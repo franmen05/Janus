@@ -60,9 +60,9 @@
     "SELECT_CLIENT": "Seleccionar cliente...",
     "TRANSPORT_MODE": "Modo de Transporte",
     "OPERATION_CATEGORY": "Categoría de Operación",
-    "BL_NUMBER": "Número de BL",
+    "BL_NUMBER": "House BL",
     "CONTAINER_NUMBER": "Número de Contenedor",
-    "CONTAINER_NUMBER_REQUIRED": "El número de contenedor es obligatorio para operaciones marítimas",
+    "CONTAINER_NUMBER_REQUIRED": "El número de contenedor es obligatorio para operaciones marítimas FCL",
     "ESTIMATED_ARRIVAL": "Llegada Estimada",
     "BL_ORIGINAL_AVAILABLE": "BL Original Disponible",
     "BL_ORIGINAL_WARNING": "El conocimiento de embarque original no está disponible. Esto puede retrasar el procesamiento aduanero.",
@@ -80,7 +80,11 @@
     "SELECT_BL_ORIGINAL": "Seleccionar...",
     "IMMUTABLE": "Esta operación no puede ser modificada (cerrada/cancelada)",
     "INSPECTION_TYPE": "Tipo de Inspección",
-    "INCOTERM": "Incoterm"
+    "INCOTERM": "Incoterm",
+    "CARGO_TYPE": "Tipo de Carga",
+    "BL_TYPE": "Tipo de BL",
+    "CHILD_BL_NUMBER": "BL Hijo",
+    "CHILD_BL_REQUIRED": "El BL Hijo es obligatorio para BL consolidado"
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
@@ -194,7 +198,9 @@
     "MISSING_CRITICAL_DOCUMENT": "Doc Faltante",
     "BL_UNAVAILABLE": "BL No Disponible",
     "ACTIVE": "Activa",
-    "ACKNOWLEDGED": "Reconocida"
+    "ACKNOWLEDGED": "Reconocida",
+    "FCL": "FCL",
+    "LCL": "LCL"
   },
   "PROGRESS": {
     "DRAFT": "Borrador",
@@ -213,6 +219,14 @@
     "PACKING_LIST": "Lista de Empaque",
     "CERTIFICATE": "Certificado",
     "OTHER": "Otro"
+  },
+  "CARGO_TYPES": {
+    "FCL": "FCL (Contenedor Completo)",
+    "LCL": "LCL (Carga Consolidada)"
+  },
+  "BL_TYPES": {
+    "SIMPLE": "Simple",
+    "CONSOLIDATED": "Consolidado"
   },
   "TRANSPORT_MODES": {
     "MARITIME": "Barco",
@@ -245,7 +259,9 @@
     "EXECUTE": "Ejecutar",
     "RESOLVE": "Resolver",
     "SAVE": "Guardar",
-    "CLOSE": "Cerrar"
+    "CLOSE": "Cerrar",
+    "MARK_BL_AVAILABLE": "Marcar BL como disponible",
+    "MARK_BL_UNAVAILABLE": "Marcar BL como no disponible"
   },
   "COMMON": {
     "ARE_YOU_SURE": "¿Está seguro?",
@@ -411,7 +427,8 @@
     "PHYSICAL_ALL_DOCS_VALIDATED": "Todos los documentos deben estar VALIDADOS antes de la Revisión de Valoración para inspección Física",
     "HIGH_VALUE_CERT_REQUIRED": "Las operaciones marítimas requieren un documento de Certificado",
     "INVOICE_NOT_VALIDATED": "La Factura Comercial debe estar VALIDADA antes de la Declaración en Proceso",
-    "INSPECTION_TYPE_REQUIRED": "El tipo de inspección debe ser establecido antes de avanzar a Revisión de Valoración"
+    "INSPECTION_TYPE_REQUIRED": "El tipo de inspección debe ser establecido antes de avanzar a Revisión de Valoración",
+    "BL_ORIGINAL_NOT_AVAILABLE": "El BL Original debe estar disponible para avanzar"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Tipo de Inspección",
