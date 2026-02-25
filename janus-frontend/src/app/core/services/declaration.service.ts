@@ -22,6 +22,10 @@ export class DeclarationService {
     return this.http.get<Declaration>(`${this.apiUrl}/api/operations/${operationId}/declarations/${id}`);
   }
 
+  updateDeclaration(operationId: number, declarationId: number, request: CreateDeclarationRequest): Observable<Declaration> {
+    return this.http.put<Declaration>(`${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}`, request);
+  }
+
   createPreliminary(operationId: number, request: CreateDeclarationRequest): Observable<Declaration> {
     return this.http.post<Declaration>(`${this.apiUrl}/api/operations/${operationId}/declarations/preliminary`, request);
   }

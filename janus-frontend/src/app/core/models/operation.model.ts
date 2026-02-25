@@ -8,6 +8,7 @@ export enum OperationStatus {
   DECLARATION_IN_PROGRESS = 'DECLARATION_IN_PROGRESS',
   SUBMITTED_TO_CUSTOMS = 'SUBMITTED_TO_CUSTOMS',
   VALUATION_REVIEW = 'VALUATION_REVIEW',
+  PENDING_EXTERNAL_APPROVAL = 'PENDING_EXTERNAL_APPROVAL',
   PAYMENT_PREPARATION = 'PAYMENT_PREPARATION',
   IN_TRANSIT = 'IN_TRANSIT',
   CLOSED = 'CLOSED',
@@ -41,6 +42,12 @@ export enum BlType {
   CONSOLIDATED = 'CONSOLIDATED'
 }
 
+export enum BlAvailability {
+  ORIGINAL = 'ORIGINAL',
+  ENDORSED = 'ENDORSED',
+  NOT_AVAILABLE = 'NOT_AVAILABLE'
+}
+
 export interface Operation {
   id: number;
   referenceNumber: string;
@@ -57,6 +64,7 @@ export interface Operation {
   childBlNumber?: string | null;
   containerNumber: string | null;
   estimatedArrival: string | null;
+  blAvailability: BlAvailability;
   blOriginalAvailable: boolean;
   notes: string | null;
   deadline: string | null;
@@ -64,6 +72,8 @@ export interface Operation {
   inspectionType?: InspectionType | null;
   inspectionSetAt?: string | null;
   incoterm?: string | null;
+  localChargesValidated?: boolean;
+  valuationFinalizedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -79,7 +89,7 @@ export interface CreateOperationRequest {
   childBlNumber?: string;
   containerNumber?: string;
   estimatedArrival?: string;
-  blOriginalAvailable?: boolean;
+  blAvailability: BlAvailability;
   notes?: string;
   deadline?: string;
   incoterm?: string;

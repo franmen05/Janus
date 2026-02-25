@@ -62,6 +62,18 @@ class OperationResourceTest {
                 .statusCode(200);
     }
 
+    private static void completeGattForm(Long operationId) {
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"commercialLinks": false, "commissions": 0, "unrecordedTransport": 0, "adjustmentAmount": 0, "justification": "Test"}
+                        """)
+                .when().put("/api/operations/{opId}/valuation/gatt-form", operationId)
+                .then()
+                .statusCode(200);
+    }
+
     private static void setupDeclarationWithApprovals(Long operationId) {
         var declId = given()
                 .auth().basic("admin", "admin123")
@@ -121,7 +133,7 @@ class OperationResourceTest {
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -135,7 +147,7 @@ class OperationResourceTest {
                 .auth().basic("accounting", "acc123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -151,7 +163,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true, "notes": "Test operation"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL", "notes": "Test operation"}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -195,7 +207,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_3", "blNumber": "BL-TEST-001", "blOriginalAvailable": true, "notes": "Updated notes"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_3", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL", "notes": "Updated notes"}
                         """)
                 .when().put("/api/operations/{id}", createdOperationId)
                 .then()
@@ -236,7 +248,7 @@ class OperationResourceTest {
                 .auth().basic("agent", "agent123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 2, "transportMode": "AIR", "operationCategory": "CATEGORY_2", "blNumber": "BL-TEST-002", "blOriginalAvailable": true}
+                        {"clientId": 2, "transportMode": "AIR", "operationCategory": "CATEGORY_2", "blNumber": "BL-TEST-002", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -306,7 +318,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -339,6 +351,10 @@ class OperationResourceTest {
             if ("VALUATION_REVIEW".equals(status)) {
                 setInspectionType(opId);
             }
+            // Complete GATT form before PAYMENT_PREPARATION (required when inspectionType is VISUAL)
+            if ("PAYMENT_PREPARATION".equals(status)) {
+                completeGattForm(opId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
@@ -367,7 +383,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-CLOSED", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-CLOSED", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -390,6 +406,10 @@ class OperationResourceTest {
             if ("VALUATION_REVIEW".equals(status)) {
                 setInspectionType(opId);
             }
+            // Complete GATT form before PAYMENT_PREPARATION (required when inspectionType is VISUAL)
+            if ("PAYMENT_PREPARATION".equals(status)) {
+                completeGattForm(opId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
@@ -405,7 +425,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-UPDATED", "blOriginalAvailable": true, "notes": "Should not work"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-UPDATED", "blAvailability": "ORIGINAL", "notes": "Should not work"}
                         """)
                 .when().put("/api/operations/{id}", opId)
                 .then()
@@ -422,7 +442,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then()

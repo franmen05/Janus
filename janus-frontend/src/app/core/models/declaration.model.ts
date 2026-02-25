@@ -35,6 +35,13 @@ export interface Declaration {
   freightValue: number;
   insuranceValue: number;
   gattMethod: string;
+  gattCommercialLinks: boolean | null;
+  gattCommissions: number | null;
+  gattUnrecordedTransport: number | null;
+  gattAdjustmentAmount: number | null;
+  gattJustification: string | null;
+  gattCompletedAt: string | null;
+  gattCompletedBy: string | null;
   notes: string | null;
   submittedAt: string | null;
   createdAt: string;

@@ -35,7 +35,7 @@ class DocumentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -201,6 +201,18 @@ class DocumentResourceTest {
                 .statusCode(201);
     }
 
+    private static void completeGattForm(Long opId) {
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"commercialLinks": false, "commissions": 0, "unrecordedTransport": 0, "adjustmentAmount": 0, "justification": "Test"}
+                        """)
+                .when().put("/api/operations/{opId}/valuation/gatt-form", opId)
+                .then()
+                .statusCode(200);
+    }
+
     private static void setupDeclarationWithApprovals(Long opId) {
         // Create a preliminary declaration
         var declId = given()
@@ -242,7 +254,7 @@ class DocumentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -264,6 +276,9 @@ class DocumentResourceTest {
         for (var status : transitions) {
             if ("VALUATION_REVIEW".equals(status)) {
                 setInspectionType(closedOperationId);
+            }
+            if ("PAYMENT_PREPARATION".equals(status)) {
+                completeGattForm(closedOperationId);
             }
             given()
                     .auth().basic("admin", "admin123")
@@ -298,7 +313,7 @@ class DocumentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -321,6 +336,9 @@ class DocumentResourceTest {
         for (var status : transitions) {
             if ("VALUATION_REVIEW".equals(status)) {
                 setInspectionType(opId);
+            }
+            if ("PAYMENT_PREPARATION".equals(status)) {
+                completeGattForm(opId);
             }
             given()
                     .auth().basic("admin", "admin123")
@@ -372,7 +390,7 @@ class DocumentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)

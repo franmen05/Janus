@@ -24,8 +24,10 @@ import { DeclarationListComponent } from '../../declarations/declaration-list/de
 import { CrossingResultComponent } from '../../declarations/crossing-result/crossing-result.component';
 import { OperationAlertsComponent } from '../../alerts/operation-alerts/operation-alerts.component';
 import { InspectionPanelComponent } from '../inspection-panel/inspection-panel.component';
+import { ValuationPanelComponent } from '../valuation-panel/valuation-panel.component';
 const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED'];
-const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
+const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
+const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 
 @Component({
   selector: 'app-operation-detail',
@@ -36,7 +38,7 @@ const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
     OperationStatusComponent, DocumentListComponent, StatusLabelPipe,
     OperationCommentsComponent,
     DeclarationListComponent, CrossingResultComponent, OperationAlertsComponent,
-    InspectionPanelComponent
+    InspectionPanelComponent, ValuationPanelComponent
   ],
   template: `
     @if (operation()) {
@@ -183,18 +185,19 @@ const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
                       @if (operation()!.deadline) {
                         <dt>{{ 'OPERATIONS.DEADLINE' | translate }}</dt><dd>{{ operation()!.deadline | date:'medium' }}</dd>
                       }
-                      <dt>{{ 'OPERATIONS.BL_ORIGINAL_AVAILABLE' | translate }}</dt>
+                      <dt>{{ 'OPERATIONS.BL_AVAILABILITY' | translate }}</dt>
                       <dd class="d-flex align-items-center gap-2">
-                        @if (operation()!.blOriginalAvailable) {
-                          <span class="badge bg-success">{{ 'COMMON.YES' | translate }}</span>
-                        } @else {
-                          <span class="badge bg-warning text-dark">{{ 'COMMON.NO' | translate }}</span>
-                        }
+                        <span class="badge" [ngClass]="operation()!.blAvailability === 'ORIGINAL' ? 'bg-success' : operation()!.blAvailability === 'ENDORSED' ? 'bg-info' : 'bg-warning text-dark'">
+                          {{ 'BL_AVAILABILITY.' + operation()!.blAvailability | translate }}
+                        </span>
                         @if (authService.hasRole(['ADMIN', 'AGENT']) && operation()!.status !== 'CLOSED' && operation()!.status !== 'CANCELLED') {
-                          <button class="btn btn-sm btn-outline-secondary py-0 px-1" (click)="toggleBlOriginalAvailable()" [title]="operation()!.blOriginalAvailable ? ('ACTIONS.MARK_BL_UNAVAILABLE' | translate) : ('ACTIONS.MARK_BL_AVAILABLE' | translate)">
-                            <i class="bi" [ngClass]="operation()!.blOriginalAvailable ? 'bi-toggle-on text-success' : 'bi-toggle-off'"></i>
-                            <small class="ms-1">{{ operation()!.blOriginalAvailable ? ('ACTIONS.MARK_BL_UNAVAILABLE' | translate) : ('ACTIONS.MARK_BL_AVAILABLE' | translate) }}</small>
-                          </button>
+                          <select class="form-select form-select-sm d-inline-block w-auto"
+                                  [value]="operation()!.blAvailability"
+                                  (change)="updateBlAvailability($event)">
+                            <option value="ORIGINAL">{{ 'BL_AVAILABILITY.ORIGINAL' | translate }}</option>
+                            <option value="ENDORSED">{{ 'BL_AVAILABILITY.ENDORSED' | translate }}</option>
+                            <option value="NOT_AVAILABLE">{{ 'BL_AVAILABILITY.NOT_AVAILABLE' | translate }}</option>
+                          </select>
                         }
                       </dd>
                     </dl>
@@ -260,6 +263,16 @@ const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
             </ng-template>
           </li>
         }
+        @if (isValuationVisible()) {
+          <li [ngbNavItem]="'valuation'">
+            <button ngbNavLink>{{ 'TABS.VALUATION' | translate }}</button>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <app-valuation-panel [operationId]="operation()!.id" [operation]="operation()" (changed)="reload()" />
+              </div>
+            </ng-template>
+          </li>
+        }
         <li [ngbNavItem]="'history'">
           <button ngbNavLink>{{ 'TABS.HISTORY' | translate }}</button>
           <ng-template ngbNavContent>
@@ -274,7 +287,7 @@ const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
             <div class="card mt-3">
               <div class="card-body p-0 table-responsive">
                 <table class="table table-sm mb-0">
-                  <thead class="table-light"><tr><th>{{ 'AUDIT.ACTION' | translate }}</th><th>{{ 'AUDIT.USER' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.ENTITY' | translate }}</th><th class="d-none d-md-table-cell">{{ 'AUDIT.IP' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.DETAILS' | translate }}</th><th>{{ 'AUDIT.DATE' | translate }}</th></tr></thead>
+                  <thead class="table-light"><tr><th>{{ 'AUDIT.ACTION' | translate }}</th><th>{{ 'AUDIT.USER' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.ENTITY' | translate }}</th><th class="d-none d-md-table-cell">{{ 'AUDIT.IP' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'AUDIT.DETAILS' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'AUDIT.CHANGES' | translate }}</th><th>{{ 'AUDIT.DATE' | translate }}</th></tr></thead>
                   <tbody>
                     @for (log of auditLogs(); track log.id) {
                       <tr>
@@ -289,6 +302,24 @@ const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
                         </td>
                         <td class="d-none d-md-table-cell"><small class="text-muted">{{ log.ipAddress ?? '-' }}</small></td>
                         <td class="d-none d-sm-table-cell"><small>{{ log.details }}</small></td>
+                        <td class="d-none d-lg-table-cell">
+                          @if (log.previousData || log.newData) {
+                            <small>
+                              @for (change of parseAuditChanges(log); track change.field) {
+                                <div>
+                                  <strong>{{ change.field }}:</strong>
+                                  @if (change.oldValue !== null) {
+                                    <span class="text-danger">{{ change.oldValue }}</span>
+                                    <i class="bi bi-arrow-right mx-1"></i>
+                                  }
+                                  <span class="text-success">{{ change.newValue }}</span>
+                                </div>
+                              }
+                            </small>
+                          } @else {
+                            <small class="text-muted">-</small>
+                          }
+                        </td>
                         <td>{{ log.createdAt | date:'medium' }}</td>
                       </tr>
                     }
@@ -331,6 +362,11 @@ export class OperationDetailComponent implements OnInit {
     const op = this.operation();
     if (!op) return false;
     return INSPECTION_VISIBLE_STATUSES.includes(op.status) || op.inspectionType != null;
+  });
+
+  isValuationVisible = computed(() => {
+    const op = this.operation();
+    return op !== null && VALUATION_VISIBLE_STATUSES.includes(op.status);
   });
 
   ngOnInit(): void {
@@ -380,11 +416,30 @@ export class OperationDetailComponent implements OnInit {
     this.declarationService.reject(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
   }
 
-  toggleBlOriginalAvailable(): void {
+  updateBlAvailability(event: Event): void {
     const op = this.operation();
     if (!op) return;
-    const newValue = !op.blOriginalAvailable;
-    this.operationService.toggleBlOriginalAvailable(op.id, newValue).subscribe(() => this.reload());
+    const value = (event.target as HTMLSelectElement).value;
+    this.operationService.updateBlAvailability(op.id, value).subscribe(() => this.reload());
+  }
+
+  parseAuditChanges(log: AuditLog): Array<{field: string; oldValue: string | null; newValue: string | null}> {
+    const changes: Array<{field: string; oldValue: string | null; newValue: string | null}> = [];
+    try {
+      const prev = log.previousData ? JSON.parse(log.previousData) : {};
+      const next = log.newData ? JSON.parse(log.newData) : {};
+      const allKeys = new Set([...Object.keys(prev), ...Object.keys(next)]);
+      for (const key of allKeys) {
+        changes.push({
+          field: key,
+          oldValue: prev[key] !== undefined ? String(prev[key]) : null,
+          newValue: next[key] !== undefined ? String(next[key]) : null
+        });
+      }
+    } catch {
+      // If parsing fails, return empty
+    }
+    return changes;
   }
 
   changeToStatus(newStatus: string): void {

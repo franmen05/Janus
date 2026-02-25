@@ -6,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
 import { Client } from '../../../core/models/client.model';
-import { TransportMode, OperationCategory, CargoType, BlType } from '../../../core/models/operation.model';
+import { TransportMode, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
 @Component({
@@ -81,16 +81,14 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                 @for (bt of blTypes; track bt) { <option [value]="bt">{{ 'BL_TYPES.' + bt | translate }}</option> }
               </select>
             </div>
-            @if (form.get('blType')!.value === 'CONSOLIDATED') {
-              <div class="col-md-4">
-                <label class="form-label">{{ 'OPERATIONS.CHILD_BL_NUMBER' | translate }}</label>
-                <input type="text" class="form-control" formControlName="childBlNumber"
-                       [class.is-invalid]="form.get('childBlNumber')!.invalid && form.get('childBlNumber')!.touched">
-                @if (form.get('childBlNumber')!.hasError('required') && form.get('childBlNumber')!.touched) {
-                  <div class="invalid-feedback">{{ 'OPERATIONS.CHILD_BL_REQUIRED' | translate }}</div>
-                }
-              </div>
-            }
+            <div class="col-md-4">
+              <label class="form-label">{{ 'OPERATIONS.CHILD_BL_NUMBER' | translate }}</label>
+              <input type="text" class="form-control" formControlName="childBlNumber"
+                     [class.is-invalid]="form.get('childBlNumber')!.invalid && form.get('childBlNumber')!.touched">
+              @if (form.get('childBlNumber')!.hasError('required') && form.get('childBlNumber')!.touched) {
+                <div class="invalid-feedback">{{ 'OPERATIONS.CHILD_BL_REQUIRED' | translate }}</div>
+              }
+            </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
@@ -111,21 +109,22 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.BL_ORIGINAL_AVAILABLE' | translate }}</label>
-              <select class="form-select" formControlName="blOriginalAvailable"
-                      [class.is-invalid]="form.get('blOriginalAvailable')!.invalid && form.get('blOriginalAvailable')!.touched">
-                <option value="">{{ 'OPERATIONS.SELECT_BL_ORIGINAL' | translate }}</option>
-                <option value="true">{{ 'COMMON.YES' | translate }}</option>
-                <option value="false">{{ 'COMMON.NO' | translate }}</option>
+              <label class="form-label">{{ 'OPERATIONS.BL_AVAILABILITY' | translate }}</label>
+              <select class="form-select" formControlName="blAvailability"
+                      [class.is-invalid]="form.get('blAvailability')!.invalid && form.get('blAvailability')!.touched">
+                <option value="">{{ 'OPERATIONS.SELECT_BL_AVAILABILITY' | translate }}</option>
+                <option value="ORIGINAL">{{ 'BL_AVAILABILITY.ORIGINAL' | translate }}</option>
+                <option value="ENDORSED">{{ 'BL_AVAILABILITY.ENDORSED' | translate }}</option>
+                <option value="NOT_AVAILABLE">{{ 'BL_AVAILABILITY.NOT_AVAILABLE' | translate }}</option>
               </select>
-              @if (form.get('blOriginalAvailable')!.hasError('required') && form.get('blOriginalAvailable')!.touched) {
-                <div class="invalid-feedback">{{ 'OPERATIONS.BL_ORIGINAL_REQUIRED' | translate }}</div>
+              @if (form.get('blAvailability')!.hasError('required') && form.get('blAvailability')!.touched) {
+                <div class="invalid-feedback">{{ 'OPERATIONS.BL_AVAILABILITY_REQUIRED' | translate }}</div>
               }
             </div>
           </div>
-          @if (form.get('blOriginalAvailable')!.value === 'false') {
+          @if (form.get('blAvailability')!.value === 'NOT_AVAILABLE') {
             <div class="alert alert-warning mt-2 py-2">
-              <small><i class="bi bi-exclamation-triangle me-1"></i>{{ 'OPERATIONS.BL_ORIGINAL_WARNING' | translate }}</small>
+              <small><i class="bi bi-exclamation-triangle me-1"></i>{{ 'OPERATIONS.BL_NOT_AVAILABLE_WARNING' | translate }}</small>
             </div>
           }
           <div class="mb-3">
@@ -166,7 +165,7 @@ export class OperationFormComponent implements OnInit {
     childBlNumber: new FormControl('', { nonNullable: true }),
     containerNumber: new FormControl('', { nonNullable: true }),
     estimatedArrival: new FormControl('', { nonNullable: true }),
-    blOriginalAvailable: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    blAvailability: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     notes: new FormControl('', { nonNullable: true }),
     deadline: new FormControl('', { nonNullable: true }),
     incoterm: new FormControl('', { nonNullable: true })
@@ -210,7 +209,7 @@ export class OperationFormComponent implements OnInit {
           childBlNumber: op.childBlNumber ?? '',
           containerNumber: op.containerNumber ?? '',
           estimatedArrival: op.estimatedArrival ?? '',
-          blOriginalAvailable: op.blOriginalAvailable ? 'true' : 'false',
+          blAvailability: op.blAvailability ?? '',
           notes: op.notes ?? '',
           deadline: op.deadline ?? '',
           incoterm: op.incoterm ?? ''
@@ -237,10 +236,12 @@ export class OperationFormComponent implements OnInit {
     if (blType === BlType.CONSOLIDATED) {
       childBlControl.setValidators([Validators.required]);
       childBlControl.enable();
+    } else if (blType === BlType.SIMPLE) {
+      childBlControl.clearValidators();
+      childBlControl.disable();
     } else {
       childBlControl.clearValidators();
-      childBlControl.setValue('');
-      childBlControl.disable();
+      childBlControl.enable();
     }
     childBlControl.updateValueAndValidity();
   }
@@ -258,7 +259,7 @@ export class OperationFormComponent implements OnInit {
       childBlNumber: val.blType === BlType.CONSOLIDATED ? (val.childBlNumber || undefined) : undefined,
       containerNumber: val.containerNumber || undefined,
       estimatedArrival: val.estimatedArrival || undefined,
-      blOriginalAvailable: val.blOriginalAvailable === 'true',
+      blAvailability: val.blAvailability as BlAvailability,
       notes: val.notes || undefined,
       deadline: val.deadline || undefined,
       incoterm: val.incoterm || undefined

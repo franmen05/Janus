@@ -20,7 +20,7 @@ describe('OperationListComponent', () => {
       id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
       transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
       status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
-      blNumber: null, containerNumber: 'CONT-001', estimatedArrival: null, blOriginalAvailable: false,
+      blNumber: null, containerNumber: 'CONT-001', estimatedArrival: null, blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,
       notes: null, deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     }
   ];

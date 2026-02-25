@@ -5,5 +5,7 @@ public enum DocumentType {
     COMMERCIAL_INVOICE,
     PACKING_LIST,
     CERTIFICATE,
+    PERMIT_CERTIFICATE,
+    LOCAL_CHARGES_RECEIPT,
     OTHER
 }

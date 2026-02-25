@@ -77,6 +77,7 @@ public class DeclarationService {
 
         declaration.operation = operation;
         declaration.declarationType = type;
+        declaration.taxableBase = declaration.cifValue;
         declaration.submittedAt = LocalDateTime.now();
         declarationRepository.persist(declaration);
 
@@ -91,6 +92,28 @@ public class DeclarationService {
     public List<Declaration> findByOperationId(Long operationId) {
         operationService.findById(operationId);
         return declarationRepository.findByOperationId(operationId);
+    }
+
+    @Transactional
+    public Declaration updateDeclaration(Long operationId, Long declarationId, Declaration updated, String username) {
+        var declaration = findById(operationId, declarationId);
+
+        declaration.declarationNumber = updated.declarationNumber;
+        declaration.fobValue = updated.fobValue;
+        declaration.cifValue = updated.cifValue;
+        declaration.taxableBase = updated.cifValue; // taxableBase always equals cifValue
+        declaration.totalTaxes = updated.totalTaxes;
+        declaration.freightValue = updated.freightValue;
+        declaration.insuranceValue = updated.insuranceValue;
+        declaration.gattMethod = updated.gattMethod;
+        declaration.notes = updated.notes;
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.UPDATE, "Declaration", declarationId, operationId,
+                null, null, "Declaration updated: " + declaration.declarationNumber
+        ));
+
+        return declaration;
     }
 
     public Declaration findById(Long operationId, Long declarationId) {

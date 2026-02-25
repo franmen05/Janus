@@ -87,6 +87,9 @@ public class DataSeeder {
         createConfig("INTERNAL_REVIEW_COMPLETE", "enabled", "true", "Enable internal review completeness check");
         createConfig("PRELIQUIDATION_APPROVED", "enabled", "true", "Enable preliquidation approval gate");
         createConfig("INSPECTION_TYPE_REQUIRED", "enabled", "true", "Enable inspection type required rule");
+        createConfig("GATT_FORM_REQUIRED", "enabled", "true", "Enable GATT form required rule for VISUAL/FISICA inspections");
+        createConfig("EXTERNAL_PERMITS_CLEARED", "enabled", "true", "Enable external permits cleared rule");
+        createConfig("LOCAL_CHARGES_VALIDATED", "enabled", "true", "Enable local charges validated rule");
     }
 
     private void createConfig(String ruleCode, String paramKey, String paramValue, String description) {

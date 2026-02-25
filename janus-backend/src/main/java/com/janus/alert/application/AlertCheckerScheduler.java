@@ -108,7 +108,7 @@ public class AlertCheckerScheduler {
         for (var status : reviewStatuses) {
             var operations = operationRepository.findByStatus(status);
             for (var op : operations) {
-                if (op.blOriginalAvailable == null || !op.blOriginalAvailable) {
+                if (op.blAvailability == null || op.blAvailability == com.janus.operation.domain.model.BlAvailability.NOT_AVAILABLE) {
                     alertService.createAlert(op, AlertType.BL_UNAVAILABLE,
                             "Operation " + op.referenceNumber + " does not have original BL available");
                 }

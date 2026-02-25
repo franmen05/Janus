@@ -25,21 +25,21 @@ describe('DashboardComponent', () => {
       id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
       transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
       status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
-      blNumber: null, containerNumber: 'CONT-001', estimatedArrival: null, blOriginalAvailable: false,
+      blNumber: null, containerNumber: 'CONT-001', estimatedArrival: null, blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,
       notes: null, deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     },
     {
       id: 2, referenceNumber: 'OP-002', clientId: 2, clientName: 'Client B',
       transportMode: TransportMode.AIR, operationCategory: OperationCategory.CATEGORY_2,
       status: OperationStatus.CLOSED, assignedAgentId: null, assignedAgentName: null,
-      blNumber: null, containerNumber: null, estimatedArrival: null, blOriginalAvailable: true,
+      blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: 'ORIGINAL' as any, blOriginalAvailable: true,
       notes: null, deadline: null, closedAt: '2024-01-10', createdAt: '2024-01-02', updatedAt: '2024-01-10'
     },
     {
       id: 3, referenceNumber: 'OP-003', clientId: 1, clientName: 'Client A',
       transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_3,
       status: OperationStatus.CANCELLED, assignedAgentId: null, assignedAgentName: null,
-      blNumber: null, containerNumber: null, estimatedArrival: null, blOriginalAvailable: false,
+      blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,
       notes: null, deadline: null, closedAt: null, createdAt: '2024-01-03', updatedAt: '2024-01-03'
     }
   ];

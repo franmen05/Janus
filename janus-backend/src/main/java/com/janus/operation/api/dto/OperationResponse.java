@@ -1,5 +1,6 @@
 package com.janus.operation.api.dto;
 
+import com.janus.operation.domain.model.BlAvailability;
 import com.janus.operation.domain.model.BlType;
 import com.janus.operation.domain.model.CargoType;
 import com.janus.operation.domain.model.InspectionType;
@@ -23,6 +24,7 @@ public record OperationResponse(
         String blNumber,
         String containerNumber,
         LocalDateTime estimatedArrival,
+        BlAvailability blAvailability,
         Boolean blOriginalAvailable,
         String notes,
         LocalDateTime deadline,
@@ -32,6 +34,8 @@ public record OperationResponse(
         String incoterm,
         BlType blType,
         String childBlNumber,
+        Boolean localChargesValidated,
+        LocalDateTime valuationFinalizedAt,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -50,7 +54,8 @@ public record OperationResponse(
                 op.blNumber,
                 op.containerNumber,
                 op.estimatedArrival,
-                op.blOriginalAvailable,
+                op.blAvailability,
+                op.blAvailability != BlAvailability.NOT_AVAILABLE,
                 op.notes,
                 op.deadline,
                 op.closedAt,
@@ -59,6 +64,8 @@ public record OperationResponse(
                 op.incoterm,
                 op.blType,
                 op.childBlNumber,
+                op.localChargesValidated,
+                op.valuationFinalizedAt,
                 op.createdAt,
                 op.updatedAt
         );

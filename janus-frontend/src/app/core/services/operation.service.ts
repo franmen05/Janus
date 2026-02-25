@@ -45,8 +45,8 @@ export class OperationService {
     return this.http.get<CompletenessResponse>(`${this.apiUrl}/${id}/documents/completeness`);
   }
 
-  toggleBlOriginalAvailable(id: number, value: boolean): Observable<Operation> {
-    return this.http.patch<Operation>(`${this.apiUrl}/${id}/bl-original-available`, { blOriginalAvailable: value });
+  updateBlAvailability(id: number, value: string): Observable<Operation> {
+    return this.http.patch<Operation>(`${this.apiUrl}/${id}/bl-availability`, { blAvailability: value });
   }
 
   getAllowedTransitions(id: number): Observable<string[]> {

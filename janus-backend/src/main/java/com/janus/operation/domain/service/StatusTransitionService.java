@@ -18,7 +18,8 @@ public class StatusTransitionService {
             OperationStatus.ANALYST_ASSIGNED,
             OperationStatus.DECLARATION_IN_PROGRESS,
             OperationStatus.SUBMITTED_TO_CUSTOMS,
-            OperationStatus.VALUATION_REVIEW
+            OperationStatus.VALUATION_REVIEW,
+            OperationStatus.PENDING_EXTERNAL_APPROVAL
     );
 
     private static final Set<OperationStatus> INTERNAL_REVIEW_STATUSES = Set.of(
@@ -37,7 +38,8 @@ public class StatusTransitionService {
             Map.entry(OperationStatus.ANALYST_ASSIGNED, Set.of(OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.DECLARATION_IN_PROGRESS, Set.of(OperationStatus.SUBMITTED_TO_CUSTOMS, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.SUBMITTED_TO_CUSTOMS, Set.of(OperationStatus.VALUATION_REVIEW, OperationStatus.CANCELLED)),
-            Map.entry(OperationStatus.VALUATION_REVIEW, Set.of(OperationStatus.PAYMENT_PREPARATION, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.VALUATION_REVIEW, Set.of(OperationStatus.PENDING_EXTERNAL_APPROVAL, OperationStatus.PAYMENT_PREPARATION, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.PENDING_EXTERNAL_APPROVAL, Set.of(OperationStatus.VALUATION_REVIEW, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.PAYMENT_PREPARATION, Set.of(OperationStatus.IN_TRANSIT, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.IN_TRANSIT, Set.of(OperationStatus.CLOSED, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.CLOSED, Set.of()),

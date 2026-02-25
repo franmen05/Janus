@@ -4,6 +4,7 @@ import com.janus.compliance.domain.model.ValidationResult;
 import com.janus.compliance.domain.service.ComplianceRule;
 import com.janus.document.domain.model.Document;
 import com.janus.document.domain.service.DocumentCompletenessService;
+import com.janus.operation.domain.model.BlAvailability;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.OperationStatus;
@@ -44,11 +45,11 @@ public class InternalReviewCompleteRule implements ComplianceRule {
             }
         }
 
-        // Check BL original is available
-        if (operation.blOriginalAvailable == null || !operation.blOriginalAvailable) {
+        // Check BL availability
+        if (operation.blAvailability == null || operation.blAvailability == BlAvailability.NOT_AVAILABLE) {
             errors.add(new ValidationResult.ValidationError(
                     "BL_ORIGINAL_NOT_AVAILABLE",
-                    "Original BL must be available to proceed to preliquidation review"
+                    "BL must be available (ORIGINAL or ENDORSED) to proceed to preliquidation review"
             ));
         }
 

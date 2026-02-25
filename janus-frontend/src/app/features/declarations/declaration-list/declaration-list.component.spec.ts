@@ -18,7 +18,9 @@ describe('DeclarationListComponent', () => {
     id: 1, operationId: 1, declarationType: DeclarationType.PRELIMINARY,
     declarationNumber: 'DECL-001', fobValue: 1000, cifValue: 1200,
     taxableBase: 1200, totalTaxes: 180, freightValue: 150, insuranceValue: 50,
-    gattMethod: 'Method 1', notes: null, submittedAt: null, createdAt: '2024-01-01T00:00:00',
+    gattMethod: 'Method 1', gattCommercialLinks: null, gattCommissions: null, gattUnrecordedTransport: null,
+    gattAdjustmentAmount: null, gattJustification: null, gattCompletedAt: null, gattCompletedBy: null,
+    notes: null, submittedAt: null, createdAt: '2024-01-01T00:00:00',
     technicalApprovedBy: null, technicalApprovedAt: null, technicalApprovalComment: null,
     finalApprovedBy: null, finalApprovedAt: null, finalApprovalComment: null,
     rejectedBy: null, rejectedAt: null, rejectionComment: null

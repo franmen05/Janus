@@ -80,6 +80,9 @@ export class ProgressBarComponent {
     if (REVIEW_STATUSES.includes(s)) {
       return this.steps.findIndex(step => step.key === 'IN_REVIEW');
     }
+    if (s === 'PENDING_EXTERNAL_APPROVAL') {
+      return this.steps.findIndex(step => step.key === 'VALUATION_REVIEW');
+    }
     const idx = this.steps.findIndex(step => step.key === s);
     return idx >= 0 ? idx : 0;
   });

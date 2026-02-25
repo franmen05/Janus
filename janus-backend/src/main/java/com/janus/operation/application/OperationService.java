@@ -6,6 +6,7 @@ import com.janus.client.domain.repository.ClientRepository;
 import com.janus.notification.application.NotificationService;
 import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.api.dto.CreateOperationRequest;
+import com.janus.operation.domain.model.BlAvailability;
 import com.janus.operation.domain.model.BlType;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
@@ -101,7 +102,7 @@ public class OperationService {
         op.blNumber = request.blNumber();
         op.containerNumber = request.containerNumber();
         op.estimatedArrival = request.estimatedArrival();
-        op.blOriginalAvailable = request.blOriginalAvailable();
+        op.blAvailability = request.blAvailability();
         op.notes = request.notes();
         op.deadline = request.deadline();
         op.incoterm = request.incoterm();
@@ -177,6 +178,7 @@ public class OperationService {
         var previousData = JsonUtil.toJson(Map.of(
                 "transportMode", op.transportMode.name(),
                 "operationCategory", op.operationCategory.name(),
+                "blAvailability", op.blAvailability != null ? op.blAvailability.name() : "",
                 "notes", op.notes != null ? op.notes : ""
         ));
 
@@ -188,7 +190,7 @@ public class OperationService {
         op.blNumber = request.blNumber();
         op.containerNumber = request.containerNumber();
         op.estimatedArrival = request.estimatedArrival();
-        op.blOriginalAvailable = request.blOriginalAvailable();
+        op.blAvailability = request.blAvailability();
         op.notes = request.notes();
         op.deadline = request.deadline();
         op.incoterm = request.incoterm();
@@ -209,6 +211,7 @@ public class OperationService {
         var newData = JsonUtil.toJson(Map.of(
                 "transportMode", op.transportMode.name(),
                 "operationCategory", op.operationCategory.name(),
+                "blAvailability", op.blAvailability != null ? op.blAvailability.name() : "",
                 "notes", op.notes != null ? op.notes : ""
         ));
 
@@ -221,15 +224,16 @@ public class OperationService {
     }
 
     @Transactional
-    public Operation toggleBlOriginalAvailable(Long id, boolean value, String username) {
+    public Operation updateBlAvailability(Long id, BlAvailability value, String username) {
         var op = findById(id);
-        op.blOriginalAvailable = value;
+        var previousValue = op.blAvailability;
+        op.blAvailability = value;
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "Operation", op.id, op.id,
-                JsonUtil.toJson(Map.of("blOriginalAvailable", String.valueOf(!value))),
-                JsonUtil.toJson(Map.of("blOriginalAvailable", String.valueOf(value))),
-                "BL original available toggled to " + value
+                JsonUtil.toJson(Map.of("blAvailability", previousValue != null ? previousValue.name() : "NOT_AVAILABLE")),
+                JsonUtil.toJson(Map.of("blAvailability", value.name())),
+                "BL availability changed to " + value
         ));
 
         // Force initialization of lazy associations for DTO mapping

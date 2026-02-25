@@ -116,13 +116,13 @@ public class OperationResource {
     }
 
     @PATCH
-    @Path("/{id}/bl-original-available")
+    @Path("/{id}/bl-availability")
     @RolesAllowed({"ADMIN", "AGENT"})
-    public OperationResponse toggleBlOriginalAvailable(@PathParam("id") Long id,
-                                                        @Valid com.janus.operation.api.dto.BlOriginalAvailableRequest body,
-                                                        @Context SecurityContext sec) {
-        var value = body.blOriginalAvailable();
-        var op = operationService.toggleBlOriginalAvailable(id, value, sec.getUserPrincipal().getName());
+    public OperationResponse updateBlAvailability(@PathParam("id") Long id,
+                                                   @Valid com.janus.operation.api.dto.BlOriginalAvailableRequest body,
+                                                   @Context SecurityContext sec) {
+        var value = body.blAvailability();
+        var op = operationService.updateBlAvailability(id, value, sec.getUserPrincipal().getName());
         return OperationResponse.from(op);
     }
 

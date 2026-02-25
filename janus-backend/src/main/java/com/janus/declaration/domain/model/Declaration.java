@@ -47,6 +47,27 @@ public class Declaration extends BaseEntity {
     @Column(name = "gatt_method")
     public String gattMethod;
 
+    @Column(name = "gatt_commercial_links")
+    public Boolean gattCommercialLinks;
+
+    @Column(name = "gatt_commissions", precision = 15, scale = 2)
+    public BigDecimal gattCommissions;
+
+    @Column(name = "gatt_unrecorded_transport", precision = 15, scale = 2)
+    public BigDecimal gattUnrecordedTransport;
+
+    @Column(name = "gatt_adjustment_amount", precision = 15, scale = 2)
+    public BigDecimal gattAdjustmentAmount;
+
+    @Column(name = "gatt_justification", columnDefinition = "TEXT")
+    public String gattJustification;
+
+    @Column(name = "gatt_completed_at")
+    public LocalDateTime gattCompletedAt;
+
+    @Column(name = "gatt_completed_by")
+    public String gattCompletedBy;
+
     @Column(columnDefinition = "TEXT")
     public String notes;
 

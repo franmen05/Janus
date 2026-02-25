@@ -1,5 +1,6 @@
 package com.janus.operation.api.dto;
 
+import com.janus.operation.domain.model.BlAvailability;
 import com.janus.operation.domain.model.BlType;
 import com.janus.operation.domain.model.CargoType;
 import com.janus.operation.domain.model.OperationCategory;
@@ -16,7 +17,7 @@ public record CreateOperationRequest(
         @NotNull @NotBlank String blNumber,
         String containerNumber,
         java.time.LocalDateTime estimatedArrival,
-        @NotNull Boolean blOriginalAvailable,
+        @NotNull BlAvailability blAvailability,
         String notes,
         java.time.LocalDateTime deadline,
         String incoterm,

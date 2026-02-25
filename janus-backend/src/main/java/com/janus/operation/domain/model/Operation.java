@@ -50,8 +50,9 @@ public class Operation extends BaseEntity {
     @Column(name = "estimated_arrival")
     public LocalDateTime estimatedArrival;
 
-    @Column(name = "bl_original_available")
-    public Boolean blOriginalAvailable = false;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "bl_availability")
+    public BlAvailability blAvailability = BlAvailability.NOT_AVAILABLE;
 
     @Column(columnDefinition = "TEXT")
     public String notes;
@@ -77,4 +78,10 @@ public class Operation extends BaseEntity {
 
     @Column(name = "child_bl_number")
     public String childBlNumber;
+
+    @Column(name = "local_charges_validated")
+    public Boolean localChargesValidated = false;
+
+    @Column(name = "valuation_finalized_at")
+    public LocalDateTime valuationFinalizedAt;
 }

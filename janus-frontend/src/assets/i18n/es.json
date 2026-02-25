@@ -84,7 +84,11 @@
     "CARGO_TYPE": "Tipo de Carga",
     "BL_TYPE": "Tipo de BL",
     "CHILD_BL_NUMBER": "BL Hijo",
-    "CHILD_BL_REQUIRED": "El BL Hijo es obligatorio para BL consolidado"
+    "CHILD_BL_REQUIRED": "El BL Hijo es obligatorio para BL consolidado",
+    "BL_AVAILABILITY": "Disponibilidad BL",
+    "SELECT_BL_AVAILABILITY": "Seleccione disponibilidad BL...",
+    "BL_AVAILABILITY_REQUIRED": "La disponibilidad del BL es requerida",
+    "BL_NOT_AVAILABLE_WARNING": "El BL no est\u00e1 disponible. Esto debe resolverse antes de la valoraci\u00f3n."
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
@@ -133,7 +137,8 @@
     "ID": "ID",
     "DETAILS": "Detalles",
     "IP": "IP",
-    "NO_LOGS": "No se encontraron registros de auditoría"
+    "NO_LOGS": "No se encontraron registros de auditoría",
+    "CHANGES": "Cambios"
   },
   "TABS": {
     "INFO": "Info",
@@ -143,7 +148,8 @@
     "DECLARATIONS": "Declaraciones",
     "HISTORY": "Historial",
     "AUDIT": "Auditoría",
-    "INSPECTION": "Inspección"
+    "INSPECTION": "Inspección",
+    "VALUATION": "Valoración"
   },
   "STATUS": {
     "DRAFT": "Borrador",
@@ -155,6 +161,7 @@
     "DECLARATION_IN_PROGRESS": "Declaración en Proceso",
     "SUBMITTED_TO_CUSTOMS": "Presentado a Aduanas",
     "VALUATION_REVIEW": "Revisión de Valoración",
+    "PENDING_EXTERNAL_APPROVAL": "Pendiente Aprobación Externa",
     "PAYMENT_PREPARATION": "Preparación de Pago",
     "IN_TRANSIT": "En Tránsito",
     "CLOSED": "Cerrado",
@@ -174,6 +181,7 @@
     "DECLARATION_IN_PROGRESS": "Declaración",
     "SUBMITTED_TO_CUSTOMS": "Presentado",
     "VALUATION_REVIEW": "Valoración",
+    "PENDING_EXTERNAL_APPROVAL": "Aprob. Ext.",
     "PAYMENT_PREPARATION": "Pago",
     "IN_TRANSIT": "En Tránsito",
     "CLOSED": "Cerrado",
@@ -218,11 +226,18 @@
     "COMMERCIAL_INVOICE": "Factura Comercial",
     "PACKING_LIST": "Lista de Empaque",
     "CERTIFICATE": "Certificado",
+    "PERMIT_CERTIFICATE": "Certificado de Permiso",
+    "LOCAL_CHARGES_RECEIPT": "Recibo de Cargos Locales",
     "OTHER": "Otro"
   },
   "CARGO_TYPES": {
     "FCL": "FCL (Contenedor Completo)",
     "LCL": "LCL (Carga Consolidada)"
+  },
+  "BL_AVAILABILITY": {
+    "ORIGINAL": "Original en f\u00edsico",
+    "ENDORSED": "Endoso registrado",
+    "NOT_AVAILABLE": "No disponible"
   },
   "BL_TYPES": {
     "SIMPLE": "Simple",
@@ -428,7 +443,10 @@
     "HIGH_VALUE_CERT_REQUIRED": "Las operaciones marítimas requieren un documento de Certificado",
     "INVOICE_NOT_VALIDATED": "La Factura Comercial debe estar VALIDADA antes de la Declaración en Proceso",
     "INSPECTION_TYPE_REQUIRED": "El tipo de inspección debe ser establecido antes de avanzar a Revisión de Valoración",
-    "BL_ORIGINAL_NOT_AVAILABLE": "El BL Original debe estar disponible para avanzar"
+    "BL_ORIGINAL_NOT_AVAILABLE": "El BL Original debe estar disponible para avanzar",
+    "GATT_FORM_INCOMPLETE": "El formulario GATT Artículo 1 debe completarse antes de avanzar a Preparación de Pago",
+    "PERMITS_PENDING": "Todos los permisos externos deben estar aprobados antes de avanzar a Preparación de Pago",
+    "LOCAL_CHARGES_NOT_VALIDATED": "El recibo de cargos locales fue subido pero no ha sido validado"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Tipo de Inspección",
@@ -469,6 +487,60 @@
     "CATEGORY_SECURITY": "Seguridad",
     "CATEGORY_OVERTIME": "Sobretiempo",
     "CATEGORY_OTHER": "Otro"
+  },
+  "PERMIT_TYPES": {
+    "VUCE": "VUCE",
+    "FDA": "FDA",
+    "DPH": "DPH",
+    "PORTCOLLECT": "PORTCOLLECT",
+    "DPW": "DPW"
+  },
+  "PERMIT_STATUS": {
+    "PENDIENTE": "Pendiente",
+    "EN_TRAMITE": "En Trámite",
+    "APROBADO": "Aprobado",
+    "RECHAZADO": "Rechazado"
+  },
+  "VALUATION": {
+    "CHECKLIST_TITLE": "Lista de Verificación Documental",
+    "ALL_PASSED": "Todo Verificado",
+    "INCOMPLETE": "Incompleto",
+    "CHECKLIST_BL_VALIDATED": "Conocimiento de Embarque Validado",
+    "CHECKLIST_INVOICE_PRESENT": "Factura Comercial Subida",
+    "CHECKLIST_FOB_VALUE_SET": "Valor FOB Declarado",
+    "CHECKLIST_INCOTERM_SET": "Incoterm Definido",
+    "CHECKLIST_PACKING_LIST_PRESENT": "Lista de Empaque Subida",
+    "CHECKLIST_GATT_COMPLETED": "Formulario GATT Artículo 1 Completado",
+    "CHECKLIST_PERMITS_CLEARED": "Permisos Externos Aprobados",
+    "CHECKLIST_BL_AVAILABILITY_CONFIRMED": "Disponibilidad BL Confirmada",
+    "CHECKLIST_LOCAL_CHARGES_VALIDATED": "Cargos Locales Validados",
+    "PERMITS_TITLE": "Permisos Externos",
+    "PERMITS_PENDING": "Pendientes",
+    "PERMITS_BLOCKING_WARNING": "Algunos permisos externos aún están en trámite. La operación no puede avanzar hasta que todos los permisos sean aprobados.",
+    "NO_PERMITS": "No hay permisos externos registrados",
+    "ADD_PERMIT": "Agregar Permiso",
+    "PERMIT_TYPE": "Tipo de Permiso",
+    "REFERENCE_NUMBER": "Número de Referencia",
+    "ISSUED_DATE": "Fecha de Emisión",
+    "EXPIRY_DATE": "Fecha de Vencimiento",
+    "NOTES": "Notas",
+    "LOCAL_CHARGES_VALIDATED": "Los cargos locales han sido validados",
+    "GATT_TITLE": "Valoración GATT Artículo 1",
+    "GATT_COMPLETED": "Completado",
+    "GATT_PENDING": "Pendiente",
+    "GATT_COMPLETED_BY": "Formulario GATT completado por {{user}} el {{date}}",
+    "GATT_COMMERCIAL_LINKS": "Vínculos comerciales entre comprador y vendedor",
+    "GATT_COMMISSIONS": "Comisiones",
+    "GATT_UNRECORDED_TRANSPORT": "Costos de Transporte No Registrados",
+    "GATT_ADJUSTMENT": "Ajuste Adicional",
+    "GATT_JUSTIFICATION": "Justificación",
+    "GATT_CALCULATION": "Cálculo de Base Imponible",
+    "GATT_ORIGINAL_BASE": "Base Imponible Original",
+    "GATT_ADJUSTED_BASE": "Base Imponible Ajustada",
+    "FINALIZE_TITLE": "Finalizar Valoración",
+    "PREFLIGHT_SUMMARY": "Lista de Verificación Previa",
+    "FINALIZE_BUTTON": "Finalizar Valoración",
+    "FINALIZE_BLOCKED": "Todos los elementos de la lista deben estar completos antes de finalizar la valoración"
   },
   "LANG": {
     "ES": "Español",
@@ -531,6 +603,10 @@
       "BL_VERIFIED_FOR_VALUATION": "Revisión de Valoración",
       "PHYSICAL_INSPECTION_GATT": "Revisión de Valoración (solo física)",
       "CROSSING_RESOLVED": "Aduana a Revisión de Valoración",
+      "GATT_FORM_REQUIRED": "Preparación de Pago (GATT requerido)",
+      "EXTERNAL_PERMITS_CLEARED": "Preparación de Pago (permisos)",
+      "LOCAL_CHARGES_VALIDATED": "Preparación de Pago (cargos locales)",
+      "INSPECTION_TYPE_REQUIRED": "Aduanas a Revisión de Valoración",
       "UNKNOWN": "No definida"
     }
   },

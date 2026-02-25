@@ -28,6 +28,7 @@ describe('OperationService', () => {
     blNumber: 'BL-001',
     containerNumber: 'CONT-001',
     estimatedArrival: '2024-02-01T10:00:00',
+    blAvailability: 'NOT_AVAILABLE' as any,
     blOriginalAvailable: false,
     notes: null,
     deadline: null,

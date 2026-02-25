@@ -28,7 +28,7 @@ class PermissionHardeningTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -39,7 +39,7 @@ class PermissionHardeningTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 2, "transportMode": "MARITIME", "operationCategory": "CATEGORY_3", "containerNumber": "CONT-002", "blNumber": "BL-TEST-002", "blOriginalAvailable": true}
+                        {"clientId": 2, "transportMode": "MARITIME", "operationCategory": "CATEGORY_3", "containerNumber": "CONT-002", "blNumber": "BL-TEST-002", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -203,7 +203,7 @@ class PermissionHardeningTest {
                 .auth().basic("accounting", "acc123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(403);
@@ -251,7 +251,7 @@ class PermissionHardeningTest {
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blOriginalAvailable": true}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(403);

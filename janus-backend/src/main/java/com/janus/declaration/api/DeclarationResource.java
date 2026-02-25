@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -79,6 +80,18 @@ public class DeclarationResource {
     public DeclarationResponse getById(@PathParam("operationId") Long operationId,
                                         @PathParam("id") Long id) {
         return DeclarationResponse.from(declarationService.findById(operationId, id));
+    }
+
+    @PUT
+    @Path("/{id}")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public DeclarationResponse update(@PathParam("operationId") Long operationId,
+                                       @PathParam("id") Long declarationId,
+                                       CreateDeclarationRequest request,
+                                       @Context SecurityContext sec) {
+        var decl = toDeclaration(request);
+        var result = declarationService.updateDeclaration(operationId, declarationId, decl, sec.getUserPrincipal().getName());
+        return DeclarationResponse.from(result);
     }
 
     @POST

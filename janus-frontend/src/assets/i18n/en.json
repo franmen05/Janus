@@ -84,7 +84,11 @@
     "CARGO_TYPE": "Cargo Type",
     "BL_TYPE": "BL Type",
     "CHILD_BL_NUMBER": "Child BL",
-    "CHILD_BL_REQUIRED": "Child BL is required for consolidated BL"
+    "CHILD_BL_REQUIRED": "Child BL is required for consolidated BL",
+    "BL_AVAILABILITY": "BL Availability",
+    "SELECT_BL_AVAILABILITY": "Select BL availability...",
+    "BL_AVAILABILITY_REQUIRED": "BL availability is required",
+    "BL_NOT_AVAILABLE_WARNING": "BL is not available. This must be resolved before valuation."
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -133,7 +137,8 @@
     "ID": "ID",
     "DETAILS": "Details",
     "IP": "IP",
-    "NO_LOGS": "No audit logs found"
+    "NO_LOGS": "No audit logs found",
+    "CHANGES": "Changes"
   },
   "TABS": {
     "INFO": "Info",
@@ -143,7 +148,8 @@
     "DECLARATIONS": "Declarations",
     "HISTORY": "History",
     "AUDIT": "Audit",
-    "INSPECTION": "Inspection"
+    "INSPECTION": "Inspection",
+    "VALUATION": "Valuation"
   },
   "STATUS": {
     "DRAFT": "Draft",
@@ -155,6 +161,7 @@
     "DECLARATION_IN_PROGRESS": "Declaration in Progress",
     "SUBMITTED_TO_CUSTOMS": "Submitted to Customs",
     "VALUATION_REVIEW": "Valuation Review",
+    "PENDING_EXTERNAL_APPROVAL": "Pending External Approval",
     "PAYMENT_PREPARATION": "Payment Preparation",
     "IN_TRANSIT": "In Transit",
     "CLOSED": "Closed",
@@ -174,6 +181,7 @@
     "DECLARATION_IN_PROGRESS": "Declaration",
     "SUBMITTED_TO_CUSTOMS": "Submitted",
     "VALUATION_REVIEW": "Valuation",
+    "PENDING_EXTERNAL_APPROVAL": "Ext. Approval",
     "PAYMENT_PREPARATION": "Payment",
     "IN_TRANSIT": "In Transit",
     "CLOSED": "Closed",
@@ -218,11 +226,18 @@
     "COMMERCIAL_INVOICE": "Commercial Invoice",
     "PACKING_LIST": "Packing List",
     "CERTIFICATE": "Certificate",
+    "PERMIT_CERTIFICATE": "Permit Certificate",
+    "LOCAL_CHARGES_RECEIPT": "Local Charges Receipt",
     "OTHER": "Other"
   },
   "CARGO_TYPES": {
     "FCL": "FCL (Full Container Load)",
     "LCL": "LCL (Less than Container Load)"
+  },
+  "BL_AVAILABILITY": {
+    "ORIGINAL": "Physical Original",
+    "ENDORSED": "Endorsement registered",
+    "NOT_AVAILABLE": "Not available"
   },
   "BL_TYPES": {
     "SIMPLE": "Simple",
@@ -428,7 +443,10 @@
     "HIGH_VALUE_CERT_REQUIRED": "Maritime operations require a Certificate document",
     "INVOICE_NOT_VALIDATED": "Commercial Invoice must be VALIDATED before Declaration in Progress",
     "INSPECTION_TYPE_REQUIRED": "Inspection type must be set before advancing to Valuation Review",
-    "BL_ORIGINAL_NOT_AVAILABLE": "Original BL must be available to proceed"
+    "BL_ORIGINAL_NOT_AVAILABLE": "Original BL must be available to proceed",
+    "GATT_FORM_INCOMPLETE": "GATT Article 1 form must be completed before advancing to Payment Preparation",
+    "PERMITS_PENDING": "All external permits must be cleared before advancing to Payment Preparation",
+    "LOCAL_CHARGES_NOT_VALIDATED": "Local charges receipt is uploaded but has not been validated"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Inspection Type",
@@ -469,6 +487,60 @@
     "CATEGORY_SECURITY": "Security",
     "CATEGORY_OVERTIME": "Overtime",
     "CATEGORY_OTHER": "Other"
+  },
+  "PERMIT_TYPES": {
+    "VUCE": "VUCE",
+    "FDA": "FDA",
+    "DPH": "DPH",
+    "PORTCOLLECT": "PORTCOLLECT",
+    "DPW": "DPW"
+  },
+  "PERMIT_STATUS": {
+    "PENDIENTE": "Pending",
+    "EN_TRAMITE": "In Process",
+    "APROBADO": "Approved",
+    "RECHAZADO": "Rejected"
+  },
+  "VALUATION": {
+    "CHECKLIST_TITLE": "Document Verification Checklist",
+    "ALL_PASSED": "All Verified",
+    "INCOMPLETE": "Incomplete",
+    "CHECKLIST_BL_VALIDATED": "Bill of Lading Validated",
+    "CHECKLIST_INVOICE_PRESENT": "Commercial Invoice Uploaded",
+    "CHECKLIST_FOB_VALUE_SET": "FOB Value Declared",
+    "CHECKLIST_INCOTERM_SET": "Incoterm Defined",
+    "CHECKLIST_PACKING_LIST_PRESENT": "Packing List Uploaded",
+    "CHECKLIST_GATT_COMPLETED": "GATT Article 1 Form Completed",
+    "CHECKLIST_PERMITS_CLEARED": "External Permits Cleared",
+    "CHECKLIST_BL_AVAILABILITY_CONFIRMED": "BL Availability Confirmed",
+    "CHECKLIST_LOCAL_CHARGES_VALIDATED": "Local Charges Validated",
+    "PERMITS_TITLE": "External Permits",
+    "PERMITS_PENDING": "Pending",
+    "PERMITS_BLOCKING_WARNING": "Some external permits are still in process. The operation cannot advance until all permits are cleared.",
+    "NO_PERMITS": "No external permits registered",
+    "ADD_PERMIT": "Add Permit",
+    "PERMIT_TYPE": "Permit Type",
+    "REFERENCE_NUMBER": "Reference Number",
+    "ISSUED_DATE": "Issued Date",
+    "EXPIRY_DATE": "Expiry Date",
+    "NOTES": "Notes",
+    "LOCAL_CHARGES_VALIDATED": "Local charges have been validated",
+    "GATT_TITLE": "GATT Article 1 Valuation",
+    "GATT_COMPLETED": "Completed",
+    "GATT_PENDING": "Pending",
+    "GATT_COMPLETED_BY": "GATT form completed by {{user}} on {{date}}",
+    "GATT_COMMERCIAL_LINKS": "Commercial links between buyer and seller",
+    "GATT_COMMISSIONS": "Commissions",
+    "GATT_UNRECORDED_TRANSPORT": "Unrecorded Transport Costs",
+    "GATT_ADJUSTMENT": "Additional Adjustment",
+    "GATT_JUSTIFICATION": "Justification",
+    "GATT_CALCULATION": "Taxable Base Calculation",
+    "GATT_ORIGINAL_BASE": "Original Taxable Base",
+    "GATT_ADJUSTED_BASE": "Adjusted Taxable Base",
+    "FINALIZE_TITLE": "Finalize Valuation",
+    "PREFLIGHT_SUMMARY": "Pre-flight Checklist",
+    "FINALIZE_BUTTON": "Finalize Valuation",
+    "FINALIZE_BLOCKED": "All checklist items must pass before finalizing valuation"
   },
   "LANG": {
     "ES": "Español",
@@ -531,6 +603,10 @@
       "BL_VERIFIED_FOR_VALUATION": "Valuation Review",
       "PHYSICAL_INSPECTION_GATT": "Valuation Review (Physical only)",
       "CROSSING_RESOLVED": "Customs to Valuation Review",
+      "GATT_FORM_REQUIRED": "Payment Preparation (GATT required)",
+      "EXTERNAL_PERMITS_CLEARED": "Payment Preparation (permits)",
+      "LOCAL_CHARGES_VALIDATED": "Payment Preparation (local charges)",
+      "INSPECTION_TYPE_REQUIRED": "Customs to Valuation Review",
       "UNKNOWN": "Not defined"
     }
   },

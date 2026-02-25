@@ -77,13 +77,19 @@ export class DeclarationFormComponent {
     declarationNumber: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     fobValue: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
     cifValue: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
-    taxableBase: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
+    taxableBase: new FormControl({ value: 0, disabled: true }, { nonNullable: true, validators: [Validators.required] }),
     totalTaxes: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
     freightValue: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
     insuranceValue: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
     gattMethod: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     notes: new FormControl('', { nonNullable: true })
   });
+
+  constructor() {
+    this.form.get('cifValue')!.valueChanges.subscribe(cif => {
+      this.form.get('taxableBase')!.setValue(cif, { emitEvent: false });
+    });
+  }
 
   onSubmit(): void {
     if (this.form.invalid) return;
