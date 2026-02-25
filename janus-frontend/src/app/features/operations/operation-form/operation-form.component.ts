@@ -172,7 +172,14 @@ export class OperationFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.clientService.getAll().subscribe(clients => this.clients.set(clients));
+    this.clientService.getAll().subscribe(clients => {
+      this.clients.set(clients);
+      const clientId = this.route.snapshot.queryParamMap.get('clientId');
+      if (clientId && !this.isEdit()) {
+        this.form.get('clientId')!.setValue(clientId);
+        this.form.get('clientId')!.disable();
+      }
+    });
 
     // Add conditional validation for containerNumber when transportMode is MARITIME and cargoType is FCL
     this.form.get('transportMode')!.valueChanges.subscribe(mode => {

@@ -125,7 +125,9 @@
     "PHONE": "Phone",
     "ADDRESS": "Address",
     "ACTIVE": "Active",
-    "INACTIVE": "Inactive"
+    "INACTIVE": "Inactive",
+    "OPERATIONS": "Operations",
+    "SEARCH": "Search by name or Tax ID..."
   },
   "AUDIT": {
     "TITLE": "Audit Log",

@@ -125,7 +125,9 @@
     "PHONE": "Teléfono",
     "ADDRESS": "Dirección",
     "ACTIVE": "Activo",
-    "INACTIVE": "Inactivo"
+    "INACTIVE": "Inactivo",
+    "OPERATIONS": "Operaciones",
+    "SEARCH": "Buscar por nombre o RNC..."
   },
   "AUDIT": {
     "TITLE": "Registro de Auditoría",
