@@ -112,7 +112,8 @@
     "INVOICE_TEMPLATE": "Plantilla de Factura Comercial",
     "PACKING_LIST_TEMPLATE": "Plantilla de Lista de Empaque",
     "TEMPLATES_SECTION": "Plantillas de Documentos",
-    "DELETED": "Eliminado"
+    "DELETED": "Eliminado",
+    "PRINT_NOT_SUPPORTED": "Este tipo de archivo no se puede imprimir directamente. Por favor descargue e imprima manualmente."
   },
   "CLIENTS": {
     "TITLE": "Clientes",
@@ -278,7 +279,8 @@
     "SAVE": "Guardar",
     "CLOSE": "Cerrar",
     "MARK_BL_AVAILABLE": "Marcar BL como disponible",
-    "MARK_BL_UNAVAILABLE": "Marcar BL como no disponible"
+    "MARK_BL_UNAVAILABLE": "Marcar BL como no disponible",
+    "PRINT": "Imprimir"
   },
   "COMMON": {
     "ARE_YOU_SURE": "¿Está seguro?",

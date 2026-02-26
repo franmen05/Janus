@@ -112,7 +112,8 @@
     "INVOICE_TEMPLATE": "Commercial Invoice Template",
     "PACKING_LIST_TEMPLATE": "Packing List Template",
     "TEMPLATES_SECTION": "Document Templates",
-    "DELETED": "Deleted"
+    "DELETED": "Deleted",
+    "PRINT_NOT_SUPPORTED": "This file type cannot be printed directly. Please download and print manually."
   },
   "CLIENTS": {
     "TITLE": "Clients",
@@ -278,7 +279,8 @@
     "SAVE": "Save",
     "CLOSE": "Close",
     "MARK_BL_AVAILABLE": "Mark BL as available",
-    "MARK_BL_UNAVAILABLE": "Mark BL as unavailable"
+    "MARK_BL_UNAVAILABLE": "Mark BL as unavailable",
+    "PRINT": "Print"
   },
   "COMMON": {
     "ARE_YOU_SURE": "Are you sure?",

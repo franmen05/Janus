@@ -8,6 +8,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
 import { FileSizePipe } from '../../../shared/pipes/file-size.pipe';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-document-list',
@@ -43,6 +44,7 @@ import { AuthService } from '../../../core/services/auth.service';
                   <div class="btn-group btn-group-sm">
                     @if (!authService.hasRole(['CARRIER'])) {
                       <button class="btn btn-outline-primary" (click)="download(doc)">{{ 'ACTIONS.DOWNLOAD' | translate }}</button>
+                      <button class="btn btn-outline-info" (click)="printDoc(doc)">{{ 'ACTIONS.PRINT' | translate }}</button>
                       <a [routerLink]="['/operations', operationId, 'documents', doc.id, 'versions']" class="btn btn-outline-secondary">{{ 'ACTIONS.VERSIONS' | translate }}</a>
                     }
                     @if (authService.hasRole(['ADMIN', 'AGENT']) && doc.active && operationStatus !== 'CLOSED' && operationStatus !== 'CANCELLED') {
@@ -64,6 +66,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class DocumentListComponent implements OnInit {
   private documentService = inject(DocumentService);
   private translate = inject(TranslateService);
+  private toastService = inject(ToastService);
   authService = inject(AuthService);
 
   @Input() operationId!: number;
@@ -92,5 +95,29 @@ export class DocumentListComponent implements OnInit {
     if (confirm(this.translate.instant('DELETE_CONFIRM.DOCUMENT'))) {
       this.documentService.delete(this.operationId, doc.id).subscribe(() => this.loadDocuments());
     }
+  }
+
+  printDoc(doc: Document): void {
+    const fileName = (doc.latestVersionName ?? '').toLowerCase();
+    const printableExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+    const isPrintable = printableExtensions.some(ext => fileName.endsWith(ext));
+    if (!isPrintable) {
+      this.toastService.warning(this.translate.instant('DOCUMENTS.PRINT_NOT_SUPPORTED'));
+      return;
+    }
+    this.documentService.download(this.operationId, doc.id).subscribe(blob => {
+      var blobUrl = URL.createObjectURL(blob);
+      var iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = blobUrl;
+      document.body.appendChild(iframe);
+      iframe.onload = () => {
+        iframe.contentWindow?.print();
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+          URL.revokeObjectURL(blobUrl);
+        }, 1000);
+      };
+    });
   }
 }
