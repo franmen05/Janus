@@ -1,7 +1,6 @@
 /janus-backend/storage/
 /janus-backend/data/
 /janus-backend/.gradle
-/janus-backend/.idea
 # Default ignored files
 /janus-backend/shelf/
 /janus-backend/workspace.xml
@@ -12,3 +11,4 @@
 /janus-backend/dataSources.local.xml
 # Editor-based HTTP Client requests
 /janus-backend/httpRequests/
+/janus-backend/.idea/
