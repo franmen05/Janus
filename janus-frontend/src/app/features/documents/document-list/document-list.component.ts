@@ -97,7 +97,7 @@ export class DocumentListComponent implements OnInit {
     }
   }
 
-  printDoc(doc: Document): void {
+  printDoc1(doc: Document): void {
     const fileName = (doc.latestVersionName ?? '').toLowerCase();
     const printableExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
     const isPrintable = printableExtensions.some(ext => fileName.endsWith(ext));
@@ -113,10 +113,36 @@ export class DocumentListComponent implements OnInit {
       document.body.appendChild(iframe);
       iframe.onload = () => {
         iframe.contentWindow?.print();
-        setTimeout(() => {
-          document.body.removeChild(iframe);
+        // setTimeout(() => {
+        //   document.body.removeChild(iframe);
+        //   URL.revokeObjectURL(blobUrl);
+        // }, 11000);
+      };
+    });
+  }
+
+  printDoc(doc: Document): void {
+    const fileName = (doc.latestVersionName ?? '').toLowerCase();
+    const printableExtensions = ['.pdf', '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+    const isPrintable = printableExtensions.some(ext => fileName.endsWith(ext));
+    if (!isPrintable) {
+      this.toastService.warning(this.translate.instant('DOCUMENTS.PRINT_NOT_SUPPORTED'));
+      return;
+    }
+    this.documentService.download(this.operationId, doc.id).subscribe(blob => {
+      const blobUrl = URL.createObjectURL(blob);
+      const printWindow = window.open(blobUrl, '_blank');
+      if (!printWindow) {
+        this.toastService.warning(this.translate.instant('DOCUMENTS.POPUP_BLOCKED'));
+        URL.revokeObjectURL(blobUrl);
+        return;
+      }
+      printWindow.onload = () => {
+        printWindow.print();
+        printWindow.onafterprint = () => {
+          // printWindow.close();
           URL.revokeObjectURL(blobUrl);
-        }, 1000);
+        };
       };
     });
   }

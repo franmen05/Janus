@@ -113,7 +113,8 @@
     "PACKING_LIST_TEMPLATE": "Packing List Template",
     "TEMPLATES_SECTION": "Document Templates",
     "DELETED": "Deleted",
-    "PRINT_NOT_SUPPORTED": "This file type cannot be printed directly. Please download and print manually."
+    "PRINT_NOT_SUPPORTED": "This file type cannot be printed directly. Please download and print manually.",
+    "POPUP_BLOCKED": "Pop-up blocked. Please allow pop-ups for this site to print documents."
   },
   "CLIENTS": {
     "TITLE": "Clients",

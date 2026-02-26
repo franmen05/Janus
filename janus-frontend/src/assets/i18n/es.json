@@ -113,7 +113,8 @@
     "PACKING_LIST_TEMPLATE": "Plantilla de Lista de Empaque",
     "TEMPLATES_SECTION": "Plantillas de Documentos",
     "DELETED": "Eliminado",
-    "PRINT_NOT_SUPPORTED": "Este tipo de archivo no se puede imprimir directamente. Por favor descargue e imprima manualmente."
+    "PRINT_NOT_SUPPORTED": "Este tipo de archivo no se puede imprimir directamente. Por favor descargue e imprima manualmente.",
+    "POPUP_BLOCKED": "Ventana emergente bloqueada. Permita las ventanas emergentes para imprimir documentos."
   },
   "CLIENTS": {
     "TITLE": "Clientes",
