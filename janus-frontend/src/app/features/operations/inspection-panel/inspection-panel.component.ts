@@ -303,6 +303,7 @@ export class InspectionPanelComponent implements OnInit {
     if (!confirm(msg)) return;
 
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    if (comment === null) return;
     const request: SetInspectionTypeRequest = {
       inspectionType: type,
       comment: comment || undefined

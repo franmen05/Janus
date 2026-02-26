@@ -401,6 +401,7 @@ export class OperationDetailComponent implements OnInit {
     const decl = this.declarations()[0];
     if (!decl) return;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    if (comment === null) return;
     this.declarationService.approveTechnical(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
   }
 
@@ -408,6 +409,7 @@ export class OperationDetailComponent implements OnInit {
     const decl = this.declarations()[0];
     if (!decl) return;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    if (comment === null) return;
     this.declarationService.approveFinal(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
   }
 
@@ -415,6 +417,7 @@ export class OperationDetailComponent implements OnInit {
     const decl = this.declarations()[0];
     if (!decl) return;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    if (comment === null) return;
     this.declarationService.reject(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
   }
 

@@ -1,6 +1,6 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
 import { Declaration, TariffLine } from '../../../core/models/declaration.model';
@@ -131,19 +131,20 @@ import { AuthService } from '../../../core/services/auth.service';
             </div>
           </div>
 
-          @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-            <div class="d-flex gap-2 mt-3">
+          <div class="d-flex gap-2 mt-3">
+            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
               @if (!declaration()!.technicalApprovedBy) {
                 <button class="btn btn-success btn-sm" (click)="approveTechnical()">{{ 'preliquidation.approveTechnical' | translate }}</button>
               }
-              @if (declaration()!.technicalApprovedBy && !declaration()!.finalApprovedBy) {
+              @if (authService.hasRole(['ADMIN']) && declaration()!.technicalApprovedBy && !declaration()!.finalApprovedBy) {
                 <button class="btn btn-primary btn-sm" (click)="approveFinal()">{{ 'preliquidation.approveFinal' | translate }}</button>
               }
               @if (!declaration()!.rejectedBy) {
                 <button class="btn btn-danger btn-sm" (click)="reject()">{{ 'preliquidation.reject' | translate }}</button>
               }
-            </div>
-          }
+            }
+            <button class="btn btn-outline-secondary btn-sm ms-auto" (click)="close()">{{ 'ACTIONS.CLOSE' | translate }}</button>
+          </div>
         </div>
       </div>
     }
@@ -154,6 +155,7 @@ export class PreliquidationComponent implements OnInit {
   declarationId = input<number>(0);
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private declarationService = inject(DeclarationService);
   private translate = inject(TranslateService);
   authService = inject(AuthService);
@@ -174,18 +176,26 @@ export class PreliquidationComponent implements OnInit {
   approveTechnical(): void {
     const decl = this.declaration()!;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    if (comment === null) return;
     this.declarationService.approveTechnical(decl.operationId, decl.id, comment || undefined).subscribe(() => this.load());
   }
 
   approveFinal(): void {
     const decl = this.declaration()!;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    if (comment === null) return;
     this.declarationService.approveFinal(decl.operationId, decl.id, comment || undefined).subscribe(() => this.load());
+  }
+
+  close(): void {
+    const opId = this.operationId() || +this.route.snapshot.paramMap.get('operationId')!;
+    this.router.navigate(['/operations', opId]);
   }
 
   reject(): void {
     const decl = this.declaration()!;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
+    if (comment === null) return;
     this.declarationService.reject(decl.operationId, decl.id, comment || undefined).subscribe(() => this.load());
   }
 }
