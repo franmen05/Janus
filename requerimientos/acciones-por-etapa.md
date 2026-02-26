@@ -29,22 +29,24 @@ DRAFT
 
 ### Los 14 estados en orden
 
-| # | Estado | Descripción |
-|---|--------|-------------|
-| 1 | `DRAFT` | Borrador inicial |
-| 2 | `DOCUMENTATION_COMPLETE` | Documentación completa |
-| 3 | `IN_REVIEW` | En revisión interna |
-| 4 | `PENDING_CORRECTION` | Pendiente de corrección |
-| 5 | `PRELIQUIDATION_REVIEW` | Revisión de preliquidación |
-| 6 | `ANALYST_ASSIGNED` | Analista asignado |
-| 7 | `DECLARATION_IN_PROGRESS` | Declaración en progreso |
-| 8 | `SUBMITTED_TO_CUSTOMS` | Enviado a aduanas |
-| 9 | `VALUATION_REVIEW` | Revisión de valoración |
-| 10 | `PENDING_EXTERNAL_APPROVAL` | Aprobación externa pendiente |
-| 11 | `PAYMENT_PREPARATION` | Preparación de pago |
-| 12 | `IN_TRANSIT` | En tránsito |
-| 13 | `CLOSED` | Cerrada (terminal) |
-| 14 | `CANCELLED` | Cancelada (terminal) |
+| # | Estado | Etiqueta (ES) | Etiqueta (EN) | Paso en barra de progreso | Descripción |
+|---|--------|---------------|---------------|---------------------------|-------------|
+| 1 | `DRAFT` | Borrador | Draft | **Borrador** | Borrador inicial |
+| 2 | `DOCUMENTATION_COMPLETE` | Documentación Completa | Documentation Complete | **Docs** | Documentación completa |
+| 3 | `IN_REVIEW` | En Revisión | In Review | **Revisión Interna** | En revisión interna |
+| 4 | `PENDING_CORRECTION` | Pendiente de Corrección | Pending Correction | Revisión Interna *(sub-estado)* | Pendiente de corrección |
+| 5 | `PRELIQUIDATION_REVIEW` | Revisión de Preliquidación | Preliquidation Review | Revisión Interna *(sub-estado)* | Revisión de preliquidación |
+| 6 | `ANALYST_ASSIGNED` | Analista Asignado | Analyst Assigned | Revisión Interna *(sub-estado)* | Analista asignado |
+| 7 | `DECLARATION_IN_PROGRESS` | Declaración en Proceso | Declaration in Progress | **Declaración** | Declaración en progreso |
+| 8 | `SUBMITTED_TO_CUSTOMS` | Presentado a Aduanas | Submitted to Customs | **Presentado** | Enviado a aduanas |
+| 9 | `VALUATION_REVIEW` | Revisión de Valoración | Valuation Review | **Valoración** | Revisión de valoración |
+| 10 | `PENDING_EXTERNAL_APPROVAL` | Pendiente Aprobación Externa | Pending External Approval | Valoración *(sub-estado)* | Aprobación externa pendiente |
+| 11 | `PAYMENT_PREPARATION` | Preparación de Pago | Payment Preparation | **Pago** | Preparación de pago |
+| 12 | `IN_TRANSIT` | En Tránsito | In Transit | **Tránsito** | En tránsito |
+| 13 | `CLOSED` | Cerrado | Closed | **Cerrado** | Cerrada (terminal) |
+| 14 | `CANCELLED` | Cancelado | Cancelled | *(barra roja)* | Cancelada (terminal) |
+
+> **Nota:** La barra de progreso muestra 9 pasos visibles. Los estados 3-6 se agrupan bajo "Revisión Interna" y el estado 10 se agrupa bajo "Valoración", mostrando un badge con el sub-estado específico.
 
 ---
 
