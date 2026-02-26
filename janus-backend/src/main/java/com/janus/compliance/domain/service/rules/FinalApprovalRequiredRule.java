@@ -14,19 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class PreliquidationApprovedRule implements ComplianceRule {
+public class FinalApprovalRequiredRule implements ComplianceRule {
 
     @Inject
     DeclarationRepository declarationRepository;
 
     @Override
     public String ruleCode() {
-        return "PRELIQUIDATION_APPROVED";
+        return "FINAL_APPROVAL_REQUIRED";
     }
 
     @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, TransportMode transportMode, OperationCategory category) {
-        return from == OperationStatus.PRELIQUIDATION_REVIEW && to == OperationStatus.ANALYST_ASSIGNED;
+        return from == OperationStatus.DECLARATION_IN_PROGRESS && to == OperationStatus.SUBMITTED_TO_CUSTOMS;
     }
 
     @Override
@@ -45,18 +45,18 @@ public class PreliquidationApprovedRule implements ComplianceRule {
         if (declarations.isEmpty()) {
             errors.add(new ValidationResult.ValidationError(
                     "NO_DECLARATION",
-                    "At least one declaration is required for preliquidation approval"
+                    "At least one declaration is required"
             ));
             return ValidationResult.failure(errors);
         }
 
-        // Check if any declaration has technical approval
-        boolean hasTechnicalApproval = declarations.stream().anyMatch(d -> d.technicalApprovedBy != null);
+        // Check if any declaration has final approval
+        boolean hasFinalApproval = declarations.stream().anyMatch(d -> d.finalApprovedBy != null);
 
-        if (!hasTechnicalApproval) {
+        if (!hasFinalApproval) {
             errors.add(new ValidationResult.ValidationError(
-                    "MISSING_TECHNICAL_APPROVAL",
-                    "Technical approval is required before assigning analyst"
+                    "MISSING_FINAL_APPROVAL",
+                    "Final (ADMIN) approval is required before submitting to customs"
             ));
         }
 

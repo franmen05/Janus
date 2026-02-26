@@ -146,7 +146,6 @@ DRAFT
 | Subir/eliminar documentos | ADMIN, AGENT | — |
 | Generar preliquidación | ADMIN, AGENT | Calcula CIF, base imponible, impuestos |
 | Aprobar técnicamente declaración | ADMIN, AGENT | Se deshabilita si ya aprobada |
-| **Aprobar final declaración** | **ADMIN solamente** | Requiere aprobación técnica previa. **Auto-transiciona a ANALYST_ASSIGNED** |
 | Rechazar declaración | ADMIN, AGENT | Limpia todas las aprobaciones. **Auto-transiciona a PENDING_CORRECTION** |
 | Enviar a corrección | ADMIN, AGENT | — |
 | Cambiar estado → ANALYST_ASSIGNED | ADMIN, AGENT | Requiere regla PRELIQUIDATION_APPROVED |
@@ -154,7 +153,7 @@ DRAFT
 | Cambiar estado → CANCELLED | ADMIN, AGENT | — |
 
 **Regla de compliance para avanzar a ANALYST_ASSIGNED:**
-- `PRELIQUIDATION_APPROVED` — Debe existir al menos una declaración con aprobación técnica Y aprobación final (ADMIN)
+- `PRELIQUIDATION_APPROVED` — Debe existir al menos una declaración con aprobación técnica
 - `BL_ORIGINAL_NOT_AVAILABLE` — BL disponible
 
 ---
@@ -190,11 +189,13 @@ DRAFT
 | Ejecutar cruce (preliminar vs final) | ADMIN, AGENT | Compara declaraciones, genera resultado MATCH o DISCREPANCY |
 | Resolver discrepancia de cruce | ADMIN, AGENT | Solo si estado es DISCREPANCY |
 | Registrar DUA | ADMIN, AGENT | Asignar número de DUA |
+| **Aprobar final declaración** | **ADMIN solamente** | Requiere aprobación técnica previa. **Auto-transiciona a SUBMITTED_TO_CUSTOMS** |
 | **Enviar a DGA** | ADMIN, AGENT | **Auto-transiciona a SUBMITTED_TO_CUSTOMS**. Notifica al cliente |
-| Cambiar estado → SUBMITTED_TO_CUSTOMS | ADMIN, AGENT | Requiere BL_ORIGINAL_NOT_AVAILABLE |
+| Cambiar estado → SUBMITTED_TO_CUSTOMS | ADMIN, AGENT | Requiere FINAL_APPROVAL_REQUIRED y BL_ORIGINAL_NOT_AVAILABLE |
 | Cambiar estado → CANCELLED | ADMIN, AGENT | — |
 
-**Regla de compliance para avanzar a SUBMITTED_TO_CUSTOMS:**
+**Reglas de compliance para avanzar a SUBMITTED_TO_CUSTOMS:**
+- `FINAL_APPROVAL_REQUIRED` — Aprobación final ADMIN requerida
 - `BL_ORIGINAL_NOT_AVAILABLE` — BL disponible
 
 ---
@@ -387,7 +388,7 @@ Estas acciones disparan cambios de estado automáticos sin intervención manual:
 
 | Acción | Estado actual | Transiciona a | Condición |
 |--------|-------------|---------------|-----------|
-| Aprobar final declaración | PRELIQUIDATION_REVIEW | ANALYST_ASSIGNED | — |
+| Aprobar final declaración | DECLARATION_IN_PROGRESS | SUBMITTED_TO_CUSTOMS | — |
 | Rechazar declaración | PRELIQUIDATION_REVIEW | PENDING_CORRECTION | — |
 | Enviar a DGA | DECLARATION_IN_PROGRESS | SUBMITTED_TO_CUSTOMS | — |
 | Establecer inspección EXPRESO | SUBMITTED_TO_CUSTOMS | VALUATION_REVIEW | Tipo = EXPRESO |
@@ -409,7 +410,8 @@ Resumen de todas las reglas que bloquean transiciones de estado:
 | HIGH_VALUE_ADDITIONAL_DOC | DOCUMENTATION_COMPLETE | Operaciones MARITIME requieren CERTIFICATE | `HIGH_VALUE_CERT_REQUIRED` |
 | INTERNAL_REVIEW_COMPLETE | PRELIQUIDATION_REVIEW | Completitud de documentos = 100% | `INCOMPLETE_DOCS` |
 | BL_ORIGINAL_NOT_AVAILABLE | PRELIQUIDATION_REVIEW → CLOSED | BL debe ser ORIGINAL o ENDORSED | `BL_ORIGINAL_NOT_AVAILABLE` |
-| PRELIQUIDATION_APPROVED | ANALYST_ASSIGNED | Aprobación técnica + aprobación final ADMIN | `NO_DECLARATION`, `MISSING_TECHNICAL_APPROVAL`, `MISSING_FINAL_APPROVAL` |
+| PRELIQUIDATION_APPROVED | ANALYST_ASSIGNED | Aprobación técnica | `NO_DECLARATION`, `MISSING_TECHNICAL_APPROVAL` |
+| FINAL_APPROVAL_REQUIRED | SUBMITTED_TO_CUSTOMS | Aprobación final ADMIN | `MISSING_FINAL_APPROVAL` |
 | COMMERCIAL_INVOICE_REQUIRED | DECLARATION_IN_PROGRESS | CATEGORY_1: factura comercial VALIDATED | `INVOICE_NOT_VALIDATED` |
 | INSPECTION_TYPE_REQUIRED | VALUATION_REVIEW | Tipo de inspección definido | `INSPECTION_TYPE_MISSING` |
 | CROSSING_RESOLVED | VALUATION_REVIEW | Discrepancias de cruce resueltas | `CROSSING_UNRESOLVED` |

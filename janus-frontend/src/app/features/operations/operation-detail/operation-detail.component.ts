@@ -25,7 +25,7 @@ import { CrossingResultComponent } from '../../declarations/crossing-result/cros
 import { OperationAlertsComponent } from '../../alerts/operation-alerts/operation-alerts.component';
 import { InspectionPanelComponent } from '../inspection-panel/inspection-panel.component';
 import { ValuationPanelComponent } from '../valuation-panel/valuation-panel.component';
-const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED'];
+const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS'];
 const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 
@@ -111,9 +111,6 @@ const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROV
                       @case ('PRELIQUIDATION_REVIEW') {
                         @if (declarations().length > 0) {
                           <button class="btn btn-sm btn-success" (click)="approveTechnical()" [disabled]="declarations()[0].technicalApprovedBy != null">{{ 'preliquidation.approveTechnical' | translate }}</button>
-                          @if (authService.hasRole(['ADMIN'])) {
-                            <button class="btn btn-sm btn-primary" (click)="approveFinal()" [disabled]="declarations()[0].technicalApprovedBy == null || declarations()[0].finalApprovedBy != null">{{ 'preliquidation.approveFinal' | translate }}</button>
-                          }
                           <button class="btn btn-sm btn-danger" (click)="rejectDeclaration()" [disabled]="declarations()[0].rejectedBy != null">{{ 'preliquidation.reject' | translate }}</button>
                           <a [routerLink]="['/operations', operation()!.id, 'declarations', declarations()[0].id, 'preliquidation']" class="btn btn-sm btn-outline-info">{{ 'preliquidation.title' | translate }}</a>
                         } @else {
@@ -130,6 +127,11 @@ const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROV
                         <button class="btn btn-sm btn-primary" (click)="changeToStatus('DECLARATION_IN_PROGRESS')">
                           <i class="bi bi-arrow-right-circle me-1"></i>{{ 'review.proceedToDeclaration' | translate }}
                         </button>
+                      }
+                      @case ('DECLARATION_IN_PROGRESS') {
+                        @if (declarations().length > 0 && authService.hasRole(['ADMIN'])) {
+                          <button class="btn btn-sm btn-primary" (click)="approveFinal()" [disabled]="declarations()[0].finalApprovedBy != null">{{ 'preliquidation.approveFinal' | translate }}</button>
+                        }
                       }
                     }
                   </div>
@@ -393,6 +395,7 @@ export class OperationDetailComponent implements OnInit {
       case 'PENDING_CORRECTION': return this.translate.instant('review.pendingCorrection');
       case 'PRELIQUIDATION_REVIEW': return this.translate.instant('review.preliquidationReview');
       case 'ANALYST_ASSIGNED': return this.translate.instant('review.analystAssigned');
+      case 'DECLARATION_IN_PROGRESS': return this.translate.instant('review.declarationInProgress');
       default: return '';
     }
   }

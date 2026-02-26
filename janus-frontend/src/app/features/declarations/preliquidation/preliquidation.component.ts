@@ -136,9 +136,6 @@ import { AuthService } from '../../../core/services/auth.service';
               @if (!declaration()!.technicalApprovedBy) {
                 <button class="btn btn-success btn-sm" (click)="approveTechnical()">{{ 'preliquidation.approveTechnical' | translate }}</button>
               }
-              @if (authService.hasRole(['ADMIN']) && declaration()!.technicalApprovedBy && !declaration()!.finalApprovedBy) {
-                <button class="btn btn-primary btn-sm" (click)="approveFinal()">{{ 'preliquidation.approveFinal' | translate }}</button>
-              }
               @if (!declaration()!.rejectedBy) {
                 <button class="btn btn-danger btn-sm" (click)="reject()">{{ 'preliquidation.reject' | translate }}</button>
               }

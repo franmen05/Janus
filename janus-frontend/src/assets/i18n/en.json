@@ -650,7 +650,8 @@
     "returnToReview": "Return to Review",
     "proceedToDeclaration": "Proceed to Declaration",
     "noDeclarationsYet": "No declarations registered yet.",
-    "createDeclarationPrompt": "Go to Declarations tab to create one."
+    "createDeclarationPrompt": "Go to Declarations tab to create one.",
+    "declarationInProgress": "Declaration is in progress. ADMIN can approve the final declaration."
   },
   "preliquidation": {
     "title": "Preliquidation",

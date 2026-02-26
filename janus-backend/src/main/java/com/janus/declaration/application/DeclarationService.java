@@ -340,11 +340,11 @@ public class DeclarationService {
         // Flush approval changes so compliance rules can read them
         declarationRepository.flush();
 
-        // Auto-advance operation from PRELIQUIDATION_REVIEW to ANALYST_ASSIGNED
+        // Auto-advance operation from DECLARATION_IN_PROGRESS to SUBMITTED_TO_CUSTOMS
         var operation = declaration.operation;
-        if (operation.status == OperationStatus.PRELIQUIDATION_REVIEW) {
+        if (operation.status == OperationStatus.DECLARATION_IN_PROGRESS) {
             operationService.changeStatus(operationId,
-                    new ChangeStatusRequest(OperationStatus.ANALYST_ASSIGNED, "Auto-advanced after final approval"),
+                    new ChangeStatusRequest(OperationStatus.SUBMITTED_TO_CUSTOMS, "Auto-advanced after final approval"),
                     username, null);
         }
 

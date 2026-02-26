@@ -650,7 +650,8 @@
     "returnToReview": "Regresar a Revisión",
     "proceedToDeclaration": "Proceder a Declaración",
     "noDeclarationsYet": "No hay declaraciones registradas aún.",
-    "createDeclarationPrompt": "Ir a la pestaña Declaraciones para crear una."
+    "createDeclarationPrompt": "Ir a la pestaña Declaraciones para crear una.",
+    "declarationInProgress": "Declaración en proceso. El ADMIN puede aprobar la declaración final."
   },
   "preliquidation": {
     "title": "Preliquidación",
