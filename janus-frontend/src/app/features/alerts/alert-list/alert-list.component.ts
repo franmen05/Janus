@@ -11,7 +11,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 @Component({
   selector: 'app-alert-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe],
+  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent],
   template: `
     <h2 class="mb-4">{{ 'ALERTS.TITLE' | translate }}</h2>
 
