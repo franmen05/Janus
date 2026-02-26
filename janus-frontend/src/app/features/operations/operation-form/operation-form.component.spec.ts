@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { OperationFormComponent } from './operation-form.component';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
-import { TransportMode, OperationCategory, OperationStatus } from '../../../core/models/operation.model';
+import { TransportMode, OperationCategory, OperationStatus, BlAvailability } from '../../../core/models/operation.model';
 
 describe('OperationFormComponent', () => {
   let component: OperationFormComponent;
@@ -21,7 +21,7 @@ describe('OperationFormComponent', () => {
       id: 10, referenceNumber: 'OP-010', clientId: 1, clientName: 'Client A',
       transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
       status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
-      blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: 'NOT_AVAILABLE', blOriginalAvailable: false,
+      blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: BlAvailability.NOT_AVAILABLE, blOriginalAvailable: false,
       notes: null, deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     }));
 

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { LoginComponent } from './login.component';
@@ -14,7 +14,7 @@ describe('LoginComponent', () => {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
 
     await TestBed.configureTestingModule({
-      imports: [LoginComponent, FormsModule, TranslateModule.forRoot(), HttpClientTestingModule],
+      imports: [LoginComponent, ReactiveFormsModule, TranslateModule.forRoot(), HttpClientTestingModule],
       providers: [
         { provide: AuthService, useValue: authServiceSpy }
       ]
@@ -30,34 +30,22 @@ describe('LoginComponent', () => {
   });
 
   it('should call authService.login on submit', () => {
-    component.username = 'admin';
-    component.password = 'secret';
+    component.loginForm.setValue({ username: 'admin', password: 'secret' });
     component.onLogin();
     expect(authServiceSpy.login).toHaveBeenCalledWith('admin', 'secret');
   });
 
-  it('should bind form values', async () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const usernameInput = compiled.querySelector('#username') as HTMLInputElement;
-    const passwordInput = compiled.querySelector('#password') as HTMLInputElement;
+  it('should bind form values', () => {
+    component.loginForm.get('username')!.setValue('testuser');
+    component.loginForm.get('password')!.setValue('testpass');
 
-    usernameInput.value = 'testuser';
-    usernameInput.dispatchEvent(new Event('input'));
-    passwordInput.value = 'testpass';
-    passwordInput.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(component.username).toBe('testuser');
-    expect(component.password).toBe('testpass');
+    expect(component.loginForm.get('username')!.value).toBe('testuser');
+    expect(component.loginForm.get('password')!.value).toBe('testpass');
   });
 
   it('should have required username and password', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const usernameInput = compiled.querySelector('#username') as HTMLInputElement;
-    const passwordInput = compiled.querySelector('#password') as HTMLInputElement;
-
-    expect(usernameInput.required).toBeTrue();
-    expect(passwordInput.required).toBeTrue();
+    expect(component.loginForm.get('username')!.hasError('required')).toBeTrue();
+    expect(component.loginForm.get('password')!.hasError('required')).toBeTrue();
+    expect(component.loginForm.invalid).toBeTrue();
   });
 });

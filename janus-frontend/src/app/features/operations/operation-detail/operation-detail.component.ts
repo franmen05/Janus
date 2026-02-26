@@ -53,7 +53,7 @@ const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROV
           @if (authService.hasRole(['ADMIN', 'AGENT']) && operation()!.status !== 'CLOSED' && operation()!.status !== 'CANCELLED') {
             <a [routerLink]="['/operations', operation()!.id, 'edit']" class="btn btn-sm btn-outline-primary">{{ 'ACTIONS.EDIT' | translate }}</a>
           }
-          @if (authService.hasRole(['ADMIN']) && operation()!.status === 'DRAFT') {
+          @if (authService.hasRole(['ADMIN', 'AGENT']) && operation()!.status === 'DRAFT') {
             <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete()">{{ 'ACTIONS.DELETE' | translate }}</button>
           }
         </div>
@@ -281,6 +281,7 @@ const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROV
             </div>
           </ng-template>
         </li>
+        @if (authService.hasRole(['ADMIN'])) {
         <li [ngbNavItem]="'audit'">
           <button ngbNavLink>{{ 'TABS.AUDIT' | translate }}</button>
           <ng-template ngbNavContent>
@@ -329,6 +330,7 @@ const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROV
             </div>
           </ng-template>
         </li>
+        }
       </ul>
       <div [ngbNavOutlet]="nav"></div>
     }

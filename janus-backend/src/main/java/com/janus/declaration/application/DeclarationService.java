@@ -6,6 +6,7 @@ import com.janus.declaration.domain.model.CrossingDiscrepancy;
 import com.janus.declaration.domain.model.CrossingResult;
 import com.janus.declaration.domain.model.CrossingStatus;
 import com.janus.declaration.domain.model.Declaration;
+import java.math.BigDecimal;
 import com.janus.declaration.domain.model.DeclarationType;
 import com.janus.declaration.domain.model.TariffLine;
 import com.janus.declaration.domain.repository.CrossingDiscrepancyRepository;
@@ -100,11 +101,13 @@ public class DeclarationService {
 
         declaration.declarationNumber = updated.declarationNumber;
         declaration.fobValue = updated.fobValue;
+        declaration.insuranceValue = updated.fobValue != null
+                ? updated.fobValue.multiply(new BigDecimal("0.02")).setScale(2, java.math.RoundingMode.HALF_UP)
+                : BigDecimal.ZERO;
+        declaration.freightValue = updated.freightValue;
         declaration.cifValue = updated.cifValue;
         declaration.taxableBase = updated.cifValue; // taxableBase always equals cifValue
         declaration.totalTaxes = updated.totalTaxes;
-        declaration.freightValue = updated.freightValue;
-        declaration.insuranceValue = updated.insuranceValue;
         declaration.gattMethod = updated.gattMethod;
         declaration.notes = updated.notes;
 

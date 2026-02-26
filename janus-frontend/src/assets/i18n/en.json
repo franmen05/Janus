@@ -60,7 +60,7 @@
     "SELECT_CLIENT": "Select client...",
     "TRANSPORT_MODE": "Transport Mode",
     "OPERATION_CATEGORY": "Operation Category",
-    "BL_NUMBER": "House BL",
+    "BL_NUMBER": "House BL (HBL)",
     "CONTAINER_NUMBER": "Container Number",
     "CONTAINER_NUMBER_REQUIRED": "Container number is required for maritime FCL operations",
     "ESTIMATED_ARRIVAL": "Estimated Arrival",
@@ -611,6 +611,15 @@
       "INSPECTION_TYPE_REQUIRED": "Customs to Valuation Review",
       "UNKNOWN": "Not defined"
     }
+  },
+  "TOAST": {
+    "SUCCESS": "Success",
+    "ERROR": "Error",
+    "WARNING": "Warning",
+    "GENERIC_ERROR": "An error occurred. Please try again.",
+    "ACCESS_DENIED": "Access denied",
+    "NOT_FOUND": "Resource not found",
+    "SERVER_ERROR": "Something went wrong. Please try again later."
   },
   "AUTH": {
     "INVALID_CREDENTIALS": "Invalid credentials"

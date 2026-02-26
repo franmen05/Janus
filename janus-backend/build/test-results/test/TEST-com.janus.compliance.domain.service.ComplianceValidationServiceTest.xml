@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.janus.compliance.domain.service.ComplianceValidationServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-02-26T04:07:59.152Z" hostname="Franmens-Mac-mini.local" time="0.017">
+  <properties/>
+  <testcase name="testValidationFailsWhenMandatoryDocsAreMissing()" classname="com.janus.compliance.domain.service.ComplianceValidationServiceTest" time="0.004"/>
+  <testcase name="testValidationReturnsSpecificErrorCodes()" classname="com.janus.compliance.domain.service.ComplianceValidationServiceTest" time="0.001"/>
+  <testcase name="testDisabledRuleIsSkipped()" classname="com.janus.compliance.domain.service.ComplianceValidationServiceTest" time="0.002"/>
+  <testcase name="testAllRulesDisabledAllowsTransition()" classname="com.janus.compliance.domain.service.ComplianceValidationServiceTest" time="0.003"/>
+  <testcase name="testValidationPassesWhenNoRulesApply()" classname="com.janus.compliance.domain.service.ComplianceValidationServiceTest" time="0.001"/>
+  <testcase name="testMARITIMEHasMoreErrors()" classname="com.janus.compliance.domain.service.ComplianceValidationServiceTest" time="0.001"/>
+  <testcase name="testReEnablingRuleTakesEffect()" classname="com.janus.compliance.domain.service.ComplianceValidationServiceTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

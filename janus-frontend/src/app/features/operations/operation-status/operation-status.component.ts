@@ -11,6 +11,7 @@ import { ValidationError } from '../../../core/models/compliance.model';
 import { TimelineComponent, TimelineEvent } from '../../../shared/components/timeline/timeline.component';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { OperationTimelineComponent } from '../operation-timeline/operation-timeline.component';
 
 @Component({
@@ -90,6 +91,7 @@ export class OperationStatusComponent implements OnInit {
   private operationService = inject(OperationService);
   private complianceService = inject(ComplianceService);
   private translate = inject(TranslateService);
+  private toastService = inject(ToastService);
   authService = inject(AuthService);
   timelineEvents = signal<TimelineEvent[]>([]);
   validationErrors = signal<ValidationError[]>([]);
@@ -155,9 +157,9 @@ export class OperationStatusComponent implements OnInit {
         if (match) {
           const from = this.translate.instant('STATUS.' + match[1]);
           const to = this.translate.instant('STATUS.' + match[2]);
-          alert(this.translate.instant('STATUS_CHANGE.INVALID_TRANSITION', { from, to }));
+          this.toastService.error(this.translate.instant('STATUS_CHANGE.INVALID_TRANSITION', { from, to }));
         } else {
-          alert(msg || this.translate.instant('STATUS_CHANGE.FAILED'));
+          this.toastService.error(msg || this.translate.instant('STATUS_CHANGE.FAILED'));
         }
       }
     });

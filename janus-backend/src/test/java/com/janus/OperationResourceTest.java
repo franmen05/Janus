@@ -481,7 +481,7 @@ class OperationResourceTest {
     @Order(33)
     void testNonAdminCannotDelete() {
         given()
-                .auth().basic("agent", "agent123")
+                .auth().basic("accounting", "acc123")
                 .when().delete("/api/operations/{id}", createdOperationId)
                 .then()
                 .statusCode(403);

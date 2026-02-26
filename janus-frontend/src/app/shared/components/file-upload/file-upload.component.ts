@@ -1,6 +1,7 @@
 import { Component, output, input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -34,6 +35,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 })
 export class FileUploadComponent {
   private translate = inject(TranslateService);
+  private toastService = inject(ToastService);
   maxSize = input<number>(10485760);
   fileSelected = output<File>();
 
@@ -62,7 +64,7 @@ export class FileUploadComponent {
 
   selectFile(file: File): void {
     if (file.size > this.maxSize()) {
-      alert(this.translate.instant('FILE_UPLOAD.FILE_TOO_LARGE', { size: this.maxSizeMb }));
+      this.toastService.warning(this.translate.instant('FILE_UPLOAD.FILE_TOO_LARGE', { size: this.maxSizeMb }));
       return;
     }
     this.selectedFile = file;

@@ -36,8 +36,8 @@ import { DeclarationService } from '../../../core/services/declaration.service';
             <input type="number" class="form-control" formControlName="freightValue" step="0.01">
           </div>
           <div class="col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }}</label>
-            <input type="number" class="form-control" formControlName="insuranceValue" step="0.01">
+            <label class="form-label">{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }} <small class="text-muted">(2% FOB)</small></label>
+            <input type="number" class="form-control" formControlName="insuranceValue" step="0.01" readonly>
           </div>
         </div>
         <div class="row mb-3">
@@ -86,9 +86,23 @@ export class DeclarationFormComponent {
   });
 
   constructor() {
+    this.form.get('fobValue')!.valueChanges.subscribe(fob => {
+      const insurance = Math.round(fob * 0.02 * 100) / 100;
+      this.form.get('insuranceValue')!.setValue(insurance, { emitEvent: false });
+      this.recalculateCif();
+    });
+    this.form.get('freightValue')!.valueChanges.subscribe(() => this.recalculateCif());
     this.form.get('cifValue')!.valueChanges.subscribe(cif => {
       this.form.get('taxableBase')!.setValue(cif, { emitEvent: false });
     });
+  }
+
+  private recalculateCif(): void {
+    const fob = this.form.get('fobValue')!.value || 0;
+    const freight = this.form.get('freightValue')!.value || 0;
+    const insurance = this.form.get('insuranceValue')!.value || 0;
+    const cif = Math.round((fob + freight + insurance) * 100) / 100;
+    this.form.get('cifValue')!.setValue(cif);
   }
 
   onSubmit(): void {

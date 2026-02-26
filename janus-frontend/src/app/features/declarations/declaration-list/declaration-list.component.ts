@@ -6,6 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
 import { Declaration } from '../../../core/models/declaration.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { DeclarationFormComponent } from '../declaration-form/declaration-form.component';
 
@@ -77,6 +78,7 @@ export class DeclarationListComponent implements OnInit {
   private declarationService = inject(DeclarationService);
   private modal = inject(NgbModal);
   private translate = inject(TranslateService);
+  private toastService = inject(ToastService);
   authService = inject(AuthService);
   declarations = signal<Declaration[]>([]);
 
@@ -111,10 +113,10 @@ export class DeclarationListComponent implements OnInit {
     if (!duaNumber) return;
     this.declarationService.registerDua(this.operationId(), decl.id, duaNumber).subscribe({
       next: () => {
-        alert(this.translate.instant('DECLARATIONS.DUA_REGISTERED'));
+        this.toastService.success(this.translate.instant('DECLARATIONS.DUA_REGISTERED'));
         this.loadDeclarations();
       },
-      error: (err) => alert(err.error?.error || 'Error')
+      error: (err) => this.toastService.error(err.error?.error || 'Error')
     });
   }
 
@@ -123,10 +125,10 @@ export class DeclarationListComponent implements OnInit {
     if (!confirm(msg)) return;
     this.declarationService.submitToDga(this.operationId(), decl.id).subscribe({
       next: () => {
-        alert(this.translate.instant('DECLARATIONS.DGA_SUBMITTED'));
+        this.toastService.success(this.translate.instant('DECLARATIONS.DGA_SUBMITTED'));
         this.loadDeclarations();
       },
-      error: (err) => alert(err.error?.error || 'Error')
+      error: (err) => this.toastService.error(err.error?.error || 'Error')
     });
   }
 }

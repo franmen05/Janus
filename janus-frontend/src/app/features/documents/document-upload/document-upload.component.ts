@@ -6,6 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DocumentService } from '../../../core/services/document.service';
 import { DocumentType, DocumentStatus } from '../../../core/models/document.model';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-document-upload',
@@ -46,6 +47,7 @@ export class DocumentUploadComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private translate = inject(TranslateService);
+  private toastService = inject(ToastService);
 
   selectedType = DocumentType.BL;
   selectedFile: File | null = null;
@@ -69,16 +71,21 @@ export class DocumentUploadComponent {
     this.documentService.upload(operationId, this.selectedFile, this.selectedType, this.changeReason || undefined).subscribe({
       next: (doc) => {
         this.uploading.set(false);
-        const statusMessages: Record<string, string> = {
-          [DocumentStatus.VALIDATED]: this.translate.instant('UPLOAD.VALIDATED'),
-          [DocumentStatus.OBSERVED]: this.translate.instant('UPLOAD.OBSERVED'),
-          [DocumentStatus.REQUIRES_REPLACEMENT]: this.translate.instant('UPLOAD.REQUIRES_REPLACEMENT'),
-          [DocumentStatus.PENDING]: this.translate.instant('UPLOAD.PENDING')
+        const statusToastMap: Record<string, () => void> = {
+          [DocumentStatus.VALIDATED]: () => this.toastService.success(this.translate.instant('UPLOAD.VALIDATED')),
+          [DocumentStatus.OBSERVED]: () => this.toastService.warning(this.translate.instant('UPLOAD.OBSERVED')),
+          [DocumentStatus.REQUIRES_REPLACEMENT]: () => this.toastService.error(this.translate.instant('UPLOAD.REQUIRES_REPLACEMENT')),
+          [DocumentStatus.PENDING]: () => this.toastService.info(this.translate.instant('UPLOAD.PENDING'))
         };
-        alert(statusMessages[doc.status] ?? `${this.translate.instant('ACTIONS.UPLOAD')}: ${doc.status}`);
+        const showToast = statusToastMap[doc.status];
+        if (showToast) {
+          showToast();
+        } else {
+          this.toastService.info(`${this.translate.instant('ACTIONS.UPLOAD')}: ${doc.status}`);
+        }
         this.router.navigate(['/operations', operationId], { queryParams: { tab: 'documents' } });
       },
-      error: (err) => { this.uploading.set(false); alert(err.error?.error ?? this.translate.instant('UPLOAD.FAILED')); }
+      error: (err) => { this.uploading.set(false); this.toastService.error(err.error?.error ?? this.translate.instant('UPLOAD.FAILED')); }
     });
   }
 

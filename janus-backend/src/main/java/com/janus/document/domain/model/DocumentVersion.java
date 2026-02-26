@@ -1,7 +1,7 @@
 package com.janus.document.domain.model;
 
+import com.janus.shared.domain.BaseEntity;
 import com.janus.user.domain.model.User;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "document_versions")
-public class DocumentVersion extends PanacheEntity {
+public class DocumentVersion extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     public Document document;
@@ -47,8 +47,12 @@ public class DocumentVersion extends PanacheEntity {
     @Column(nullable = false)
     public boolean active = true;
 
+    @Override
     @PrePersist
     public void prePersist() {
-        uploadedAt = LocalDateTime.now();
+        super.prePersist();
+        if (this.uploadedAt == null) {
+            this.uploadedAt = LocalDateTime.now();
+        }
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.janus.PermissionHardeningTest" tests="25" skipped="0" failures="0" errors="0" timestamp="2026-02-26T04:07:49.698Z" hostname="Franmens-Mac-mini.local" time="1.753">
+  <properties/>
+  <testcase name="testSetupOperations()" classname="com.janus.PermissionHardeningTest" time="0.141"/>
+  <testcase name="testClientSeesOnlyOwnOperations()" classname="com.janus.PermissionHardeningTest" time="0.076"/>
+  <testcase name="testClientCanAccessOwnOperation()" classname="com.janus.PermissionHardeningTest" time="0.069"/>
+  <testcase name="testClientCannotAccessOtherClientOperation()" classname="com.janus.PermissionHardeningTest" time="0.068"/>
+  <testcase name="testClientCannotAccessOtherClientHistory()" classname="com.janus.PermissionHardeningTest" time="0.066"/>
+  <testcase name="testClientCannotAccessOtherClientDocuments()" classname="com.janus.PermissionHardeningTest" time="0.067"/>
+  <testcase name="testClientCannotAccessOtherClientComments()" classname="com.janus.PermissionHardeningTest" time="0.067"/>
+  <testcase name="testClientCannotAccessOtherClientTimeline()" classname="com.janus.PermissionHardeningTest" time="0.066"/>
+  <testcase name="testClientCannotAccessOtherClientCompleteness()" classname="com.janus.PermissionHardeningTest" time="0.064"/>
+  <testcase name="testClientCannotAccessOtherClientCrossing()" classname="com.janus.PermissionHardeningTest" time="0.066"/>
+  <testcase name="testCarrierCannotListOperations()" classname="com.janus.PermissionHardeningTest" time="0.068"/>
+  <testcase name="testCarrierCannotAccessAlerts()" classname="com.janus.PermissionHardeningTest" time="0.065"/>
+  <testcase name="testCarrierCannotAccessDashboard()" classname="com.janus.PermissionHardeningTest" time="0.065"/>
+  <testcase name="testCarrierCannotAccessDeclarations()" classname="com.janus.PermissionHardeningTest" time="0.066"/>
+  <testcase name="testCarrierCannotAccessComments()" classname="com.janus.PermissionHardeningTest" time="0.065"/>
+  <testcase name="testAccountingCanListOperations()" classname="com.janus.PermissionHardeningTest" time="0.068"/>
+  <testcase name="testAccountingCannotCreateOperations()" classname="com.janus.PermissionHardeningTest" time="0.066"/>
+  <testcase name="testAccountingCannotChangeStatus()" classname="com.janus.PermissionHardeningTest" time="0.066"/>
+  <testcase name="testAccountingCannotDeleteOperations()" classname="com.janus.PermissionHardeningTest" time="0.065"/>
+  <testcase name="testAccountingCannotUploadDocuments()" classname="com.janus.PermissionHardeningTest" time="0.065"/>
+  <testcase name="testClientCannotCreateOperations()" classname="com.janus.PermissionHardeningTest" time="0.066"/>
+  <testcase name="testClientCannotUploadDocuments()" classname="com.janus.PermissionHardeningTest" time="0.066"/>
+  <testcase name="testClientCannotAddComments()" classname="com.janus.PermissionHardeningTest" time="0.065"/>
+  <testcase name="testClientCannotAccessAlerts()" classname="com.janus.PermissionHardeningTest" time="0.065"/>
+  <testcase name="testForbiddenResponseIsJson()" classname="com.janus.PermissionHardeningTest" time="0.068"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

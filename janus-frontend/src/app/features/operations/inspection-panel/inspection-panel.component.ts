@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } 
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InspectionService } from '../../../core/services/inspection.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { Operation, InspectionType } from '../../../core/models/operation.model';
 import { InspectionPhoto, SetInspectionTypeRequest, InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../../core/models/inspection.model';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
@@ -249,6 +250,7 @@ export class InspectionPanelComponent implements OnInit {
 
   private inspectionService = inject(InspectionService);
   private translate = inject(TranslateService);
+  private toastService = inject(ToastService);
   authService = inject(AuthService);
 
   photos = signal<InspectionPhoto[]>([]);
@@ -310,7 +312,7 @@ export class InspectionPanelComponent implements OnInit {
         this.changed.emit();
         this.loadPhotos();
       },
-      error: (err) => alert(err.error?.error || 'Error')
+      error: (err) => this.toastService.error(err.error?.error || 'Error')
     });
   }
 
@@ -334,11 +336,11 @@ export class InspectionPanelComponent implements OnInit {
         this.selectedFile = null;
         this.caption = '';
         this.loadPhotos();
-        alert(this.translate.instant('INSPECTION.UPLOAD_SUCCESS'));
+        this.toastService.success(this.translate.instant('INSPECTION.UPLOAD_SUCCESS'));
       },
       error: (err) => {
         this.uploading.set(false);
-        alert(err.error?.error || 'Error');
+        this.toastService.error(err.error?.error || 'Error');
       }
     });
   }
@@ -389,9 +391,9 @@ export class InspectionPanelComponent implements OnInit {
         this.newExpenseForm.reset({ category: '', currency: 'USD' });
         this.showExpenseForm.set(false);
         this.loadExpenses();
-        alert(this.translate.instant('INSPECTION.EXPENSE_ADDED'));
+        this.toastService.success(this.translate.instant('INSPECTION.EXPENSE_ADDED'));
       },
-      error: (err) => alert(err.error?.error || 'Error')
+      error: (err) => this.toastService.error(err.error?.error || 'Error')
     });
   }
 
@@ -426,9 +428,9 @@ export class InspectionPanelComponent implements OnInit {
       next: () => {
         this.editingExpenseId.set(null);
         this.loadExpenses();
-        alert(this.translate.instant('INSPECTION.EXPENSE_UPDATED'));
+        this.toastService.success(this.translate.instant('INSPECTION.EXPENSE_UPDATED'));
       },
-      error: (err) => alert(err.error?.error || 'Error')
+      error: (err) => this.toastService.error(err.error?.error || 'Error')
     });
   }
 
@@ -438,9 +440,9 @@ export class InspectionPanelComponent implements OnInit {
     this.inspectionService.deleteExpense(this.operationId(), expenseId).subscribe({
       next: () => {
         this.loadExpenses();
-        alert(this.translate.instant('INSPECTION.EXPENSE_DELETED'));
+        this.toastService.success(this.translate.instant('INSPECTION.EXPENSE_DELETED'));
       },
-      error: (err) => alert(err.error?.error || 'Error')
+      error: (err) => this.toastService.error(err.error?.error || 'Error')
     });
   }
 }

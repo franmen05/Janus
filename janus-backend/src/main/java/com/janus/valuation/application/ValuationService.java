@@ -13,6 +13,7 @@ import com.janus.operation.domain.model.BlAvailability;
 import com.janus.operation.domain.model.InspectionType;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
+import com.janus.operation.domain.model.TransportMode;
 import com.janus.shared.infrastructure.audit.AuditDiffUtil;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.util.JsonUtil;
@@ -273,12 +274,14 @@ public class ValuationService {
                 "BL_VALIDATED", "Bill of Lading validated", blValidated,
                 blValidated ? "BL is validated" : "BL must be validated"));
 
-        // 1b. BL availability confirmed
-        boolean blAvailabilityConfirmed = operation.blAvailability != null
-                && operation.blAvailability != BlAvailability.NOT_AVAILABLE;
-        items.add(new ValuationChecklistResponse.ChecklistItem(
-                "BL_AVAILABILITY_CONFIRMED", "BL availability confirmed", blAvailabilityConfirmed,
-                blAvailabilityConfirmed ? "BL: " + operation.blAvailability : "BL availability not confirmed"));
+        // 1b. BL availability confirmed (only for maritime operations)
+        if (operation.transportMode == TransportMode.MARITIME) {
+            boolean blAvailabilityConfirmed = operation.blAvailability != null
+                    && operation.blAvailability != BlAvailability.NOT_AVAILABLE;
+            items.add(new ValuationChecklistResponse.ChecklistItem(
+                    "BL_AVAILABILITY_CONFIRMED", "BL availability confirmed", blAvailabilityConfirmed,
+                    blAvailabilityConfirmed ? "BL: " + operation.blAvailability : "BL availability not confirmed"));
+        }
 
         // 2. Commercial invoice present
         boolean invoicePresent = documents.stream()
@@ -349,6 +352,15 @@ public class ValuationService {
 
         if (operation.status != OperationStatus.VALUATION_REVIEW) {
             throw new BusinessException("Operation must be in VALUATION_REVIEW status to finalize valuation");
+        }
+
+        // Validate GATT completion when required by inspection type
+        if (isGattRequired(operation)) {
+            boolean gattCompleted = declarationRepository.findByOperationId(operationId).stream()
+                    .anyMatch(d -> d.gattCompletedAt != null);
+            if (!gattCompleted) {
+                throw new BusinessException("GATT form must be completed for operations with VISUAL or FISICA inspection");
+            }
         }
 
         operation.valuationFinalizedAt = LocalDateTime.now();

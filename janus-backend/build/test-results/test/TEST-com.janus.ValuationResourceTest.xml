@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.janus.ValuationResourceTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2026-02-26T04:07:53.006Z" hostname="Franmens-Mac-mini.local" time="4.949">
+  <properties/>
+  <testcase name="testSetupOperation()" classname="com.janus.ValuationResourceTest" time="1.091"/>
+  <testcase name="testGetChecklist()" classname="com.janus.ValuationResourceTest" time="0.073"/>
+  <testcase name="testAccountingCanGetChecklist()" classname="com.janus.ValuationResourceTest" time="0.068"/>
+  <testcase name="testClientCannotGetChecklist()" classname="com.janus.ValuationResourceTest" time="0.067"/>
+  <testcase name="testToggleLocalChargesValidated()" classname="com.janus.ValuationResourceTest" time="0.07"/>
+  <testcase name="testToggleLocalChargesValidatedOff()" classname="com.janus.ValuationResourceTest" time="0.069"/>
+  <testcase name="testClientCannotToggleLocalCharges()" classname="com.janus.ValuationResourceTest" time="0.065"/>
+  <testcase name="testCreatePermit()" classname="com.janus.ValuationResourceTest" time="0.081"/>
+  <testcase name="testListPermits()" classname="com.janus.ValuationResourceTest" time="0.068"/>
+  <testcase name="testAccountingCanListPermits()" classname="com.janus.ValuationResourceTest" time="0.065"/>
+  <testcase name="testUpdatePermit()" classname="com.janus.ValuationResourceTest" time="0.071"/>
+  <testcase name="testDeletePermit()" classname="com.janus.ValuationResourceTest" time="0.069"/>
+  <testcase name="testClientCannotCreatePermit()" classname="com.janus.ValuationResourceTest" time="0.065"/>
+  <testcase name="testPermitAutoTransitionToPendingExternalApproval()" classname="com.janus.ValuationResourceTest" time="0.346"/>
+  <testcase name="testGetGattForm()" classname="com.janus.ValuationResourceTest" time="0.068"/>
+  <testcase name="testSaveGattForm()" classname="com.janus.ValuationResourceTest" time="0.073"/>
+  <testcase name="testClientCannotSaveGattForm()" classname="com.janus.ValuationResourceTest" time="0.071"/>
+  <testcase name="testFinalizeValuation()" classname="com.janus.ValuationResourceTest" time="0.137"/>
+  <testcase name="testCannotFinalizeNonValuationReviewOperation()" classname="com.janus.ValuationResourceTest" time="0.065"/>
+  <testcase name="testClientCannotFinalizeValuation()" classname="com.janus.ValuationResourceTest" time="1.115"/>
+  <testcase name="testGattFormNotRequiredForExpreso()" classname="com.janus.ValuationResourceTest" time="1.142"/>
+  <system-out><![CDATA[2026-02-26 00:07:53,143 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-1) File stored: ./storage/OP-2026-00022/f0d07745-32cd-44d7-9ad3-47ec7a560e0f_test-doc3386591515720619714.pdf
+2026-02-26 00:07:53,212 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-2) File stored: ./storage/OP-2026-00022/5cc9a692-6fe6-4ffc-8919-79db77bae2d0_test-doc6819346982971551244.pdf
+2026-02-26 00:07:53,281 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-1) File stored: ./storage/OP-2026-00022/5948e96e-77ac-4f23-bd92-9071955d3ef6_test-doc12684225525137375523.pdf
+2026-02-26 00:07:53,553 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:53,553 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: DOCUMENTATION_COMPLETE.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:53,620 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:53,620 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: IN_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:53,688 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:53,688 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: PRELIQUIDATION_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:53,759 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:53,759 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: ANALYST_ASSIGNED.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:53,827 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:53,827 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: DECLARATION_IN_PROGRESS.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:53,894 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:53,894 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: SUBMITTED_TO_CUSTOMS.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:54,027 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:54,028 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: VALUATION_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:55,002 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:55,002 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: PENDING_EXTERNAL_APPROVAL.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:55,142 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:55,142 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: VALUATION_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:55,562 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00022 - Status Update
+2026-02-26 00:07:55,562 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00022 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00022 has been updated to status: PAYMENT_PREPARATION.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:55,834 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-2) File stored: ./storage/OP-2026-00023/d3b414c5-2e6a-4d2b-90e7-93eca051c638_test-doc7939248588435628595.pdf
+2026-02-26 00:07:55,904 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-1) File stored: ./storage/OP-2026-00023/186ce9fe-db06-4ef7-810c-665611dac391_test-doc3234978869173784223.pdf
+2026-02-26 00:07:55,972 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-2) File stored: ./storage/OP-2026-00023/a8bfed44-58b2-4b56-82fd-cc71d92e13e4_test-doc5582067731787975573.pdf
+2026-02-26 00:07:56,241 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-1) Sending email to info@demoimport.com: Operation OP-2026-00023 - Status Update
+2026-02-26 00:07:56,242 INFO  [quarkus-mailer] (executor-thread-1) Sending email Operation OP-2026-00023 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00023 has been updated to status: DOCUMENTATION_COMPLETE.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:56,310 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-1) Sending email to info@demoimport.com: Operation OP-2026-00023 - Status Update
+2026-02-26 00:07:56,310 INFO  [quarkus-mailer] (executor-thread-1) Sending email Operation OP-2026-00023 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00023 has been updated to status: IN_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:56,377 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-1) Sending email to info@demoimport.com: Operation OP-2026-00023 - Status Update
+2026-02-26 00:07:56,377 INFO  [quarkus-mailer] (executor-thread-1) Sending email Operation OP-2026-00023 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00023 has been updated to status: PRELIQUIDATION_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:56,446 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-1) Sending email to info@demoimport.com: Operation OP-2026-00023 - Status Update
+2026-02-26 00:07:56,446 INFO  [quarkus-mailer] (executor-thread-1) Sending email Operation OP-2026-00023 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00023 has been updated to status: ANALYST_ASSIGNED.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:56,512 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-1) Sending email to info@demoimport.com: Operation OP-2026-00023 - Status Update
+2026-02-26 00:07:56,512 INFO  [quarkus-mailer] (executor-thread-1) Sending email Operation OP-2026-00023 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00023 has been updated to status: DECLARATION_IN_PROGRESS.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:56,579 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-1) Sending email to info@demoimport.com: Operation OP-2026-00023 - Status Update
+2026-02-26 00:07:56,580 INFO  [quarkus-mailer] (executor-thread-1) Sending email Operation OP-2026-00023 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00023 has been updated to status: SUBMITTED_TO_CUSTOMS.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:56,721 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-1) Sending email to info@demoimport.com: Operation OP-2026-00023 - Status Update
+2026-02-26 00:07:56,721 INFO  [quarkus-mailer] (executor-thread-1) Sending email Operation OP-2026-00023 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00023 has been updated to status: VALUATION_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:56,980 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-1) File stored: ./storage/OP-2026-00024/d458f4f1-db93-48f5-a02d-da5d74ad9d67_test-doc15959841138794593626.pdf
+2026-02-26 00:07:57,052 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-2) File stored: ./storage/OP-2026-00024/fbe73aa5-4119-4542-b278-31e85be8c5ea_test-doc2683362857488721152.pdf
+2026-02-26 00:07:57,122 INFO  [com.jan.doc.inf.sto.LocalStorageService] (executor-thread-1) File stored: ./storage/OP-2026-00024/256bea1a-98e5-4246-93b3-cd1cd388971f_test-doc12344718514446965336.pdf
+2026-02-26 00:07:57,410 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00024 - Status Update
+2026-02-26 00:07:57,410 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00024 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00024 has been updated to status: DOCUMENTATION_COMPLETE.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:57,478 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00024 - Status Update
+2026-02-26 00:07:57,478 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00024 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00024 has been updated to status: IN_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:57,546 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00024 - Status Update
+2026-02-26 00:07:57,546 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00024 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00024 has been updated to status: PRELIQUIDATION_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:57,614 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00024 - Status Update
+2026-02-26 00:07:57,614 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00024 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00024 has been updated to status: ANALYST_ASSIGNED.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:57,682 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00024 - Status Update
+2026-02-26 00:07:57,682 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00024 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00024 has been updated to status: DECLARATION_IN_PROGRESS.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:57,749 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00024 - Status Update
+2026-02-26 00:07:57,749 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00024 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00024 has been updated to status: SUBMITTED_TO_CUSTOMS.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+2026-02-26 00:07:57,818 INFO  [com.jan.not.inf.EmailNotificationAdapter] (executor-thread-2) Sending email to info@demoimport.com: Operation OP-2026-00024 - Status Update
+2026-02-26 00:07:57,818 INFO  [quarkus-mailer] (executor-thread-2) Sending email Operation OP-2026-00024 - Status Update from null to [info@demoimport.com] (cc: [], bcc: []), text body: 
+Your operation OP-2026-00024 has been updated to status: VALUATION_REVIEW.
+
+Please log in to the Janus platform for more details.
+
+html body: 
+<empty>
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -11,6 +11,7 @@ import com.janus.declaration.api.dto.ResolveCrossingRequest;
 import com.janus.declaration.api.dto.TariffLineResponse;
 import com.janus.declaration.application.DeclarationService;
 import com.janus.declaration.domain.model.Declaration;
+import java.math.BigDecimal;
 import com.janus.declaration.domain.model.TariffLine;
 import com.janus.operation.application.OperationService;
 import com.janus.shared.infrastructure.security.SecurityHelper;
@@ -165,11 +166,13 @@ public class DeclarationResource {
         var d = new Declaration();
         d.declarationNumber = r.declarationNumber();
         d.fobValue = r.fobValue();
+        d.insuranceValue = r.fobValue() != null
+                ? r.fobValue().multiply(new BigDecimal("0.02")).setScale(2, java.math.RoundingMode.HALF_UP)
+                : BigDecimal.ZERO;
+        d.freightValue = r.freightValue();
         d.cifValue = r.cifValue();
         d.taxableBase = r.taxableBase();
         d.totalTaxes = r.totalTaxes();
-        d.freightValue = r.freightValue();
-        d.insuranceValue = r.insuranceValue();
         d.gattMethod = r.gattMethod();
         d.notes = r.notes();
         return d;

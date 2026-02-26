@@ -109,7 +109,7 @@ public class OperationResource {
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response delete(@PathParam("id") Long id, @Context SecurityContext sec) {
         operationService.delete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();

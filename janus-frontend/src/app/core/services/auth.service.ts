@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../environments/environment';
 import { User } from '../models/user.model';
+import { ToastService } from './toast.service';
 
 const STORAGE_KEY_CREDENTIALS = 'janus_credentials';
 const STORAGE_KEY_USER = 'janus_user';
@@ -13,6 +14,7 @@ export class AuthService {
   private currentUser = signal<User | null>(null);
   private credentials = signal<string | null>(null);
   private translate = inject(TranslateService);
+  private toastService = inject(ToastService);
 
   isAuthenticated = computed(() => this.currentUser() !== null);
   user = computed(() => this.currentUser());
@@ -37,7 +39,7 @@ export class AuthService {
       },
       error: () => {
         this.credentials.set(null);
-        alert(this.translate.instant('AUTH.INVALID_CREDENTIALS'));
+        this.toastService.error(this.translate.instant('AUTH.INVALID_CREDENTIALS'));
       }
     });
   }

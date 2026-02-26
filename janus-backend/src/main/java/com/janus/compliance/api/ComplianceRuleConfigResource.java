@@ -1,11 +1,9 @@
 package com.janus.compliance.api;
 
+import com.janus.compliance.application.ComplianceRuleConfigService;
 import com.janus.compliance.domain.model.ComplianceRuleConfig;
-import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
-import com.janus.shared.infrastructure.exception.NotFoundException;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -25,47 +23,35 @@ import java.util.List;
 public class ComplianceRuleConfigResource {
 
     @Inject
-    ComplianceRuleConfigRepository repository;
+    ComplianceRuleConfigService service;
 
     @GET
     public List<ComplianceRuleConfig> listAll() {
-        return repository.listAll();
+        return service.listAll();
     }
 
     @GET
     @Path("/{ruleCode}")
     public List<ComplianceRuleConfig> getByRuleCode(@PathParam("ruleCode") String ruleCode) {
-        return repository.findByRuleCode(ruleCode);
+        return service.findByRuleCode(ruleCode);
     }
 
     @POST
-    @Transactional
     public Response create(ComplianceRuleConfig entity) {
-        repository.persist(entity);
-        return Response.status(Response.Status.CREATED).entity(entity).build();
+        var created = service.create(entity);
+        return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
     @PUT
     @Path("/{id}")
-    @Transactional
     public ComplianceRuleConfig update(@PathParam("id") Long id, ComplianceRuleConfig update) {
-        var config = repository.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("ComplianceRuleConfig", id));
-        config.paramValue = update.paramValue;
-        config.enabled = update.enabled;
-        if (update.description != null) {
-            config.description = update.description;
-        }
-        return config;
+        return service.update(id, update);
     }
 
     @DELETE
     @Path("/{id}")
-    @Transactional
     public Response delete(@PathParam("id") Long id) {
-        var config = repository.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("ComplianceRuleConfig", id));
-        repository.delete(config);
+        service.delete(id);
         return Response.noContent().build();
     }
 }

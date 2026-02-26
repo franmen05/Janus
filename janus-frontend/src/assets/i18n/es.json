@@ -60,7 +60,7 @@
     "SELECT_CLIENT": "Seleccionar cliente...",
     "TRANSPORT_MODE": "Modo de Transporte",
     "OPERATION_CATEGORY": "Categoría de Operación",
-    "BL_NUMBER": "House BL",
+    "BL_NUMBER": "BL Madre (HBL)",
     "CONTAINER_NUMBER": "Número de Contenedor",
     "CONTAINER_NUMBER_REQUIRED": "El número de contenedor es obligatorio para operaciones marítimas FCL",
     "ESTIMATED_ARRIVAL": "Llegada Estimada",
@@ -611,6 +611,15 @@
       "INSPECTION_TYPE_REQUIRED": "Aduanas a Revisión de Valoración",
       "UNKNOWN": "No definida"
     }
+  },
+  "TOAST": {
+    "SUCCESS": "Éxito",
+    "ERROR": "Error",
+    "WARNING": "Advertencia",
+    "GENERIC_ERROR": "Ocurrió un error. Por favor intente nuevamente.",
+    "ACCESS_DENIED": "Acceso denegado",
+    "NOT_FOUND": "Recurso no encontrado",
+    "SERVER_ERROR": "Algo salió mal. Por favor intente más tarde."
   },
   "AUTH": {
     "INVALID_CREDENTIALS": "Credenciales inválidas"

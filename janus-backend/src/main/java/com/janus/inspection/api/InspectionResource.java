@@ -11,6 +11,7 @@ import com.janus.operation.application.OperationService;
 import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -151,6 +152,7 @@ public class InspectionResource {
     @Path("/expenses/{expenseId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"ADMIN", "AGENT"})
+    @Transactional
     public InspectionExpenseResponse updateExpense(@PathParam("operationId") Long operationId,
                                                     @PathParam("expenseId") Long expenseId,
                                                     @Valid CreateExpenseRequest request,

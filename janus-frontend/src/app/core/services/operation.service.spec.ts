@@ -5,7 +5,7 @@ import { OperationService } from './operation.service';
 import { environment } from '../../../environments/environment';
 import {
   Operation, CreateOperationRequest, ChangeStatusRequest,
-  OperationStatus, TransportMode, OperationCategory, StatusHistory
+  OperationStatus, TransportMode, OperationCategory, StatusHistory, BlAvailability
 } from '../models/operation.model';
 import { CompletenessResponse } from '../models/document.model';
 
@@ -28,7 +28,7 @@ describe('OperationService', () => {
     blNumber: 'BL-001',
     containerNumber: 'CONT-001',
     estimatedArrival: '2024-02-01T10:00:00',
-    blAvailability: 'NOT_AVAILABLE' as any,
+    blAvailability: BlAvailability.NOT_AVAILABLE,
     blOriginalAvailable: false,
     notes: null,
     deadline: null,
@@ -114,7 +114,8 @@ describe('OperationService', () => {
       const request: CreateOperationRequest = {
         clientId: 1,
         transportMode: TransportMode.MARITIME,
-        operationCategory: OperationCategory.CATEGORY_1
+        operationCategory: OperationCategory.CATEGORY_1,
+        blAvailability: BlAvailability.NOT_AVAILABLE
       };
 
       service.create(request).subscribe(op => {
@@ -133,7 +134,8 @@ describe('OperationService', () => {
       const request: CreateOperationRequest = {
         clientId: 1,
         transportMode: TransportMode.AIR,
-        operationCategory: OperationCategory.CATEGORY_2
+        operationCategory: OperationCategory.CATEGORY_2,
+        blAvailability: BlAvailability.NOT_AVAILABLE
       };
 
       service.update(1, request).subscribe(op => {
