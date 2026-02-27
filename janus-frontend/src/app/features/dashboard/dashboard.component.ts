@@ -161,7 +161,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
       <!-- Active Alerts -->
       @if (activeAlerts().length > 0) {
         <div class="card mb-4 border-warning">
-          <div class="card-header bg-warning bg-opacity-10 d-flex justify-content-between align-items-center">
+          <div class="card-header bg-warning bg-opacity-10 d-flex flex-wrap gap-2 justify-content-between align-items-center">
             <h6 class="mb-0">{{ 'DASHBOARD.ACTIVE_ALERTS' | translate }} ({{ activeAlerts().length }})</h6>
             <a routerLink="/alerts" class="btn btn-sm btn-outline-warning">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
           </div>
@@ -205,7 +205,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
         </div>
       </div>
       <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex flex-wrap gap-2 justify-content-between align-items-center">
           <h5 class="mb-0">{{ 'DASHBOARD.RECENT_OPERATIONS' | translate }}</h5>
           <a routerLink="/operations" class="btn btn-sm btn-outline-primary">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
         </div>

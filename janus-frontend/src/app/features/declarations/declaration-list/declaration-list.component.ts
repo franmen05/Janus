@@ -16,7 +16,7 @@ import { DeclarationFormComponent } from '../declaration-form/declaration-form.c
   imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent],
   template: `
     @if (authService.hasRole(['ADMIN', 'AGENT']) && !isTerminalStatus()) {
-      <div class="mb-3 d-flex gap-2">
+      <div class="mb-3 d-flex flex-wrap gap-2">
         @if (!canRegisterFinal()) {
           <button class="btn btn-sm btn-outline-primary" (click)="openForm('PRELIMINARY')">{{ 'DECLARATIONS.REGISTER_PRELIMINARY' | translate }}</button>
         }
@@ -32,10 +32,10 @@ import { DeclarationFormComponent } from '../declaration-form/declaration-form.c
             <tr>
               <th>{{ 'DECLARATIONS.TYPE' | translate }}</th>
               <th>{{ 'DECLARATIONS.DECLARATION_NUMBER' | translate }}</th>
-              <th>{{ 'DECLARATIONS.FOB_VALUE' | translate }}</th>
-              <th>{{ 'DECLARATIONS.CIF_VALUE' | translate }}</th>
+              <th class="d-none d-sm-table-cell">{{ 'DECLARATIONS.FOB_VALUE' | translate }}</th>
+              <th class="d-none d-sm-table-cell">{{ 'DECLARATIONS.CIF_VALUE' | translate }}</th>
               <th>{{ 'DECLARATIONS.TOTAL_TAXES' | translate }}</th>
-              <th>{{ 'DECLARATIONS.SUBMITTED_AT' | translate }}</th>
+              <th class="d-none d-sm-table-cell">{{ 'DECLARATIONS.SUBMITTED_AT' | translate }}</th>
               <th></th>
             </tr>
           </thead>
@@ -44,10 +44,10 @@ import { DeclarationFormComponent } from '../declaration-form/declaration-form.c
               <tr>
                 <td><app-status-badge [status]="decl.declarationType" /></td>
                 <td>{{ decl.declarationNumber }}</td>
-                <td>{{ decl.fobValue | number:'1.2-2' }}</td>
-                <td>{{ decl.cifValue | number:'1.2-2' }}</td>
+                <td class="d-none d-sm-table-cell">{{ decl.fobValue | number:'1.2-2' }}</td>
+                <td class="d-none d-sm-table-cell">{{ decl.cifValue | number:'1.2-2' }}</td>
                 <td>{{ decl.totalTaxes | number:'1.2-2' }}</td>
-                <td>{{ decl.createdAt | date:'shortDate' }}</td>
+                <td class="d-none d-sm-table-cell">{{ decl.createdAt | date:'shortDate' }}</td>
                 <td>
                   <div class="d-flex gap-1 flex-wrap">
                     <a [routerLink]="['/operations', operationId(), 'declarations', decl.id]" class="btn btn-sm btn-outline-secondary">{{ (canEditDeclaration(decl) ? 'ACTIONS.EDIT' : 'ACTIONS.VIEW') | translate }}</a>
@@ -92,7 +92,7 @@ export class DeclarationListComponent implements OnInit {
   ];
 
   private static readonly FINAL_EDITABLE_STATUSES = [
-    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW'
+    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS'
   ];
 
   canRegisterFinal(): boolean {

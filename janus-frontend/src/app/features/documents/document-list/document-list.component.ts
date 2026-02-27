@@ -15,7 +15,7 @@ import { ToastService } from '../../../core/services/toast.service';
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, FileSizePipe, StatusLabelPipe],
   template: `
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
       <h5 class="mb-0">{{ 'DOCUMENTS.TITLE' | translate }}</h5>
       @if (authService.hasRole(['ADMIN', 'AGENT'])) {
         <a [routerLink]="['/operations', operationId, 'documents', 'upload']" class="btn btn-sm btn-primary">{{ 'DOCUMENTS.UPLOAD' | translate }}</a>
@@ -25,7 +25,7 @@ import { ToastService } from '../../../core/services/toast.service';
       <div class="card-body p-0">
         <table class="table table-hover mb-0">
           <thead class="table-light">
-            <tr><th>{{ 'DOCUMENTS.TYPE' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'DOCUMENTS.FILE_NAME' | translate }}</th><th>{{ 'DOCUMENTS.SIZE' | translate }}</th><th>{{ 'DOCUMENTS.UPLOADED' | translate }}</th><th>{{ 'COMMON.ACTIONS' | translate }}</th></tr>
+            <tr><th>{{ 'DOCUMENTS.TYPE' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'DOCUMENTS.FILE_NAME' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'DOCUMENTS.SIZE' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'DOCUMENTS.UPLOADED' | translate }}</th><th>{{ 'COMMON.ACTIONS' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (doc of documents(); track doc.id) {
@@ -38,8 +38,8 @@ import { ToastService } from '../../../core/services/toast.service';
                   }
                 </td>
                 <td>{{ doc.latestVersionName ?? '-' }}</td>
-                <td>{{ doc.latestVersionSize | fileSize }}</td>
-                <td>{{ doc.createdAt | date:'medium' }}</td>
+                <td class="d-none d-sm-table-cell">{{ doc.latestVersionSize | fileSize }}</td>
+                <td class="d-none d-sm-table-cell">{{ doc.createdAt | date:'medium' }}</td>
                 <td>
                   <div class="btn-group btn-group-sm">
                     @if (!authService.hasRole(['CARRIER'])) {

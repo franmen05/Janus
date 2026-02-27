@@ -27,29 +27,29 @@ import { DeclarationService } from '../../../core/services/declaration.service';
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-md-4">
+          <div class="col-6 col-md-4">
             <label class="form-label">{{ 'DECLARATIONS.FOB_VALUE' | translate }}</label>
             <input type="number" class="form-control" formControlName="fobValue" step="0.01">
           </div>
-          <div class="col-md-4">
+          <div class="col-6 col-md-4">
             <label class="form-label">{{ 'DECLARATIONS.FREIGHT_VALUE' | translate }}</label>
             <input type="number" class="form-control" formControlName="freightValue" step="0.01">
           </div>
-          <div class="col-md-4">
+          <div class="col-6 col-md-4">
             <label class="form-label">{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }} <small class="text-muted">(2% FOB)</small></label>
             <input type="number" class="form-control" formControlName="insuranceValue" step="0.01" readonly>
           </div>
         </div>
         <div class="row mb-3">
-          <div class="col-md-4">
+          <div class="col-6 col-md-4">
             <label class="form-label">{{ 'DECLARATIONS.CIF_VALUE' | translate }}</label>
             <input type="number" class="form-control" formControlName="cifValue" step="0.01">
           </div>
-          <div class="col-md-4">
+          <div class="col-6 col-md-4">
             <label class="form-label">{{ 'DECLARATIONS.TAXABLE_BASE' | translate }}</label>
             <input type="number" class="form-control" formControlName="taxableBase" step="0.01">
           </div>
-          <div class="col-md-4">
+          <div class="col-6 col-md-4">
             <label class="form-label">{{ 'DECLARATIONS.TOTAL_TAXES' | translate }}</label>
             <input type="number" class="form-control" formControlName="totalTaxes" step="0.01">
           </div>

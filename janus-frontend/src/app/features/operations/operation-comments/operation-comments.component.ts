@@ -29,7 +29,7 @@ import { AuthService } from '../../../core/services/auth.service';
       @for (comment of comments(); track comment.id) {
         <div class="card mb-2" [class.border-start]="comment.internal" [class.border-warning]="comment.internal" [class.border-3]="comment.internal" [class.bg-light]="comment.internal">
           <div class="card-body py-2">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex flex-wrap gap-2 justify-content-between">
               <div>
                 <strong>{{ comment.authorFullName }}</strong>
                 @if (comment.internal) {

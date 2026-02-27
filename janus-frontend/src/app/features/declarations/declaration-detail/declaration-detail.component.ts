@@ -17,7 +17,7 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
   imports: [CommonModule, RouterModule, ReactiveFormsModule, TranslateModule, StatusBadgeComponent],
   template: `
     @if (declaration()) {
-      <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
         <h3>{{ 'DECLARATIONS.DETAIL_TITLE' | translate }}: {{ declaration()!.declarationNumber }}</h3>
         <a [routerLink]="['/operations', declaration()!.operationId]" class="btn btn-outline-secondary btn-sm">{{ 'ACTIONS.CLOSE' | translate }}</a>
       </div>
@@ -103,7 +103,7 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
         </div>
       </div>
 
-      <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
         <h5>{{ 'DECLARATIONS.TARIFF_LINES' | translate }}</h5>
         @if (authService.hasRole(['ADMIN', 'AGENT']) && canEdit()) {
           <button class="btn btn-sm btn-outline-primary" (click)="openTariffLineForm()">{{ 'DECLARATIONS.ADD_TARIFF_LINE' | translate }}</button>
@@ -163,7 +163,7 @@ export class DeclarationDetailComponent implements OnInit {
   ];
 
   private static readonly FINAL_EDITABLE_STATUSES = [
-    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW'
+    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS'
   ];
 
   canEdit = computed(() => {

@@ -10,7 +10,7 @@ import { User } from '../../../core/models/user.model';
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule],
   template: `
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'USERS.TITLE' | translate }}</h2>
       <a routerLink="/users/new" class="btn btn-primary">{{ 'USERS.NEW' | translate }}</a>
     </div>
@@ -39,7 +39,7 @@ import { User } from '../../../core/models/user.model';
                     {{ (user.active ? 'USERS.ACTIVE' : 'USERS.INACTIVE') | translate }}
                   </span>
                 </td>
-                <td class="d-flex gap-1">
+                <td class="d-flex flex-wrap gap-1">
                   <a [routerLink]="['/users', user.id, 'edit']" class="btn btn-sm btn-outline-primary">{{ 'ACTIONS.EDIT' | translate }}</a>
                   <button class="btn btn-sm" [class]="user.active ? 'btn-outline-warning' : 'btn-outline-success'" (click)="toggleActive(user)">
                     {{ (user.active ? 'USERS.INACTIVE' : 'USERS.ACTIVE') | translate }}

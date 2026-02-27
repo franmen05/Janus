@@ -136,7 +136,7 @@ import {
                     <div class="card-body">
                       <h6>{{ 'VALUATION.ADD_PERMIT' | translate }}</h6>
                       <div class="row g-2">
-                        <div class="col-md-3">
+                        <div class="col-6 col-md-3">
                           <label class="form-label">{{ 'VALUATION.PERMIT_TYPE' | translate }}</label>
                           <select class="form-select form-select-sm" [(ngModel)]="newPermitType">
                             @for (t of permitTypes; track t) {
@@ -144,7 +144,7 @@ import {
                             }
                           </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-6 col-md-3">
                           <label class="form-label">{{ 'COMMON.STATUS' | translate }}</label>
                           <select class="form-select form-select-sm" [(ngModel)]="newPermitStatus">
                             @for (s of permitStatuses; track s) {
@@ -152,11 +152,11 @@ import {
                             }
                           </select>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-6 col-md-3">
                           <label class="form-label">{{ 'VALUATION.REFERENCE_NUMBER' | translate }}</label>
                           <input type="text" class="form-control form-control-sm" [(ngModel)]="newPermitRef">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-6 col-md-3">
                           <label class="form-label">{{ 'VALUATION.NOTES' | translate }}</label>
                           <input type="text" class="form-control form-control-sm" [(ngModel)]="newPermitNotes">
                         </div>

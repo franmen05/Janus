@@ -112,10 +112,10 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                     <th>{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }}</th>
                     <th>{{ 'INSPECTION.EXPENSE_DESCRIPTION' | translate }}</th>
                     <th class="text-end">{{ 'INSPECTION.EXPENSE_AMOUNT' | translate }}</th>
-                    <th>{{ 'INSPECTION.EXPENSE_CURRENCY' | translate }}</th>
-                    <th>{{ 'INSPECTION.EXPENSE_DATE' | translate }}</th>
-                    <th>{{ 'INSPECTION.EXPENSE_JUSTIFICATION' | translate }}</th>
-                    <th>{{ 'INSPECTION.EXPENSE_REGISTERED_BY' | translate }}</th>
+                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_CURRENCY' | translate }}</th>
+                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_DATE' | translate }}</th>
+                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_JUSTIFICATION' | translate }}</th>
+                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_REGISTERED_BY' | translate }}</th>
                     @if (canManageExpenses()) {
                       <th>{{ 'COMMON.ACTIONS' | translate }}</th>
                     }
@@ -134,10 +134,10 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                         </td>
                         <td><input type="text" class="form-control form-control-sm" [formControl]="editExpenseForm.controls.description"></td>
                         <td><input type="number" class="form-control form-control-sm" [formControl]="editExpenseForm.controls.amount" step="0.01" min="0.01"></td>
-                        <td><input type="text" class="form-control form-control-sm" [formControl]="editExpenseForm.controls.currency" style="width:80px"></td>
-                        <td><input type="date" class="form-control form-control-sm" [formControl]="editExpenseForm.controls.expenseDate"></td>
-                        <td><input type="text" class="form-control form-control-sm" [formControl]="editExpenseForm.controls.justification"></td>
-                        <td>{{ expense.registeredByFullName }}</td>
+                        <td class="d-none d-md-table-cell"><input type="text" class="form-control form-control-sm" [formControl]="editExpenseForm.controls.currency" style="width:80px"></td>
+                        <td class="d-none d-md-table-cell"><input type="date" class="form-control form-control-sm" [formControl]="editExpenseForm.controls.expenseDate"></td>
+                        <td class="d-none d-md-table-cell"><input type="text" class="form-control form-control-sm" [formControl]="editExpenseForm.controls.justification"></td>
+                        <td class="d-none d-md-table-cell">{{ expense.registeredByFullName }}</td>
                         <td>
                           <button class="btn btn-sm btn-success me-1" (click)="updateExpense(expense.id)" [disabled]="editExpenseForm.invalid">
                             {{ 'INSPECTION.EXPENSE_SAVE' | translate }}
@@ -152,10 +152,10 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                         <td>{{ 'INSPECTION.CATEGORY_' + expense.category | translate }}</td>
                         <td>{{ expense.description || '-' }}</td>
                         <td class="text-end">{{ expense.amount | number:'1.2-2' }}</td>
-                        <td>{{ expense.currency }}</td>
-                        <td>{{ expense.expenseDate | date:'shortDate' }}</td>
-                        <td>{{ expense.justification || '-' }}</td>
-                        <td>{{ expense.registeredByFullName }}</td>
+                        <td class="d-none d-md-table-cell">{{ expense.currency }}</td>
+                        <td class="d-none d-md-table-cell">{{ expense.expenseDate | date:'shortDate' }}</td>
+                        <td class="d-none d-md-table-cell">{{ expense.justification || '-' }}</td>
+                        <td class="d-none d-md-table-cell">{{ expense.registeredByFullName }}</td>
                         @if (canManageExpenses()) {
                           <td>
                             <button class="btn btn-sm btn-outline-primary me-1" (click)="startEdit(expense)">
@@ -194,7 +194,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                 <h6>{{ 'INSPECTION.ADD_EXPENSE' | translate }}</h6>
                 <form [formGroup]="newExpenseForm" (ngSubmit)="addExpense()">
                   <div class="row g-2">
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                       <label class="form-label">{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }} *</label>
                       <select class="form-select form-select-sm" formControlName="category">
                         <option value="" disabled>{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }}...</option>
@@ -203,19 +203,19 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                         }
                       </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                       <label class="form-label">{{ 'INSPECTION.EXPENSE_DESCRIPTION' | translate }}</label>
                       <input type="text" class="form-control form-control-sm" formControlName="description">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-6 col-md-2">
                       <label class="form-label">{{ 'INSPECTION.EXPENSE_AMOUNT' | translate }} *</label>
                       <input type="number" class="form-control form-control-sm" formControlName="amount" step="0.01" min="0.01">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-6 col-md-2">
                       <label class="form-label">{{ 'INSPECTION.EXPENSE_CURRENCY' | translate }}</label>
                       <input type="text" class="form-control form-control-sm" formControlName="currency">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-6 col-md-2">
                       <label class="form-label">{{ 'INSPECTION.EXPENSE_DATE' | translate }}</label>
                       <input type="date" class="form-control form-control-sm" formControlName="expenseDate">
                     </div>
