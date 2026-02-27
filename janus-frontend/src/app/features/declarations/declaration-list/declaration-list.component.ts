@@ -17,10 +17,10 @@ import { DeclarationFormComponent } from '../declaration-form/declaration-form.c
   template: `
     @if (authService.hasRole(['ADMIN', 'AGENT']) && !isTerminalStatus()) {
       <div class="mb-3 d-flex flex-wrap gap-2">
-        @if (!canRegisterFinal()) {
+        @if (!canRegisterFinal() && !hasPreliminary()) {
           <button class="btn btn-sm btn-outline-primary" (click)="openForm('PRELIMINARY')">{{ 'DECLARATIONS.REGISTER_PRELIMINARY' | translate }}</button>
         }
-        @if (canRegisterFinal()) {
+        @if (canRegisterFinal() && !hasFinal()) {
           <button class="btn btn-sm btn-outline-primary" (click)="openForm('FINAL')">{{ 'DECLARATIONS.REGISTER_FINAL' | translate }}</button>
         }
       </div>
@@ -97,6 +97,14 @@ export class DeclarationListComponent implements OnInit {
 
   canRegisterFinal(): boolean {
     return DeclarationListComponent.FINAL_ALLOWED_STATUSES.includes(this.operationStatus());
+  }
+
+  hasPreliminary(): boolean {
+    return this.declarations().some(d => d.declarationType === DeclarationType.PRELIMINARY);
+  }
+
+  hasFinal(): boolean {
+    return this.declarations().some(d => d.declarationType === DeclarationType.FINAL);
   }
 
   isTerminalStatus(): boolean {

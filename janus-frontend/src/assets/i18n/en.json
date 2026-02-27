@@ -357,7 +357,7 @@
   },
   "DECLARATIONS": {
     "TITLE": "Declarations",
-    "REGISTER_PRELIMINARY": "Register Preliminary",
+    "REGISTER_PRELIMINARY": "Pre-liquidation",
     "REGISTER_FINAL": "Register Final",
     "DECLARATION_NUMBER": "Declaration Number",
     "TYPE": "Type",
@@ -455,7 +455,7 @@
     "HIGH_VALUE_CERT_REQUIRED": "Maritime operations require a Certificate document",
     "INVOICE_NOT_VALIDATED": "Commercial Invoice must be VALIDATED before Declaration in Progress",
     "INSPECTION_TYPE_REQUIRED": "Inspection type must be set before advancing to Valuation Review",
-    "BL_ORIGINAL_NOT_AVAILABLE": "Original BL must be available to proceed",
+    "BL_ORIGINAL_NOT_AVAILABLE": "Original BL must be available to advance past Valuation Review",
     "GATT_FORM_INCOMPLETE": "GATT Article 1 form must be completed before advancing to Payment Preparation",
     "PERMITS_PENDING": "All external permits must be cleared before advancing to Payment Preparation",
     "LOCAL_CHARGES_NOT_VALIDATED": "Local charges receipt is uploaded but has not been validated"

@@ -357,7 +357,7 @@
   },
   "DECLARATIONS": {
     "TITLE": "Declaraciones",
-    "REGISTER_PRELIMINARY": "Registrar Preliminar",
+    "REGISTER_PRELIMINARY": "Pre-liquidación",
     "REGISTER_FINAL": "Registrar Final",
     "DECLARATION_NUMBER": "Número de Declaración",
     "TYPE": "Tipo",
@@ -455,7 +455,7 @@
     "HIGH_VALUE_CERT_REQUIRED": "Las operaciones marítimas requieren un documento de Certificado",
     "INVOICE_NOT_VALIDATED": "La Factura Comercial debe estar VALIDADA antes de la Declaración en Proceso",
     "INSPECTION_TYPE_REQUIRED": "El tipo de inspección debe ser establecido antes de avanzar a Revisión de Valoración",
-    "BL_ORIGINAL_NOT_AVAILABLE": "El BL Original debe estar disponible para avanzar",
+    "BL_ORIGINAL_NOT_AVAILABLE": "El BL Original debe estar disponible para avanzar más allá de la Revisión de Valoración",
     "GATT_FORM_INCOMPLETE": "El formulario GATT Artículo 1 debe completarse antes de avanzar a Preparación de Pago",
     "PERMITS_PENDING": "Todos los permisos externos deben estar aprobados antes de avanzar a Preparación de Pago",
     "LOCAL_CHARGES_NOT_VALIDATED": "El recibo de cargos locales fue subido pero no ha sido validado"

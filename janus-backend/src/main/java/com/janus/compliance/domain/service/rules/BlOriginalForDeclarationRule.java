@@ -19,12 +19,7 @@ public class BlOriginalForDeclarationRule implements ComplianceRule {
 
     @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, TransportMode transportMode, OperationCategory category) {
-        return to == OperationStatus.PRELIQUIDATION_REVIEW
-                || to == OperationStatus.ANALYST_ASSIGNED
-                || to == OperationStatus.DECLARATION_IN_PROGRESS
-                || to == OperationStatus.SUBMITTED_TO_CUSTOMS
-                || to == OperationStatus.VALUATION_REVIEW
-                || to == OperationStatus.PAYMENT_PREPARATION
+        return to == OperationStatus.PAYMENT_PREPARATION
                 || to == OperationStatus.IN_TRANSIT
                 || to == OperationStatus.CLOSED;
     }
