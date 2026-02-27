@@ -10,15 +10,15 @@ Documentación de referencia del flujo de operaciones aduaneras en Janus: estado
 DRAFT
   ├──→ DOCUMENTATION_COMPLETE
   │       ├──→ IN_REVIEW
-  │       │       ├──→ PRELIQUIDATION_REVIEW
-  │       │       │       ├──→ ANALYST_ASSIGNED
-  │       │       │       │       └──→ DECLARATION_IN_PROGRESS
-  │       │       │       │               └──→ SUBMITTED_TO_CUSTOMS
-  │       │       │       │                       └──→ VALUATION_REVIEW
-  │       │       │       │                               ├──→ PENDING_EXTERNAL_APPROVAL ──→ (vuelve a VALUATION_REVIEW)
-  │       │       │       │                               └──→ PAYMENT_PREPARATION
-  │       │       │       │                                       └──→ IN_TRANSIT
-  │       │       │       │                                               └──→ CLOSED ✓
+  │       │       ├──→ PRELIQUIDATION_REVIEW(sub-estado de IN_REVIEW)
+  │       │       │       ├──→ DECLARATION_IN_PROGRESS (directo)
+  │       │       │       |   └──→ ANALYST_ASSIGNED (sub-estado de DECLARATION_IN_PROGRESS)
+  │       │       │       │       └──→ SUBMITTED_TO_CUSTOMS
+  │       │       │       │               └──→ VALUATION_REVIEW
+  │       │       │       │                       ├──→ PENDING_EXTERNAL_APPROVAL ──→ (vuelve a VALUATION_REVIEW)
+  │       │       │       │                       └──→ PAYMENT_PREPARATION
+  │       │       │       │                               └──→ IN_TRANSIT
+  │       │       │       │                                       └──→ CLOSED ✓
   │       │       │       └──→ PENDING_CORRECTION ──→ (vuelve a IN_REVIEW)
   │       │       └──→ PENDING_CORRECTION ──→ (vuelve a IN_REVIEW)
   │       └──→ CANCELLED ✗
@@ -58,7 +58,7 @@ DRAFT
 | DOCUMENTATION_COMPLETE | IN_REVIEW, CANCELLED |
 | IN_REVIEW | PRELIQUIDATION_REVIEW, PENDING_CORRECTION, CANCELLED |
 | PENDING_CORRECTION | IN_REVIEW, CANCELLED |
-| PRELIQUIDATION_REVIEW | ANALYST_ASSIGNED, PENDING_CORRECTION, CANCELLED |
+| PRELIQUIDATION_REVIEW | ANALYST_ASSIGNED, DECLARATION_IN_PROGRESS, PENDING_CORRECTION, CANCELLED |
 | ANALYST_ASSIGNED | DECLARATION_IN_PROGRESS, CANCELLED |
 | DECLARATION_IN_PROGRESS | SUBMITTED_TO_CUSTOMS, CANCELLED |
 | SUBMITTED_TO_CUSTOMS | VALUATION_REVIEW, CANCELLED |
@@ -149,10 +149,11 @@ DRAFT
 | Rechazar declaración | ADMIN, AGENT | Limpia todas las aprobaciones. **Auto-transiciona a PENDING_CORRECTION** |
 | Enviar a corrección | ADMIN, AGENT | — |
 | Cambiar estado → ANALYST_ASSIGNED | ADMIN, AGENT | Requiere regla PRELIQUIDATION_APPROVED |
+| Cambiar estado → DECLARATION_IN_PROGRESS | ADMIN, AGENT | Transición directa (salta ANALYST_ASSIGNED) |
 | Cambiar estado → PENDING_CORRECTION | ADMIN, AGENT | — |
 | Cambiar estado → CANCELLED | ADMIN, AGENT | — |
 
-**Regla de compliance para avanzar a ANALYST_ASSIGNED:**
+**Regla de compliance para avanzar a ANALYST_ASSIGNED o DECLARATION_IN_PROGRESS:**
 - `PRELIQUIDATION_APPROVED` — Debe existir al menos una declaración con aprobación técnica
 - `BL_ORIGINAL_NOT_AVAILABLE` — BL disponible
 
