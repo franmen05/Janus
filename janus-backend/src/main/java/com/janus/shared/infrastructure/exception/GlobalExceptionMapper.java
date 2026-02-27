@@ -28,9 +28,14 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
                     .build();
         }
 
-        if (exception instanceof BusinessException) {
+        if (exception instanceof BusinessException be) {
+            if (be.getErrorCode() != null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(Map.of("error", be.getMessage(), "errorCode", be.getErrorCode()))
+                        .build();
+            }
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Map.of("error", exception.getMessage()))
+                    .entity(Map.of("error", be.getMessage()))
                     .build();
         }
 

@@ -563,19 +563,41 @@ export class OperationDetailComponent implements OnInit {
     }).subscribe({
       next: () => this.reload(),
       error: (err) => {
-        const msg = err.error?.error ?? '';
-        const match = msg.match(/Invalid status transition from (\w+) to (\w+)/);
-        if (match) {
-          if(match[1] === match[2] ) {
-            this.reload()
-          }else {
-            const from = this.translate.instant('STATUS.' + match[1]);
-            const to = this.translate.instant('STATUS.' + match[2]);
-            this.statusChangeErrors.set([this.translate.instant('STATUS_CHANGE.INVALID_TRANSITION', {from, to})]);
+        let errorMessage: string;
+        if (err.error?.errorCode) {
+          if (err.error.errorCode === 'INVALID_STATUS_TRANSITION') {
+            const match = err.error.error?.match(/from (\w+) to (\w+)/);
+            if (match) {
+              if (match[1] === match[2]) {
+                this.reload();
+                return;
+              }
+              const from = this.translate.instant('STATUS.' + match[1]);
+              const to = this.translate.instant('STATUS.' + match[2]);
+              errorMessage = this.translate.instant('ERRORS.INVALID_STATUS_TRANSITION', { from, to });
+            } else {
+              errorMessage = this.translate.instant('ERRORS.INVALID_STATUS_TRANSITION');
+            }
+          } else {
+            errorMessage = this.translate.instant('ERRORS.' + err.error.errorCode);
           }
         } else {
-          this.statusChangeErrors.set([msg || this.translate.instant('STATUS_CHANGE.FAILED')]);
+          // Fallback for errors without errorCode (legacy)
+          const msg = err.error?.error ?? '';
+          const match = msg.match(/Invalid status transition from (\w+) to (\w+)/);
+          if (match) {
+            if (match[1] === match[2]) {
+              this.reload();
+              return;
+            }
+            const from = this.translate.instant('STATUS.' + match[1]);
+            const to = this.translate.instant('STATUS.' + match[2]);
+            errorMessage = this.translate.instant('STATUS_CHANGE.INVALID_TRANSITION', { from, to });
+          } else {
+            errorMessage = msg || this.translate.instant('ERRORS.GENERIC_ERROR');
+          }
         }
+        this.statusChangeErrors.set([errorMessage]);
       }
     });
   }

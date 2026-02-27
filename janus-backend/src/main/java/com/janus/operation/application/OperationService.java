@@ -89,7 +89,7 @@ public class OperationService {
         if (request.transportMode() == TransportMode.MARITIME
                 && request.cargoType() == CargoType.FCL
                 && (request.containerNumber() == null || request.containerNumber().isBlank())) {
-            throw new BusinessException("Container number is required for MARITIME FCL transport mode");
+            throw new BusinessException("CONTAINER_NUMBER_REQUIRED", "Container number is required for MARITIME FCL transport mode");
         }
 
         var op = new Operation();
@@ -112,7 +112,7 @@ public class OperationService {
         // Validate childBlNumber required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
                 && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
-            throw new BusinessException("Child BL number is required for consolidated BL");
+            throw new BusinessException("CHILD_BL_REQUIRED", "Child BL number is required for consolidated BL");
         }
 
         if (request.assignedAgentId() != null) {
@@ -165,14 +165,14 @@ public class OperationService {
         var op = findById(id);
 
         if (statusTransitionService.isFinalStatus(op.status)) {
-            throw new BusinessException("Cannot update a closed or cancelled operation");
+            throw new BusinessException("OPERATION_NOT_EDITABLE", "Cannot update a closed or cancelled operation");
         }
 
         // Validate containerNumber required for MARITIME + FCL
         if (request.transportMode() == TransportMode.MARITIME
                 && request.cargoType() == CargoType.FCL
                 && (request.containerNumber() == null || request.containerNumber().isBlank())) {
-            throw new BusinessException("Container number is required for MARITIME FCL transport mode");
+            throw new BusinessException("CONTAINER_NUMBER_REQUIRED", "Container number is required for MARITIME FCL transport mode");
         }
 
         var previousData = JsonUtil.toJson(Map.of(
@@ -200,7 +200,7 @@ public class OperationService {
         // Validate childBlNumber required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
                 && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
-            throw new BusinessException("Child BL number is required for consolidated BL");
+            throw new BusinessException("CHILD_BL_REQUIRED", "Child BL number is required for consolidated BL");
         }
 
         if (request.assignedAgentId() != null) {
@@ -257,7 +257,7 @@ public class OperationService {
                 var messages = complianceResult.errors().stream()
                         .map(e -> e.ruleCode() + ": " + e.message())
                         .toList();
-                throw new BusinessException("Compliance validation failed: " + String.join("; ", messages));
+                throw new BusinessException("COMPLIANCE_VALIDATION_FAILED", "Compliance validation failed: " + String.join("; ", messages));
             }
         }
 
@@ -305,7 +305,7 @@ public class OperationService {
     public void delete(Long id, String username) {
         var op = findById(id);
         if (op.status != OperationStatus.DRAFT) {
-            throw new BusinessException("Cannot delete an operation that is not in DRAFT status");
+            throw new BusinessException("DELETE_ONLY_DRAFT", "Cannot delete an operation that is not in DRAFT status");
         }
 
         auditEvent.fire(new AuditEvent(

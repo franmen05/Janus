@@ -676,5 +676,22 @@
   "alerts": {
     "MISSING_CRITICAL_DOCUMENT": "Missing Critical Document",
     "BL_UNAVAILABLE": "BL Unavailable"
+  },
+  "ERRORS": {
+    "INVALID_STATUS_TRANSITION": "Cannot change from {{from}} to {{to}}. Only the next step is allowed.",
+    "CONTAINER_NUMBER_REQUIRED": "Container number is required for Maritime FCL transport mode.",
+    "CHILD_BL_REQUIRED": "Child BL number is required for consolidated BL.",
+    "OPERATION_NOT_EDITABLE": "Cannot update a closed or cancelled operation.",
+    "COMPLIANCE_VALIDATION_FAILED": "Compliance validation failed.",
+    "DELETE_ONLY_DRAFT": "Cannot delete an operation that is not in Draft status.",
+    "DECLARATION_ALREADY_EXISTS": "A declaration of this type already exists for this operation.",
+    "PRELIMINARY_NOT_EDITABLE": "Preliminary declarations can only be edited in early stages (Draft, Documentation Complete, In Review, Pending Correction).",
+    "FINAL_NOT_EDITABLE": "Final declarations can only be edited until Submitted to Customs.",
+    "CROSSING_NOT_DISCREPANCY": "Crossing is not in Discrepancy status.",
+    "ALREADY_SUBMITTED_TO_DGA": "This declaration has already been submitted to DGA.",
+    "ALREADY_TECHNICAL_APPROVED": "This declaration already has technical approval.",
+    "TECHNICAL_APPROVAL_REQUIRED": "Technical approval is required before final approval.",
+    "ALREADY_FINAL_APPROVED": "This declaration already has final approval.",
+    "GENERIC_ERROR": "An unexpected error occurred."
   }
 }

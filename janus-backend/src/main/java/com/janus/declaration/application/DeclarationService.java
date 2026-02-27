@@ -86,7 +86,7 @@ public class DeclarationService {
         var operation = operationService.findById(operationId);
 
         if (declarationRepository.findByOperationAndType(operationId, type).isPresent()) {
-            throw new BusinessException(type + " declaration already exists for this operation");
+            throw new BusinessException("DECLARATION_ALREADY_EXISTS", type + " declaration already exists for this operation");
         }
 
         declaration.operation = operation;
@@ -222,7 +222,7 @@ public class DeclarationService {
                 .orElseThrow(() -> new NotFoundException("CrossingResult for operation", operationId));
 
         if (crossingResult.status != CrossingStatus.DISCREPANCY) {
-            throw new BusinessException("Crossing is not in DISCREPANCY status");
+            throw new BusinessException("CROSSING_NOT_DISCREPANCY", "Crossing is not in DISCREPANCY status");
         }
 
         crossingResult.status = CrossingStatus.RESOLVED;
@@ -251,12 +251,12 @@ public class DeclarationService {
         var status = declaration.operation.status;
         if (declaration.declarationType == DeclarationType.PRELIMINARY) {
             if (!PRELIMINARY_EDITABLE_STATUSES.contains(status)) {
-                throw new BusinessException(
+                throw new BusinessException("PRELIMINARY_NOT_EDITABLE",
                         "Preliminary declarations can only be edited in statuses: DRAFT, DOCUMENTATION_COMPLETE, IN_REVIEW, PENDING_CORRECTION");
             }
         } else if (declaration.declarationType == DeclarationType.FINAL) {
             if (!FINAL_EDITABLE_STATUSES.contains(status)) {
-                throw new BusinessException(
+                throw new BusinessException("FINAL_NOT_EDITABLE",
                         "Final declarations can only be edited in statuses: DECLARATION_IN_PROGRESS, SUBMITTED_TO_CUSTOMS");
             }
         }
@@ -307,7 +307,7 @@ public class DeclarationService {
         var declaration = findById(operationId, declarationId);
 
         if (declaration.submittedAt != null) {
-            throw new BusinessException("Declaration has already been submitted to DGA");
+            throw new BusinessException("ALREADY_SUBMITTED_TO_DGA", "Declaration has already been submitted to DGA");
         }
 
         declaration.submittedAt = LocalDateTime.now();
@@ -345,7 +345,7 @@ public class DeclarationService {
         var declaration = findById(operationId, declarationId);
 
         if (declaration.technicalApprovedBy != null) {
-            throw new BusinessException("Declaration already has technical approval");
+            throw new BusinessException("ALREADY_TECHNICAL_APPROVED", "Declaration already has technical approval");
         }
 
         declaration.technicalApprovedBy = username;
@@ -369,10 +369,10 @@ public class DeclarationService {
         var declaration = findById(operationId, declarationId);
 
         if (declaration.technicalApprovedBy == null) {
-            throw new BusinessException("Technical approval is required before final approval");
+            throw new BusinessException("TECHNICAL_APPROVAL_REQUIRED", "Technical approval is required before final approval");
         }
         if (declaration.finalApprovedBy != null) {
-            throw new BusinessException("Declaration already has final approval");
+            throw new BusinessException("ALREADY_FINAL_APPROVED", "Declaration already has final approval");
         }
 
         declaration.finalApprovedBy = username;

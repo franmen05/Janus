@@ -49,7 +49,7 @@ public class StatusTransitionService {
     public void validateTransition(OperationStatus from, OperationStatus to) {
         var allowed = ALLOWED_TRANSITIONS.getOrDefault(from, Set.of());
         if (!allowed.contains(to)) {
-            throw new BusinessException(
+            throw new BusinessException("INVALID_STATUS_TRANSITION",
                     "Invalid status transition from " + from + " to " + to);
         }
     }

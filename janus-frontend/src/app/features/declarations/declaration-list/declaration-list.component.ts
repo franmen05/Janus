@@ -134,7 +134,13 @@ export class DeclarationListComponent implements OnInit {
         this.toastService.success(this.translate.instant('DECLARATIONS.DUA_REGISTERED'));
         this.loadDeclarations();
       },
-      error: (err) => this.toastService.error(err.error?.error || 'Error')
+      error: (err) => {
+        const errorCode = err.error?.errorCode;
+        const message = errorCode
+          ? this.translate.instant('ERRORS.' + errorCode)
+          : (err.error?.error || this.translate.instant('ERRORS.GENERIC_ERROR'));
+        this.toastService.error(message);
+      }
     });
   }
 
@@ -146,7 +152,13 @@ export class DeclarationListComponent implements OnInit {
         this.toastService.success(this.translate.instant('DECLARATIONS.DGA_SUBMITTED'));
         this.loadDeclarations();
       },
-      error: (err) => this.toastService.error(err.error?.error || 'Error')
+      error: (err) => {
+        const errorCode = err.error?.errorCode;
+        const message = errorCode
+          ? this.translate.instant('ERRORS.' + errorCode)
+          : (err.error?.error || this.translate.instant('ERRORS.GENERIC_ERROR'));
+        this.toastService.error(message);
+      }
     });
   }
 }

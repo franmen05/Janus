@@ -676,5 +676,22 @@
   "alerts": {
     "MISSING_CRITICAL_DOCUMENT": "Documento Crítico Faltante",
     "BL_UNAVAILABLE": "BL No Disponible"
+  },
+  "ERRORS": {
+    "INVALID_STATUS_TRANSITION": "No se puede cambiar de {{from}} a {{to}}. Solo se permite el siguiente paso.",
+    "CONTAINER_NUMBER_REQUIRED": "El número de contenedor es obligatorio para transporte marítimo FCL.",
+    "CHILD_BL_REQUIRED": "El número de BL hijo es obligatorio para BL consolidado.",
+    "OPERATION_NOT_EDITABLE": "No se puede modificar una operación cerrada o cancelada.",
+    "COMPLIANCE_VALIDATION_FAILED": "La validación de cumplimiento falló.",
+    "DELETE_ONLY_DRAFT": "Solo se pueden eliminar operaciones en estado Borrador.",
+    "DECLARATION_ALREADY_EXISTS": "Ya existe una declaración de este tipo para esta operación.",
+    "PRELIMINARY_NOT_EDITABLE": "Las declaraciones preliminares solo se pueden editar en etapas tempranas (Borrador, Documentación Completa, En Revisión, Pendiente de Corrección).",
+    "FINAL_NOT_EDITABLE": "Las declaraciones finales solo se pueden editar hasta Presentada a Aduanas.",
+    "CROSSING_NOT_DISCREPANCY": "El cruce no está en estado de Discrepancia.",
+    "ALREADY_SUBMITTED_TO_DGA": "Esta declaración ya fue presentada a la DGA.",
+    "ALREADY_TECHNICAL_APPROVED": "Esta declaración ya tiene aprobación técnica.",
+    "TECHNICAL_APPROVAL_REQUIRED": "Se requiere aprobación técnica antes de la aprobación final.",
+    "ALREADY_FINAL_APPROVED": "Esta declaración ya tiene aprobación final.",
+    "GENERIC_ERROR": "Ocurrió un error inesperado."
   }
 }
