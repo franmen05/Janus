@@ -281,7 +281,8 @@
     "CLOSE": "Close",
     "MARK_BL_AVAILABLE": "Mark BL as available",
     "MARK_BL_UNAVAILABLE": "Mark BL as unavailable",
-    "PRINT": "Print"
+    "PRINT": "Print",
+    "VIEW": "View"
   },
   "COMMON": {
     "ARE_YOU_SURE": "Are you sure?",

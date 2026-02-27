@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
-import { Declaration } from '../../../core/models/declaration.model';
+import { Declaration, DeclarationType } from '../../../core/models/declaration.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
@@ -50,7 +50,7 @@ import { DeclarationFormComponent } from '../declaration-form/declaration-form.c
                 <td>{{ decl.createdAt | date:'shortDate' }}</td>
                 <td>
                   <div class="d-flex gap-1 flex-wrap">
-                    <a [routerLink]="['/operations', operationId(), 'declarations', decl.id]" class="btn btn-sm btn-outline-secondary">{{ 'ACTIONS.EDIT' | translate }}</a>
+                    <a [routerLink]="['/operations', operationId(), 'declarations', decl.id]" class="btn btn-sm btn-outline-secondary">{{ (canEditDeclaration(decl) ? 'ACTIONS.EDIT' : 'ACTIONS.VIEW') | translate }}</a>
                     @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                       @if (!decl.declarationNumber) {
                         <button class="btn btn-sm btn-outline-info" (click)="registerDua(decl)">{{ 'DECLARATIONS.REGISTER_DUA' | translate }}</button>
@@ -87,12 +87,23 @@ export class DeclarationListComponent implements OnInit {
     'PAYMENT_PREPARATION', 'IN_TRANSIT'
   ];
 
+  private static readonly PRELIMINARY_EDITABLE_STATUSES = [
+    'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION'
+  ];
+
   canRegisterFinal(): boolean {
     return DeclarationListComponent.FINAL_ALLOWED_STATUSES.includes(this.operationStatus());
   }
 
   isTerminalStatus(): boolean {
     return ['CLOSED', 'CANCELLED'].includes(this.operationStatus());
+  }
+
+  canEditDeclaration(decl: Declaration): boolean {
+    if (decl.declarationType === DeclarationType.PRELIMINARY) {
+      return DeclarationListComponent.PRELIMINARY_EDITABLE_STATUSES.includes(this.operationStatus());
+    }
+    return true;
   }
 
   ngOnInit(): void { this.loadDeclarations(); }

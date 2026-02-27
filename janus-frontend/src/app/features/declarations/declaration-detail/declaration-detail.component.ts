@@ -1,11 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
-import { Declaration, TariffLine } from '../../../core/models/declaration.model';
+import { OperationService } from '../../../core/services/operation.service';
+import { Declaration, DeclarationType, TariffLine } from '../../../core/models/declaration.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.component';
@@ -46,7 +47,7 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
               </div>
             </div>
             @if (declaration()!.notes) { <p><strong>{{ 'DECLARATIONS.NOTES' | translate }}:</strong> {{ declaration()!.notes }}</p> }
-            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+            @if (authService.hasRole(['ADMIN', 'AGENT']) && canEdit()) {
               <button class="btn btn-sm btn-outline-primary mt-2" (click)="startEditing()">{{ 'ACTIONS.EDIT' | translate }}</button>
             }
           } @else {
@@ -104,7 +105,7 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
 
       <div class="d-flex justify-content-between align-items-center mb-2">
         <h5>{{ 'DECLARATIONS.TARIFF_LINES' | translate }}</h5>
-        @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+        @if (authService.hasRole(['ADMIN', 'AGENT']) && canEdit()) {
           <button class="btn btn-sm btn-outline-primary" (click)="openTariffLineForm()">{{ 'DECLARATIONS.ADD_TARIFF_LINE' | translate }}</button>
         }
       </div>
@@ -148,12 +149,27 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
 export class DeclarationDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private declarationService = inject(DeclarationService);
+  private operationService = inject(OperationService);
   private modal = inject(NgbModal);
   authService = inject(AuthService);
 
   declaration = signal<Declaration | null>(null);
   tariffLines = signal<TariffLine[]>([]);
   editing = signal(false);
+  operationStatus = signal<string>('');
+
+  private static readonly PRELIMINARY_EDITABLE_STATUSES = [
+    'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION'
+  ];
+
+  canEdit = computed(() => {
+    const decl = this.declaration();
+    if (!decl) return true;
+    if (decl.declarationType === DeclarationType.PRELIMINARY) {
+      return DeclarationDetailComponent.PRELIMINARY_EDITABLE_STATUSES.includes(this.operationStatus());
+    }
+    return true;
+  });
 
   form = new FormGroup({
     declarationNumber: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -180,6 +196,7 @@ export class DeclarationDetailComponent implements OnInit {
     const declId = +this.route.snapshot.paramMap.get('declarationId')!;
     this.declarationService.getDeclaration(opId, declId).subscribe(d => this.declaration.set(d));
     this.declarationService.getTariffLines(opId, declId).subscribe(lines => this.tariffLines.set(lines));
+    this.operationService.getById(opId).subscribe(op => this.operationStatus.set(op.status));
   }
 
   startEditing(): void {

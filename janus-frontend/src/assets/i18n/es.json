@@ -281,7 +281,8 @@
     "CLOSE": "Cerrar",
     "MARK_BL_AVAILABLE": "Marcar BL como disponible",
     "MARK_BL_UNAVAILABLE": "Marcar BL como no disponible",
-    "PRINT": "Imprimir"
+    "PRINT": "Imprimir",
+    "VIEW": "Ver"
   },
   "COMMON": {
     "ARE_YOU_SURE": "¿Está seguro?",

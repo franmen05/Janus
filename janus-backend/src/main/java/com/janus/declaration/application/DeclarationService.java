@@ -27,9 +27,15 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @ApplicationScoped
 public class DeclarationService {
+
+    private static final Set<OperationStatus> PRELIMINARY_EDITABLE_STATUSES = Set.of(
+            OperationStatus.DRAFT, OperationStatus.DOCUMENTATION_COMPLETE,
+            OperationStatus.IN_REVIEW, OperationStatus.PENDING_CORRECTION
+    );
 
     @Inject
     DeclarationRepository declarationRepository;
@@ -101,6 +107,7 @@ public class DeclarationService {
     @Transactional
     public Declaration updateDeclaration(Long operationId, Long declarationId, Declaration updated, String username) {
         var declaration = findById(operationId, declarationId);
+        enforceEditableIfPreliminary(declaration);
 
         declaration.declarationNumber = updated.declarationNumber;
         declaration.fobValue = updated.fobValue;
@@ -137,6 +144,7 @@ public class DeclarationService {
     @Transactional
     public TariffLine addTariffLine(Long operationId, Long declarationId, TariffLine line, String username) {
         var declaration = findById(operationId, declarationId);
+        enforceEditableIfPreliminary(declaration);
         line.declaration = declaration;
         tariffLineRepository.persist(line);
 
@@ -233,6 +241,16 @@ public class DeclarationService {
 
     public List<CrossingDiscrepancy> getDiscrepancies(Long crossingResultId) {
         return crossingDiscrepancyRepository.findByCrossingResultId(crossingResultId);
+    }
+
+    private void enforceEditableIfPreliminary(Declaration declaration) {
+        if (declaration.declarationType == DeclarationType.PRELIMINARY) {
+            var status = declaration.operation.status;
+            if (!PRELIMINARY_EDITABLE_STATUSES.contains(status)) {
+                throw new BusinessException(
+                        "Preliminary declarations can only be edited in statuses: DRAFT, DOCUMENTATION_COMPLETE, IN_REVIEW, PENDING_CORRECTION");
+            }
+        }
     }
 
     private void invalidateCrossingIfFinal(Declaration declaration, Long operationId) {
