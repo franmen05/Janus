@@ -28,6 +28,7 @@ import { ValuationPanelComponent } from '../valuation-panel/valuation-panel.comp
 const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS'];
 const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
+const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 
 @Component({
   selector: 'app-operation-detail',
@@ -250,7 +251,9 @@ const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROV
             <ng-template ngbNavContent>
               <div class="mt-3">
                 <app-declaration-list [operationId]="operation()!.id" [operationStatus]="operation()!.status" />
-                <app-crossing-result [operationId]="operation()!.id" />
+                @if (isCrossingVisible()) {
+                  <app-crossing-result [operationId]="operation()!.id" />
+                }
               </div>
             </ng-template>
           </li>
@@ -371,6 +374,11 @@ export class OperationDetailComponent implements OnInit {
   isValuationVisible = computed(() => {
     const op = this.operation();
     return op !== null && VALUATION_VISIBLE_STATUSES.includes(op.status);
+  });
+
+  isCrossingVisible = computed(() => {
+    const op = this.operation();
+    return op !== null && CROSSING_VISIBLE_STATUSES.includes(op.status);
   });
 
   ngOnInit(): void {

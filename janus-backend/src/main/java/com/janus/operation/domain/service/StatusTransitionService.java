@@ -34,7 +34,7 @@ public class StatusTransitionService {
             Map.entry(OperationStatus.DOCUMENTATION_COMPLETE, Set.of(OperationStatus.IN_REVIEW, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.IN_REVIEW, Set.of(OperationStatus.PRELIQUIDATION_REVIEW, OperationStatus.PENDING_CORRECTION, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.PENDING_CORRECTION, Set.of(OperationStatus.IN_REVIEW, OperationStatus.CANCELLED)),
-            Map.entry(OperationStatus.PRELIQUIDATION_REVIEW, Set.of(OperationStatus.ANALYST_ASSIGNED, OperationStatus.PENDING_CORRECTION, OperationStatus.CANCELLED)),
+            Map.entry(OperationStatus.PRELIQUIDATION_REVIEW, Set.of(OperationStatus.ANALYST_ASSIGNED, OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.PENDING_CORRECTION, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.ANALYST_ASSIGNED, Set.of(OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.DECLARATION_IN_PROGRESS, Set.of(OperationStatus.SUBMITTED_TO_CUSTOMS, OperationStatus.CANCELLED)),
             Map.entry(OperationStatus.SUBMITTED_TO_CUSTOMS, Set.of(OperationStatus.VALUATION_REVIEW, OperationStatus.CANCELLED)),
