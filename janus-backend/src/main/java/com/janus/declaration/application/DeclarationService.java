@@ -37,6 +37,11 @@ public class DeclarationService {
             OperationStatus.IN_REVIEW, OperationStatus.PENDING_CORRECTION
     );
 
+    private static final Set<OperationStatus> FINAL_EDITABLE_STATUSES = Set.of(
+            OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.SUBMITTED_TO_CUSTOMS,
+            OperationStatus.VALUATION_REVIEW
+    );
+
     @Inject
     DeclarationRepository declarationRepository;
 
@@ -107,7 +112,7 @@ public class DeclarationService {
     @Transactional
     public Declaration updateDeclaration(Long operationId, Long declarationId, Declaration updated, String username) {
         var declaration = findById(operationId, declarationId);
-        enforceEditableIfPreliminary(declaration);
+        enforceEditable(declaration);
 
         declaration.declarationNumber = updated.declarationNumber;
         declaration.fobValue = updated.fobValue;
@@ -144,7 +149,7 @@ public class DeclarationService {
     @Transactional
     public TariffLine addTariffLine(Long operationId, Long declarationId, TariffLine line, String username) {
         var declaration = findById(operationId, declarationId);
-        enforceEditableIfPreliminary(declaration);
+        enforceEditable(declaration);
         line.declaration = declaration;
         tariffLineRepository.persist(line);
 
@@ -243,12 +248,17 @@ public class DeclarationService {
         return crossingDiscrepancyRepository.findByCrossingResultId(crossingResultId);
     }
 
-    private void enforceEditableIfPreliminary(Declaration declaration) {
+    private void enforceEditable(Declaration declaration) {
+        var status = declaration.operation.status;
         if (declaration.declarationType == DeclarationType.PRELIMINARY) {
-            var status = declaration.operation.status;
             if (!PRELIMINARY_EDITABLE_STATUSES.contains(status)) {
                 throw new BusinessException(
                         "Preliminary declarations can only be edited in statuses: DRAFT, DOCUMENTATION_COMPLETE, IN_REVIEW, PENDING_CORRECTION");
+            }
+        } else if (declaration.declarationType == DeclarationType.FINAL) {
+            if (!FINAL_EDITABLE_STATUSES.contains(status)) {
+                throw new BusinessException(
+                        "Final declarations can only be edited in statuses: DECLARATION_IN_PROGRESS, SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW");
             }
         }
     }

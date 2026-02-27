@@ -157,6 +157,31 @@ class DeclarationResourceTest {
 
     @Test
     @Order(8)
+    void testAdvanceToDeclarationInProgress() {
+        // Upload mandatory documents
+        uploadDocument(operationId, "BL");
+        uploadDocument(operationId, "COMMERCIAL_INVOICE");
+        uploadDocument(operationId, "PACKING_LIST");
+
+        // Technical approve the preliminary declaration (required for ANALYST_ASSIGNED)
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Technical OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", operationId, preliminaryId)
+                .then().statusCode(200);
+
+        changeStatus(operationId, "DOCUMENTATION_COMPLETE");
+        changeStatus(operationId, "IN_REVIEW");
+        changeStatus(operationId, "PRELIQUIDATION_REVIEW");
+        changeStatus(operationId, "ANALYST_ASSIGNED");
+        changeStatus(operationId, "DECLARATION_IN_PROGRESS");
+    }
+
+    @Test
+    @Order(9)
     void testAddTariffLineToFinal() {
         given()
                 .auth().basic("admin", "admin123")
@@ -179,7 +204,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(9)
+    @Order(10)
     void testGetTariffLines() {
         given()
                 .auth().basic("admin", "admin123")
@@ -190,7 +215,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(10)
+    @Order(11)
     void testExecuteCrossingWithDiscrepancies() {
         given()
                 .auth().basic("admin", "admin123")
@@ -203,7 +228,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(11)
+    @Order(12)
     void testGetCrossingResult() {
         given()
                 .auth().basic("admin", "admin123")
@@ -214,7 +239,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(12)
+    @Order(13)
     void testResolveCrossing() {
         given()
                 .auth().basic("admin", "admin123")
@@ -230,7 +255,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(13)
+    @Order(14)
     void testClientCanViewCrossing() {
         given()
                 .auth().basic("client", "client123")
@@ -240,7 +265,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(14)
+    @Order(15)
     void testClientCannotRegisterDeclaration() {
         given()
                 .auth().basic("client", "client123")

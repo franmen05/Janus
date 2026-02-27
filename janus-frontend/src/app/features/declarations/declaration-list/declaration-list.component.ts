@@ -91,6 +91,10 @@ export class DeclarationListComponent implements OnInit {
     'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION'
   ];
 
+  private static readonly FINAL_EDITABLE_STATUSES = [
+    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW'
+  ];
+
   canRegisterFinal(): boolean {
     return DeclarationListComponent.FINAL_ALLOWED_STATUSES.includes(this.operationStatus());
   }
@@ -102,6 +106,9 @@ export class DeclarationListComponent implements OnInit {
   canEditDeclaration(decl: Declaration): boolean {
     if (decl.declarationType === DeclarationType.PRELIMINARY) {
       return DeclarationListComponent.PRELIMINARY_EDITABLE_STATUSES.includes(this.operationStatus());
+    }
+    if (decl.declarationType === DeclarationType.FINAL) {
+      return DeclarationListComponent.FINAL_EDITABLE_STATUSES.includes(this.operationStatus());
     }
     return true;
   }

@@ -162,11 +162,18 @@ export class DeclarationDetailComponent implements OnInit {
     'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION'
   ];
 
+  private static readonly FINAL_EDITABLE_STATUSES = [
+    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW'
+  ];
+
   canEdit = computed(() => {
     const decl = this.declaration();
     if (!decl) return true;
     if (decl.declarationType === DeclarationType.PRELIMINARY) {
       return DeclarationDetailComponent.PRELIMINARY_EDITABLE_STATUSES.includes(this.operationStatus());
+    }
+    if (decl.declarationType === DeclarationType.FINAL) {
+      return DeclarationDetailComponent.FINAL_EDITABLE_STATUSES.includes(this.operationStatus());
     }
     return true;
   });
