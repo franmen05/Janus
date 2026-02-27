@@ -58,6 +58,9 @@ public class DeclarationService {
     @Inject
     Event<AuditEvent> auditEvent;
 
+    @org.eclipse.microprofile.config.inject.ConfigProperty(name = "janus.app.frontend-url", defaultValue = "http://localhost:4200")
+    String frontendUrl;
+
     @Transactional
     public Declaration registerPreliminary(Long operationId, Declaration declaration, String username) {
         return registerDeclaration(operationId, declaration, DeclarationType.PRELIMINARY, username);
@@ -111,6 +114,8 @@ public class DeclarationService {
         declaration.gattMethod = updated.gattMethod;
         declaration.notes = updated.notes;
 
+        invalidateCrossingIfFinal(declaration, operationId);
+
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "Declaration", declarationId, operationId,
                 null, null, "Declaration updated: " + declaration.declarationNumber
@@ -134,6 +139,8 @@ public class DeclarationService {
         var declaration = findById(operationId, declarationId);
         line.declaration = declaration;
         tariffLineRepository.persist(line);
+
+        invalidateCrossingIfFinal(declaration, operationId);
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.CREATE, "TariffLine", line.id, operationId,
@@ -159,6 +166,10 @@ public class DeclarationService {
 
         var prelimLines = tariffLineRepository.findByDeclarationId(preliminary.id);
         var finalLines = tariffLineRepository.findByDeclarationId(finalDecl.id);
+
+        // Remove previous crossing results before creating a new one
+        crossingDiscrepancyRepository.deleteByOperationId(operationId);
+        crossingResultRepository.deleteByOperationId(operationId);
 
         var crossingResult = new CrossingResult();
         crossingResult.operation = operation;
@@ -224,6 +235,13 @@ public class DeclarationService {
         return crossingDiscrepancyRepository.findByCrossingResultId(crossingResultId);
     }
 
+    private void invalidateCrossingIfFinal(Declaration declaration, Long operationId) {
+        if (declaration.declarationType == DeclarationType.FINAL) {
+            crossingDiscrepancyRepository.deleteByOperationId(operationId);
+            crossingResultRepository.deleteByOperationId(operationId);
+        }
+    }
+
     @Transactional
     public Declaration generatePreliquidation(Long operationId, Long declarationId, String username) {
         var declaration = findById(operationId, declarationId);
@@ -233,6 +251,8 @@ public class DeclarationService {
         declaration.cifValue = result.cifValue();
         declaration.taxableBase = result.taxableBase();
         declaration.totalTaxes = result.totalTaxes();
+
+        invalidateCrossingIfFinal(declaration, operationId);
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "Declaration", declarationId, operationId,
@@ -349,6 +369,26 @@ public class DeclarationService {
         }
 
         return declaration;
+    }
+
+    @Transactional
+    public void sendApprovalLink(Long operationId, Long declarationId, String username) {
+        var declaration = findById(operationId, declarationId);
+        var operation = declaration.operation;
+
+        var approvalUrl = frontendUrl + "/operations/" + operationId + "?action=approve-final";
+
+        if (operation.client != null && operation.client.email != null) {
+            notificationService.send(operationId, operation.client.email,
+                    "Approval Required - " + operation.referenceNumber,
+                    "Please review and approve the final declaration for operation "
+                            + operation.referenceNumber + ". Click here to approve: " + approvalUrl);
+        }
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.UPDATE, "Declaration", declarationId, operationId,
+                null, null, "Approval link sent for declaration " + declaration.declarationNumber
+        ));
     }
 
     @Transactional

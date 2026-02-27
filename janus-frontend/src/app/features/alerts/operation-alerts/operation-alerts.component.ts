@@ -2,6 +2,7 @@ import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '../../../core/services/alert.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Alert } from '../../../core/models/alert.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
@@ -25,6 +26,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 export class OperationAlertsComponent implements OnInit {
   operationId = input.required<number>();
   private alertService = inject(AlertService);
+  private authService = inject(AuthService);
   activeAlerts = signal<Alert[]>([]);
 
   ngOnInit(): void {
@@ -32,9 +34,11 @@ export class OperationAlertsComponent implements OnInit {
   }
 
   loadAlerts(): void {
-    this.alertService.getByOperation(this.operationId()).subscribe(alerts => {
-      this.activeAlerts.set(alerts.filter(a => a.status === 'ACTIVE'));
-    });
+    if (this.authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING', 'CLIENT'])) {
+      this.alertService.getByOperation(this.operationId()).subscribe(alerts => {
+        this.activeAlerts.set(alerts.filter(a => a.status === 'ACTIVE'));
+      });
+    }
   }
 
   acknowledge(alert: Alert): void {

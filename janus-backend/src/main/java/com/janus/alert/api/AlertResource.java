@@ -2,6 +2,8 @@ package com.janus.alert.api;
 
 import com.janus.alert.api.dto.AlertResponse;
 import com.janus.alert.application.AlertService;
+import com.janus.operation.application.OperationService;
+import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -22,6 +24,12 @@ public class AlertResource {
     @Inject
     AlertService alertService;
 
+    @Inject
+    SecurityHelper securityHelper;
+
+    @Inject
+    OperationService operationService;
+
     @GET
     @RolesAllowed({"ADMIN", "AGENT"})
     public List<AlertResponse> getActiveAlerts() {
@@ -32,8 +40,10 @@ public class AlertResource {
 
     @GET
     @Path("/operations/{operationId}")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
-    public List<AlertResponse> getByOperation(@PathParam("operationId") Long operationId) {
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    public List<AlertResponse> getByOperation(@PathParam("operationId") Long operationId,
+                                               @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         return alertService.getAlertsByOperationId(operationId).stream()
                 .map(AlertResponse::from)
                 .toList();

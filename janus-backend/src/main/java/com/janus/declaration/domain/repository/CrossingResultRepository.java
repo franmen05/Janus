@@ -16,4 +16,8 @@ public class CrossingResultRepository implements PanacheRepository<CrossingResul
     public boolean hasUnresolvedForOperation(Long operationId) {
         return count("operation.id = ?1 AND status = ?2", operationId, CrossingStatus.DISCREPANCY) > 0;
     }
+
+    public long deleteByOperationId(Long operationId) {
+        return delete("operation.id = ?1", operationId);
+    }
 }

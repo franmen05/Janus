@@ -9,7 +9,7 @@ import { AuditService } from '../../../core/services/audit.service';
 import { DeclarationService } from '../../../core/services/declaration.service';
 import { Operation, OperationStatus } from '../../../core/models/operation.model';
 import { CompletenessResponse, Document } from '../../../core/models/document.model';
-import { Declaration } from '../../../core/models/declaration.model';
+import { CrossingResult, Declaration } from '../../../core/models/declaration.model';
 import { AuditLog } from '../../../core/models/audit.model';
 import { DocumentService } from '../../../core/services/document.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
@@ -90,7 +90,7 @@ const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUST
               </div>
               <div class="col-md-8">
                 <p class="text-muted mb-2">{{ getReviewDescription() }}</p>
-                @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+                @if (authService.hasRole(['ADMIN', 'AGENT']) || (authService.hasRole(['CLIENT']) && operation()!.status === 'DECLARATION_IN_PROGRESS')) {
                   <div class="d-flex gap-2 flex-wrap">
                     @switch (operation()!.status) {
                       @case ('IN_REVIEW') {
@@ -130,8 +130,24 @@ const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUST
                         </button>
                       }
                       @case ('DECLARATION_IN_PROGRESS') {
-                        @if (declarations().length > 0 && authService.hasRole(['ADMIN'])) {
-                          <button class="btn btn-sm btn-primary" (click)="approveFinal()" [disabled]="declarations()[0].finalApprovedBy != null">{{ 'preliquidation.approveFinal' | translate }}</button>
+                        @if (declarations().length > 0) {
+                          @if (isCrossingApproved()) {
+                            @if (authService.hasRole(['ADMIN', 'CLIENT'])) {
+                              <button class="btn btn-sm btn-primary" (click)="approveFinal()" [disabled]="declarations()[0].finalApprovedBy != null">{{ 'preliquidation.approveFinal' | translate }}</button>
+                            }
+                            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+                              <button class="btn btn-sm btn-outline-secondary" (click)="copyApprovalLink()">
+                                <i class="bi bi-clipboard me-1"></i>{{ 'approval.copyLink' | translate }}
+                              </button>
+                              <button class="btn btn-sm btn-outline-info" (click)="sendApprovalEmail()">
+                                <i class="bi bi-envelope me-1"></i>{{ 'approval.sendEmail' | translate }}
+                              </button>
+                            }
+                          } @else {
+                            <div class="alert alert-info py-2 px-3 mb-0 flex-grow-1">
+                              <small><i class="bi bi-info-circle me-1"></i>{{ 'CROSSING.REQUIRED_BEFORE_APPROVAL' | translate }}</small>
+                            </div>
+                          }
                         }
                       }
                     }
@@ -245,7 +261,7 @@ const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUST
             <div class="mt-3"><app-operation-comments [operationId]="operation()!.id" /></div>
           </ng-template>
         </li>
-        @if (authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {
+        @if (authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING', 'CLIENT'])) {
           <li [ngbNavItem]="'declarations'">
             <button ngbNavLink>{{ 'TABS.DECLARATIONS' | translate }}</button>
             <ng-template ngbNavContent>
@@ -357,6 +373,7 @@ export class OperationDetailComponent implements OnInit {
   completeness = signal<CompletenessResponse | null>(null);
   documents = signal<Document[]>([]);
   declarations = signal<Declaration[]>([]);
+  crossingResult = signal<CrossingResult | null>(null);
   statusChangeErrors = signal<string[]>([]);
   activeTab = 'info';
 
@@ -381,19 +398,42 @@ export class OperationDetailComponent implements OnInit {
     return op !== null && CROSSING_VISIBLE_STATUSES.includes(op.status);
   });
 
+  isCrossingApproved = computed(() => {
+    const cr = this.crossingResult();
+    return cr !== null && (cr.status === 'MATCH' || cr.status === 'RESOLVED');
+  });
+
   ngOnInit(): void {
     const tab = this.route.snapshot.queryParamMap.get('tab');
     if (tab) { this.activeTab = tab; }
+    const action = this.route.snapshot.queryParamMap.get('action');
     this.reload();
+    if (action === 'approve-final') {
+      const id = +this.route.snapshot.paramMap.get('id')!;
+      this.operationService.getById(id).subscribe(op => {
+        this.operation.set(op);
+        if (op.status === 'DECLARATION_IN_PROGRESS') {
+          this.declarationService.getDeclarations(id).subscribe(decls => {
+            this.declarations.set(decls);
+            if (decls.length > 0 && decls[0].finalApprovedBy == null) {
+              this.approveFinal();
+            }
+          });
+        }
+      });
+    }
   }
 
   reload(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
     this.operationService.getById(id).subscribe(op => this.operation.set(op));
     this.operationService.getCompleteness(id).subscribe(c => this.completeness.set(c));
-    this.auditService.getByOperation(id).subscribe(logs => this.auditLogs.set(logs));
+    if (this.authService.hasRole(['ADMIN'])) {
+      this.auditService.getByOperation(id).subscribe(logs => this.auditLogs.set(logs));
+    }
     this.documentService.getByOperation(id).subscribe(docs => this.documents.set(docs));
     this.declarationService.getDeclarations(id).subscribe(decls => this.declarations.set(decls));
+    this.declarationService.getCrossing(id).subscribe(c => this.crossingResult.set(c));
   }
 
   getReviewDescription(): string {
@@ -422,6 +462,24 @@ export class OperationDetailComponent implements OnInit {
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
     if (comment === null) return;
     this.declarationService.approveFinal(this.operation()!.id, decl.id, comment || undefined).subscribe(() => this.reload());
+  }
+
+  copyApprovalLink(): void {
+    const op = this.operation();
+    if (!op) return;
+    const url = window.location.origin + '/operations/' + op.id + '?action=approve-final';
+    navigator.clipboard.writeText(url).then(() => {
+      alert(this.translate.instant('approval.linkCopied'));
+    });
+  }
+
+  sendApprovalEmail(): void {
+    const op = this.operation();
+    const decl = this.declarations()[0];
+    if (!op || !decl) return;
+    this.declarationService.sendApprovalLink(op.id, decl.id).subscribe(() => {
+      alert(this.translate.instant('approval.emailSent'));
+    });
   }
 
   rejectDeclaration(): void {

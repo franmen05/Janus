@@ -403,7 +403,8 @@
     "RESOLUTION_COMMENT": "Comentario de Resolución",
     "RESOLVED_BY": "Resuelto Por",
     "NO_CROSSING": "Sin resultado de cruce disponible. Deben registrarse ambas declaraciones (preliminar y final) primero.",
-    "RESOLVE_PLACEHOLDER": "Ingrese comentario de resolución..."
+    "RESOLVE_PLACEHOLDER": "Ingrese comentario de resolución...",
+    "REQUIRED_BEFORE_APPROVAL": "Debe realizarse el cruce con la declaración preliminar antes de la aprobación final."
   },
   "ALERTS": {
     "TITLE": "Alertas",
@@ -651,7 +652,13 @@
     "proceedToDeclaration": "Proceder a Declaración",
     "noDeclarationsYet": "No hay declaraciones registradas aún.",
     "createDeclarationPrompt": "Ir a la pestaña Declaraciones para crear una.",
-    "declarationInProgress": "Declaración en proceso. El ADMIN puede aprobar la declaración final."
+    "declarationInProgress": "Declaración en proceso. El ADMIN o el CLIENTE pueden aprobar la declaración final."
+  },
+  "approval": {
+    "copyLink": "Copiar Enlace",
+    "sendEmail": "Enviar Enlace por Email",
+    "linkCopied": "Enlace copiado al portapapeles",
+    "emailSent": "Email de aprobación enviado al cliente"
   },
   "preliquidation": {
     "title": "Preliquidación",

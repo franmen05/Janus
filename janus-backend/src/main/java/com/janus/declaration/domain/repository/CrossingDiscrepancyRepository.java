@@ -11,4 +11,8 @@ public class CrossingDiscrepancyRepository implements PanacheRepository<Crossing
     public List<CrossingDiscrepancy> findByCrossingResultId(Long crossingResultId) {
         return list("crossingResult.id = ?1", crossingResultId);
     }
+
+    public long deleteByOperationId(Long operationId) {
+        return delete("crossingResult.id IN (SELECT cr.id FROM CrossingResult cr WHERE cr.operation.id = ?1)", operationId);
+    }
 }

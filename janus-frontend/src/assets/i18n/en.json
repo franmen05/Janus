@@ -403,7 +403,8 @@
     "RESOLUTION_COMMENT": "Resolution Comment",
     "RESOLVED_BY": "Resolved By",
     "NO_CROSSING": "No crossing result available. Both preliminary and final declarations must be registered first.",
-    "RESOLVE_PLACEHOLDER": "Enter resolution comment..."
+    "RESOLVE_PLACEHOLDER": "Enter resolution comment...",
+    "REQUIRED_BEFORE_APPROVAL": "The crossing with the preliminary declaration must be completed before final approval."
   },
   "ALERTS": {
     "TITLE": "Alerts",
@@ -651,7 +652,13 @@
     "proceedToDeclaration": "Proceed to Declaration",
     "noDeclarationsYet": "No declarations registered yet.",
     "createDeclarationPrompt": "Go to Declarations tab to create one.",
-    "declarationInProgress": "Declaration is in progress. ADMIN can approve the final declaration."
+    "declarationInProgress": "Declaration is in progress. ADMIN or CLIENT can approve the final declaration."
+  },
+  "approval": {
+    "copyLink": "Copy Link",
+    "sendEmail": "Send Link by Email",
+    "linkCopied": "Link copied to clipboard",
+    "emailSent": "Approval email sent to client"
   },
   "preliquidation": {
     "title": "Preliquidation",

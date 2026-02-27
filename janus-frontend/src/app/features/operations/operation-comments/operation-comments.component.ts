@@ -14,10 +14,8 @@ import { AuthService } from '../../../core/services/auth.service';
     @if (authService.hasRole(['ADMIN', 'AGENT'])) {
       <div class="card mb-3">
         <div class="card-body">
-          <div class="input-group">
-            <input type="text" class="form-control" [placeholder]="'COMMENTS.PLACEHOLDER' | translate" [(ngModel)]="newComment">
-            <button class="btn btn-primary" (click)="addComment()" [disabled]="!newComment.trim()">{{ 'COMMENTS.SUBMIT' | translate }}</button>
-          </div>
+          <textarea class="form-control mb-2" rows="3" [placeholder]="'COMMENTS.PLACEHOLDER' | translate" [(ngModel)]="newComment"></textarea>
+          <button class="btn btn-primary" (click)="addComment()" [disabled]="!newComment.trim()">{{ 'COMMENTS.SUBMIT' | translate }}</button>
           @if (canToggleInternal()) {
             <div class="form-check mt-2">
               <input class="form-check-input" type="checkbox" id="internalToggle" [(ngModel)]="internalFlag">

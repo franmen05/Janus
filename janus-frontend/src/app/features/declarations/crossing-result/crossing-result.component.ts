@@ -56,10 +56,8 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
           }
           @if (crossing()!.status === 'DISCREPANCY' && authService.hasRole(['ADMIN', 'AGENT'])) {
             <div class="mt-3">
-              <div class="input-group">
-                <input type="text" class="form-control" [placeholder]="'CROSSING.RESOLVE_PLACEHOLDER' | translate" [(ngModel)]="resolveComment">
-                <button class="btn btn-warning" (click)="resolveCrossing()" [disabled]="!resolveComment.trim()">{{ 'CROSSING.RESOLVE' | translate }}</button>
-              </div>
+              <textarea class="form-control mb-2" rows="3" [placeholder]="'CROSSING.RESOLVE_PLACEHOLDER' | translate" [(ngModel)]="resolveComment"></textarea>
+              <button class="btn btn-warning" (click)="resolveCrossing()" [disabled]="!resolveComment.trim()">{{ 'CROSSING.RESOLVE' | translate }}</button>
             </div>
           }
         } @else {
