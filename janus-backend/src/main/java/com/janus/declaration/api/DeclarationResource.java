@@ -68,8 +68,10 @@ public class DeclarationResource {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
-    public List<DeclarationResponse> list(@PathParam("operationId") Long operationId) {
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    public List<DeclarationResponse> list(@PathParam("operationId") Long operationId,
+                                           @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         return declarationService.findByOperationId(operationId).stream()
                 .map(DeclarationResponse::from)
                 .toList();
@@ -77,9 +79,11 @@ public class DeclarationResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
     public DeclarationResponse getById(@PathParam("operationId") Long operationId,
-                                        @PathParam("id") Long id) {
+                                        @PathParam("id") Long id,
+                                        @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         return DeclarationResponse.from(declarationService.findById(operationId, id));
     }
 
@@ -204,11 +208,12 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/approve-final")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN", "CLIENT"})
     public DeclarationResponse approveFinal(@PathParam("operationId") Long operationId,
                                              @PathParam("id") Long declarationId,
                                              ApprovalRequest request,
                                              @Context SecurityContext sec) {
+        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         var comment = request != null ? request.comment() : null;
         var result = declarationService.approveFinal(operationId, declarationId, comment,
                 sec.getUserPrincipal().getName());
@@ -226,6 +231,16 @@ public class DeclarationResource {
         var result = declarationService.reject(operationId, declarationId, comment,
                 sec.getUserPrincipal().getName());
         return DeclarationResponse.from(result);
+    }
+
+    @POST
+    @Path("/{id}/send-approval-link")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public Response sendApprovalLink(@PathParam("operationId") Long operationId,
+                                      @PathParam("id") Long declarationId,
+                                      @Context SecurityContext sec) {
+        declarationService.sendApprovalLink(operationId, declarationId, sec.getUserPrincipal().getName());
+        return Response.ok().build();
     }
 
     @POST

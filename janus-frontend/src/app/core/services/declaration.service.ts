@@ -71,6 +71,13 @@ export class DeclarationService {
     );
   }
 
+  sendApprovalLink(operationId: number, declarationId: number): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}/send-approval-link`,
+      {}
+    );
+  }
+
   generatePreliquidation(operationId: number, declarationId: number): Observable<Declaration> {
     return this.http.post<Declaration>(
       `${this.apiUrl}/api/operations/${operationId}/declarations/${declarationId}/generate-preliquidation`,
