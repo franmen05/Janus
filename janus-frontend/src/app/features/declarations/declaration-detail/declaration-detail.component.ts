@@ -54,39 +54,39 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
             <form [formGroup]="form">
               <div class="row mb-3">
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'DECLARATIONS.DECLARATION_NUMBER' | translate }}</label>
+                  <label class="form-label">{{ 'DECLARATIONS.DECLARATION_NUMBER' | translate }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" formControlName="declarationNumber">
                 </div>
                 <div class="col-md-6">
-                  <label class="form-label">{{ 'DECLARATIONS.GATT_METHOD' | translate }}</label>
+                  <label class="form-label">{{ 'DECLARATIONS.GATT_METHOD' | translate }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" formControlName="gattMethod">
                 </div>
               </div>
               <div class="row mb-3">
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'DECLARATIONS.FOB_VALUE' | translate }}</label>
+                  <label class="form-label">{{ 'DECLARATIONS.FOB_VALUE' | translate }} <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" formControlName="fobValue" step="0.01">
                 </div>
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'DECLARATIONS.FREIGHT_VALUE' | translate }}</label>
+                  <label class="form-label">{{ 'DECLARATIONS.FREIGHT_VALUE' | translate }} <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" formControlName="freightValue" step="0.01">
                 </div>
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }}</label>
+                  <label class="form-label">{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }} <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" formControlName="insuranceValue" step="0.01">
                 </div>
               </div>
               <div class="row mb-3">
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'DECLARATIONS.CIF_VALUE' | translate }}</label>
+                  <label class="form-label">{{ 'DECLARATIONS.CIF_VALUE' | translate }} <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" formControlName="cifValue" step="0.01">
                 </div>
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'DECLARATIONS.TAXABLE_BASE' | translate }}</label>
+                  <label class="form-label">{{ 'DECLARATIONS.TAXABLE_BASE' | translate }} <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" formControlName="taxableBase" step="0.01">
                 </div>
                 <div class="col-md-4">
-                  <label class="form-label">{{ 'DECLARATIONS.TOTAL_TAXES' | translate }}</label>
+                  <label class="form-label">{{ 'DECLARATIONS.TOTAL_TAXES' | translate }} <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" formControlName="totalTaxes" step="0.01">
                 </div>
               </div>

@@ -22,11 +22,11 @@ import { Client } from '../../../core/models/client.model';
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'USERS.USERNAME' | translate }}</label>
+              <label class="form-label">{{ 'USERS.USERNAME' | translate }} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="username" [readonly]="isEdit()">
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'USERS.PASSWORD' | translate }}</label>
+              <label class="form-label">{{ 'USERS.PASSWORD' | translate }} @if (!isEdit()) { <span class="text-danger">*</span> }</label>
               <input type="password" class="form-control" formControlName="password">
               @if (isEdit()) {
                 <small class="form-text text-muted">{{ 'USERS.PASSWORD_HINT' | translate }}</small>
@@ -35,17 +35,17 @@ import { Client } from '../../../core/models/client.model';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'USERS.FULL_NAME' | translate }}</label>
+              <label class="form-label">{{ 'USERS.FULL_NAME' | translate }} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="fullName">
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'USERS.EMAIL' | translate }}</label>
+              <label class="form-label">{{ 'USERS.EMAIL' | translate }} <span class="text-danger">*</span></label>
               <input type="email" class="form-control" formControlName="email">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'USERS.ROLE' | translate }}</label>
+              <label class="form-label">{{ 'USERS.ROLE' | translate }} <span class="text-danger">*</span></label>
               <select class="form-select" formControlName="role">
                 @for (r of roles; track r) {
                   <option [value]="r">{{ 'ROLES.' + r | translate }}</option>

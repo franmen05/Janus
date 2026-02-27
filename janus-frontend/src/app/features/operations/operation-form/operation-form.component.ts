@@ -23,7 +23,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.CLIENT' | translate }}</label>
+              <label class="form-label">{{ 'OPERATIONS.CLIENT' | translate }} <span class="text-danger">*</span></label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control"
@@ -56,13 +56,13 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</label>
+              <label class="form-label">{{ 'OPERATIONS.TRANSPORT_MODE' | translate }} <span class="text-danger">*</span></label>
               <select class="form-select" formControlName="transportMode">
                 @for (t of transportModes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.OPERATION_CATEGORY' | translate }}</label>
+              <label class="form-label">{{ 'OPERATIONS.OPERATION_CATEGORY' | translate }} <span class="text-danger">*</span></label>
               <select class="form-select" formControlName="operationCategory">
                 @for (t of operationCategories; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
               </select>
@@ -93,7 +93,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           }
           <div class="row mb-3">
             <div class="col-md-4">
-              <label class="form-label">{{ 'OPERATIONS.BL_NUMBER' | translate }}</label>
+              <label class="form-label">{{ 'OPERATIONS.BL_NUMBER' | translate }} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="blNumber"
                      [class.is-invalid]="form.get('blNumber')!.invalid && form.get('blNumber')!.touched">
               @if (form.get('blNumber')!.hasError('required') && form.get('blNumber')!.touched) {
@@ -117,8 +117,12 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.ESTIMATED_ARRIVAL' | translate }}</label>
-              <input type="datetime-local" class="form-control" formControlName="estimatedArrival">
+              <label class="form-label">{{ 'OPERATIONS.ESTIMATED_ARRIVAL' | translate }} <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control" formControlName="estimatedArrival"
+                     [class.is-invalid]="form.get('estimatedArrival')!.invalid && form.get('estimatedArrival')!.touched">
+              @if (form.get('estimatedArrival')!.hasError('required') && form.get('estimatedArrival')!.touched) {
+                <div class="invalid-feedback">{{ 'OPERATIONS.ESTIMATED_ARRIVAL_REQUIRED' | translate }}</div>
+              }
             </div>
             <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.DEADLINE' | translate }}</label>
@@ -134,7 +138,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.BL_AVAILABILITY' | translate }}</label>
+              <label class="form-label">{{ 'OPERATIONS.BL_AVAILABILITY' | translate }} <span class="text-danger">*</span></label>
               <select class="form-select" formControlName="blAvailability"
                       [class.is-invalid]="form.get('blAvailability')!.invalid && form.get('blAvailability')!.touched">
                 <option value="">{{ 'OPERATIONS.SELECT_BL_AVAILABILITY' | translate }}</option>
@@ -192,7 +196,7 @@ export class OperationFormComponent implements OnInit {
     blType: new FormControl(BlType.SIMPLE, { nonNullable: true }),
     childBlNumber: new FormControl('', { nonNullable: true }),
     containerNumber: new FormControl('', { nonNullable: true }),
-    estimatedArrival: new FormControl('', { nonNullable: true }),
+    estimatedArrival: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     blAvailability: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     notes: new FormControl('', { nonNullable: true }),
     deadline: new FormControl('', { nonNullable: true }),
@@ -338,7 +342,7 @@ export class OperationFormComponent implements OnInit {
       blType: val.blType as BlType,
       childBlNumber: val.blType === BlType.CONSOLIDATED ? (val.childBlNumber || undefined) : undefined,
       containerNumber: val.containerNumber || undefined,
-      estimatedArrival: val.estimatedArrival || undefined,
+      estimatedArrival: val.estimatedArrival,
       blAvailability: val.blAvailability as BlAvailability,
       notes: val.notes || undefined,
       deadline: val.deadline || undefined,

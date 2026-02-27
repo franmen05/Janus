@@ -117,7 +117,7 @@ class InspectionResourceTest {
                 .contentType(ContentType.JSON)
                 .body("""
                         {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
-                         "blNumber": "BL-INSP-TEST", "blAvailability": "ORIGINAL"}
+                         "blNumber": "BL-INSP-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -346,7 +346,7 @@ class InspectionResourceTest {
                 .contentType(ContentType.JSON)
                 .body("""
                         {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
-                         "blNumber": "BL-INSP-DRAFT", "blAvailability": "ORIGINAL"}
+                         "blNumber": "BL-INSP-DRAFT", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)

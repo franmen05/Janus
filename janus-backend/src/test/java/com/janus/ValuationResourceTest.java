@@ -104,7 +104,7 @@ class ValuationResourceTest {
                 .contentType(ContentType.JSON)
                 .body("""
                         {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
-                         "blNumber": "BL-VAL-TEST", "blAvailability": "ORIGINAL"}
+                         "blNumber": "BL-VAL-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -468,7 +468,7 @@ class ValuationResourceTest {
                 .contentType(ContentType.JSON)
                 .body("""
                         {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
-                         "blNumber": "BL-VAL-EXPRESO", "blAvailability": "ORIGINAL"}
+                         "blNumber": "BL-VAL-EXPRESO", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)

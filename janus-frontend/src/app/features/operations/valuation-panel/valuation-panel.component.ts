@@ -242,7 +242,7 @@ import {
                       </div>
                       <div class="col-md-6">
                         <div class="mb-3">
-                          <label class="form-label">{{ 'VALUATION.GATT_JUSTIFICATION' | translate }}</label>
+                          <label class="form-label">{{ 'VALUATION.GATT_JUSTIFICATION' | translate }} <span class="text-danger">*</span></label>
                           <textarea class="form-control" formControlName="justification" rows="4"></textarea>
                         </div>
                         <div class="card bg-light">

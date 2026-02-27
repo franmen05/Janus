@@ -16,7 +16,7 @@ public record CreateOperationRequest(
         Long assignedAgentId,
         @NotNull @NotBlank String blNumber,
         String containerNumber,
-        java.time.LocalDateTime estimatedArrival,
+        @NotNull java.time.LocalDateTime estimatedArrival,
         @NotNull BlAvailability blAvailability,
         String notes,
         java.time.LocalDateTime deadline,

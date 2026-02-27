@@ -195,7 +195,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                 <form [formGroup]="newExpenseForm" (ngSubmit)="addExpense()">
                   <div class="row g-2">
                     <div class="col-6 col-md-3">
-                      <label class="form-label">{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }} *</label>
+                      <label class="form-label">{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }} <span class="text-danger">*</span></label>
                       <select class="form-select form-select-sm" formControlName="category">
                         <option value="" disabled>{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }}...</option>
                         @for (cat of expenseCategories; track cat) {
@@ -208,7 +208,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                       <input type="text" class="form-control form-control-sm" formControlName="description">
                     </div>
                     <div class="col-6 col-md-2">
-                      <label class="form-label">{{ 'INSPECTION.EXPENSE_AMOUNT' | translate }} *</label>
+                      <label class="form-label">{{ 'INSPECTION.EXPENSE_AMOUNT' | translate }} <span class="text-danger">*</span></label>
                       <input type="number" class="form-control form-control-sm" formControlName="amount" step="0.01" min="0.01">
                     </div>
                     <div class="col-6 col-md-2">

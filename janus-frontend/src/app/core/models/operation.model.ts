@@ -88,7 +88,7 @@ export interface CreateOperationRequest {
   blType?: BlType;
   childBlNumber?: string;
   containerNumber?: string;
-  estimatedArrival?: string;
+  estimatedArrival: string;
   blAvailability: BlAvailability;
   notes?: string;
   deadline?: string;

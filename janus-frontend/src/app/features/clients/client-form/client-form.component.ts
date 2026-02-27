@@ -16,17 +16,17 @@ import { ClientService } from '../../../core/services/client.service';
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'CLIENTS.NAME' | translate }}</label>
+              <label class="form-label">{{ 'CLIENTS.NAME' | translate }} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="name">
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'CLIENTS.TAX_ID' | translate }}</label>
+              <label class="form-label">{{ 'CLIENTS.TAX_ID' | translate }} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="taxId">
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'CLIENTS.EMAIL' | translate }}</label>
+              <label class="form-label">{{ 'CLIENTS.EMAIL' | translate }} <span class="text-danger">*</span></label>
               <input type="email" class="form-control" formControlName="email">
             </div>
             <div class="col-md-6">

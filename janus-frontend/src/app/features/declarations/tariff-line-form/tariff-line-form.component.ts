@@ -18,11 +18,11 @@ import { DeclarationService } from '../../../core/services/declaration.service';
       <form [formGroup]="form">
         <div class="row mb-3">
           <div class="col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.LINE_NUMBER' | translate }}</label>
+            <label class="form-label">{{ 'DECLARATIONS.LINE_NUMBER' | translate }} <span class="text-danger">*</span></label>
             <input type="number" class="form-control" formControlName="lineNumber">
           </div>
           <div class="col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.TARIFF_CODE' | translate }}</label>
+            <label class="form-label">{{ 'DECLARATIONS.TARIFF_CODE' | translate }} <span class="text-danger">*</span></label>
             <input type="text" class="form-control" formControlName="tariffCode">
           </div>
           <div class="col-md-4">
@@ -32,25 +32,25 @@ import { DeclarationService } from '../../../core/services/declaration.service';
         </div>
         <div class="row mb-3">
           <div class="col-md-3">
-            <label class="form-label">{{ 'DECLARATIONS.QUANTITY' | translate }}</label>
+            <label class="form-label">{{ 'DECLARATIONS.QUANTITY' | translate }} <span class="text-danger">*</span></label>
             <input type="number" class="form-control" formControlName="quantity" step="0.01">
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ 'DECLARATIONS.UNIT_VALUE' | translate }}</label>
+            <label class="form-label">{{ 'DECLARATIONS.UNIT_VALUE' | translate }} <span class="text-danger">*</span></label>
             <input type="number" class="form-control" formControlName="unitValue" step="0.01">
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ 'DECLARATIONS.TOTAL_VALUE' | translate }}</label>
+            <label class="form-label">{{ 'DECLARATIONS.TOTAL_VALUE' | translate }} <span class="text-danger">*</span></label>
             <input type="number" class="form-control" formControlName="totalValue" step="0.01">
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-md-3">
-            <label class="form-label">{{ 'DECLARATIONS.TAX_RATE' | translate }}</label>
+            <label class="form-label">{{ 'DECLARATIONS.TAX_RATE' | translate }} <span class="text-danger">*</span></label>
             <input type="number" class="form-control" formControlName="taxRate" step="0.01">
           </div>
           <div class="col-md-3">
-            <label class="form-label">{{ 'DECLARATIONS.TAX_AMOUNT' | translate }}</label>
+            <label class="form-label">{{ 'DECLARATIONS.TAX_AMOUNT' | translate }} <span class="text-danger">*</span></label>
             <input type="number" class="form-control" formControlName="taxAmount" step="0.01">
           </div>
         </div>
