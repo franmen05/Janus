@@ -1,3 +1,6 @@
+// Bootstrap Icons
+@use 'bootstrap-icons/font/bootstrap-icons.css';
+
 // Bootstrap
 @use 'bootstrap/scss/bootstrap';
 
@@ -7,20 +10,85 @@ body {
   background-color: #f8f9fa;
 }
 
+// Sidebar
 .sidebar {
   min-height: calc(100vh - 56px);
-  background-color: #343a40;
+  background: linear-gradient(180deg, #1e2530 0%, #1a1f2b 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-brand .brand-icon {
+  font-size: 1.5rem;
+  color: #6ea8fe;
+}
+
+.sidebar-brand .brand-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.nav-section-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 0.25rem;
 }
 
 .sidebar .nav-link {
-  color: rgba(255, 255, 255, 0.75);
-  padding: 0.75rem 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.6rem 1rem;
+  border-radius: 0.375rem;
+  margin: 1px 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  border-left: 3px solid transparent;
 }
 
-.sidebar .nav-link:hover,
+.sidebar .nav-link i {
+  font-size: 1.1rem;
+  width: 1.25rem;
+  text-align: center;
+}
+
+.sidebar .nav-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
 .sidebar .nav-link.active {
   color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(110, 168, 254, 0.12);
+  border-left-color: #6ea8fe;
+  font-weight: 500;
+}
+
+.sidebar-footer {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-footer .user-avatar {
+  font-size: 1.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1;
+}
+
+// Navbar
+.navbar-janus {
+  background: linear-gradient(90deg, #1e2530 0%, #252d3a 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .content-area {

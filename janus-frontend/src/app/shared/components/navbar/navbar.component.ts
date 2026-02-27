@@ -11,10 +11,11 @@ import { LanguageService } from '../../../core/services/language.service';
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, NgbDropdownModule, NgbCollapseModule],
   template: `
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-janus">
       <div class="container-fluid">
-        <a class="navbar-brand" routerLink="/dashboard">
-          <strong>{{ 'APP.TITLE' | translate }}</strong>
+        <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
+          <i class="bi bi-layers-half me-2" style="color: #6ea8fe; font-size: 1.5rem;"></i>
+          <strong>JANUS</strong>
           <small class="text-muted ms-2 d-none d-sm-inline">{{ 'APP.SUBTITLE' | translate }}</small>
         </a>
         @if (authService.isAuthenticated()) {
@@ -24,31 +25,56 @@ import { LanguageService } from '../../../core/services/language.service';
           <div class="collapse navbar-collapse" [ngbCollapse]="menuCollapsed()">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item d-lg-none">
-                <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">{{ 'NAV.DASHBOARD' | translate }}</a>
+                <a class="nav-link" routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">
+                  <i class="bi bi-speedometer2 me-2"></i>{{ 'NAV.DASHBOARD' | translate }}
+                </a>
               </li>
               <li class="nav-item d-lg-none">
-                <a class="nav-link" routerLink="/operations" routerLinkActive="active" (click)="closeMenu()">{{ 'NAV.OPERATIONS' | translate }}</a>
+                <a class="nav-link" routerLink="/operations" routerLinkActive="active" (click)="closeMenu()">
+                  <i class="bi bi-box-seam me-2"></i>{{ 'NAV.OPERATIONS' | translate }}
+                </a>
               </li>
               @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                 <li class="nav-item d-lg-none">
-                  <a class="nav-link" routerLink="/clients" routerLinkActive="active" (click)="closeMenu()">{{ 'NAV.CLIENTS' | translate }}</a>
+                  <a class="nav-link" routerLink="/clients" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-people me-2"></i>{{ 'NAV.CLIENTS' | translate }}
+                  </a>
                 </li>
               }
               @if (authService.hasRole(['ADMIN'])) {
                 <li class="nav-item d-lg-none">
-                  <a class="nav-link" routerLink="/users" routerLinkActive="active" (click)="closeMenu()">{{ 'NAV.USERS' | translate }}</a>
+                  <a class="nav-link" routerLink="/users" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-person-gear me-2"></i>{{ 'NAV.USERS' | translate }}
+                  </a>
                 </li>
               }
               @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                 <li class="nav-item d-lg-none">
-                  <a class="nav-link" routerLink="/alerts" routerLinkActive="active" (click)="closeMenu()">{{ 'NAV.ALERTS' | translate }}</a>
+                  <a class="nav-link" routerLink="/alerts" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-bell me-2"></i>{{ 'NAV.ALERTS' | translate }}
+                  </a>
                 </li>
               }
               @if (authService.hasRole(['ADMIN'])) {
                 <li class="nav-item d-lg-none">
-                  <a class="nav-link" routerLink="/audit" routerLinkActive="active" (click)="closeMenu()">{{ 'NAV.AUDIT_LOG' | translate }}</a>
+                  <a class="nav-link" routerLink="/audit" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-journal-text me-2"></i>{{ 'NAV.AUDIT_LOG' | translate }}
+                  </a>
                 </li>
               }
+              <li class="d-lg-none"><hr class="dropdown-divider border-secondary"></li>
+              <li class="d-lg-none nav-item">
+                <span class="nav-link text-light">
+                  <i class="bi bi-person-circle me-2"></i>
+                  {{ authService.user()?.fullName }}
+                  <span class="badge bg-primary bg-opacity-25 text-primary-emphasis ms-1">{{ authService.user()?.role }}</span>
+                </span>
+              </li>
+              <li class="d-lg-none nav-item">
+                <button class="btn btn-outline-secondary btn-sm ms-3 my-1" (click)="authService.logout()">
+                  <i class="bi bi-box-arrow-right me-1"></i>{{ 'NAV.LOGOUT' | translate }}
+                </button>
+              </li>
               <li class="d-lg-none"><hr class="dropdown-divider border-secondary"></li>
               <li class="nav-item" ngbDropdown>
                 <a class="nav-link" ngbDropdownToggle role="button">
@@ -59,15 +85,6 @@ import { LanguageService } from '../../../core/services/language.service';
                     <button ngbDropdownItem [class.active]="lang.code === langService.currentLanguage()" (click)="langService.setLanguage(lang.code)">{{ lang.label }}</button>
                   }
                 </div>
-              </li>
-              <li class="nav-item">
-                <span class="nav-link text-light">
-                  {{ authService.user()?.fullName }}
-                  <span class="badge bg-secondary ms-1">{{ authService.user()?.role }}</span>
-                </span>
-              </li>
-              <li class="nav-item">
-                <button class="btn btn-outline-light btn-sm ms-2 my-1" (click)="authService.logout()">{{ 'NAV.LOGOUT' | translate }}</button>
               </li>
             </ul>
           </div>
