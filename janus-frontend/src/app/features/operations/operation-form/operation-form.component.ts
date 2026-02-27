@@ -1,8 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { OperatorFunction, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
 import { Client } from '../../../core/models/client.model';
@@ -12,7 +15,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 @Component({
   selector: 'app-operation-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, StatusLabelPipe],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, NgbTypeaheadModule, StatusLabelPipe, RouterModule],
   template: `
     <h2 class="mb-4">{{ (isEdit() ? 'OPERATIONS.EDIT_TITLE' : 'OPERATIONS.NEW_TITLE') | translate }}</h2>
     <div class="card">
@@ -21,12 +24,34 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.CLIENT' | translate }}</label>
-              <select class="form-select" formControlName="clientId">
-                <option value="">{{ 'OPERATIONS.SELECT_CLIENT' | translate }}</option>
-                @for (client of clients(); track client.id) {
-                  <option [value]="client.id">{{ client.name }} ({{ client.taxId }})</option>
-                }
-              </select>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control"
+                  [ngbTypeahead]="searchClient"
+                  [resultFormatter]="clientResultFormatter"
+                  [inputFormatter]="clientInputFormatter"
+                  (selectItem)="onClientSelected($event)"
+                  [value]="selectedClientDisplay()"
+                  [disabled]="clientLocked()"
+                  placeholder="{{ 'OPERATIONS.CLIENT_SEARCH_PLACEHOLDER' | translate }}" />
+              </div>
+              @if (selectedClient()) {
+                <div class="mt-1 d-flex align-items-center gap-2">
+                  <span class="badge bg-primary">{{ selectedClient()!.name }}</span>
+                  <small class="text-muted">{{ selectedClient()!.taxId }}</small>
+                  @if (!clientLocked()) {
+                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearClient()">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
+                  }
+                </div>
+              } @else {
+                <div class="mt-1">
+                  <a routerLink="/clients/new" class="small text-decoration-none">
+                    <i class="bi bi-plus-circle me-1"></i>{{ 'OPERATIONS.CREATE_CLIENT' | translate }}
+                  </a>
+                </div>
+              }
             </div>
           </div>
           <div class="row mb-3">
@@ -149,6 +174,9 @@ export class OperationFormComponent implements OnInit {
   clients = signal<Client[]>([]);
   isEdit = signal(false);
   operationId: number | null = null;
+  selectedClient = signal<Client | null>(null);
+  selectedClientDisplay = signal('');
+  clientLocked = signal(false);
   transportModes = Object.values(TransportMode);
   cargoTypes = Object.values(CargoType);
   operationCategories = Object.values(OperationCategory);
@@ -171,13 +199,51 @@ export class OperationFormComponent implements OnInit {
     incoterm: new FormControl('', { nonNullable: true })
   });
 
+  searchClient: OperatorFunction<string, Client[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => {
+        if (term.length < 1) return this.clients().filter(c => c.active).slice(0, 10);
+        const lower = term.toLowerCase();
+        return this.clients().filter(c => c.active &&
+          (c.name.toLowerCase().includes(lower) ||
+           c.taxId?.toLowerCase().includes(lower) ||
+           c.email?.toLowerCase().includes(lower))
+        ).slice(0, 10);
+      })
+    );
+
+  clientResultFormatter = (client: Client) =>
+    `${client.name}  —  ${client.taxId || ''}  ${client.email ? '· ' + client.email : ''}`;
+
+  clientInputFormatter = (client: Client) => client.name;
+
+  onClientSelected(event: any): void {
+    const client = event.item as Client;
+    this.selectedClient.set(client);
+    this.selectedClientDisplay.set(client.name);
+    this.form.get('clientId')!.setValue(client.id.toString());
+  }
+
+  clearClient(): void {
+    this.selectedClient.set(null);
+    this.selectedClientDisplay.set('');
+    this.form.get('clientId')!.setValue('');
+  }
+
   ngOnInit(): void {
     this.clientService.getAll().subscribe(clients => {
       this.clients.set(clients);
-      const clientId = this.route.snapshot.queryParamMap.get('clientId');
-      if (clientId && !this.isEdit()) {
-        this.form.get('clientId')!.setValue(clientId);
-        this.form.get('clientId')!.disable();
+      const clientIdParam = this.route.snapshot.queryParamMap.get('clientId');
+      if (clientIdParam && !this.isEdit()) {
+        const client = clients.find(c => c.id === +clientIdParam);
+        if (client) {
+          this.selectedClient.set(client);
+          this.selectedClientDisplay.set(client.name);
+          this.form.get('clientId')!.setValue(clientIdParam);
+          this.clientLocked.set(true);
+        }
       }
     });
 
@@ -221,6 +287,13 @@ export class OperationFormComponent implements OnInit {
           deadline: op.deadline ?? '',
           incoterm: op.incoterm ?? ''
         });
+        if (op.clientId) {
+          const client = this.clients().find(c => c.id === op.clientId);
+          if (client) {
+            this.selectedClient.set(client);
+            this.selectedClientDisplay.set(client.name);
+          }
+        }
       });
     }
   }

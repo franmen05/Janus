@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { OperatorFunction, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { UserService } from '../../../core/services/user.service';
 import { ClientService } from '../../../core/services/client.service';
 import { Role } from '../../../core/models/user.model';
@@ -11,7 +14,7 @@ import { Client } from '../../../core/models/client.model';
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, NgbTypeaheadModule],
   template: `
     <h2 class="mb-4">{{ (isEdit() ? 'USERS.EDIT_TITLE' : 'USERS.NEW_TITLE') | translate }}</h2>
     <div class="card">
@@ -52,12 +55,25 @@ import { Client } from '../../../core/models/client.model';
             @if (form.get('role')?.value === 'CLIENT') {
               <div class="col-md-6">
                 <label class="form-label">{{ 'USERS.CLIENT' | translate }}</label>
-                <select class="form-select" formControlName="clientId">
-                  <option [ngValue]="null">--</option>
-                  @for (c of clients(); track c.id) {
-                    <option [ngValue]="c.id">{{ c.name }}</option>
-                  }
-                </select>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control"
+                    [ngbTypeahead]="searchClient"
+                    [resultFormatter]="clientResultFormatter"
+                    [inputFormatter]="clientInputFormatter"
+                    (selectItem)="onClientSelected($event)"
+                    [value]="selectedClientDisplay()"
+                    placeholder="{{ 'USERS.CLIENT_SEARCH_PLACEHOLDER' | translate }}" />
+                </div>
+                @if (selectedClient()) {
+                  <div class="mt-1 d-flex align-items-center gap-2">
+                    <span class="badge bg-primary">{{ selectedClient()!.name }}</span>
+                    <small class="text-muted">{{ selectedClient()!.taxId }}</small>
+                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearClient()">
+                      <i class="bi bi-x-circle"></i>
+                    </button>
+                  </div>
+                }
               </div>
             }
           </div>
@@ -80,6 +96,8 @@ export class UserFormComponent implements OnInit {
   userId: number | null = null;
   roles = Object.values(Role);
   clients = signal<Client[]>([]);
+  selectedClient = signal<Client | null>(null);
+  selectedClientDisplay = signal('');
 
   form = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -90,25 +108,67 @@ export class UserFormComponent implements OnInit {
     clientId: new FormControl<number | null>(null)
   });
 
-  ngOnInit(): void {
-    this.clientService.getAll().subscribe(clients => this.clients.set(clients));
+  searchClient: OperatorFunction<string, Client[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => {
+        if (term.length < 1) return this.clients().filter(c => c.active).slice(0, 10);
+        const lower = term.toLowerCase();
+        return this.clients().filter(c => c.active &&
+          (c.name.toLowerCase().includes(lower) ||
+           c.taxId?.toLowerCase().includes(lower) ||
+           c.email?.toLowerCase().includes(lower))
+        ).slice(0, 10);
+      })
+    );
 
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.isEdit.set(true);
-      this.userId = +id;
-      this.form.get('password')!.removeValidators(Validators.required);
-      this.form.get('password')!.updateValueAndValidity();
-      this.userService.getById(+id).subscribe(u => {
-        this.form.patchValue({
-          username: u.username,
-          fullName: u.fullName,
-          email: u.email,
-          role: u.role,
-          clientId: u.clientId
+  clientResultFormatter = (client: Client) =>
+    `${client.name}  —  ${client.taxId || ''}  ${client.email ? '· ' + client.email : ''}`;
+
+  clientInputFormatter = (client: Client) => client.name;
+
+  onClientSelected(event: any): void {
+    const client = event.item as Client;
+    this.selectedClient.set(client);
+    this.selectedClientDisplay.set(client.name);
+    this.form.get('clientId')!.setValue(client.id);
+  }
+
+  clearClient(): void {
+    this.selectedClient.set(null);
+    this.selectedClientDisplay.set('');
+    this.form.get('clientId')!.setValue(null);
+  }
+
+  ngOnInit(): void {
+    this.clientService.getAll().subscribe(clients => {
+      this.clients.set(clients);
+
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.isEdit.set(true);
+        this.userId = +id;
+        this.form.get('password')!.removeValidators(Validators.required);
+        this.form.get('password')!.updateValueAndValidity();
+        this.userService.getById(+id).subscribe(u => {
+          this.form.patchValue({
+            username: u.username,
+            fullName: u.fullName,
+            email: u.email,
+            role: u.role,
+            clientId: u.clientId
+          });
+          if (u.clientId) {
+            const client = clients.find(c => c.id === u.clientId);
+            if (client) {
+              this.selectedClient.set(client);
+              this.selectedClientDisplay.set(client.name);
+            }
+          }
         });
-      });
-    }
+      }
+    });
   }
 
   onSubmit(): void {

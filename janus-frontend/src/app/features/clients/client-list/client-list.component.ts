@@ -14,7 +14,7 @@ import { AuthService } from '../../../core/services/auth.service';
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'CLIENTS.TITLE' | translate }}</h2>
-      @if (authService.hasRole(['ADMIN'])) {
+      @if (authService.hasRole(['ADMIN', 'AGENT'])) {
         <a routerLink="/clients/new" class="btn btn-primary">{{ 'CLIENTS.NEW' | translate }}</a>
       }
     </div>
@@ -39,7 +39,7 @@ import { AuthService } from '../../../core/services/auth.service';
                 <td class="d-none d-lg-table-cell">{{ client.phone ?? '-' }}</td>
                 <td><span class="badge" [class]="client.active ? 'bg-success' : 'bg-secondary'">{{ (client.active ? 'CLIENTS.ACTIVE' : 'CLIENTS.INACTIVE') | translate }}</span></td>
                 <td>
-                  @if (authService.hasRole(['ADMIN'])) {
+                  @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                     <a [routerLink]="['/clients', client.id, 'edit']" class="btn btn-sm btn-outline-primary me-1">{{ 'ACTIONS.EDIT' | translate }}</a>
                   }
                   @if (authService.hasRole(['ADMIN', 'AGENT'])) {

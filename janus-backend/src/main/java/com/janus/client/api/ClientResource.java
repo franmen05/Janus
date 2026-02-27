@@ -41,7 +41,7 @@ public class ClientResource {
     }
 
     @POST
-    @RolesAllowed("ADMIN")
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response create(@Valid CreateClientRequest request) {
         var client = clientService.create(request);
         return Response.status(Response.Status.CREATED)
@@ -51,7 +51,7 @@ public class ClientResource {
 
     @PUT
     @Path("/{id}")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed({"ADMIN", "AGENT"})
     public ClientResponse update(@PathParam("id") Long id, @Valid CreateClientRequest request) {
         return ClientResponse.from(clientService.update(id, request));
     }

@@ -11,7 +11,9 @@
     "ALERTS": "Alerts",
     "USERS": "Users",
     "COMPLIANCE_CONFIG": "Compliance Rules",
-    "LOGOUT": "Logout"
+    "LOGOUT": "Logout",
+    "SECTION_MAIN": "Main",
+    "SECTION_ADMIN": "Administration"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -88,7 +90,9 @@
     "BL_AVAILABILITY": "BL Availability",
     "SELECT_BL_AVAILABILITY": "Select BL availability...",
     "BL_AVAILABILITY_REQUIRED": "BL availability is required",
-    "BL_NOT_AVAILABLE_WARNING": "BL is not available. This must be resolved before valuation."
+    "BL_NOT_AVAILABLE_WARNING": "BL is not available. This must be resolved before valuation.",
+    "CLIENT_SEARCH_PLACEHOLDER": "Search client by name, tax ID, or email...",
+    "CREATE_CLIENT": "Create new client"
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -570,7 +574,8 @@
     "CLIENT": "Client",
     "ACTIVE": "Active",
     "INACTIVE": "Inactive",
-    "NO_USERS": "No users found"
+    "NO_USERS": "No users found",
+    "CLIENT_SEARCH_PLACEHOLDER": "Search by name, tax ID, or email..."
   },
   "ROLES": {
     "ADMIN": "Administrator",

@@ -162,20 +162,20 @@ class ClientResourceTest {
                 .body("email", is("updated@testclient.com"));
     }
 
-    // ---- Role-based create restrictions ----
+    // ---- Role-based create permissions ----
 
     @Test
     @Order(30)
-    void testAgentCannotCreateClient() {
+    void testAgentCanCreateClient() {
         given()
                 .auth().basic("agent", "agent123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"name": "Blocked", "taxId": "RTN-BLOCK-001", "email": "blocked@test.com"}
+                        {"name": "Agent Created", "taxId": "RTN-AGENT-001", "email": "agentcreated@test.com"}
                         """)
                 .when().post("/api/clients")
                 .then()
-                .statusCode(403);
+                .statusCode(201);
     }
 
     @Test

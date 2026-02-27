@@ -11,7 +11,9 @@
     "ALERTS": "Alertas",
     "USERS": "Usuarios",
     "COMPLIANCE_CONFIG": "Reglas de Cumplimiento",
-    "LOGOUT": "Cerrar Sesión"
+    "LOGOUT": "Cerrar Sesión",
+    "SECTION_MAIN": "Principal",
+    "SECTION_ADMIN": "Administración"
   },
   "LOGIN": {
     "USERNAME": "Usuario",
@@ -88,7 +90,9 @@
     "BL_AVAILABILITY": "Disponibilidad BL",
     "SELECT_BL_AVAILABILITY": "Seleccione disponibilidad BL...",
     "BL_AVAILABILITY_REQUIRED": "La disponibilidad del BL es requerida",
-    "BL_NOT_AVAILABLE_WARNING": "El BL no est\u00e1 disponible. Esto debe resolverse antes de la valoraci\u00f3n."
+    "BL_NOT_AVAILABLE_WARNING": "El BL no est\u00e1 disponible. Esto debe resolverse antes de la valoraci\u00f3n.",
+    "CLIENT_SEARCH_PLACEHOLDER": "Buscar cliente por nombre, RNC o correo...",
+    "CREATE_CLIENT": "Crear nuevo cliente"
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
@@ -570,7 +574,8 @@
     "CLIENT": "Cliente",
     "ACTIVE": "Activo",
     "INACTIVE": "Inactivo",
-    "NO_USERS": "No se encontraron usuarios"
+    "NO_USERS": "No se encontraron usuarios",
+    "CLIENT_SEARCH_PLACEHOLDER": "Buscar por nombre, RNC o correo..."
   },
   "ROLES": {
     "ADMIN": "Administrador",

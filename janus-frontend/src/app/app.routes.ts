@@ -71,13 +71,13 @@ export const routes: Routes = [
       {
         path: 'clients/new',
         loadComponent: () => import('./features/clients/client-form/client-form.component').then(m => m.ClientFormComponent),
-        data: { roles: ['ADMIN'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
         path: 'clients/:id/edit',
         loadComponent: () => import('./features/clients/client-form/client-form.component').then(m => m.ClientFormComponent),
-        data: { roles: ['ADMIN'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
