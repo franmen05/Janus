@@ -38,8 +38,7 @@ public class DeclarationService {
     );
 
     private static final Set<OperationStatus> FINAL_EDITABLE_STATUSES = Set.of(
-            OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.SUBMITTED_TO_CUSTOMS,
-            OperationStatus.VALUATION_REVIEW
+            OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.SUBMITTED_TO_CUSTOMS
     );
 
     @Inject
@@ -258,7 +257,7 @@ public class DeclarationService {
         } else if (declaration.declarationType == DeclarationType.FINAL) {
             if (!FINAL_EDITABLE_STATUSES.contains(status)) {
                 throw new BusinessException(
-                        "Final declarations can only be edited in statuses: DECLARATION_IN_PROGRESS, SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW");
+                        "Final declarations can only be edited in statuses: DECLARATION_IN_PROGRESS, SUBMITTED_TO_CUSTOMS");
             }
         }
     }
