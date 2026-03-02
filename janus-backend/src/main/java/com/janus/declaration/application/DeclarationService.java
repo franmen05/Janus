@@ -93,6 +93,18 @@ public class DeclarationService {
         declaration.declarationType = type;
         declaration.taxableBase = declaration.cifValue;
         declaration.submittedAt = LocalDateTime.now();
+
+        // Inherit technical approval from approved PRELIMINARY declaration
+        if (type == DeclarationType.FINAL) {
+            declarationRepository.findByOperationAndType(operationId, DeclarationType.PRELIMINARY)
+                    .filter(prelim -> prelim.technicalApprovedBy != null)
+                    .ifPresent(prelim -> {
+                        declaration.technicalApprovedBy = prelim.technicalApprovedBy;
+                        declaration.technicalApprovedAt = prelim.technicalApprovedAt;
+                        declaration.technicalApprovalComment = prelim.technicalApprovalComment;
+                    });
+        }
+
         declarationRepository.persist(declaration);
 
         auditEvent.fire(new AuditEvent(

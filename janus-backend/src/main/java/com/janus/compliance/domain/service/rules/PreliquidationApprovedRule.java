@@ -26,7 +26,8 @@ public class PreliquidationApprovedRule implements ComplianceRule {
 
     @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, TransportMode transportMode, OperationCategory category) {
-        return from == OperationStatus.PRELIQUIDATION_REVIEW && to == OperationStatus.ANALYST_ASSIGNED;
+        return from == OperationStatus.PRELIQUIDATION_REVIEW
+                && (to == OperationStatus.ANALYST_ASSIGNED || to == OperationStatus.DECLARATION_IN_PROGRESS);
     }
 
     @Override
