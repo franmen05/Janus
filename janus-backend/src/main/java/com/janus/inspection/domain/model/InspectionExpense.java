@@ -42,6 +42,8 @@ public class InspectionExpense extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     public String justification;
 
+    public String responsable;
+
     @Column(nullable = false)
     public boolean active = true;
 }

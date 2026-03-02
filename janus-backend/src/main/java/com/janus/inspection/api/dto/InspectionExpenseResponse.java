@@ -16,6 +16,7 @@ public record InspectionExpenseResponse(
         String currency,
         LocalDate expenseDate,
         String justification,
+        String responsable,
         LocalDateTime createdAt
 ) {
     public static InspectionExpenseResponse from(InspectionExpense expense) {
@@ -30,6 +31,7 @@ public record InspectionExpenseResponse(
                 expense.currency,
                 expense.expenseDate,
                 expense.justification,
+                expense.responsable,
                 expense.createdAt
         );
     }

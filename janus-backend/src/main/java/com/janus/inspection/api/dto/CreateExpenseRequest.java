@@ -11,5 +11,6 @@ public record CreateExpenseRequest(
         @NotNull BigDecimal amount,
         String currency,
         LocalDate expenseDate,
-        String justification
+        String justification,
+        String responsable
 ) {}

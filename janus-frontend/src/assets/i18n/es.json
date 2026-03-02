@@ -498,7 +498,9 @@
     "CATEGORY_TRANSPORT": "Transporte",
     "CATEGORY_SECURITY": "Seguridad",
     "CATEGORY_OVERTIME": "Sobretiempo",
-    "CATEGORY_OTHER": "Otro"
+    "CATEGORY_OTHER": "Otro",
+    "VIEW_EXPENSE": "Detalle de Gasto",
+    "RESPONSIBLE": "Responsable"
   },
   "PERMIT_TYPES": {
     "VUCE": "VUCE",

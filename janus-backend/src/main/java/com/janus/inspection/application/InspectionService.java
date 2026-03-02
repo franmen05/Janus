@@ -181,6 +181,7 @@ public class InspectionService {
         expense.currency = request.currency() != null ? request.currency() : "USD";
         expense.expenseDate = request.expenseDate() != null ? request.expenseDate() : LocalDate.now();
         expense.justification = request.justification();
+        expense.responsable = request.responsable();
 
         userRepository.findByUsername(username).ifPresent(u -> expense.registeredBy = u);
 
@@ -223,6 +224,7 @@ public class InspectionService {
         expense.currency = request.currency() != null ? request.currency() : expense.currency;
         expense.expenseDate = request.expenseDate() != null ? request.expenseDate() : expense.expenseDate;
         expense.justification = request.justification();
+        expense.responsable = request.responsable();
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "InspectionExpense", expense.id, operationId,

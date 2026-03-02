@@ -30,6 +30,7 @@ export interface InspectionExpense {
   amount: number;
   currency: string;
   expenseDate: string;
+  responsable: string | null;
   justification: string | null;
   createdAt: string;
 }
@@ -45,5 +46,6 @@ export interface CreateExpenseRequest {
   amount: number;
   currency?: string;
   expenseDate?: string;
+  responsable?: string;
   justification?: string;
 }
