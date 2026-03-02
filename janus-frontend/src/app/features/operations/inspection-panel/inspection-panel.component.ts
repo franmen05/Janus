@@ -124,6 +124,7 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
                     <th class="d-none d-md-table-cell">{{ 'INSPECTION.RESPONSIBLE' | translate }}</th>
                     <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_JUSTIFICATION' | translate }}</th>
                     <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_REGISTERED_BY' | translate }}</th>
+                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.PAYMENT_STATUS' | translate }}</th>
                     <th>{{ 'COMMON.ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
@@ -138,6 +139,11 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
                       <td class="d-none d-md-table-cell">{{ expense.responsable || '-' }}</td>
                       <td class="d-none d-md-table-cell">{{ expense.justification || '-' }}</td>
                       <td class="d-none d-md-table-cell">{{ expense.registeredByFullName }}</td>
+                      <td class="d-none d-md-table-cell">
+                        <span class="badge" [class.bg-success]="expense.paymentStatus === 'PAID'" [class.bg-warning]="expense.paymentStatus === 'PENDING'">
+                          {{ 'INSPECTION.PAYMENT_' + expense.paymentStatus | translate }}
+                        </span>
+                      </td>
                       <td>
                           <button class="btn btn-sm btn-outline-secondary me-1" (click)="openExpenseDetail(expense)" title="{{ 'ACTIONS.VIEW' | translate }}">
                             <i class="bi bi-eye"></i> {{ 'ACTIONS.VIEW' | translate }}
@@ -155,7 +161,7 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
                   <tr class="fw-bold">
                     <td colspan="2">{{ 'INSPECTION.EXPENSE_TOTAL' | translate }}</td>
                     <td class="text-end">{{ expensesTotal() | number:'1.2-2' }}</td>
-                    <td colspan="6"></td>
+                    <td colspan="7"></td>
                   </tr>
                 </tfoot>
               </table>

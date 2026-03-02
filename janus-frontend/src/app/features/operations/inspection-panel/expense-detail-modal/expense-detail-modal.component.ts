@@ -38,6 +38,13 @@ import { InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../
           <dt class="col-sm-4">{{ 'INSPECTION.EXPENSE_JUSTIFICATION' | translate }}</dt>
           <dd class="col-sm-8">{{ expense!.justification || '-' }}</dd>
 
+          <dt class="col-sm-4">{{ 'INSPECTION.PAYMENT_STATUS' | translate }}</dt>
+          <dd class="col-sm-8">
+            <span class="badge" [class.bg-success]="expense!.paymentStatus === 'PAID'" [class.bg-warning]="expense!.paymentStatus === 'PENDING'">
+              {{ 'INSPECTION.PAYMENT_' + expense!.paymentStatus | translate }}
+            </span>
+          </dd>
+
           <dt class="col-sm-4">{{ 'INSPECTION.EXPENSE_REGISTERED_BY' | translate }}</dt>
           <dd class="col-sm-8">{{ expense!.registeredByFullName }}</dd>
         </dl>
@@ -80,6 +87,15 @@ import { InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../
           <div class="mb-3">
             <label class="form-label">{{ 'INSPECTION.RESPONSIBLE' | translate }}</label>
             <input type="text" class="form-control" formControlName="responsable">
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{ 'INSPECTION.PAYMENT_STATUS' | translate }}</label>
+              <select class="form-select" formControlName="paymentStatus">
+                <option value="PENDING">{{ 'INSPECTION.PAYMENT_PENDING' | translate }}</option>
+                <option value="PAID">{{ 'INSPECTION.PAYMENT_PAID' | translate }}</option>
+              </select>
+            </div>
           </div>
           <div class="mb-3">
             <label class="form-label">{{ 'INSPECTION.EXPENSE_JUSTIFICATION' | translate }}</label>
@@ -129,7 +145,8 @@ export class ExpenseDetailModalComponent {
     currency: new FormControl<string>('USD', { nonNullable: true }),
     expenseDate: new FormControl<string>('', { nonNullable: true }),
     responsable: new FormControl<string>('', { nonNullable: true }),
-    justification: new FormControl<string>('', { nonNullable: true })
+    justification: new FormControl<string>('', { nonNullable: true }),
+    paymentStatus: new FormControl<string>('PENDING', { nonNullable: true })
   });
 
   initForm(): void {
@@ -142,11 +159,12 @@ export class ExpenseDetailModalComponent {
         currency: this.expense.currency,
         expenseDate: this.expense.expenseDate,
         responsable: this.expense.responsable || '',
-        justification: this.expense.justification || ''
+        justification: this.expense.justification || '',
+        paymentStatus: this.expense.paymentStatus || 'PENDING'
       });
     } else {
       // Add mode: start with empty form in editing state
-      this.editForm.reset({ category: '', currency: 'USD' });
+      this.editForm.reset({ category: '', currency: 'USD', paymentStatus: 'PENDING' });
       this.editing.set(true);
     }
   }
@@ -170,7 +188,8 @@ export class ExpenseDetailModalComponent {
       currency: val.currency || undefined,
       expenseDate: val.expenseDate || undefined,
       responsable: val.responsable || undefined,
-      justification: val.justification || undefined
+      justification: val.justification || undefined,
+      paymentStatus: val.paymentStatus || undefined
     };
 
     if (this.isAddMode) {

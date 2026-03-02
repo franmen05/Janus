@@ -6,6 +6,7 @@ import com.janus.document.domain.service.DocumentValidationService;
 import com.janus.document.infrastructure.storage.StorageService;
 import com.janus.inspection.api.dto.CreateExpenseRequest;
 import com.janus.inspection.domain.model.InspectionExpense;
+import com.janus.inspection.domain.model.PaymentStatus;
 import com.janus.inspection.domain.model.InspectionPhoto;
 import com.janus.inspection.domain.repository.InspectionExpenseRepository;
 import com.janus.inspection.domain.repository.InspectionPhotoRepository;
@@ -182,6 +183,7 @@ public class InspectionService {
         expense.expenseDate = request.expenseDate() != null ? request.expenseDate() : LocalDate.now();
         expense.justification = request.justification();
         expense.responsable = request.responsable();
+        expense.paymentStatus = request.paymentStatus() != null ? request.paymentStatus() : PaymentStatus.PENDING;
 
         userRepository.findByUsername(username).ifPresent(u -> expense.registeredBy = u);
 
@@ -225,6 +227,7 @@ public class InspectionService {
         expense.expenseDate = request.expenseDate() != null ? request.expenseDate() : expense.expenseDate;
         expense.justification = request.justification();
         expense.responsable = request.responsable();
+        expense.paymentStatus = request.paymentStatus() != null ? request.paymentStatus() : expense.paymentStatus;
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "InspectionExpense", expense.id, operationId,

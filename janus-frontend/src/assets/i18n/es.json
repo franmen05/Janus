@@ -500,7 +500,10 @@
     "CATEGORY_OVERTIME": "Sobretiempo",
     "CATEGORY_OTHER": "Otro",
     "VIEW_EXPENSE": "Detalle de Gasto",
-    "RESPONSIBLE": "Responsable"
+    "RESPONSIBLE": "Responsable",
+    "PAYMENT_STATUS": "Estado de Pago",
+    "PAYMENT_PENDING": "Pendiente",
+    "PAYMENT_PAID": "Pagado"
   },
   "PERMIT_TYPES": {
     "VUCE": "VUCE",

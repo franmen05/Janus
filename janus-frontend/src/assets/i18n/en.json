@@ -500,7 +500,10 @@
     "CATEGORY_OVERTIME": "Overtime",
     "CATEGORY_OTHER": "Other",
     "VIEW_EXPENSE": "Expense Detail",
-    "RESPONSIBLE": "Responsible"
+    "RESPONSIBLE": "Responsible",
+    "PAYMENT_STATUS": "Payment Status",
+    "PAYMENT_PENDING": "Pending",
+    "PAYMENT_PAID": "Paid"
   },
   "PERMIT_TYPES": {
     "VUCE": "VUCE",

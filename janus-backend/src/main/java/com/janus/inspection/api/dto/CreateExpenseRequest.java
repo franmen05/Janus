@@ -1,6 +1,7 @@
 package com.janus.inspection.api.dto;
 
 import com.janus.inspection.domain.model.ExpenseCategory;
+import com.janus.inspection.domain.model.PaymentStatus;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,5 +13,6 @@ public record CreateExpenseRequest(
         String currency,
         LocalDate expenseDate,
         String justification,
-        String responsable
+        String responsable,
+        PaymentStatus paymentStatus
 ) {}

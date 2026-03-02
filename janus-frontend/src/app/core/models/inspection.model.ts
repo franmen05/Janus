@@ -32,6 +32,7 @@ export interface InspectionExpense {
   expenseDate: string;
   responsable: string | null;
   justification: string | null;
+  paymentStatus: string;
   createdAt: string;
 }
 
@@ -48,4 +49,5 @@ export interface CreateExpenseRequest {
   expenseDate?: string;
   responsable?: string;
   justification?: string;
+  paymentStatus?: string;
 }

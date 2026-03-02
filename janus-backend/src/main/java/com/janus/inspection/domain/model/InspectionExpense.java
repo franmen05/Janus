@@ -44,6 +44,10 @@ public class InspectionExpense extends BaseEntity {
 
     public String responsable;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    public PaymentStatus paymentStatus = PaymentStatus.PENDING;
+
     @Column(nullable = false)
     public boolean active = true;
 }
