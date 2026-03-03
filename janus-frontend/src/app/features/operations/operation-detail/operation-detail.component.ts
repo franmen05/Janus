@@ -336,7 +336,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                           <tr>
                             <td>{{ doc.latestVersionName ?? 'document' }}</td>
                             <td class="d-none d-sm-table-cell">{{ doc.latestVersionSize ? (doc.latestVersionSize / 1024).toFixed(1) + ' KB' : '-' }}</td>
-                            <td class="d-none d-sm-table-cell">{{ doc.createdAt | date:'medium' }}</td>
+                            <td class="d-none d-sm-table-cell">{{ (doc.latestVersionUploadedAt || doc.createdAt) | date:'medium' }}</td>
                             <td>
                               <button class="btn btn-sm btn-outline-primary" (click)="downloadReceptionDoc(doc)">
                                 <i class="bi bi-download me-1"></i>{{ 'ACTIONS.DOWNLOAD' | translate }}

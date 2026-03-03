@@ -58,7 +58,7 @@ public class DocumentResource {
                 .map(doc -> {
                     var latestVersion = documentService.getLatestVersionOrNull(doc.id);
                     if (latestVersion != null) {
-                        return DocumentResponse.from(doc, latestVersion.originalName, latestVersion.fileSize);
+                        return DocumentResponse.from(doc, latestVersion.originalName, latestVersion.fileSize, latestVersion.uploadedAt);
                     }
                     return DocumentResponse.from(doc);
                 })
@@ -95,8 +95,12 @@ public class DocumentResource {
                     sec.getUserPrincipal().getName(),
                     changeReason
             );
+            var latestVersion = documentService.getLatestVersionOrNull(doc.id);
+            var response = latestVersion != null
+                    ? DocumentResponse.from(doc, latestVersion.originalName, latestVersion.fileSize, latestVersion.uploadedAt)
+                    : DocumentResponse.from(doc);
             return Response.status(Response.Status.CREATED)
-                    .entity(DocumentResponse.from(doc))
+                    .entity(response)
                     .build();
         } catch (IOException e) {
             throw new RuntimeException("Upload failed", e);

@@ -22,6 +22,7 @@ export interface Document {
   active: boolean;
   latestVersionName?: string;
   latestVersionSize?: number;
+  latestVersionUploadedAt?: string;
   createdAt: string;
   updatedAt: string;
 }

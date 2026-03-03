@@ -39,7 +39,7 @@ import { ToastService } from '../../../core/services/toast.service';
                 </td>
                 <td>{{ doc.latestVersionName ?? '-' }}</td>
                 <td class="d-none d-sm-table-cell">{{ doc.latestVersionSize | fileSize }}</td>
-                <td class="d-none d-sm-table-cell">{{ doc.createdAt | date:'medium' }}</td>
+                <td class="d-none d-sm-table-cell">{{ (doc.latestVersionUploadedAt || doc.createdAt) | date:'medium' }}</td>
                 <td>
                   <div class="btn-group btn-group-sm">
                     @if (!authService.hasRole(['CARRIER'])) {

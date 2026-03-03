@@ -13,6 +13,7 @@ public record DocumentResponse(
         boolean active,
         String latestVersionName,
         Long latestVersionSize,
+        LocalDateTime latestVersionUploadedAt,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -25,12 +26,13 @@ public record DocumentResponse(
                 doc.active,
                 null,
                 null,
+                null,
                 doc.createdAt,
                 doc.updatedAt
         );
     }
 
-    public static DocumentResponse from(Document doc, String latestVersionName, Long latestVersionSize) {
+    public static DocumentResponse from(Document doc, String latestVersionName, Long latestVersionSize, LocalDateTime latestVersionUploadedAt) {
         return new DocumentResponse(
                 doc.id,
                 doc.operation != null ? doc.operation.id : null,
@@ -39,6 +41,7 @@ public record DocumentResponse(
                 doc.active,
                 latestVersionName,
                 latestVersionSize,
+                latestVersionUploadedAt,
                 doc.createdAt,
                 doc.updatedAt
         );
