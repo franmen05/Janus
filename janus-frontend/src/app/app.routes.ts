@@ -39,6 +39,18 @@ export const routes: Routes = [
         canActivate: [roleGuard]
       },
       {
+        path: 'operations/:operationId/declarations/new',
+        loadComponent: () => import('./features/declarations/declaration-form/declaration-form.component').then(m => m.DeclarationFormComponent),
+        data: { roles: ['ADMIN', 'AGENT'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'operations/:operationId/declarations/:declarationId/edit',
+        loadComponent: () => import('./features/declarations/declaration-form/declaration-form.component').then(m => m.DeclarationFormComponent),
+        data: { roles: ['ADMIN', 'AGENT'] },
+        canActivate: [roleGuard]
+      },
+      {
         path: 'operations/:operationId/declarations/:declarationId',
         loadComponent: () => import('./features/declarations/declaration-detail/declaration-detail.component').then(m => m.DeclarationDetailComponent),
         data: { roles: ['ADMIN', 'AGENT', 'ACCOUNTING'] },

@@ -270,7 +270,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
               <div class="mt-3">
                 <app-declaration-list [operationId]="operation()!.id" [operationStatus]="operation()!.status" />
                 @if (isCrossingVisible()) {
-                  <app-crossing-result [operationId]="operation()!.id" />
+                  <app-crossing-result [operationId]="operation()!.id" (resolved)="crossingResult.set($event)" />
                 }
               </div>
             </ng-template>

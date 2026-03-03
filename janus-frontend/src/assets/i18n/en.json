@@ -398,7 +398,8 @@
     "SUBMITTED_TO_DGA_AT": "Submitted to DGA",
     "DGA_SUBMISSION_CONFIRM": "Are you sure you want to submit this declaration to DGA?",
     "DUA_REGISTERED": "DUA number registered successfully",
-    "DGA_SUBMITTED": "Declaration submitted to DGA successfully"
+    "DGA_SUBMITTED": "Declaration submitted to DGA successfully",
+    "EDIT_TITLE": "Edit Declaration"
   },
   "CROSSING": {
     "TITLE": "Customs Crossing",

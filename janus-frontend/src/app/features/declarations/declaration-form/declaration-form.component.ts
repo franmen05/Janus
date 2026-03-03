@@ -1,77 +1,81 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
 
 @Component({
   selector: 'app-declaration-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [ReactiveFormsModule, TranslateModule, RouterModule],
   template: `
-    <div class="modal-header">
-      <h5 class="modal-title">{{ (declarationType === 'PRELIMINARY' ? 'DECLARATIONS.REGISTER_PRELIMINARY' : 'DECLARATIONS.REGISTER_FINAL') | translate }}</h5>
-      <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
-    </div>
-    <div class="modal-body">
-      <form [formGroup]="form">
-        <div class="row mb-3">
-          <div class="col-md-6">
-            <label class="form-label">{{ 'DECLARATIONS.DECLARATION_NUMBER' | translate }}</label>
-            <input type="text" class="form-control" formControlName="declarationNumber">
+    <h2 class="mb-4">{{ title() | translate }}</h2>
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="form">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{ 'DECLARATIONS.DECLARATION_NUMBER' | translate }}</label>
+              <input type="text" class="form-control" formControlName="declarationNumber">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ 'DECLARATIONS.GATT_METHOD' | translate }}</label>
+              <input type="text" class="form-control" formControlName="gattMethod">
+            </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">{{ 'DECLARATIONS.GATT_METHOD' | translate }}</label>
-            <input type="text" class="form-control" formControlName="gattMethod">
+          <div class="row mb-3">
+            <div class="col-6 col-md-4">
+              <label class="form-label">{{ 'DECLARATIONS.FOB_VALUE' | translate }}</label>
+              <input type="number" class="form-control" formControlName="fobValue" step="0.01">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="form-label">{{ 'DECLARATIONS.FREIGHT_VALUE' | translate }}</label>
+              <input type="number" class="form-control" formControlName="freightValue" step="0.01">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="form-label">{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }} <small class="text-muted">(2% FOB)</small></label>
+              <input type="number" class="form-control" formControlName="insuranceValue" step="0.01" readonly>
+            </div>
           </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-6 col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.FOB_VALUE' | translate }}</label>
-            <input type="number" class="form-control" formControlName="fobValue" step="0.01">
+          <div class="row mb-3">
+            <div class="col-6 col-md-4">
+              <label class="form-label">{{ 'DECLARATIONS.CIF_VALUE' | translate }}</label>
+              <input type="number" class="form-control" formControlName="cifValue" step="0.01">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="form-label">{{ 'DECLARATIONS.TAXABLE_BASE' | translate }}</label>
+              <input type="number" class="form-control" formControlName="taxableBase" step="0.01">
+            </div>
+            <div class="col-6 col-md-4">
+              <label class="form-label">{{ 'DECLARATIONS.TOTAL_TAXES' | translate }}</label>
+              <input type="number" class="form-control" formControlName="totalTaxes" step="0.01">
+            </div>
           </div>
-          <div class="col-6 col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.FREIGHT_VALUE' | translate }}</label>
-            <input type="number" class="form-control" formControlName="freightValue" step="0.01">
+          <div class="mb-3">
+            <label class="form-label">{{ 'DECLARATIONS.NOTES' | translate }}</label>
+            <textarea class="form-control" formControlName="notes" rows="2"></textarea>
           </div>
-          <div class="col-6 col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }} <small class="text-muted">(2% FOB)</small></label>
-            <input type="number" class="form-control" formControlName="insuranceValue" step="0.01" readonly>
+          <div class="d-flex gap-2 justify-content-end">
+            <a class="btn btn-outline-secondary" [routerLink]="cancelRoute()">{{ 'ACTIONS.CANCEL' | translate }}</a>
+            <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="form.invalid">{{ 'ACTIONS.SAVE' | translate }}</button>
           </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-6 col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.CIF_VALUE' | translate }}</label>
-            <input type="number" class="form-control" formControlName="cifValue" step="0.01">
-          </div>
-          <div class="col-6 col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.TAXABLE_BASE' | translate }}</label>
-            <input type="number" class="form-control" formControlName="taxableBase" step="0.01">
-          </div>
-          <div class="col-6 col-md-4">
-            <label class="form-label">{{ 'DECLARATIONS.TOTAL_TAXES' | translate }}</label>
-            <input type="number" class="form-control" formControlName="totalTaxes" step="0.01">
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">{{ 'DECLARATIONS.NOTES' | translate }}</label>
-          <textarea class="form-control" formControlName="notes" rows="2"></textarea>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()">{{ 'ACTIONS.CANCEL' | translate }}</button>
-      <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="form.invalid">{{ 'ACTIONS.SAVE' | translate }}</button>
+        </form>
+      </div>
     </div>
   `
 })
-export class DeclarationFormComponent {
-  activeModal = inject(NgbActiveModal);
+export class DeclarationFormComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private declarationService = inject(DeclarationService);
 
-  operationId!: number;
-  declarationType!: string;
+  isEdit = signal(false);
+  private operationId = 0;
+  private declarationId = 0;
+  private declarationType = '';
+
+  title = signal('DECLARATIONS.REGISTER_PRELIMINARY');
+  cancelRoute = signal<string[]>([]);
 
   form = new FormGroup({
     declarationNumber: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -97,6 +101,36 @@ export class DeclarationFormComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.operationId = +this.route.snapshot.paramMap.get('operationId')!;
+    const declIdParam = this.route.snapshot.paramMap.get('declarationId');
+
+    if (declIdParam) {
+      this.isEdit.set(true);
+      this.declarationId = +declIdParam;
+      this.title.set('DECLARATIONS.EDIT_TITLE');
+      this.cancelRoute.set(['/operations', String(this.operationId), 'declarations', String(this.declarationId)]);
+      this.declarationService.getDeclaration(this.operationId, this.declarationId).subscribe(d => {
+        this.declarationType = d.declarationType;
+        this.form.patchValue({
+          declarationNumber: d.declarationNumber ?? '',
+          fobValue: d.fobValue ?? 0,
+          cifValue: d.cifValue ?? 0,
+          totalTaxes: d.totalTaxes ?? 0,
+          freightValue: d.freightValue ?? 0,
+          insuranceValue: d.insuranceValue ?? 0,
+          gattMethod: d.gattMethod ?? '',
+          notes: d.notes ?? ''
+        });
+        this.form.get('taxableBase')!.setValue(d.cifValue ?? 0, { emitEvent: false });
+      });
+    } else {
+      this.declarationType = this.route.snapshot.queryParamMap.get('type') || 'PRELIMINARY';
+      this.title.set(this.declarationType === 'PRELIMINARY' ? 'DECLARATIONS.REGISTER_PRELIMINARY' : 'DECLARATIONS.REGISTER_FINAL');
+      this.cancelRoute.set(['/operations', String(this.operationId)]);
+    }
+  }
+
   private recalculateCif(): void {
     const fob = this.form.get('fobValue')!.value || 0;
     const freight = this.form.get('freightValue')!.value || 0;
@@ -109,9 +143,19 @@ export class DeclarationFormComponent {
     if (this.form.invalid) return;
     const val = this.form.getRawValue();
     const request = { ...val, notes: val.notes || undefined };
-    const obs = this.declarationType === 'PRELIMINARY'
-      ? this.declarationService.createPreliminary(this.operationId, request)
-      : this.declarationService.createFinal(this.operationId, request);
-    obs.subscribe(() => this.activeModal.close());
+
+    if (this.isEdit()) {
+      this.declarationService.updateDeclaration(this.operationId, this.declarationId, request)
+        .subscribe(d => {
+          this.router.navigate(['/operations', this.operationId, 'declarations', this.declarationId]);
+        });
+    } else {
+      const obs = this.declarationType === 'PRELIMINARY'
+        ? this.declarationService.createPreliminary(this.operationId, request)
+        : this.declarationService.createFinal(this.operationId, request);
+      obs.subscribe(d => {
+        this.router.navigate(['/operations', this.operationId, 'declarations', d.id]);
+      });
+    }
   }
 }

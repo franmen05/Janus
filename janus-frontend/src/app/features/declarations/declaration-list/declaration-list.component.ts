@@ -1,14 +1,12 @@
 import { Component, input, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
 import { Declaration, DeclarationType } from '../../../core/models/declaration.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
-import { DeclarationFormComponent } from '../declaration-form/declaration-form.component';
 
 @Component({
   selector: 'app-declaration-list',
@@ -76,7 +74,7 @@ export class DeclarationListComponent implements OnInit {
   operationStatus = input<string>('');
 
   private declarationService = inject(DeclarationService);
-  private modal = inject(NgbModal);
+  private router = inject(Router);
   private translate = inject(TranslateService);
   private toastService = inject(ToastService);
   authService = inject(AuthService);
@@ -128,10 +126,7 @@ export class DeclarationListComponent implements OnInit {
   }
 
   openForm(type: string): void {
-    const ref = this.modal.open(DeclarationFormComponent, { size: 'lg' });
-    ref.componentInstance.operationId = this.operationId();
-    ref.componentInstance.declarationType = type;
-    ref.result.then(() => this.loadDeclarations(), () => {});
+    this.router.navigate(['/operations', this.operationId(), 'declarations', 'new'], { queryParams: { type } });
   }
 
   registerDua(decl: Declaration): void {

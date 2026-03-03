@@ -1,4 +1,4 @@
-import { Component, input, inject, OnInit, signal } from '@angular/core';
+import { Component, input, inject, OnInit, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -73,6 +73,7 @@ export class CrossingResultComponent implements OnInit {
   private declarationService = inject(DeclarationService);
   authService = inject(AuthService);
   crossing = signal<CrossingResult | null>(null);
+  resolved = output<CrossingResult>();
   resolveComment = '';
 
   ngOnInit(): void { this.loadCrossing(); }
@@ -82,7 +83,10 @@ export class CrossingResultComponent implements OnInit {
   }
 
   executeCrossing(): void {
-    this.declarationService.executeCrossing(this.operationId()).subscribe(c => this.crossing.set(c));
+    this.declarationService.executeCrossing(this.operationId()).subscribe(c => {
+      this.crossing.set(c);
+      this.resolved.emit(c);
+    });
   }
 
   resolveCrossing(): void {
@@ -90,6 +94,7 @@ export class CrossingResultComponent implements OnInit {
     this.declarationService.resolveCrossing(this.operationId(), { comment: this.resolveComment }).subscribe(c => {
       this.crossing.set(c);
       this.resolveComment = '';
+      this.resolved.emit(c);
     });
   }
 }

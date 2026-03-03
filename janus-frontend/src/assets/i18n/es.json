@@ -398,7 +398,8 @@
     "SUBMITTED_TO_DGA_AT": "Enviado a DGA",
     "DGA_SUBMISSION_CONFIRM": "¿Está seguro de que desea enviar esta declaración a la DGA?",
     "DUA_REGISTERED": "Número de DUA registrado exitosamente",
-    "DGA_SUBMITTED": "Declaración enviada a la DGA exitosamente"
+    "DGA_SUBMITTED": "Declaración enviada a la DGA exitosamente",
+    "EDIT_TITLE": "Editar Declaración"
   },
   "CROSSING": {
     "TITLE": "Cruce Aduanero",
