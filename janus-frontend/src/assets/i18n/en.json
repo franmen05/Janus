@@ -158,7 +158,8 @@
     "HISTORY": "History",
     "AUDIT": "Audit",
     "INSPECTION": "Inspection",
-    "VALUATION": "Valuation"
+    "VALUATION": "Valuation",
+    "RECEPTION": "Reception"
   },
   "STATUS": {
     "DRAFT": "Draft",
@@ -237,6 +238,7 @@
     "CERTIFICATE": "Certificate",
     "PERMIT_CERTIFICATE": "Permit Certificate",
     "LOCAL_CHARGES_RECEIPT": "Local Charges Receipt",
+    "RECEPTION_RECEIPT": "Reception Receipt",
     "OTHER": "Other"
   },
   "CARGO_TYPES": {
@@ -458,7 +460,8 @@
     "BL_ORIGINAL_NOT_AVAILABLE": "Original BL must be available to advance past Valuation Review",
     "GATT_FORM_INCOMPLETE": "GATT Article 1 form must be completed before advancing to Payment Preparation",
     "PERMITS_PENDING": "All external permits must be cleared before advancing to Payment Preparation",
-    "LOCAL_CHARGES_NOT_VALIDATED": "Local charges receipt is uploaded but has not been validated"
+    "LOCAL_CHARGES_NOT_VALIDATED": "Local charges receipt is uploaded but has not been validated",
+    "RECEPTION_RECEIPT_REQUIRED": "A reception receipt must be uploaded before closing the operation"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Inspection Type",
@@ -558,6 +561,13 @@
     "FINALIZE_BUTTON": "Finalize Valuation",
     "FINALIZE_BLOCKED": "All checklist items must pass before finalizing valuation"
   },
+  "RECEPTION": {
+    "TITLE": "Reception Receipt",
+    "UPLOAD_PROMPT": "Upload the reception receipt to confirm goods delivery",
+    "NO_RECEIPT": "No reception receipt uploaded yet",
+    "UPLOAD_SUCCESS": "Reception receipt uploaded successfully",
+    "ALREADY_CLOSED": "Operation is closed. Receipt was uploaded."
+  },
   "LANG": {
     "ES": "Español",
     "EN": "English"
@@ -624,6 +634,7 @@
       "EXTERNAL_PERMITS_CLEARED": "Payment Preparation (permits)",
       "LOCAL_CHARGES_VALIDATED": "Payment Preparation (local charges)",
       "INSPECTION_TYPE_REQUIRED": "Customs to Valuation Review",
+      "RECEPTION_RECEIPT_REQUIRED": "In Transit \u2192 Closed",
       "UNKNOWN": "Not defined"
     }
   },

@@ -73,7 +73,7 @@ public class OperationResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT", "CARRIER"})
     public OperationResponse getById(@PathParam("id") Long id, @Context SecurityContext sec) {
         var op = operationService.findById(id);
         securityHelper.enforceClientAccess(sec, op);
@@ -99,7 +99,7 @@ public class OperationResource {
 
     @POST
     @Path("/{id}/change-status")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "CARRIER"})
     public Response changeStatus(@PathParam("id") Long id,
                                   @Valid ChangeStatusRequest request,
                                   @Context SecurityContext sec) {
@@ -128,7 +128,7 @@ public class OperationResource {
 
     @GET
     @Path("/{id}/allowed-transitions")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "CARRIER"})
     public Set<OperationStatus> getAllowedTransitions(@PathParam("id") Long id) {
         var op = operationService.findById(id);
         return statusTransitionService.getAllowedTransitions(op.status);

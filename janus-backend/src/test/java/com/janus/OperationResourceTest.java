@@ -355,6 +355,10 @@ class OperationResourceTest {
             if ("PAYMENT_PREPARATION".equals(status)) {
                 completeGattForm(opId);
             }
+            // Upload reception receipt before CLOSED transition
+            if ("CLOSED".equals(status)) {
+                uploadDocument(opId, "RECEPTION_RECEIPT");
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
@@ -409,6 +413,10 @@ class OperationResourceTest {
             // Complete GATT form before PAYMENT_PREPARATION (required when inspectionType is VISUAL)
             if ("PAYMENT_PREPARATION".equals(status)) {
                 completeGattForm(opId);
+            }
+            // Upload reception receipt before CLOSED transition
+            if ("CLOSED".equals(status)) {
+                uploadDocument(opId, "RECEPTION_RECEIPT");
             }
             given()
                     .auth().basic("admin", "admin123")
@@ -531,5 +539,141 @@ class OperationResourceTest {
                 .when().get("/api/operations")
                 .then()
                 .statusCode(200);
+    }
+
+    // ---- RECEPTION_RECEIPT compliance tests (IN_TRANSIT -> CLOSED) ----
+
+    private static Long advanceToInTransit() {
+        var opId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-RR-COMP", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
+                        """)
+                .when().post("/api/operations")
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        uploadAllMandatoryDocs(opId);
+        setupDeclarationWithApprovals(opId);
+
+        var transitions = new String[]{
+                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW", "ANALYST_ASSIGNED",
+                "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+                "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT"
+        };
+        for (var status : transitions) {
+            if ("VALUATION_REVIEW".equals(status)) {
+                setInspectionType(opId);
+            }
+            if ("PAYMENT_PREPARATION".equals(status)) {
+                completeGattForm(opId);
+            }
+            given()
+                    .auth().basic("admin", "admin123")
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {"newStatus": "%s"}
+                            """.formatted(status))
+                    .when().post("/api/operations/{id}/change-status", opId)
+                    .then()
+                    .statusCode(200);
+        }
+        return opId;
+    }
+
+    @Test
+    @Order(60)
+    void testCannotCloseWithoutReceptionReceipt() {
+        var opId = advanceToInTransit();
+
+        // Attempt to close without uploading RECEPTION_RECEIPT — should fail
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"newStatus": "CLOSED"}
+                        """)
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then()
+                .statusCode(400)
+                .body("error", containsString("Compliance validation failed"));
+    }
+
+    @Test
+    @Order(61)
+    void testCanCloseAfterUploadingReceptionReceipt() {
+        var opId = advanceToInTransit();
+
+        // Upload RECEPTION_RECEIPT
+        uploadDocument(opId, "RECEPTION_RECEIPT");
+
+        // Now closing should succeed
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"newStatus": "CLOSED"}
+                        """)
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then()
+                .statusCode(200);
+
+        // Verify the operation is now CLOSED
+        given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/operations/{id}", opId)
+                .then()
+                .statusCode(200)
+                .body("status", is("CLOSED"));
+    }
+
+    @Test
+    @Order(62)
+    void testCanCloseWithoutReceptionReceiptWhenRuleDisabled() {
+        var opId = advanceToInTransit();
+
+        // Look up the config ID for RECEPTION_RECEIPT_REQUIRED
+        var configId = given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/compliance/config/{ruleCode}", "RECEPTION_RECEIPT_REQUIRED")
+                .then()
+                .statusCode(200)
+                .extract().jsonPath().getLong("[0].id");
+
+        // Disable the RECEPTION_RECEIPT_REQUIRED rule via the config API
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"paramValue": "true", "enabled": false}
+                        """)
+                .when().put("/api/compliance/config/{id}", configId)
+                .then()
+                .statusCode(200)
+                .body("enabled", is(false));
+
+        // Closing should now succeed without RECEPTION_RECEIPT
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"newStatus": "CLOSED"}
+                        """)
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then()
+                .statusCode(200);
+
+        // Re-enable the rule for subsequent tests
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"paramValue": "true", "enabled": true}
+                        """)
+                .when().put("/api/compliance/config/{id}", configId)
+                .then()
+                .statusCode(200)
+                .body("enabled", is(true));
     }
 }

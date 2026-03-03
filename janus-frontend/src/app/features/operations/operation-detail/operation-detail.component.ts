@@ -8,7 +8,8 @@ import { ComplianceService } from '../../../core/services/compliance.service';
 import { AuditService } from '../../../core/services/audit.service';
 import { DeclarationService } from '../../../core/services/declaration.service';
 import { Operation, OperationStatus } from '../../../core/models/operation.model';
-import { CompletenessResponse, Document } from '../../../core/models/document.model';
+import { CompletenessResponse, Document, DocumentType } from '../../../core/models/document.model';
+import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
 import { CrossingResult, Declaration } from '../../../core/models/declaration.model';
 import { AuditLog } from '../../../core/models/audit.model';
 import { DocumentService } from '../../../core/services/document.service';
@@ -29,6 +30,7 @@ const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVI
 const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
+const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
 
 @Component({
   selector: 'app-operation-detail',
@@ -39,7 +41,7 @@ const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUST
     OperationStatusComponent, DocumentListComponent, StatusLabelPipe,
     OperationCommentsComponent,
     DeclarationListComponent, CrossingResultComponent, OperationAlertsComponent,
-    InspectionPanelComponent, ValuationPanelComponent
+    InspectionPanelComponent, ValuationPanelComponent, FileUploadComponent
   ],
   template: `
     @if (operation()) {
@@ -294,6 +296,64 @@ const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUST
             </ng-template>
           </li>
         }
+        @if (isReceptionVisible()) {
+          <li [ngbNavItem]="'reception'">
+            <button ngbNavLink>{{ 'TABS.RECEPTION' | translate }}</button>
+            <ng-template ngbNavContent>
+              <div class="card mt-3">
+                <div class="card-header">
+                  <h6 class="mb-0">{{ 'RECEPTION.TITLE' | translate }}</h6>
+                </div>
+                <div class="card-body">
+                  @if (canUploadReceipt()) {
+                    <p class="text-muted">{{ 'RECEPTION.UPLOAD_PROMPT' | translate }}</p>
+                    <app-file-upload (fileSelected)="onReceptionFileSelected($event)" />
+                    @if (uploadingReceipt()) {
+                      <div class="text-center mt-2">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                          <span class="visually-hidden">{{ 'DOCUMENTS.UPLOADING' | translate }}</span>
+                        </div>
+                      </div>
+                    }
+                  }
+                  @if (operation()!.status === 'CLOSED') {
+                    <div class="alert alert-info mb-3">
+                      <i class="bi bi-info-circle me-1"></i>{{ 'RECEPTION.ALREADY_CLOSED' | translate }}
+                    </div>
+                  }
+                  @if (receptionDocuments().length > 0) {
+                    <table class="table table-sm mt-3">
+                      <thead class="table-light">
+                        <tr>
+                          <th>{{ 'DOCUMENTS.FILE_NAME' | translate }}</th>
+                          <th class="d-none d-sm-table-cell">{{ 'DOCUMENTS.SIZE' | translate }}</th>
+                          <th class="d-none d-sm-table-cell">{{ 'DOCUMENTS.UPLOADED' | translate }}</th>
+                          <th>{{ 'COMMON.ACTIONS' | translate }}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (doc of receptionDocuments(); track doc.id) {
+                          <tr>
+                            <td>{{ doc.latestVersionName ?? 'document' }}</td>
+                            <td class="d-none d-sm-table-cell">{{ doc.latestVersionSize ? (doc.latestVersionSize / 1024).toFixed(1) + ' KB' : '-' }}</td>
+                            <td class="d-none d-sm-table-cell">{{ doc.createdAt | date:'medium' }}</td>
+                            <td>
+                              <button class="btn btn-sm btn-outline-primary" (click)="downloadReceptionDoc(doc)">
+                                <i class="bi bi-download me-1"></i>{{ 'ACTIONS.DOWNLOAD' | translate }}
+                              </button>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  } @else if (!canUploadReceipt()) {
+                    <p class="text-muted">{{ 'RECEPTION.NO_RECEIPT' | translate }}</p>
+                  }
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        }
         <li [ngbNavItem]="'history'">
           <button ngbNavLink>{{ 'TABS.HISTORY' | translate }}</button>
           <ng-template ngbNavContent>
@@ -397,6 +457,22 @@ export class OperationDetailComponent implements OnInit {
     const op = this.operation();
     return op !== null && CROSSING_VISIBLE_STATUSES.includes(op.status);
   });
+
+  isReceptionVisible = computed(() => {
+    const op = this.operation();
+    return op !== null && RECEPTION_VISIBLE_STATUSES.includes(op.status) && this.authService.hasRole(['ADMIN', 'AGENT', 'CARRIER']);
+  });
+
+  receptionDocuments = computed(() => {
+    return this.documents().filter(d => d.documentType === DocumentType.RECEPTION_RECEIPT && d.active);
+  });
+
+  canUploadReceipt = computed(() => {
+    const op = this.operation();
+    return op !== null && op.status === 'IN_TRANSIT';
+  });
+
+  uploadingReceipt = signal(false);
 
   isCrossingApproved = computed(() => {
     const cr = this.crossingResult();
@@ -599,6 +675,32 @@ export class OperationDetailComponent implements OnInit {
         }
         this.statusChangeErrors.set([errorMessage]);
       }
+    });
+  }
+
+  onReceptionFileSelected(file: File): void {
+    const op = this.operation();
+    if (!op) return;
+    this.uploadingReceipt.set(true);
+    this.documentService.upload(op.id, file, DocumentType.RECEPTION_RECEIPT).subscribe({
+      next: () => {
+        this.uploadingReceipt.set(false);
+        this.reload();
+      },
+      error: () => {
+        this.uploadingReceipt.set(false);
+      }
+    });
+  }
+
+  downloadReceptionDoc(doc: Document): void {
+    const op = this.operation();
+    if (!op) return;
+    this.documentService.download(op.id, doc.id).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = doc.latestVersionName ?? 'document'; a.click();
+      window.URL.revokeObjectURL(url);
     });
   }
 

@@ -77,7 +77,7 @@ public class DocumentResource {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "CARRIER"})
     public Response upload(@PathParam("operationId") Long operationId,
                            @RestForm("file") FileUpload file,
                            @RestForm("documentType") DocumentType documentType,

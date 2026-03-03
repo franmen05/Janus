@@ -158,7 +158,8 @@
     "HISTORY": "Historial",
     "AUDIT": "Auditoría",
     "INSPECTION": "Inspección",
-    "VALUATION": "Valoración"
+    "VALUATION": "Valoración",
+    "RECEPTION": "Recepción"
   },
   "STATUS": {
     "DRAFT": "Borrador",
@@ -237,6 +238,7 @@
     "CERTIFICATE": "Certificado",
     "PERMIT_CERTIFICATE": "Certificado de Permiso",
     "LOCAL_CHARGES_RECEIPT": "Recibo de Cargos Locales",
+    "RECEPTION_RECEIPT": "Comprobante de Recepción",
     "OTHER": "Otro"
   },
   "CARGO_TYPES": {
@@ -458,7 +460,8 @@
     "BL_ORIGINAL_NOT_AVAILABLE": "El BL Original debe estar disponible para avanzar más allá de la Revisión de Valoración",
     "GATT_FORM_INCOMPLETE": "El formulario GATT Artículo 1 debe completarse antes de avanzar a Preparación de Pago",
     "PERMITS_PENDING": "Todos los permisos externos deben estar aprobados antes de avanzar a Preparación de Pago",
-    "LOCAL_CHARGES_NOT_VALIDATED": "El recibo de cargos locales fue subido pero no ha sido validado"
+    "LOCAL_CHARGES_NOT_VALIDATED": "El recibo de cargos locales fue subido pero no ha sido validado",
+    "RECEPTION_RECEIPT_REQUIRED": "Se debe subir un comprobante de recepción antes de cerrar la operación"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Tipo de Inspección",
@@ -558,6 +561,13 @@
     "FINALIZE_BUTTON": "Finalizar Valoración",
     "FINALIZE_BLOCKED": "Todos los elementos de la lista deben estar completos antes de finalizar la valoración"
   },
+  "RECEPTION": {
+    "TITLE": "Comprobante de Recepción",
+    "UPLOAD_PROMPT": "Suba el comprobante de recepción para confirmar la entrega de mercancía",
+    "NO_RECEIPT": "Aún no se ha subido comprobante de recepción",
+    "UPLOAD_SUCCESS": "Comprobante de recepción subido exitosamente",
+    "ALREADY_CLOSED": "La operación está cerrada. El comprobante fue subido."
+  },
   "LANG": {
     "ES": "Español",
     "EN": "English"
@@ -624,6 +634,7 @@
       "EXTERNAL_PERMITS_CLEARED": "Preparación de Pago (permisos)",
       "LOCAL_CHARGES_VALIDATED": "Preparación de Pago (cargos locales)",
       "INSPECTION_TYPE_REQUIRED": "Aduanas a Revisión de Valoración",
+      "RECEPTION_RECEIPT_REQUIRED": "En Tránsito \u2192 Cerrado",
       "UNKNOWN": "No definida"
     }
   },

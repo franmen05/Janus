@@ -280,6 +280,9 @@ class DocumentResourceTest {
             if ("PAYMENT_PREPARATION".equals(status)) {
                 completeGattForm(closedOperationId);
             }
+            if ("CLOSED".equals(status)) {
+                uploadDoc(closedOperationId, "RECEPTION_RECEIPT");
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
@@ -534,5 +537,91 @@ class DocumentResourceTest {
                 .when().get("/api/operations/{operationId}/documents/{id}/versions", operationId, documentId)
                 .then()
                 .statusCode(404);
+    }
+
+    // ---- RECEPTION_RECEIPT document type tests ----
+
+    private static Long inTransitOperationId;
+    private static Long receptionReceiptDocId;
+
+    @Test
+    @Order(50)
+    void testSetupInTransitOperation() {
+        // Create an operation and advance it to IN_TRANSIT for RECEPTION_RECEIPT tests
+        inTransitOperationId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-RR-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
+                        """)
+                .when().post("/api/operations")
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        uploadDoc(inTransitOperationId, "BL");
+        uploadDoc(inTransitOperationId, "COMMERCIAL_INVOICE");
+        uploadDoc(inTransitOperationId, "PACKING_LIST");
+        setupDeclarationWithApprovals(inTransitOperationId);
+
+        var transitions = new String[]{
+                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW", "ANALYST_ASSIGNED",
+                "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+                "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT"
+        };
+        for (var status : transitions) {
+            if ("VALUATION_REVIEW".equals(status)) {
+                setInspectionType(inTransitOperationId);
+            }
+            if ("PAYMENT_PREPARATION".equals(status)) {
+                completeGattForm(inTransitOperationId);
+            }
+            given()
+                    .auth().basic("admin", "admin123")
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {"newStatus": "%s"}
+                            """.formatted(status))
+                    .when().post("/api/operations/{id}/change-status", inTransitOperationId)
+                    .then()
+                    .statusCode(200);
+        }
+    }
+
+    @Test
+    @Order(51)
+    void testUploadReceptionReceipt() {
+        receptionReceiptDocId = given()
+                .auth().preemptive().basic("admin", "admin123")
+                .multiPart("file", "reception-receipt.pdf", "dummy receipt content".getBytes(), "application/pdf")
+                .multiPart("documentType", "RECEPTION_RECEIPT")
+                .when().post("/api/operations/{operationId}/documents", inTransitOperationId)
+                .then()
+                .statusCode(201)
+                .body("id", notNullValue())
+                .body("documentType", is("RECEPTION_RECEIPT"))
+                .body("operationId", is(inTransitOperationId.intValue()))
+                .extract().jsonPath().getLong("id");
+    }
+
+    @Test
+    @Order(52)
+    void testReceptionReceiptAppearsInDocumentList() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/operations/{operationId}/documents", inTransitOperationId)
+                .then()
+                .statusCode(200)
+                .body("find { it.documentType == 'RECEPTION_RECEIPT' }.id", is(receptionReceiptDocId.intValue()));
+    }
+
+    @Test
+    @Order(53)
+    void testDownloadReceptionReceipt() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/operations/{operationId}/documents/{id}/download", inTransitOperationId, receptionReceiptDocId)
+                .then()
+                .statusCode(200)
+                .header("Content-Disposition", containsString("reception-receipt.pdf"));
     }
 }

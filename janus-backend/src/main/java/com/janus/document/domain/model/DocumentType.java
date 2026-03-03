@@ -7,5 +7,6 @@ public enum DocumentType {
     CERTIFICATE,
     PERMIT_CERTIFICATE,
     LOCAL_CHARGES_RECEIPT,
+    RECEPTION_RECEIPT,
     OTHER
 }

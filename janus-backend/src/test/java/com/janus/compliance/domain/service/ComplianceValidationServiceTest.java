@@ -14,6 +14,12 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import com.janus.compliance.domain.service.rules.ReceptionReceiptRequiredRule;
+import com.janus.document.domain.model.Document;
+import com.janus.document.domain.model.DocumentType;
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -171,6 +177,82 @@ class ComplianceValidationServiceTest {
         assertTrue(maritimeResult.errors().size() >= airResult.errors().size(),
                 "MARITIME should have at least as many errors as AIR. MARITIME=" + maritimeResult.errors().size()
                         + " AIR=" + airResult.errors().size());
+    }
+
+    // ---- ReceptionReceiptRequiredRule tests ----
+
+    @Test
+    @Order(35)
+    void testReceptionReceiptRuleFailsWhenNoReceipt() {
+        // IN_TRANSIT -> CLOSED should require a RECEPTION_RECEIPT document
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.IN_TRANSIT);
+        operation.id = -999L; // Non-existent ID, so documentRepository returns empty list
+
+        var result = validationService.validate(operation, OperationStatus.CLOSED);
+
+        assertFalse(result.passed(), "Validation should fail when RECEPTION_RECEIPT is missing");
+        var receptionErrors = result.errors().stream()
+                .filter(e -> "RECEPTION_RECEIPT_REQUIRED".equals(e.ruleCode()))
+                .toList();
+        assertFalse(receptionErrors.isEmpty(),
+                "Should contain RECEPTION_RECEIPT_REQUIRED error, got: " + result.errors());
+    }
+
+    @Test
+    @Order(36)
+    void testReceptionReceiptRulePassesWhenReceiptExists() {
+        // Test the rule directly with a document list containing a RECEPTION_RECEIPT
+        var rule = new ReceptionReceiptRequiredRule();
+
+        var receipt = new Document();
+        receipt.documentType = DocumentType.RECEPTION_RECEIPT;
+        receipt.active = true;
+
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.IN_TRANSIT);
+
+        // Rule should apply to IN_TRANSIT -> CLOSED
+        assertTrue(rule.appliesTo(OperationStatus.IN_TRANSIT, OperationStatus.CLOSED, TransportMode.AIR, OperationCategory.CATEGORY_1));
+
+        // Rule should pass when RECEPTION_RECEIPT is present
+        var result = rule.validate(operation, List.of(receipt));
+        assertTrue(result.passed(), "Rule should pass when RECEPTION_RECEIPT document exists");
+
+        // Rule should fail with empty documents
+        var failResult = rule.validate(operation, Collections.emptyList());
+        assertFalse(failResult.passed(), "Rule should fail when no documents exist");
+
+        // Rule should fail when RECEPTION_RECEIPT is inactive (soft-deleted)
+        var inactiveReceipt = new Document();
+        inactiveReceipt.documentType = DocumentType.RECEPTION_RECEIPT;
+        inactiveReceipt.active = false;
+        var inactiveResult = rule.validate(operation, List.of(inactiveReceipt));
+        assertFalse(inactiveResult.passed(), "Rule should fail when RECEPTION_RECEIPT is inactive");
+    }
+
+    @Test
+    @Order(37)
+    @Transactional
+    void testReceptionReceiptRuleSkippedWhenDisabled() {
+        // Disable the RECEPTION_RECEIPT_REQUIRED rule
+        var enabledConfig = configRepository.findByRuleCodeAndKey("RECEPTION_RECEIPT_REQUIRED", "enabled")
+                .orElseThrow();
+        var originalEnabled = enabledConfig.enabled;
+        enabledConfig.enabled = false;
+
+        var operation = createTestOperation(TransportMode.AIR, OperationCategory.CATEGORY_1, OperationStatus.IN_TRANSIT);
+        operation.id = -999L;
+
+        var result = validationService.validate(operation, OperationStatus.CLOSED);
+
+        // RECEPTION_RECEIPT_REQUIRED should NOT appear in errors since it's disabled
+        var receptionErrors = result.errors().stream()
+                .filter(e -> "RECEPTION_RECEIPT_REQUIRED".equals(e.ruleCode()))
+                .toList();
+        assertTrue(receptionErrors.isEmpty(),
+                "Disabled RECEPTION_RECEIPT_REQUIRED rule should not produce errors, but got: " + receptionErrors);
+
+        // Restore original value
+        enabledConfig.enabled = originalEnabled;
     }
 
     // ---- Rule re-enable takes effect ----

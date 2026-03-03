@@ -90,6 +90,7 @@ public class DataSeeder {
         createConfig("GATT_FORM_REQUIRED", "enabled", "true", "Enable GATT form required rule for VISUAL/FISICA inspections");
         createConfig("EXTERNAL_PERMITS_CLEARED", "enabled", "true", "Enable external permits cleared rule");
         createConfig("LOCAL_CHARGES_VALIDATED", "enabled", "true", "Enable local charges validated rule");
+        createConfig("RECEPTION_RECEIPT_REQUIRED", "enabled", "true", "Enable reception receipt required rule for closing operations");
     }
 
     private void createConfig(String ruleCode, String paramKey, String paramValue, String description) {
