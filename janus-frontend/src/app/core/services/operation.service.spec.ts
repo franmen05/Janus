@@ -115,6 +115,7 @@ describe('OperationService', () => {
         clientId: 1,
         transportMode: TransportMode.MARITIME,
         operationCategory: OperationCategory.CATEGORY_1,
+        estimatedArrival: '2024-06-01',
         blAvailability: BlAvailability.NOT_AVAILABLE
       };
 
@@ -135,6 +136,7 @@ describe('OperationService', () => {
         clientId: 1,
         transportMode: TransportMode.AIR,
         operationCategory: OperationCategory.CATEGORY_2,
+        estimatedArrival: '2024-06-01',
         blAvailability: BlAvailability.NOT_AVAILABLE
       };
 

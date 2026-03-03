@@ -134,7 +134,14 @@
     "ACTIVE": "Active",
     "INACTIVE": "Inactive",
     "OPERATIONS": "Operations",
-    "SEARCH": "Search by name or Tax ID..."
+    "SEARCH": "Search by name or Tax ID...",
+    "TYPE": "Type",
+    "SELECT_TYPE": "Select type..."
+  },
+  "CLIENT_TYPES": {
+    "COMPANY": "Company",
+    "CONSIGNEE": "Consignee",
+    "INDIVIDUAL": "Individual"
   },
   "AUDIT": {
     "TITLE": "Audit Log",

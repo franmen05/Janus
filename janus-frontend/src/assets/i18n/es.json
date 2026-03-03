@@ -134,7 +134,14 @@
     "ACTIVE": "Activo",
     "INACTIVE": "Inactivo",
     "OPERATIONS": "Operaciones",
-    "SEARCH": "Buscar por nombre o RNC..."
+    "SEARCH": "Buscar por nombre o RNC...",
+    "TYPE": "Tipo",
+    "SELECT_TYPE": "Seleccionar tipo..."
+  },
+  "CLIENT_TYPES": {
+    "COMPANY": "Empresa",
+    "CONSIGNEE": "Consignatario",
+    "INDIVIDUAL": "Particular"
   },
   "AUDIT": {
     "TITLE": "Registro de Auditoría",

@@ -1,6 +1,7 @@
 package com.janus.shared.infrastructure;
 
 import com.janus.client.domain.model.Client;
+import com.janus.client.domain.model.ClientType;
 import com.janus.client.domain.repository.ClientRepository;
 import com.janus.compliance.domain.model.ComplianceRuleConfig;
 import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
@@ -51,6 +52,7 @@ public class DataSeeder {
         client1.email = "info@demoimport.com";
         client1.phone = "+504-2222-3333";
         client1.address = "San Pedro Sula, Honduras";
+        client1.clientType = ClientType.COMPANY;
         clientRepository.persist(client1);
 
         var client2 = new Client();
@@ -59,6 +61,7 @@ public class DataSeeder {
         client2.email = "contact@globaltrade.hn";
         client2.phone = "+504-2555-6666";
         client2.address = "Tegucigalpa, Honduras";
+        client2.clientType = ClientType.COMPANY;
         clientRepository.persist(client2);
     }
 

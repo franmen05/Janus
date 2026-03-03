@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { ClientService } from './client.service';
 import { environment } from '../../../environments/environment';
-import { Client, CreateClientRequest } from '../models/client.model';
+import { Client, ClientType, CreateClientRequest } from '../models/client.model';
 
 describe('ClientService', () => {
   let service: ClientService;
@@ -18,6 +18,7 @@ describe('ClientService', () => {
     email: 'client@test.com',
     phone: '+1234567890',
     address: '123 Main St',
+    clientType: ClientType.COMPANY,
     active: true,
     createdAt: '2024-01-01T00:00:00'
   };
@@ -72,6 +73,7 @@ describe('ClientService', () => {
         name: 'New Client',
         taxId: 'TAX-002',
         email: 'new@test.com',
+        clientType: ClientType.COMPANY,
         phone: '+9876543210',
         address: '456 Oak Ave'
       };
@@ -92,7 +94,8 @@ describe('ClientService', () => {
       const request: CreateClientRequest = {
         name: 'Updated Client',
         taxId: 'TAX-001',
-        email: 'updated@test.com'
+        email: 'updated@test.com',
+        clientType: ClientType.CONSIGNEE
       };
 
       service.update(1, request).subscribe(client => {

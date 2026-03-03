@@ -126,7 +126,8 @@ class ClientResourceTest {
                             "taxId": "RTN-TEST-001",
                             "email": "test@testclient.com",
                             "phone": "+504-9999-0000",
-                            "address": "Test City, Honduras"
+                            "address": "Test City, Honduras",
+                            "clientType": "COMPANY"
                         }
                         """)
                 .when().post("/api/clients")
@@ -152,7 +153,8 @@ class ClientResourceTest {
                             "taxId": "RTN-TEST-001",
                             "email": "updated@testclient.com",
                             "phone": "+504-8888-0000",
-                            "address": "Updated City, Honduras"
+                            "address": "Updated City, Honduras",
+                            "clientType": "COMPANY"
                         }
                         """)
                 .when().put("/api/clients/{id}", createdClientId)
@@ -171,7 +173,7 @@ class ClientResourceTest {
                 .auth().basic("agent", "agent123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"name": "Agent Created", "taxId": "RTN-AGENT-001", "email": "agentcreated@test.com"}
+                        {"name": "Agent Created", "taxId": "RTN-AGENT-001", "email": "agentcreated@test.com", "clientType": "COMPANY"}
                         """)
                 .when().post("/api/clients")
                 .then()
@@ -185,7 +187,7 @@ class ClientResourceTest {
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"name": "Blocked", "taxId": "RTN-BLOCK-002", "email": "blocked2@test.com"}
+                        {"name": "Blocked", "taxId": "RTN-BLOCK-002", "email": "blocked2@test.com", "clientType": "COMPANY"}
                         """)
                 .when().post("/api/clients")
                 .then()

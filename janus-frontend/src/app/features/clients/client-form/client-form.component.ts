@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ClientService } from '../../../core/services/client.service';
+import { ClientType } from '../../../core/models/client.model';
 
 @Component({
   selector: 'app-client-form',
@@ -30,6 +31,17 @@ import { ClientService } from '../../../core/services/client.service';
               <input type="email" class="form-control" formControlName="email">
             </div>
             <div class="col-md-6">
+              <label class="form-label">{{ 'CLIENTS.TYPE' | translate }} <span class="text-danger">*</span></label>
+              <select class="form-select" formControlName="clientType">
+                <option value="">{{ 'CLIENTS.SELECT_TYPE' | translate }}</option>
+                @for (ct of clientTypes; track ct) {
+                  <option [value]="ct">{{ 'CLIENT_TYPES.' + ct | translate }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
               <label class="form-label">{{ 'CLIENTS.PHONE' | translate }}</label>
               <input type="text" class="form-control" formControlName="phone">
             </div>
@@ -54,11 +66,13 @@ export class ClientFormComponent implements OnInit {
 
   isEdit = signal(false);
   clientId: number | null = null;
+  clientTypes = Object.values(ClientType);
 
   form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     taxId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    clientType: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     phone: new FormControl('', { nonNullable: true }),
     address: new FormControl('', { nonNullable: true })
   });
@@ -69,14 +83,15 @@ export class ClientFormComponent implements OnInit {
       this.isEdit.set(true);
       this.clientId = +id;
       this.clientService.getById(+id).subscribe(c => {
-        this.form.patchValue({ name: c.name, taxId: c.taxId, email: c.email, phone: c.phone ?? '', address: c.address ?? '' });
+        this.form.patchValue({ name: c.name, taxId: c.taxId, email: c.email, clientType: c.clientType, phone: c.phone ?? '', address: c.address ?? '' });
       });
     }
   }
 
   onSubmit(): void {
     if (this.form.invalid) return;
-    const val = this.form.getRawValue();
+    const raw = this.form.getRawValue();
+    const val = { ...raw, clientType: raw.clientType as ClientType };
     const obs = this.isEdit() ? this.clientService.update(this.clientId!, val) : this.clientService.create(val);
     obs.subscribe(() => this.router.navigate(['/clients']));
   }

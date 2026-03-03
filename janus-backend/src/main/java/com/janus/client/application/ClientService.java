@@ -37,6 +37,7 @@ public class ClientService {
         client.email = request.email();
         client.phone = request.phone();
         client.address = request.address();
+        client.clientType = request.clientType();
         clientRepository.persist(client);
         return client;
     }
@@ -49,6 +50,7 @@ public class ClientService {
         client.email = request.email();
         client.phone = request.phone();
         client.address = request.address();
+        client.clientType = request.clientType();
         return client;
     }
 }

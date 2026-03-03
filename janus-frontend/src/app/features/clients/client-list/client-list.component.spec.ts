@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { ClientListComponent } from './client-list.component';
 import { ClientService } from '../../../core/services/client.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Client } from '../../../core/models/client.model';
+import { Client, ClientType } from '../../../core/models/client.model';
 
 describe('ClientListComponent', () => {
   let component: ClientListComponent;
@@ -14,8 +14,8 @@ describe('ClientListComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   const mockClients: Client[] = [
-    { id: 1, name: 'Client A', taxId: '123-456', email: 'a@example.com', phone: '555-0001', address: '123 Main St', active: true, createdAt: '2024-01-01' },
-    { id: 2, name: 'Client B', taxId: '789-012', email: 'b@example.com', phone: null, address: null, active: false, createdAt: '2024-01-02' }
+    { id: 1, name: 'Client A', taxId: '123-456', email: 'a@example.com', phone: '555-0001', address: '123 Main St', clientType: ClientType.COMPANY, active: true, createdAt: '2024-01-01' },
+    { id: 2, name: 'Client B', taxId: '789-012', email: 'b@example.com', phone: null, address: null, clientType: ClientType.CONSIGNEE, active: false, createdAt: '2024-01-02' }
   ];
 
   beforeEach(async () => {

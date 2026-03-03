@@ -28,13 +28,14 @@ import { AuthService } from '../../../core/services/auth.service';
       <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
           <thead class="table-light">
-            <tr><th>{{ 'CLIENTS.NAME' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'CLIENTS.TAX_ID' | translate }}</th><th class="d-none d-md-table-cell">{{ 'CLIENTS.EMAIL' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'CLIENTS.PHONE' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'COMMON.ACTIONS' | translate }}</th></tr>
+            <tr><th>{{ 'CLIENTS.NAME' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'CLIENTS.TAX_ID' | translate }}</th><th class="d-none d-md-table-cell">{{ 'CLIENTS.TYPE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'CLIENTS.EMAIL' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'CLIENTS.PHONE' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'COMMON.ACTIONS' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (client of filteredClients(); track client.id) {
               <tr>
                 <td class="fw-bold">{{ client.name }}</td>
                 <td class="d-none d-sm-table-cell">{{ client.taxId }}</td>
+                <td class="d-none d-md-table-cell">{{ 'CLIENT_TYPES.' + client.clientType | translate }}</td>
                 <td class="d-none d-md-table-cell">{{ client.email }}</td>
                 <td class="d-none d-lg-table-cell">{{ client.phone ?? '-' }}</td>
                 <td><span class="badge" [class]="client.active ? 'bg-success' : 'bg-secondary'">{{ (client.active ? 'CLIENTS.ACTIVE' : 'CLIENTS.INACTIVE') | translate }}</span></td>

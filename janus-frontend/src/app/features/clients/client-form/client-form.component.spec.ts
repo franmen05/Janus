@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { ClientFormComponent } from './client-form.component';
 import { ClientService } from '../../../core/services/client.service';
+import { ClientType } from '../../../core/models/client.model';
 
 describe('ClientFormComponent', () => {
   let component: ClientFormComponent;
@@ -16,7 +17,7 @@ describe('ClientFormComponent', () => {
     clientServiceSpy = jasmine.createSpyObj('ClientService', ['create', 'update', 'getById']);
     clientServiceSpy.create.and.returnValue(of({
       id: 10, name: 'New Client', taxId: '999', email: 'new@test.com',
-      phone: null, address: null, active: true, createdAt: '2024-01-01'
+      phone: null, address: null, clientType: ClientType.COMPANY, active: true, createdAt: '2024-01-01'
     }));
 
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -61,7 +62,8 @@ describe('ClientFormComponent', () => {
     component.form.patchValue({
       name: 'Test Client',
       taxId: '123-456',
-      email: 'test@example.com'
+      email: 'test@example.com',
+      clientType: 'COMPANY'
     });
     expect(component.form.valid).toBeTrue();
   });
@@ -72,6 +74,7 @@ describe('ClientFormComponent', () => {
       name: 'New Client',
       taxId: '999',
       email: 'new@test.com',
+      clientType: 'COMPANY',
       phone: '',
       address: ''
     });
@@ -82,6 +85,7 @@ describe('ClientFormComponent', () => {
       name: 'New Client',
       taxId: '999',
       email: 'new@test.com',
+      clientType: ClientType.COMPANY,
       phone: '',
       address: ''
     });

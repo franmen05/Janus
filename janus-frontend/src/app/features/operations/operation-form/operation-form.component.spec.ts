@@ -7,6 +7,7 @@ import { OperationFormComponent } from './operation-form.component';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
 import { TransportMode, OperationCategory, OperationStatus, BlAvailability } from '../../../core/models/operation.model';
+import { ClientType } from '../../../core/models/client.model';
 
 describe('OperationFormComponent', () => {
   let component: OperationFormComponent;
@@ -27,7 +28,7 @@ describe('OperationFormComponent', () => {
 
     clientServiceSpy = jasmine.createSpyObj('ClientService', ['getAll']);
     clientServiceSpy.getAll.and.returnValue(of([
-      { id: 1, name: 'Client A', taxId: '123', email: 'a@b.com', phone: null, address: null, active: true, createdAt: '2024-01-01' }
+      { id: 1, name: 'Client A', taxId: '123', email: 'a@b.com', phone: null, address: null, clientType: ClientType.COMPANY, active: true, createdAt: '2024-01-01' }
     ]));
 
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
