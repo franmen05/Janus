@@ -288,15 +288,6 @@ import {
             <div ngbAccordionBody>
               <ng-template>
                 @if (checklist()) {
-                  <h6>{{ 'VALUATION.PREFLIGHT_SUMMARY' | translate }}</h6>
-                  <div class="list-group list-group-flush mb-3">
-                    @for (item of checklist()!.items; track item.code) {
-                      <div class="list-group-item d-flex align-items-center py-1 px-0">
-                        <i class="bi me-2" [ngClass]="item.passed ? 'bi-check-circle text-success' : 'bi-x-circle text-danger'"></i>
-                        <span [class.text-muted]="item.passed">{{ 'VALUATION.CHECKLIST_' + item.code | translate }}</span>
-                      </div>
-                    }
-                  </div>
                   <button class="btn btn-success" (click)="confirmFinalizeValuation()"
                           [disabled]="!checklist()!.allPassed || finalizing()">
                     @if (finalizing()) {

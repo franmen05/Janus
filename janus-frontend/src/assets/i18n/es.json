@@ -555,7 +555,6 @@
     "GATT_ORIGINAL_BASE": "Base Imponible Original",
     "GATT_ADJUSTED_BASE": "Base Imponible Ajustada",
     "FINALIZE_TITLE": "Finalizar Valoración",
-    "PREFLIGHT_SUMMARY": "Lista de Verificación Previa",
     "FINALIZE_BUTTON": "Finalizar Valoración",
     "FINALIZE_BLOCKED": "Todos los elementos de la lista deben estar completos antes de finalizar la valoración"
   },

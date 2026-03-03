@@ -209,7 +209,7 @@ const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUST
                         <span class="badge" [ngClass]="operation()!.blAvailability === 'ORIGINAL' ? 'bg-success' : operation()!.blAvailability === 'ENDORSED' ? 'bg-info' : 'bg-warning text-dark'">
                           {{ 'BL_AVAILABILITY.' + operation()!.blAvailability | translate }}
                         </span>
-                        @if (authService.hasRole(['ADMIN', 'AGENT']) && operation()!.status !== 'CLOSED' && operation()!.status !== 'CANCELLED') {
+                        @if (authService.hasRole(['ADMIN', 'AGENT']) && !['PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED', 'CANCELLED'].includes(operation()!.status)) {
                           <select class="form-select form-select-sm d-inline-block w-auto"
                                   [value]="operation()!.blAvailability"
                                   (change)="updateBlAvailability($event)">

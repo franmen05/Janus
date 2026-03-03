@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-import { OperatorFunction, Observable } from 'rxjs';
+import { OperatorFunction, Observable, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
@@ -187,6 +187,11 @@ export class OperationFormComponent implements OnInit {
   blTypes = Object.values(BlType);
   incoterms = ['FOB', 'CIF', 'EXW', 'CFR', 'CIP', 'DAP', 'DDP'];
 
+  private readonly blAvailabilityLockedStatuses = new Set([
+    'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION',
+    'IN_TRANSIT', 'CLOSED', 'CANCELLED'
+  ]);
+
   form = new FormGroup({
     clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     transportMode: new FormControl(TransportMode.MARITIME, { nonNullable: true, validators: [Validators.required] }),
@@ -237,20 +242,6 @@ export class OperationFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.clientService.getAll().subscribe(clients => {
-      this.clients.set(clients);
-      const clientIdParam = this.route.snapshot.queryParamMap.get('clientId');
-      if (clientIdParam && !this.isEdit()) {
-        const client = clients.find(c => c.id === +clientIdParam);
-        if (client) {
-          this.selectedClient.set(client);
-          this.selectedClientDisplay.set(client.name);
-          this.form.get('clientId')!.setValue(clientIdParam);
-          this.clientLocked.set(true);
-        }
-      }
-    });
-
     // Add conditional validation for containerNumber when transportMode is MARITIME and cargoType is FCL
     this.form.get('transportMode')!.valueChanges.subscribe(mode => {
       this.updateContainerNumberValidation(mode, this.form.get('cargoType')!.value);
@@ -271,7 +262,12 @@ export class OperationFormComponent implements OnInit {
     if (id) {
       this.isEdit.set(true);
       this.operationId = +id;
-      this.operationService.getById(+id).subscribe(op => {
+      // Use forkJoin to ensure both clients and operation are loaded before client lookup
+      forkJoin({
+        clients: this.clientService.getAll(),
+        operation: this.operationService.getById(+id)
+      }).subscribe(({ clients, operation: op }) => {
+        this.clients.set(clients);
         if (op.status === 'CLOSED' || op.status === 'CANCELLED') {
           this.router.navigate(['/operations', op.id]);
           return;
@@ -291,11 +287,30 @@ export class OperationFormComponent implements OnInit {
           deadline: op.deadline ?? '',
           incoterm: op.incoterm ?? ''
         });
+        // Disable BL Availability when operation is at or past VALUATION_REVIEW
+        if (this.blAvailabilityLockedStatuses.has(op.status)) {
+          this.form.get('blAvailability')!.disable();
+        }
         if (op.clientId) {
-          const client = this.clients().find(c => c.id === op.clientId);
+          const client = clients.find(c => c.id === op.clientId);
           if (client) {
             this.selectedClient.set(client);
             this.selectedClientDisplay.set(client.name);
+          }
+        }
+      });
+    } else {
+      // Not editing: just load clients for the typeahead
+      this.clientService.getAll().subscribe(clients => {
+        this.clients.set(clients);
+        const clientIdParam = this.route.snapshot.queryParamMap.get('clientId');
+        if (clientIdParam) {
+          const client = clients.find(c => c.id === +clientIdParam);
+          if (client) {
+            this.selectedClient.set(client);
+            this.selectedClientDisplay.set(client.name);
+            this.form.get('clientId')!.setValue(clientIdParam);
+            this.clientLocked.set(true);
           }
         }
       });

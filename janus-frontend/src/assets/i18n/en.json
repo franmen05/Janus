@@ -555,7 +555,6 @@
     "GATT_ORIGINAL_BASE": "Original Taxable Base",
     "GATT_ADJUSTED_BASE": "Adjusted Taxable Base",
     "FINALIZE_TITLE": "Finalize Valuation",
-    "PREFLIGHT_SUMMARY": "Pre-flight Checklist",
     "FINALIZE_BUTTON": "Finalize Valuation",
     "FINALIZE_BLOCKED": "All checklist items must pass before finalizing valuation"
   },
