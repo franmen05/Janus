@@ -236,6 +236,24 @@ class DocumentResourceTest {
                 .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", opId, declId)
                 .then().statusCode(200);
 
+        // Register final declaration for crossing
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"declarationNumber": "FINAL-DOC-TEST", "fobValue": 1000.00, "cifValue": 1200.00,
+                         "taxableBase": 1200.00, "totalTaxes": 180.00, "freightValue": 150.00, "insuranceValue": 50.00}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/final", opId)
+                .then().statusCode(201);
+
+        // Execute crossing
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .when().post("/api/operations/{opId}/declarations/crossing/execute", opId)
+                .then().statusCode(201);
+
         // Final approval
         given()
                 .auth().basic("admin", "admin123")

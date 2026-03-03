@@ -374,6 +374,24 @@ class DeclarationResourceTest {
         changeStatus(clientApprovalOpId, "ANALYST_ASSIGNED");
         changeStatus(clientApprovalOpId, "DECLARATION_IN_PROGRESS");
 
+        // Register final declaration and execute crossing (required for final approval)
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"declarationNumber": "FINAL-CA", "fobValue": 5000.00, "cifValue": 6000.00,
+                         "taxableBase": 6000.00, "totalTaxes": 900.00, "freightValue": 800.00, "insuranceValue": 200.00}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/final", clientApprovalOpId)
+                .then().statusCode(201);
+
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .when().post("/api/operations/{opId}/declarations/crossing/execute", clientApprovalOpId)
+                .then().statusCode(201)
+                .body("status", is("MATCH"));
+
         // Verify operation is in DECLARATION_IN_PROGRESS
         given()
                 .auth().basic("admin", "admin123")

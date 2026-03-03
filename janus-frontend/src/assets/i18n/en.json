@@ -721,6 +721,7 @@
     "ALREADY_TECHNICAL_APPROVED": "This declaration already has technical approval.",
     "TECHNICAL_APPROVAL_REQUIRED": "Technical approval is required before final approval.",
     "ALREADY_FINAL_APPROVED": "This declaration already has final approval.",
+    "CROSSING_NOT_APPROVED": "Customs crossing must be completed and approved before final approval.",
     "GENERIC_ERROR": "An unexpected error occurred."
   }
 }

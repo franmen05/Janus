@@ -95,6 +95,24 @@ class OperationResourceTest {
                 .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", operationId, declId)
                 .then().statusCode(200);
 
+        // Register final declaration for crossing
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"declarationNumber": "FINAL-OP-TEST", "fobValue": 1000.00, "cifValue": 1200.00,
+                         "taxableBase": 1200.00, "totalTaxes": 180.00, "freightValue": 150.00, "insuranceValue": 50.00}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/final", operationId)
+                .then().statusCode(201);
+
+        // Execute crossing
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .when().post("/api/operations/{opId}/declarations/crossing/execute", operationId)
+                .then().statusCode(201);
+
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)

@@ -721,6 +721,7 @@
     "ALREADY_TECHNICAL_APPROVED": "Esta declaración ya tiene aprobación técnica.",
     "TECHNICAL_APPROVAL_REQUIRED": "Se requiere aprobación técnica antes de la aprobación final.",
     "ALREADY_FINAL_APPROVED": "Esta declaración ya tiene aprobación final.",
+    "CROSSING_NOT_APPROVED": "El cruce aduanero debe estar completado y aprobado antes de la aprobación final.",
     "GENERIC_ERROR": "Ocurrió un error inesperado."
   }
 }

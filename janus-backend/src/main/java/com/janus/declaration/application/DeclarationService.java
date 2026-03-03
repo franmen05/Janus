@@ -387,6 +387,11 @@ public class DeclarationService {
             throw new BusinessException("ALREADY_FINAL_APPROVED", "Declaration already has final approval");
         }
 
+        var crossing = crossingResultRepository.findByOperationId(operationId);
+        if (crossing.isEmpty() || (crossing.get().status != CrossingStatus.MATCH && crossing.get().status != CrossingStatus.RESOLVED)) {
+            throw new BusinessException("CROSSING_NOT_APPROVED", "Customs crossing must be completed and approved before final approval");
+        }
+
         declaration.finalApprovedBy = username;
         declaration.finalApprovedAt = LocalDateTime.now();
         declaration.finalApprovalComment = comment;
