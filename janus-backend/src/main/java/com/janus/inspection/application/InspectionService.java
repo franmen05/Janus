@@ -180,7 +180,7 @@ public class InspectionService {
         expense.description = request.description();
         expense.amount = request.amount();
         expense.currency = request.currency() != null ? request.currency() : "USD";
-        expense.expenseDate = request.expenseDate() != null ? request.expenseDate() : LocalDate.now();
+        expense.expenseDate = request.expenseDate();
         expense.justification = request.justification();
         expense.responsable = request.responsable();
         expense.paymentStatus = request.paymentStatus() != null ? request.paymentStatus() : PaymentStatus.PENDING;
@@ -224,7 +224,7 @@ public class InspectionService {
         expense.description = request.description();
         expense.amount = request.amount();
         expense.currency = request.currency() != null ? request.currency() : expense.currency;
-        expense.expenseDate = request.expenseDate() != null ? request.expenseDate() : expense.expenseDate;
+        expense.expenseDate = request.expenseDate();
         expense.justification = request.justification();
         expense.responsable = request.responsable();
         expense.paymentStatus = request.paymentStatus() != null ? request.paymentStatus() : expense.paymentStatus;

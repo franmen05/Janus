@@ -76,7 +76,7 @@ import { InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'INSPECTION.EXPENSE_DATE' | translate }}</label>
+              <label class="form-label">{{ 'INSPECTION.EXPENSE_DATE' | translate }} @if (editForm.controls.paymentStatus.value === 'PAID') { <span class="text-danger">*</span> }</label>
               <input type="date" class="form-control" formControlName="expenseDate">
             </div>
             <div class="col-md-6">
@@ -85,7 +85,7 @@ import { InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label">{{ 'INSPECTION.RESPONSIBLE' | translate }}</label>
+            <label class="form-label">{{ 'INSPECTION.RESPONSIBLE' | translate }} <span class="text-danger">*</span></label>
             <input type="text" class="form-control" formControlName="responsable">
           </div>
           <div class="row mb-3">
@@ -144,7 +144,7 @@ export class ExpenseDetailModalComponent {
     amount: new FormControl<number | null>(null, { validators: [Validators.required, Validators.min(0.01)] }),
     currency: new FormControl<string>('USD', { nonNullable: true }),
     expenseDate: new FormControl<string>('', { nonNullable: true }),
-    responsable: new FormControl<string>('', { nonNullable: true }),
+    responsable: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     justification: new FormControl<string>('', { nonNullable: true }),
     paymentStatus: new FormControl<string>('PENDING', { nonNullable: true })
   });
@@ -167,6 +167,18 @@ export class ExpenseDetailModalComponent {
       this.editForm.reset({ category: '', currency: 'USD', paymentStatus: 'PENDING' });
       this.editing.set(true);
     }
+    this.updateDateRequired(this.editForm.controls.paymentStatus.value);
+    this.editForm.controls.paymentStatus.valueChanges.subscribe(status => this.updateDateRequired(status));
+  }
+
+  private updateDateRequired(status: string): void {
+    const dateCtrl = this.editForm.controls.expenseDate;
+    if (status === 'PAID') {
+      dateCtrl.setValidators([Validators.required]);
+    } else {
+      dateCtrl.clearValidators();
+    }
+    dateCtrl.updateValueAndValidity();
   }
 
   cancelEditing(): void {

@@ -36,7 +36,7 @@ public class InspectionExpense extends BaseEntity {
     @Column(nullable = false)
     public String currency = "USD";
 
-    @Column(name = "expense_date", nullable = false)
+    @Column(name = "expense_date")
     public LocalDate expenseDate;
 
     @Column(columnDefinition = "TEXT")
