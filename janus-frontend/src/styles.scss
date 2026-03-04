@@ -12,7 +12,11 @@ body {
 
 // Sidebar
 .sidebar {
-  min-height: calc(100vh - 56px);
+  height: 100%;
+  position: sticky;
+  top: 56px;
+  max-height: calc(100vh - 56px);
+  overflow-y: auto;
   background: linear-gradient(180deg, #1e2530 0%, #1a1f2b 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -89,6 +93,10 @@ body {
 .navbar-janus {
   background: linear-gradient(90deg, #1e2530 0%, #252d3a 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-col {
+  background: linear-gradient(180deg, #1e2530 0%, #1a1f2b 100%);
 }
 
 .content-area {

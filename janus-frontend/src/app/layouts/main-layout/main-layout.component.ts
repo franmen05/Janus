@@ -11,7 +11,7 @@ import { SidebarComponent } from '../../shared/components/sidebar/sidebar.compon
     <app-navbar />
     <div class="container-fluid">
       <div class="row">
-        <div class="d-none d-lg-block col-lg-2 p-0">
+        <div class="d-none d-lg-block col-lg-2 p-0 sidebar-col">
           <app-sidebar />
         </div>
         <div class="col-12 col-lg-10 content-area">
