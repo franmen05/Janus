@@ -85,12 +85,9 @@ export class DeclarationListComponent implements OnInit {
     'PAYMENT_PREPARATION', 'IN_TRANSIT'
   ];
 
-  private static readonly PRELIMINARY_EDITABLE_STATUSES = [
-    'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION'
-  ];
-
-  private static readonly FINAL_EDITABLE_STATUSES = [
-    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS'
+  private static readonly DECLARATION_EDITABLE_STATUSES = [
+    'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION',
+    'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS'
   ];
 
   canRegisterFinal(): boolean {
@@ -109,14 +106,8 @@ export class DeclarationListComponent implements OnInit {
     return ['CLOSED', 'CANCELLED'].includes(this.operationStatus());
   }
 
-  canEditDeclaration(decl: Declaration): boolean {
-    if (decl.declarationType === DeclarationType.PRELIMINARY) {
-      return DeclarationListComponent.PRELIMINARY_EDITABLE_STATUSES.includes(this.operationStatus());
-    }
-    if (decl.declarationType === DeclarationType.FINAL) {
-      return DeclarationListComponent.FINAL_EDITABLE_STATUSES.includes(this.operationStatus());
-    }
-    return true;
+  canEditDeclaration(_decl: Declaration): boolean {
+    return DeclarationListComponent.DECLARATION_EDITABLE_STATUSES.includes(this.operationStatus());
   }
 
   ngOnInit(): void { this.loadDeclarations(); }

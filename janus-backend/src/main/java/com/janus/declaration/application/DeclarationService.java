@@ -32,13 +32,11 @@ import java.util.Set;
 @ApplicationScoped
 public class DeclarationService {
 
-    private static final Set<OperationStatus> PRELIMINARY_EDITABLE_STATUSES = Set.of(
+    private static final Set<OperationStatus> DECLARATION_EDITABLE_STATUSES = Set.of(
             OperationStatus.DRAFT, OperationStatus.DOCUMENTATION_COMPLETE,
-            OperationStatus.IN_REVIEW, OperationStatus.PENDING_CORRECTION
-    );
-
-    private static final Set<OperationStatus> FINAL_EDITABLE_STATUSES = Set.of(
-            OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.SUBMITTED_TO_CUSTOMS
+            OperationStatus.IN_REVIEW, OperationStatus.PENDING_CORRECTION,
+            OperationStatus.PRELIQUIDATION_REVIEW, OperationStatus.ANALYST_ASSIGNED,
+            OperationStatus.DECLARATION_IN_PROGRESS
     );
 
     @Inject
@@ -261,16 +259,9 @@ public class DeclarationService {
 
     private void enforceEditable(Declaration declaration) {
         var status = declaration.operation.status;
-        if (declaration.declarationType == DeclarationType.PRELIMINARY) {
-            if (!PRELIMINARY_EDITABLE_STATUSES.contains(status)) {
-                throw new BusinessException("PRELIMINARY_NOT_EDITABLE",
-                        "Preliminary declarations can only be edited in statuses: DRAFT, DOCUMENTATION_COMPLETE, IN_REVIEW, PENDING_CORRECTION");
-            }
-        } else if (declaration.declarationType == DeclarationType.FINAL) {
-            if (!FINAL_EDITABLE_STATUSES.contains(status)) {
-                throw new BusinessException("FINAL_NOT_EDITABLE",
-                        "Final declarations can only be edited in statuses: DECLARATION_IN_PROGRESS, SUBMITTED_TO_CUSTOMS");
-            }
+        if (!DECLARATION_EDITABLE_STATUSES.contains(status)) {
+            throw new BusinessException("DECLARATION_NOT_EDITABLE",
+                    "Declarations can only be edited up to the declaration stage");
         }
     }
 
