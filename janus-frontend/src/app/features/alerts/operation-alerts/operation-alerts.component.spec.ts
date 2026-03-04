@@ -3,6 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { OperationAlertsComponent } from './operation-alerts.component';
 import { AlertService } from '../../../core/services/alert.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { AlertType, AlertStatus } from '../../../core/models/alert.model';
 
 describe('OperationAlertsComponent', () => {
@@ -19,10 +20,14 @@ describe('OperationAlertsComponent', () => {
     alertServiceSpy.getByOperation.and.returnValue(of(mockAlerts));
     alertServiceSpy.acknowledge.and.returnValue(of(mockAlerts[0]));
 
+    const authServiceSpy = jasmine.createSpyObj('AuthService', ['hasRole']);
+    authServiceSpy.hasRole.and.returnValue(true);
+
     await TestBed.configureTestingModule({
       imports: [OperationAlertsComponent, TranslateModule.forRoot()],
       providers: [
-        { provide: AlertService, useValue: alertServiceSpy }
+        { provide: AlertService, useValue: alertServiceSpy },
+        { provide: AuthService, useValue: authServiceSpy }
       ]
     }).compileComponents();
 

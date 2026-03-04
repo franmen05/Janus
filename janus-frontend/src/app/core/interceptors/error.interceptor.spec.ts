@@ -2,7 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient, withInterceptors, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { errorInterceptor } from './error.interceptor';
+import { ToastService } from '../services/toast.service';
 import { environment } from '../../../environments/environment';
 
 describe('errorInterceptor', () => {
@@ -11,11 +13,16 @@ describe('errorInterceptor', () => {
   let router: Router;
 
   beforeEach(async () => {
+    const translateSpy = jasmine.createSpyObj('TranslateService', ['instant']);
+    translateSpy.instant.and.callFake((key: string) => key);
+
     await TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptors([errorInterceptor])),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: TranslateService, useValue: translateSpy },
+        ToastService
       ]
     }).compileComponents();
 

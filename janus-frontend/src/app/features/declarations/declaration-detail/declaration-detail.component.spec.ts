@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { DeclarationDetailComponent } from './declaration-detail.component';
 import { DeclarationService } from '../../../core/services/declaration.service';
+import { OperationService } from '../../../core/services/operation.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeclarationType } from '../../../core/models/declaration.model';
@@ -23,13 +24,17 @@ describe('DeclarationDetailComponent', () => {
     }));
     declarationServiceSpy.getTariffLines.and.returnValue(of([]));
 
+    const operationServiceSpy = jasmine.createSpyObj('OperationService', ['getById']);
+    operationServiceSpy.getById.and.returnValue(of({ id: 1, status: 'DRAFT' }));
+
     const authServiceSpy = jasmine.createSpyObj('AuthService', ['hasRole']);
     authServiceSpy.hasRole.and.returnValue(true);
 
     await TestBed.configureTestingModule({
-      imports: [DeclarationDetailComponent, TranslateModule.forRoot()],
+      imports: [DeclarationDetailComponent, RouterModule.forRoot([]), TranslateModule.forRoot()],
       providers: [
         { provide: DeclarationService, useValue: declarationServiceSpy },
+        { provide: OperationService, useValue: operationServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
         { provide: NgbModal, useValue: jasmine.createSpyObj('NgbModal', ['open']) },
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ operationId: '1', declarationId: '1' }) } } }

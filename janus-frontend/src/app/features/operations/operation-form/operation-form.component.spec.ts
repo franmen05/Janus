@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { OperationFormComponent } from './operation-form.component';
@@ -14,7 +14,7 @@ describe('OperationFormComponent', () => {
   let fixture: ComponentFixture<OperationFormComponent>;
   let operationServiceSpy: jasmine.SpyObj<OperationService>;
   let clientServiceSpy: jasmine.SpyObj<ClientService>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let router: Router;
 
   beforeEach(async () => {
     operationServiceSpy = jasmine.createSpyObj('OperationService', ['create', 'update', 'getById']);
@@ -31,14 +31,11 @@ describe('OperationFormComponent', () => {
       { id: 1, name: 'Client A', taxId: '123', email: 'a@b.com', phone: null, address: null, clientType: ClientType.COMPANY, active: true, createdAt: '2024-01-01' }
     ]));
 
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-
     await TestBed.configureTestingModule({
-      imports: [OperationFormComponent, ReactiveFormsModule, TranslateModule.forRoot()],
+      imports: [OperationFormComponent, ReactiveFormsModule, RouterModule.forRoot([]), TranslateModule.forRoot()],
       providers: [
         { provide: OperationService, useValue: operationServiceSpy },
         { provide: ClientService, useValue: clientServiceSpy },
-        { provide: Router, useValue: routerSpy },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -47,6 +44,9 @@ describe('OperationFormComponent', () => {
         }
       ]
     }).compileComponents();
+
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
 
     fixture = TestBed.createComponent(OperationFormComponent);
     component = fixture.componentInstance;
@@ -70,7 +70,7 @@ describe('OperationFormComponent', () => {
   it('should mark form invalid when required fields empty', () => {
     fixture.detectChanges();
     expect(component.form.invalid).toBeTrue();
-    component.form.patchValue({ clientId: '1', containerNumber: 'CONT-001', blNumber: 'BL-001', blAvailability: 'ORIGINAL' });
+    component.form.patchValue({ clientId: '1', containerNumber: 'CONT-001', blNumber: 'BL-001', blAvailability: 'ORIGINAL', estimatedArrival: '2024-06-01' });
     expect(component.form.valid).toBeTrue();
   });
 
@@ -93,10 +93,10 @@ describe('OperationFormComponent', () => {
     fixture.detectChanges();
     component.form.patchValue({
       clientId: '1', transportMode: TransportMode.MARITIME,
-      operationCategory: OperationCategory.CATEGORY_1, containerNumber: 'CONT-001', blNumber: 'BL-001', blAvailability: 'ORIGINAL', notes: ''
+      operationCategory: OperationCategory.CATEGORY_1, containerNumber: 'CONT-001', blNumber: 'BL-001', blAvailability: 'ORIGINAL', estimatedArrival: '2024-06-01', notes: ''
     });
     component.onSubmit();
     expect(operationServiceSpy.create).toHaveBeenCalled();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/operations', 10]);
+    expect(router.navigate).toHaveBeenCalledWith(['/operations', 10]);
   });
 });

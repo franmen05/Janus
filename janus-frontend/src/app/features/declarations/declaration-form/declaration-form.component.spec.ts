@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { DeclarationFormComponent } from './declaration-form.component';
 import { DeclarationService } from '../../../core/services/declaration.service';
@@ -11,7 +11,7 @@ describe('DeclarationFormComponent', () => {
   let component: DeclarationFormComponent;
   let fixture: ComponentFixture<DeclarationFormComponent>;
   let declarationServiceSpy: jasmine.SpyObj<DeclarationService>;
-  let activeModalSpy: jasmine.SpyObj<NgbActiveModal>;
+  let router: Router;
 
   const mockDeclaration = {
     id: 1, operationId: 1, declarationType: DeclarationType.PRELIMINARY,
@@ -25,32 +25,47 @@ describe('DeclarationFormComponent', () => {
     rejectedBy: null, rejectedAt: null, rejectionComment: null
   };
 
-  beforeEach(async () => {
-    declarationServiceSpy = jasmine.createSpyObj('DeclarationService', ['createPreliminary', 'createFinal']);
+  function createComponent(paramMap: Record<string, string>, queryParamMap: Record<string, string> = {}) {
+    declarationServiceSpy = jasmine.createSpyObj('DeclarationService', [
+      'createPreliminary', 'createFinal', 'updateDeclaration', 'getDeclaration'
+    ]);
     declarationServiceSpy.createPreliminary.and.returnValue(of(mockDeclaration));
     declarationServiceSpy.createFinal.and.returnValue(of(mockDeclaration));
-    activeModalSpy = jasmine.createSpyObj('NgbActiveModal', ['close', 'dismiss']);
+    declarationServiceSpy.updateDeclaration.and.returnValue(of(mockDeclaration));
+    declarationServiceSpy.getDeclaration.and.returnValue(of(mockDeclaration));
 
-    await TestBed.configureTestingModule({
-      imports: [DeclarationFormComponent, ReactiveFormsModule, TranslateModule.forRoot()],
+    TestBed.configureTestingModule({
+      imports: [DeclarationFormComponent, ReactiveFormsModule, RouterModule.forRoot([]), TranslateModule.forRoot()],
       providers: [
         { provide: DeclarationService, useValue: declarationServiceSpy },
-        { provide: NgbActiveModal, useValue: activeModalSpy }
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: { get: (key: string) => paramMap[key] ?? null },
+              queryParamMap: { get: (key: string) => queryParamMap[key] ?? null }
+            }
+          }
+        }
       ]
-    }).compileComponents();
+    });
+
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
 
     fixture = TestBed.createComponent(DeclarationFormComponent);
     component = fixture.componentInstance;
-    component.operationId = 1;
-    component.declarationType = 'PRELIMINARY';
     fixture.detectChanges();
-  });
+  }
 
-  it('should create', () => {
+  it('should create in preliminary mode', () => {
+    createComponent({ operationId: '1' }, { type: 'PRELIMINARY' });
     expect(component).toBeTruthy();
+    expect(component.isEdit()).toBeFalse();
   });
 
   it('should submit preliminary declaration', () => {
+    createComponent({ operationId: '1' }, { type: 'PRELIMINARY' });
     component.form.patchValue({
       declarationNumber: 'DECL-001', fobValue: 1000, cifValue: 1200,
       taxableBase: 1200, totalTaxes: 180, freightValue: 150, insuranceValue: 50,
@@ -58,10 +73,11 @@ describe('DeclarationFormComponent', () => {
     });
     component.onSubmit();
     expect(declarationServiceSpy.createPreliminary).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalled();
   });
 
   it('should submit final declaration', () => {
-    component.declarationType = 'FINAL';
+    createComponent({ operationId: '1' }, { type: 'FINAL' });
     component.form.patchValue({
       declarationNumber: 'DECL-002', fobValue: 1000, cifValue: 1200,
       taxableBase: 1200, totalTaxes: 180, freightValue: 150, insuranceValue: 50,
@@ -72,7 +88,14 @@ describe('DeclarationFormComponent', () => {
   });
 
   it('should not submit invalid form', () => {
+    createComponent({ operationId: '1' }, { type: 'PRELIMINARY' });
     component.onSubmit();
     expect(declarationServiceSpy.createPreliminary).not.toHaveBeenCalled();
+  });
+
+  it('should load declaration in edit mode', () => {
+    createComponent({ operationId: '1', declarationId: '1' });
+    expect(component.isEdit()).toBeTrue();
+    expect(declarationServiceSpy.getDeclaration).toHaveBeenCalledWith(1, 1);
   });
 });

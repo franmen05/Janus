@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { FileUploadComponent } from './file-upload.component';
+import { ToastService } from '../../../core/services/toast.service';
 
 describe('FileUploadComponent', () => {
   let component: FileUploadComponent;
@@ -35,7 +36,8 @@ describe('FileUploadComponent', () => {
   });
 
   it('should reject file exceeding maxSize', () => {
-    spyOn(window, 'alert');
+    const toastService = TestBed.inject(ToastService);
+    spyOn(toastService, 'warning');
     spyOn(component.fileSelected, 'emit');
 
     const largeContent = new Array(10485761).fill('a').join('');
@@ -43,7 +45,7 @@ describe('FileUploadComponent', () => {
 
     component.selectFile(largeFile);
 
-    expect(window.alert).toHaveBeenCalled();
+    expect(toastService.warning).toHaveBeenCalled();
     expect(component.selectedFile).toBeNull();
     expect(component.fileSelected.emit).not.toHaveBeenCalled();
   });

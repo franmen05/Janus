@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, convertToParamMap, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { OperationDetailComponent } from './operation-detail.component';
@@ -51,11 +50,12 @@ describe('OperationDetailComponent', () => {
     const complianceServiceSpy = jasmine.createSpyObj('ComplianceService', ['validate']);
     complianceServiceSpy.validate.and.returnValue(of({ valid: true, errors: [] }));
 
-    const declarationServiceSpy = jasmine.createSpyObj('DeclarationService', ['getDeclarations', 'approveTechnical', 'approveFinal', 'reject']);
+    const declarationServiceSpy = jasmine.createSpyObj('DeclarationService', ['getDeclarations', 'getCrossing', 'approveTechnical', 'approveFinal', 'reject']);
     declarationServiceSpy.getDeclarations.and.returnValue(of([]));
+    declarationServiceSpy.getCrossing.and.returnValue(of(null));
 
     await TestBed.configureTestingModule({
-      imports: [OperationDetailComponent, RouterTestingModule, TranslateModule.forRoot()],
+      imports: [OperationDetailComponent, RouterModule.forRoot([]), TranslateModule.forRoot()],
       providers: [
         { provide: OperationService, useValue: operationServiceSpy },
         { provide: AuditService, useValue: auditServiceSpy },

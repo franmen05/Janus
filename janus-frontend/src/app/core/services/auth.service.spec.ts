@@ -4,6 +4,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 import { provideRouter, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from './auth.service';
+import { ToastService } from './toast.service';
 import { User } from '../models/user.model';
 import { environment } from '../../../environments/environment';
 
@@ -84,8 +85,9 @@ describe('AuthService', () => {
       expect(localStorage.getItem('janus_user')).toBe(JSON.stringify(mockUser));
     });
 
-    it('should clear credentials and alert on error', () => {
-      spyOn(window, 'alert');
+    it('should clear credentials and show toast on error', () => {
+      const toastService = TestBed.inject(ToastService);
+      spyOn(toastService, 'error');
 
       service.login('admin', 'wrongpassword');
 
@@ -94,7 +96,7 @@ describe('AuthService', () => {
 
       expect(service.isAuthenticated()).toBeFalse();
       expect(service.getAuthHeader()).toBeNull();
-      expect(window.alert).toHaveBeenCalledWith('AUTH.INVALID_CREDENTIALS');
+      expect(toastService.error).toHaveBeenCalledWith('AUTH.INVALID_CREDENTIALS');
     });
   });
 

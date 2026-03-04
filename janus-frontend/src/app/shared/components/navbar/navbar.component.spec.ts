@@ -55,7 +55,7 @@ describe('NavbarComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const logoutButton = compiled.querySelector('button.btn-outline-light');
+    const logoutButton = compiled.querySelector('button.btn-outline-secondary');
     expect(logoutButton).toBeTruthy();
   });
 
