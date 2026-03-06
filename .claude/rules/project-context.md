@@ -75,9 +75,9 @@ Janus/
 │   ├── angular.json
 │   ├── package.json
 │   └── tsconfig.json
-├── requerimientos/             # Requirements documentation
-│   ├── rq.md                   # Requirements
-│   └── user-story.md           # User stories
+├── docs/                       # Documentation
+│   ├── requerimientos/         # Requirements and user stories
+│   └── plan/                   # Implementation plans
 ├── .claude/                    # Claude Code configuration
 │   └── rules/                  # Project rules
 │       ├── skill-routing.md
@@ -102,7 +102,7 @@ Janus/
 
 ### Next Steps
 **Backend:**
-- Define complete requirements in `requerimientos/`
+- Define complete requirements in `docs/requerimientos/`
 - Design domain model and database schema
 - Implement business logic and services
 - Add database persistence (H2 dev, PostgreSQL prod)
@@ -348,7 +348,7 @@ com.janus
 
 - **Quarkus Guides**: https://quarkus.io/guides/
 - **Quarkus Dev UI**: http://localhost:8080/q/dev/ (dev mode only)
-- **Project Requirements**: See `requerimientos/` directory
+- **Project Requirements**: See `docs/requerimientos/` directory
 
 ---
 

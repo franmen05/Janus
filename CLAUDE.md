@@ -6,7 +6,7 @@
 
 - **janus-backend/** — Quarkus 3.27.2 REST API (Java 21, Gradle)
 - **janus-frontend/** — Angular 20 + Bootstrap 5 (TypeScript)
-- **requerimientos/** — Requirements and user stories
+- **docs/** — Documentation (requirements, plans, user stories)
 
 | Area | Dev | Test | URL |
 |------|-----|------|-----|
