@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": "./gradlew",
+      "runtimeArgs": ["quarkusDev"],
+      "port": 8080,
+      "cwd": "janus-backend"
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["ng", "serve", "--port", "4200"],
+      "port": 4200,
+      "cwd": "janus-frontend"
+    }
+  ]
+}

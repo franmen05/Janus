@@ -17,7 +17,7 @@ describe('LanguageService', () => {
 
     translateService = TestBed.inject(TranslateService);
     spyOn(translateService, 'addLangs').and.callThrough();
-    spyOn(translateService, 'setDefaultLang').and.callThrough();
+    spyOn(translateService, 'setFallbackLang').and.callThrough();
     getBrowserLangSpy = spyOn(translateService, 'getBrowserLang').and.returnValue('en');
     spyOn(translateService, 'use').and.callThrough();
 
@@ -37,7 +37,7 @@ describe('LanguageService', () => {
       service.init();
 
       expect(translateService.addLangs).toHaveBeenCalledWith(['es', 'en']);
-      expect(translateService.setDefaultLang).toHaveBeenCalledWith('es');
+      expect(translateService.setFallbackLang).toHaveBeenCalledWith('es');
     });
 
     it('should use stored language from localStorage', () => {

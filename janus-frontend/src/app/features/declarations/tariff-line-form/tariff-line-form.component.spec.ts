@@ -16,7 +16,10 @@ describe('TariffLineFormComponent', () => {
     declarationServiceSpy.addTariffLine.and.returnValue(of({
       id: 1, declarationId: 1, lineNumber: 1, tariffCode: '8471.30',
       description: 'Test', quantity: 10, unitValue: 100, totalValue: 1000,
-      taxRate: 15, taxAmount: 150
+      taxRate: 15, taxAmount: 150,
+      dutyRate: null, dutyAmount: null, itbisRate: null, itbisAmount: null,
+      selectiveRate: null, selectiveAmount: null, surchargeRate: null, surchargeAmount: null,
+      adminFee: null
     }));
 
     await TestBed.configureTestingModule({

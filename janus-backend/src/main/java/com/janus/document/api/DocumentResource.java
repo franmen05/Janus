@@ -83,6 +83,12 @@ public class DocumentResource {
                            @RestForm("documentType") DocumentType documentType,
                            @RestForm("changeReason") String changeReason,
                            @Context SecurityContext sec) {
+        // CARRIER can only upload RECEPTION_RECEIPT
+        if (sec.isUserInRole("CARRIER") && documentType != DocumentType.RECEPTION_RECEIPT) {
+            throw new com.janus.shared.infrastructure.exception.BusinessException(
+                    "CARRIER_DOCUMENT_RESTRICTED",
+                    "CARRIER role can only upload RECEPTION_RECEIPT documents");
+        }
         try {
             var inputStream = Files.newInputStream(file.uploadedFile());
             var doc = documentService.upload(

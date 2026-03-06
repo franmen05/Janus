@@ -48,5 +48,8 @@ public class InspectionExpense extends BaseEntity {
     public PaymentStatus paymentStatus = PaymentStatus.PENDING;
 
     @Column(nullable = false)
+    public boolean reimbursable = true;
+
+    @Column(nullable = false)
     public boolean active = true;
 }

@@ -14,5 +14,6 @@ public record CreateExpenseRequest(
         LocalDate expenseDate,
         String justification,
         String responsable,
-        PaymentStatus paymentStatus
+        PaymentStatus paymentStatus,
+        Boolean reimbursable
 ) {}

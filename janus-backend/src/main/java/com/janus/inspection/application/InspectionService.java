@@ -184,6 +184,7 @@ public class InspectionService {
         expense.justification = request.justification();
         expense.responsable = request.responsable();
         expense.paymentStatus = request.paymentStatus() != null ? request.paymentStatus() : PaymentStatus.PENDING;
+        expense.reimbursable = request.reimbursable() != null ? request.reimbursable() : true;
 
         userRepository.findByUsername(username).ifPresent(u -> expense.registeredBy = u);
 
@@ -228,6 +229,7 @@ public class InspectionService {
         expense.justification = request.justification();
         expense.responsable = request.responsable();
         expense.paymentStatus = request.paymentStatus() != null ? request.paymentStatus() : expense.paymentStatus;
+        expense.reimbursable = request.reimbursable() != null ? request.reimbursable() : expense.reimbursable;
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "InspectionExpense", expense.id, operationId,

@@ -18,6 +18,7 @@ public record InspectionExpenseResponse(
         String justification,
         String responsable,
         String paymentStatus,
+        boolean reimbursable,
         LocalDateTime createdAt
 ) {
     public static InspectionExpenseResponse from(InspectionExpense expense) {
@@ -34,6 +35,7 @@ public record InspectionExpenseResponse(
                 expense.justification,
                 expense.responsable,
                 expense.paymentStatus != null ? expense.paymentStatus.name() : null,
+                expense.reimbursable,
                 expense.createdAt
         );
     }

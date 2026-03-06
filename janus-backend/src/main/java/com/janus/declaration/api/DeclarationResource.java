@@ -276,6 +276,15 @@ public class DeclarationResource {
         t.totalValue = r.totalValue();
         t.taxRate = r.taxRate();
         t.taxAmount = r.taxAmount();
+        t.dutyRate = r.dutyRate();
+        t.dutyAmount = r.dutyAmount();
+        t.itbisRate = r.itbisRate();
+        t.itbisAmount = r.itbisAmount();
+        t.selectiveRate = r.selectiveRate();
+        t.selectiveAmount = r.selectiveAmount();
+        t.surchargeRate = r.surchargeRate();
+        t.surchargeAmount = r.surchargeAmount();
+        t.adminFee = r.adminFee();
         return t;
     }
 }

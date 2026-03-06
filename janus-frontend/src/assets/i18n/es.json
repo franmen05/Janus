@@ -166,6 +166,7 @@
     "AUDIT": "Auditoría",
     "INSPECTION": "Inspección",
     "VALUATION": "Valoración",
+    "PAYMENT": "Pago",
     "RECEPTION": "Recepción"
   },
   "STATUS": {
@@ -246,6 +247,9 @@
     "PERMIT_CERTIFICATE": "Certificado de Permiso",
     "LOCAL_CHARGES_RECEIPT": "Recibo de Cargos Locales",
     "RECEPTION_RECEIPT": "Comprobante de Recepción",
+    "LIQUIDATION_DOCUMENT": "Documento de Liquidación",
+    "PAYMENT_RECEIPT": "Comprobante de Pago",
+    "AGENCY_INVOICE": "Factura de Agencia",
     "OTHER": "Otro"
   },
   "CARGO_TYPES": {
@@ -514,7 +518,13 @@
     "RESPONSIBLE": "Responsable",
     "PAYMENT_STATUS": "Estado de Pago",
     "PAYMENT_PENDING": "Pendiente",
-    "PAYMENT_PAID": "Pagado"
+    "PAYMENT_PAID": "Pagado",
+    "CATEGORY_STORAGE": "Almacenaje",
+    "CATEGORY_DEMURRAGE": "Demora",
+    "CATEGORY_FREIGHT": "Flete",
+    "CATEGORY_LOCAL_CHARGES": "Cargos Locales",
+    "REIMBURSABLE": "Reembolsable",
+    "NOT_REIMBURSABLE": "No Reembolsable"
   },
   "PERMIT_TYPES": {
     "VUCE": "VUCE",
@@ -682,7 +692,12 @@
     "proceedToDeclaration": "Proceder a Declaración",
     "noDeclarationsYet": "No hay declaraciones registradas aún.",
     "createDeclarationPrompt": "Ir a la pestaña Declaraciones para crear una.",
-    "declarationInProgress": "Declaración en proceso. El ADMIN o el CLIENTE pueden aprobar la declaración final."
+    "declarationInProgress": "Declaración en proceso. El ADMIN o el CLIENTE pueden aprobar la declaración final.",
+    "advancePanel": "Avanzar Operación",
+    "advanceDescription": {
+      "DRAFT": "Esta operación está en estado Borrador. Avance para continuar el proceso.",
+      "DOCUMENTATION_COMPLETE": "La documentación está completa. Avance a Revisión Interna."
+    }
   },
   "approval": {
     "copyLink": "Copiar Enlace",
@@ -706,6 +721,61 @@
     "MISSING_CRITICAL_DOCUMENT": "Documento Crítico Faltante",
     "BL_UNAVAILABLE": "BL No Disponible"
   },
+  "PAYMENT": {
+    "TITLE": "Liquidación y Pago",
+    "GENERATE": "Generar Liquidación",
+    "REGENERATE": "Regenerar Liquidación",
+    "NO_LIQUIDATION": "No se ha generado liquidación aún. Genere una a partir de la declaración final.",
+    "AGENCY_FEE": "Tarifa de Servicios de Agencia",
+    "AGENCY_FEE_PLACEHOLDER": "Ingrese tarifa de agencia (opcional)",
+    "CUSTOMS_TAXES": "Impuestos Aduaneros",
+    "THIRD_PARTY": "Gastos a Terceros",
+    "AGENCY_SERVICES": "Servicios de Agencia",
+    "GRAND_TOTAL": "Total General",
+    "LINES_TITLE": "Desglose de Liquidación",
+    "CONCEPT": "Concepto",
+    "DESCRIPTION": "Descripción",
+    "AMOUNT": "Monto",
+    "TYPE": "Tipo",
+    "REIMBURSABLE": "Reembolsable",
+    "OWN_SERVICE": "Servicio Propio",
+    "APPROVE": "Aprobar Liquidación",
+    "APPROVE_CONFIRM": "¿Está seguro que desea aprobar esta liquidación?",
+    "MAKE_DEFINITIVE": "Hacer Definitiva",
+    "DGA_PAYMENT_CODE": "Código de Pago DGA",
+    "DGA_PAYMENT_CODE_PLACEHOLDER": "Ingrese código de referencia de pago DGA",
+    "REGISTER_PAYMENT": "Registrar Pago",
+    "PAYMENT_AMOUNT": "Monto del Pago",
+    "PAYMENT_METHOD": "Método de Pago",
+    "PAYMENT_DATE": "Fecha de Pago",
+    "DGA_REFERENCE": "Referencia DGA",
+    "BANK_REFERENCE": "Referencia Bancaria",
+    "NOTES": "Notas",
+    "PAYMENT_DETAILS": "Detalles del Pago",
+    "REGISTERED_BY": "Registrado por",
+    "APPROVED_BY": "Aprobado por",
+    "APPROVED_AT": "Aprobado el",
+    "STATUS_PRELIMINARY": "Preliminar",
+    "STATUS_APPROVED": "Aprobada",
+    "STATUS_DEFINITIVE": "Definitiva",
+    "STATUS_PAID": "Pagada",
+    "METHOD_BANK_TRANSFER": "Transferencia Bancaria",
+    "METHOD_CHECK": "Cheque",
+    "METHOD_CASH": "Efectivo",
+    "METHOD_ELECTRONIC": "Electrónico",
+    "CONCEPT_CUSTOMS_TAXES": "Impuestos Aduaneros",
+    "CONCEPT_STORAGE": "Almacenaje",
+    "CONCEPT_DEMURRAGE": "Demora",
+    "CONCEPT_FREIGHT": "Flete",
+    "CONCEPT_LOCAL_CHARGES": "Cargos Locales",
+    "CONCEPT_AGENCY_SERVICE": "Servicio de Agencia",
+    "CONCEPT_OTHER": "Otro",
+    "CONCEPT_LABOR": "Mano de Obra",
+    "CONCEPT_EQUIPMENT": "Equipos",
+    "CONCEPT_TRANSPORT": "Transporte",
+    "CONCEPT_SECURITY": "Seguridad",
+    "CONCEPT_OVERTIME": "Horas Extra"
+  },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "No se puede cambiar de {{from}} a {{to}}. Solo se permite el siguiente paso.",
     "CONTAINER_NUMBER_REQUIRED": "El número de contenedor es obligatorio para transporte marítimo FCL.",
@@ -721,6 +791,12 @@
     "TECHNICAL_APPROVAL_REQUIRED": "Se requiere aprobación técnica antes de la aprobación final.",
     "ALREADY_FINAL_APPROVED": "Esta declaración ya tiene aprobación final.",
     "CROSSING_NOT_APPROVED": "El cruce aduanero debe estar completado y aprobado antes de la aprobación final.",
-    "GENERIC_ERROR": "Ocurrió un error inesperado."
+    "GENERIC_ERROR": "Ocurrió un error inesperado.",
+    "LIQUIDATION_NO_FINAL_DECLARATION": "No se encontró declaración final para esta operación. Registre una declaración final primero.",
+    "LIQUIDATION_ALREADY_APPROVED": "No se puede regenerar una liquidación que ya fue aprobada.",
+    "LIQUIDATION_NOT_FOUND": "No se encontró liquidación para esta operación.",
+    "LIQUIDATION_NOT_PRELIMINARY": "Solo las liquidaciones preliminares pueden ser aprobadas.",
+    "LIQUIDATION_NOT_APPROVED": "Solo las liquidaciones aprobadas pueden hacerse definitivas.",
+    "LIQUIDATION_NOT_DEFINITIVE": "El pago solo puede registrarse para liquidaciones definitivas."
   }
 }

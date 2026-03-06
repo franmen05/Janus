@@ -13,12 +13,24 @@ public record TariffLineResponse(
         BigDecimal unitValue,
         BigDecimal totalValue,
         BigDecimal taxRate,
-        BigDecimal taxAmount
+        BigDecimal taxAmount,
+        BigDecimal dutyRate,
+        BigDecimal dutyAmount,
+        BigDecimal itbisRate,
+        BigDecimal itbisAmount,
+        BigDecimal selectiveRate,
+        BigDecimal selectiveAmount,
+        BigDecimal surchargeRate,
+        BigDecimal surchargeAmount,
+        BigDecimal adminFee
 ) {
     public static TariffLineResponse from(TariffLine t) {
         return new TariffLineResponse(
                 t.id, t.declaration.id, t.lineNumber, t.tariffCode, t.description,
-                t.quantity, t.unitValue, t.totalValue, t.taxRate, t.taxAmount
+                t.quantity, t.unitValue, t.totalValue, t.taxRate, t.taxAmount,
+                t.dutyRate, t.dutyAmount, t.itbisRate, t.itbisAmount,
+                t.selectiveRate, t.selectiveAmount, t.surchargeRate, t.surchargeAmount,
+                t.adminFee
         );
     }
 }

@@ -12,5 +12,14 @@ public record CreateTariffLineRequest(
         BigDecimal unitValue,
         BigDecimal totalValue,
         BigDecimal taxRate,
-        BigDecimal taxAmount
+        BigDecimal taxAmount,
+        BigDecimal dutyRate,
+        BigDecimal dutyAmount,
+        BigDecimal itbisRate,
+        BigDecimal itbisAmount,
+        BigDecimal selectiveRate,
+        BigDecimal selectiveAmount,
+        BigDecimal surchargeRate,
+        BigDecimal surchargeAmount,
+        BigDecimal adminFee
 ) {}

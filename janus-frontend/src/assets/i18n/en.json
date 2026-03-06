@@ -166,6 +166,7 @@
     "AUDIT": "Audit",
     "INSPECTION": "Inspection",
     "VALUATION": "Valuation",
+    "PAYMENT": "Payment",
     "RECEPTION": "Reception"
   },
   "STATUS": {
@@ -246,6 +247,9 @@
     "PERMIT_CERTIFICATE": "Permit Certificate",
     "LOCAL_CHARGES_RECEIPT": "Local Charges Receipt",
     "RECEPTION_RECEIPT": "Reception Receipt",
+    "LIQUIDATION_DOCUMENT": "Liquidation Document",
+    "PAYMENT_RECEIPT": "Payment Receipt",
+    "AGENCY_INVOICE": "Agency Invoice",
     "OTHER": "Other"
   },
   "CARGO_TYPES": {
@@ -514,7 +518,13 @@
     "RESPONSIBLE": "Responsible",
     "PAYMENT_STATUS": "Payment Status",
     "PAYMENT_PENDING": "Pending",
-    "PAYMENT_PAID": "Paid"
+    "PAYMENT_PAID": "Paid",
+    "CATEGORY_STORAGE": "Storage",
+    "CATEGORY_DEMURRAGE": "Demurrage",
+    "CATEGORY_FREIGHT": "Freight",
+    "CATEGORY_LOCAL_CHARGES": "Local Charges",
+    "REIMBURSABLE": "Reimbursable",
+    "NOT_REIMBURSABLE": "Not Reimbursable"
   },
   "PERMIT_TYPES": {
     "VUCE": "VUCE",
@@ -682,7 +692,12 @@
     "proceedToDeclaration": "Proceed to Declaration",
     "noDeclarationsYet": "No declarations registered yet.",
     "createDeclarationPrompt": "Go to Declarations tab to create one.",
-    "declarationInProgress": "Declaration is in progress. ADMIN or CLIENT can approve the final declaration."
+    "declarationInProgress": "Declaration is in progress. ADMIN or CLIENT can approve the final declaration.",
+    "advancePanel": "Advance Operation",
+    "advanceDescription": {
+      "DRAFT": "This operation is in Draft status. Advance to continue the process.",
+      "DOCUMENTATION_COMPLETE": "Documentation is complete. Advance to Internal Review."
+    }
   },
   "approval": {
     "copyLink": "Copy Link",
@@ -706,6 +721,61 @@
     "MISSING_CRITICAL_DOCUMENT": "Missing Critical Document",
     "BL_UNAVAILABLE": "BL Unavailable"
   },
+  "PAYMENT": {
+    "TITLE": "Liquidation & Payment",
+    "GENERATE": "Generate Liquidation",
+    "REGENERATE": "Regenerate Liquidation",
+    "NO_LIQUIDATION": "No liquidation generated yet. Generate one from the final declaration.",
+    "AGENCY_FEE": "Agency Service Fee",
+    "AGENCY_FEE_PLACEHOLDER": "Enter agency fee (optional)",
+    "CUSTOMS_TAXES": "Customs Taxes",
+    "THIRD_PARTY": "Third Party Expenses",
+    "AGENCY_SERVICES": "Agency Services",
+    "GRAND_TOTAL": "Grand Total",
+    "LINES_TITLE": "Liquidation Breakdown",
+    "CONCEPT": "Concept",
+    "DESCRIPTION": "Description",
+    "AMOUNT": "Amount",
+    "TYPE": "Type",
+    "REIMBURSABLE": "Reimbursable",
+    "OWN_SERVICE": "Own Service",
+    "APPROVE": "Approve Liquidation",
+    "APPROVE_CONFIRM": "Are you sure you want to approve this liquidation?",
+    "MAKE_DEFINITIVE": "Make Definitive",
+    "DGA_PAYMENT_CODE": "DGA Payment Code",
+    "DGA_PAYMENT_CODE_PLACEHOLDER": "Enter DGA payment reference code",
+    "REGISTER_PAYMENT": "Register Payment",
+    "PAYMENT_AMOUNT": "Payment Amount",
+    "PAYMENT_METHOD": "Payment Method",
+    "PAYMENT_DATE": "Payment Date",
+    "DGA_REFERENCE": "DGA Reference",
+    "BANK_REFERENCE": "Bank Reference",
+    "NOTES": "Notes",
+    "PAYMENT_DETAILS": "Payment Details",
+    "REGISTERED_BY": "Registered By",
+    "APPROVED_BY": "Approved By",
+    "APPROVED_AT": "Approved At",
+    "STATUS_PRELIMINARY": "Preliminary",
+    "STATUS_APPROVED": "Approved",
+    "STATUS_DEFINITIVE": "Definitive",
+    "STATUS_PAID": "Paid",
+    "METHOD_BANK_TRANSFER": "Bank Transfer",
+    "METHOD_CHECK": "Check",
+    "METHOD_CASH": "Cash",
+    "METHOD_ELECTRONIC": "Electronic",
+    "CONCEPT_CUSTOMS_TAXES": "Customs Taxes",
+    "CONCEPT_STORAGE": "Storage",
+    "CONCEPT_DEMURRAGE": "Demurrage",
+    "CONCEPT_FREIGHT": "Freight",
+    "CONCEPT_LOCAL_CHARGES": "Local Charges",
+    "CONCEPT_AGENCY_SERVICE": "Agency Service",
+    "CONCEPT_OTHER": "Other",
+    "CONCEPT_LABOR": "Labor",
+    "CONCEPT_EQUIPMENT": "Equipment",
+    "CONCEPT_TRANSPORT": "Transport",
+    "CONCEPT_SECURITY": "Security",
+    "CONCEPT_OVERTIME": "Overtime"
+  },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "Cannot change from {{from}} to {{to}}. Only the next step is allowed.",
     "CONTAINER_NUMBER_REQUIRED": "Container number is required for Maritime FCL transport mode.",
@@ -721,6 +791,12 @@
     "TECHNICAL_APPROVAL_REQUIRED": "Technical approval is required before final approval.",
     "ALREADY_FINAL_APPROVED": "This declaration already has final approval.",
     "CROSSING_NOT_APPROVED": "Customs crossing must be completed and approved before final approval.",
-    "GENERIC_ERROR": "An unexpected error occurred."
+    "GENERIC_ERROR": "An unexpected error occurred.",
+    "LIQUIDATION_NO_FINAL_DECLARATION": "No final declaration found for this operation. Register a final declaration first.",
+    "LIQUIDATION_ALREADY_APPROVED": "Cannot regenerate a liquidation that has already been approved.",
+    "LIQUIDATION_NOT_FOUND": "No liquidation found for this operation.",
+    "LIQUIDATION_NOT_PRELIMINARY": "Only preliminary liquidations can be approved.",
+    "LIQUIDATION_NOT_APPROVED": "Only approved liquidations can be made definitive.",
+    "LIQUIDATION_NOT_DEFINITIVE": "Payment can only be registered for definitive liquidations."
   }
 }

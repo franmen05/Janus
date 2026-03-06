@@ -49,7 +49,7 @@ export class AuthService {
     this.credentials.set(null);
     localStorage.removeItem(STORAGE_KEY_CREDENTIALS);
     localStorage.removeItem(STORAGE_KEY_USER);
-    this.router.navigate(['/login']);
+    this.router.navigateByUrl('/login');
   }
 
   getAuthHeader(): string | null {

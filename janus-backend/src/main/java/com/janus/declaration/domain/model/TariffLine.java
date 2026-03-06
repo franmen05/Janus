@@ -38,4 +38,31 @@ public class TariffLine extends PanacheEntity {
 
     @Column(name = "tax_amount", precision = 15, scale = 2)
     public BigDecimal taxAmount;
+
+    @Column(name = "duty_rate", precision = 8, scale = 4)
+    public BigDecimal dutyRate;
+
+    @Column(name = "duty_amount", precision = 15, scale = 2)
+    public BigDecimal dutyAmount;
+
+    @Column(name = "itbis_rate", precision = 8, scale = 4)
+    public BigDecimal itbisRate;
+
+    @Column(name = "itbis_amount", precision = 15, scale = 2)
+    public BigDecimal itbisAmount;
+
+    @Column(name = "selective_rate", precision = 8, scale = 4)
+    public BigDecimal selectiveRate;
+
+    @Column(name = "selective_amount", precision = 15, scale = 2)
+    public BigDecimal selectiveAmount;
+
+    @Column(name = "surcharge_rate", precision = 8, scale = 4)
+    public BigDecimal surchargeRate;
+
+    @Column(name = "surcharge_amount", precision = 15, scale = 2)
+    public BigDecimal surchargeAmount;
+
+    @Column(name = "admin_fee", precision = 15, scale = 2)
+    public BigDecimal adminFee;
 }

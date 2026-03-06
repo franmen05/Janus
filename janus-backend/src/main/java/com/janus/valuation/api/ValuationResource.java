@@ -118,6 +118,15 @@ public class ValuationResource {
 
     // ── Local charges ──
 
+    @POST
+    @Path("/validate-local-charges")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public OperationResponse validateLocalCharges(@PathParam("operationId") Long operationId,
+                                                   @Context SecurityContext sec) {
+        var op = valuationService.toggleLocalChargesValidated(operationId, true, sec.getUserPrincipal().getName());
+        return OperationResponse.from(op);
+    }
+
     @PATCH
     @Path("/local-charges-validated")
     @RolesAllowed({"ADMIN", "AGENT"})

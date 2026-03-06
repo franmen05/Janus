@@ -12,7 +12,7 @@ export class LanguageService {
 
   init(): void {
     this.translate.addLangs(['es', 'en']);
-    this.translate.setDefaultLang('es');
+    this.translate.setFallbackLang('es');
 
     const stored = localStorage.getItem('janus-lang');
     const browserLang = this.translate.getBrowserLang();

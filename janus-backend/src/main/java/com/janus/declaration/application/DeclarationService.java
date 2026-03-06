@@ -89,7 +89,14 @@ public class DeclarationService {
 
         declaration.operation = operation;
         declaration.declarationType = type;
+
+        // Auto-calculate CIF value if fob/freight/insurance are provided
+        var fob = declaration.fobValue != null ? declaration.fobValue : BigDecimal.ZERO;
+        var freight = declaration.freightValue != null ? declaration.freightValue : BigDecimal.ZERO;
+        var insurance = declaration.insuranceValue != null ? declaration.insuranceValue : BigDecimal.ZERO;
+        declaration.cifValue = fob.add(freight).add(insurance);
         declaration.taxableBase = declaration.cifValue;
+
         declaration.submittedAt = LocalDateTime.now();
 
         // Inherit technical approval from approved PRELIMINARY declaration
@@ -160,6 +167,10 @@ public class DeclarationService {
         var declaration = findById(operationId, declarationId);
         enforceEditable(declaration);
         line.declaration = declaration;
+
+        // Auto-calculate tariff line amounts if not provided
+        calculateTariffLineAmounts(line);
+
         tariffLineRepository.persist(line);
 
         invalidateCrossingIfFinal(declaration, operationId);
@@ -257,6 +268,27 @@ public class DeclarationService {
         return crossingDiscrepancyRepository.findByCrossingResultId(crossingResultId);
     }
 
+    private void calculateTariffLineAmounts(TariffLine line) {
+        var quantity = line.quantity != null ? line.quantity : BigDecimal.ZERO;
+        var unitValue = line.unitValue != null ? line.unitValue : BigDecimal.ZERO;
+
+        if (line.totalValue == null) {
+            line.totalValue = quantity.multiply(unitValue).setScale(2, java.math.RoundingMode.HALF_UP);
+        }
+
+        var totalValue = line.totalValue;
+
+        if (line.dutyAmount == null && line.dutyRate != null) {
+            line.dutyAmount = totalValue.multiply(line.dutyRate)
+                    .divide(new BigDecimal("100"), 2, java.math.RoundingMode.HALF_UP);
+        }
+
+        if (line.taxAmount == null && line.taxRate != null) {
+            line.taxAmount = totalValue.multiply(line.taxRate)
+                    .divide(new BigDecimal("100"), 2, java.math.RoundingMode.HALF_UP);
+        }
+    }
+
     private void enforceEditable(Declaration declaration) {
         var status = declaration.operation.status;
         if (!DECLARATION_EDITABLE_STATUSES.contains(status)) {
@@ -295,7 +327,7 @@ public class DeclarationService {
     @Transactional
     public Declaration registerDua(Long operationId, Long declarationId, String duaNumber, String username) {
         var declaration = findById(operationId, declarationId);
-        declaration.declarationNumber = duaNumber;
+        declaration.duaNumber = duaNumber;
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "Declaration", declarationId, operationId,

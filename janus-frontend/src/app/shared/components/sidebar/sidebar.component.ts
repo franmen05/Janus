@@ -82,7 +82,7 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
             <span class="badge bg-primary bg-opacity-25 text-white small">{{ authService.user()?.role }}</span>
           </div>
         </div>
-        <button class="btn btn-outline-secondary btn-sm w-100" (click)="authService.logout()">
+        <button type="button" class="btn btn-outline-secondary btn-sm w-100" (click)="onLogout()">
           <i class="bi bi-box-arrow-right me-1"></i>{{ 'NAV.LOGOUT' | translate }}
         </button>
       </div>
@@ -91,4 +91,8 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
 })
 export class SidebarComponent {
   authService = inject(AuthService);
+
+  onLogout(): void {
+    this.authService.logout();
+  }
 }

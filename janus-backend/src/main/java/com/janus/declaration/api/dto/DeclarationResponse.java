@@ -10,6 +10,7 @@ public record DeclarationResponse(
         Long operationId,
         DeclarationType declarationType,
         String declarationNumber,
+        String duaNumber,
         BigDecimal fobValue,
         BigDecimal cifValue,
         BigDecimal taxableBase,
@@ -39,7 +40,7 @@ public record DeclarationResponse(
 ) {
     public static DeclarationResponse from(Declaration d) {
         return new DeclarationResponse(
-                d.id, d.operation.id, d.declarationType, d.declarationNumber,
+                d.id, d.operation.id, d.declarationType, d.declarationNumber, d.duaNumber,
                 d.fobValue, d.cifValue, d.taxableBase, d.totalTaxes,
                 d.freightValue, d.insuranceValue, d.gattMethod,
                 d.gattCommercialLinks, d.gattCommissions, d.gattUnrecordedTransport,

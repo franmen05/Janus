@@ -1,5 +1,6 @@
 package com.janus.inspection.domain.model;
 
 public enum ExpenseCategory {
-    LABOR, EQUIPMENT, TRANSPORT, SECURITY, OVERTIME, OTHER
+    LABOR, EQUIPMENT, TRANSPORT, SECURITY, OVERTIME, OTHER,
+    STORAGE, DEMURRAGE, FREIGHT, LOCAL_CHARGES
 }

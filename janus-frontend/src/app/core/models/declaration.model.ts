@@ -79,6 +79,15 @@ export interface TariffLine {
   totalValue: number;
   taxRate: number;
   taxAmount: number;
+  dutyRate: number | null;
+  dutyAmount: number | null;
+  itbisRate: number | null;
+  itbisAmount: number | null;
+  selectiveRate: number | null;
+  selectiveAmount: number | null;
+  surchargeRate: number | null;
+  surchargeAmount: number | null;
+  adminFee: number | null;
 }
 
 export interface CreateTariffLineRequest {
@@ -90,6 +99,11 @@ export interface CreateTariffLineRequest {
   totalValue: number;
   taxRate: number;
   taxAmount: number;
+  dutyRate?: number;
+  itbisRate?: number;
+  selectiveRate?: number;
+  surchargeRate?: number;
+  adminFee?: number;
 }
 
 export interface CrossingResult {

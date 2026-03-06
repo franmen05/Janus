@@ -12,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
-    importProvidersFrom(TranslateModule.forRoot({ defaultLanguage: 'es' })),
+    importProvidersFrom(TranslateModule.forRoot()),
     provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' })
   ]
 };

@@ -18,7 +18,7 @@ export interface SetInspectionTypeRequest {
   comment?: string;
 }
 
-export type ExpenseCategory = 'LABOR' | 'EQUIPMENT' | 'TRANSPORT' | 'SECURITY' | 'OVERTIME' | 'OTHER';
+export type ExpenseCategory = 'LABOR' | 'EQUIPMENT' | 'TRANSPORT' | 'SECURITY' | 'OVERTIME' | 'OTHER' | 'STORAGE' | 'DEMURRAGE' | 'FREIGHT' | 'LOCAL_CHARGES';
 
 export interface InspectionExpense {
   id: number;
@@ -32,6 +32,7 @@ export interface InspectionExpense {
   expenseDate: string;
   responsable: string | null;
   justification: string | null;
+  reimbursable: boolean;
   paymentStatus: string;
   createdAt: string;
 }
@@ -49,5 +50,6 @@ export interface CreateExpenseRequest {
   expenseDate?: string;
   responsable?: string;
   justification?: string;
+  reimbursable?: boolean;
   paymentStatus?: string;
 }
