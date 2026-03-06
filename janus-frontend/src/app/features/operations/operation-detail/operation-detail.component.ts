@@ -26,10 +26,13 @@ import { CrossingResultComponent } from '../../declarations/crossing-result/cros
 import { OperationAlertsComponent } from '../../alerts/operation-alerts/operation-alerts.component';
 import { InspectionPanelComponent } from '../inspection-panel/inspection-panel.component';
 import { ValuationPanelComponent } from '../valuation-panel/valuation-panel.component';
+import { PaymentPanelComponent } from '../payment-panel/payment-panel.component';
+const PRE_REVIEW_STATUSES = ['DRAFT', 'DOCUMENTATION_COMPLETE'];
 const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS'];
 const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
+const PAYMENT_VISIBLE_STATUSES = ['PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
 
 @Component({
@@ -41,7 +44,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
     OperationStatusComponent, DocumentListComponent, StatusLabelPipe,
     OperationCommentsComponent,
     DeclarationListComponent, CrossingResultComponent, OperationAlertsComponent,
-    InspectionPanelComponent, ValuationPanelComponent, FileUploadComponent
+    InspectionPanelComponent, ValuationPanelComponent, PaymentPanelComponent, FileUploadComponent
   ],
   template: `
     @if (operation()) {
@@ -72,6 +75,24 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
               <li [innerHTML]="err"></li>
             }
           </ul>
+        </div>
+      }
+
+      @if (isPreReviewStatus() && authService.hasRole(['ADMIN', 'AGENT'])) {
+        <div class="card mb-3 border-primary">
+          <div class="card-header bg-primary bg-opacity-10">
+            <h6 class="mb-0">{{ 'review.advancePanel' | translate }}</h6>
+          </div>
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3">
+              <p class="text-muted mb-0 flex-grow-1">{{ 'review.advanceDescription.' + operation()!.status | translate }}</p>
+              @for (transition of allowedTransitions(); track transition) {
+                <button class="btn btn-sm btn-primary" (click)="changeToStatus(transition)">
+                  <i class="bi bi-arrow-right-circle me-1"></i>{{ 'STATUS.' + transition | translate }}
+                </button>
+              }
+            </div>
+          </div>
         </div>
       }
 
@@ -296,6 +317,16 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
             </ng-template>
           </li>
         }
+        @if (isPaymentVisible()) {
+          <li [ngbNavItem]="'payment'">
+            <button ngbNavLink>{{ 'TABS.PAYMENT' | translate }}</button>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <app-payment-panel [operationId]="operation()!.id" [operation]="operation()" (changed)="reload()" />
+              </div>
+            </ng-template>
+          </li>
+        }
         @if (isReceptionVisible()) {
           <li [ngbNavItem]="'reception'">
             <button ngbNavLink>{{ 'TABS.RECEPTION' | translate }}</button>
@@ -435,7 +466,13 @@ export class OperationDetailComponent implements OnInit {
   declarations = signal<Declaration[]>([]);
   crossingResult = signal<CrossingResult | null>(null);
   statusChangeErrors = signal<string[]>([]);
+  allowedTransitions = signal<string[]>([]);
   activeTab = 'info';
+
+  isPreReviewStatus = computed(() => {
+    const op = this.operation();
+    return op !== null && PRE_REVIEW_STATUSES.includes(op.status);
+  });
 
   isInReviewStatus = computed(() => {
     const op = this.operation();
@@ -456,6 +493,11 @@ export class OperationDetailComponent implements OnInit {
   isCrossingVisible = computed(() => {
     const op = this.operation();
     return op !== null && CROSSING_VISIBLE_STATUSES.includes(op.status);
+  });
+
+  isPaymentVisible = computed(() => {
+    const op = this.operation();
+    return op !== null && PAYMENT_VISIBLE_STATUSES.includes(op.status);
   });
 
   isReceptionVisible = computed(() => {
@@ -510,6 +552,10 @@ export class OperationDetailComponent implements OnInit {
     this.documentService.getByOperation(id).subscribe(docs => this.documents.set(docs));
     this.declarationService.getDeclarations(id).subscribe(decls => this.declarations.set(decls));
     this.declarationService.getCrossing(id).subscribe(c => this.crossingResult.set(c));
+    this.operationService.getAllowedTransitions(id).subscribe({
+      next: (transitions) => this.allowedTransitions.set(transitions),
+      error: () => this.allowedTransitions.set([])
+    });
   }
 
   getReviewDescription(): string {
