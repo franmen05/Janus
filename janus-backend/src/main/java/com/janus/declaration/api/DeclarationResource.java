@@ -49,7 +49,7 @@ public class DeclarationResource {
     @Path("/preliminary")
     @RolesAllowed({"ADMIN", "AGENT"})
     public Response registerPreliminary(@PathParam("operationId") Long operationId,
-                                         CreateDeclarationRequest request,
+                                         @Valid CreateDeclarationRequest request,
                                          @Context SecurityContext sec) {
         var decl = toDeclaration(request);
         var result = declarationService.registerPreliminary(operationId, decl, sec.getUserPrincipal().getName());
@@ -60,7 +60,7 @@ public class DeclarationResource {
     @Path("/final")
     @RolesAllowed({"ADMIN", "AGENT"})
     public Response registerFinal(@PathParam("operationId") Long operationId,
-                                   CreateDeclarationRequest request,
+                                   @Valid CreateDeclarationRequest request,
                                    @Context SecurityContext sec) {
         var decl = toDeclaration(request);
         var result = declarationService.registerFinal(operationId, decl, sec.getUserPrincipal().getName());
@@ -92,7 +92,7 @@ public class DeclarationResource {
     @RolesAllowed({"ADMIN", "AGENT"})
     public DeclarationResponse update(@PathParam("operationId") Long operationId,
                                        @PathParam("id") Long declarationId,
-                                       CreateDeclarationRequest request,
+                                       @Valid CreateDeclarationRequest request,
                                        @Context SecurityContext sec) {
         var decl = toDeclaration(request);
         var result = declarationService.updateDeclaration(operationId, declarationId, decl, sec.getUserPrincipal().getName());

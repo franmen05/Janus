@@ -407,7 +407,8 @@
     "TARIFF_LINE_MISSING": "Partida Arancelaria Faltante",
     "TARIFF_LINE_QUANTITY": "Cantidad de Partida Arancelaria",
     "TARIFF_LINE_VALUE": "Valor de Partida Arancelaria",
-    "TARIFF_LINE_TAX": "Impuesto de Partida Arancelaria"
+    "TARIFF_LINE_TAX": "Impuesto de Partida Arancelaria",
+    "FOB_VALUE_MIN": "El valor FOB debe ser mayor a 0"
   },
   "CROSSING": {
     "TITLE": "Cruce Aduanero",

@@ -407,7 +407,8 @@
     "TARIFF_LINE_MISSING": "Missing Tariff Line",
     "TARIFF_LINE_QUANTITY": "Tariff Line Quantity",
     "TARIFF_LINE_VALUE": "Tariff Line Value",
-    "TARIFF_LINE_TAX": "Tariff Line Tax"
+    "TARIFF_LINE_TAX": "Tariff Line Tax",
+    "FOB_VALUE_MIN": "FOB value must be greater than 0"
   },
   "CROSSING": {
     "TITLE": "Customs Crossing",

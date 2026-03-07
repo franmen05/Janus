@@ -26,7 +26,11 @@ import { DeclarationService } from '../../../core/services/declaration.service';
           <div class="row mb-3">
             <div class="col-6 col-md-4">
               <label class="form-label">{{ 'DECLARATIONS.FOB_VALUE' | translate }}</label>
-              <input type="number" class="form-control" formControlName="fobValue" step="0.01">
+              <input type="number" class="form-control" formControlName="fobValue" step="0.01"
+                     [class.is-invalid]="form.get('fobValue')!.invalid && form.get('fobValue')!.touched">
+              @if (form.get('fobValue')!.hasError('min') && form.get('fobValue')!.touched) {
+                <div class="invalid-feedback">{{ 'DECLARATIONS.FOB_VALUE_MIN' | translate }}</div>
+              }
             </div>
             <div class="col-6 col-md-4">
               <label class="form-label">{{ 'DECLARATIONS.FREIGHT_VALUE' | translate }}</label>
@@ -79,7 +83,7 @@ export class DeclarationFormComponent implements OnInit {
 
   form = new FormGroup({
     declarationNumber: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    fobValue: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
+    fobValue: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0.01)] }),
     cifValue: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
     taxableBase: new FormControl({ value: 0, disabled: true }, { nonNullable: true, validators: [Validators.required] }),
     totalTaxes: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
