@@ -87,7 +87,7 @@ export class DeclarationListComponent implements OnInit {
 
   private static readonly DECLARATION_EDITABLE_STATUSES = [
     'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION',
-    'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS'
+    'PRELIQUIDATION_REVIEW'
   ];
 
   canRegisterFinal(): boolean {

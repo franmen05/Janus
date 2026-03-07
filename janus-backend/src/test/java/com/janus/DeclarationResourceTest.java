@@ -157,7 +157,7 @@ class DeclarationResourceTest {
 
     @Test
     @Order(8)
-    void testAdvanceToDeclarationInProgress() {
+    void testAdvanceToPreliquidationReview() {
         // Upload mandatory documents
         uploadDocument(operationId, "BL");
         uploadDocument(operationId, "COMMERCIAL_INVOICE");
@@ -176,8 +176,6 @@ class DeclarationResourceTest {
         changeStatus(operationId, "DOCUMENTATION_COMPLETE");
         changeStatus(operationId, "IN_REVIEW");
         changeStatus(operationId, "PRELIQUIDATION_REVIEW");
-        changeStatus(operationId, "ANALYST_ASSIGNED");
-        changeStatus(operationId, "DECLARATION_IN_PROGRESS");
     }
 
     @Test
@@ -217,6 +215,9 @@ class DeclarationResourceTest {
     @Test
     @Order(11)
     void testExecuteCrossingWithDiscrepancies() {
+        changeStatus(operationId, "ANALYST_ASSIGNED");
+        changeStatus(operationId, "DECLARATION_IN_PROGRESS");
+
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)

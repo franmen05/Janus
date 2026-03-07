@@ -35,8 +35,7 @@ public class DeclarationService {
     private static final Set<OperationStatus> DECLARATION_EDITABLE_STATUSES = Set.of(
             OperationStatus.DRAFT, OperationStatus.DOCUMENTATION_COMPLETE,
             OperationStatus.IN_REVIEW, OperationStatus.PENDING_CORRECTION,
-            OperationStatus.PRELIQUIDATION_REVIEW, OperationStatus.ANALYST_ASSIGNED,
-            OperationStatus.DECLARATION_IN_PROGRESS
+            OperationStatus.PRELIQUIDATION_REVIEW
     );
 
     @Inject
