@@ -396,6 +396,14 @@ public class DeclarationService {
                 null, null, "Technical approval by " + username
         ));
 
+        // Auto-advance operation from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS
+        var operation = declaration.operation;
+        if (operation.status == OperationStatus.PRELIQUIDATION_REVIEW) {
+            operationService.changeStatus(operationId,
+                    new ChangeStatusRequest(OperationStatus.DECLARATION_IN_PROGRESS, "Auto-advanced after technical approval"),
+                    username, null);
+        }
+
         return declaration;
     }
 
