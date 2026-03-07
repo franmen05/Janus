@@ -484,7 +484,9 @@
     "NO_OPERATION_ID": "La operación debe estar guardada antes de la validación",
     "MISSING_TECHNICAL_APPROVAL": "Se requiere la aprobación técnica antes de asignar analista",
     "INCOMPLETE_DOCS": "La completitud de documentos debe ser 100% para continuar",
-    "INSPECTION_TYPE_MISSING": "El tipo de inspección debe ser establecido antes de avanzar a Revisión de Valoración"
+    "INSPECTION_TYPE_MISSING": "El tipo de inspección debe ser establecido antes de avanzar a Revisión de Valoración",
+    "INCOMPLETE_DOCS_FOR_PAYMENT": "La lista de verificación documental debe estar completa (100%) antes de avanzar a Preparación de Pago",
+    "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "La lista de verificación documental debe estar completa antes de avanzar a Preparación de Pago"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Tipo de Inspección",

@@ -484,7 +484,9 @@
     "NO_OPERATION_ID": "Operation must be persisted before validation",
     "MISSING_TECHNICAL_APPROVAL": "Technical approval is required before assigning analyst",
     "INCOMPLETE_DOCS": "Document completeness must be 100% to proceed",
-    "INSPECTION_TYPE_MISSING": "Inspection type must be set before advancing to Valuation Review"
+    "INSPECTION_TYPE_MISSING": "Inspection type must be set before advancing to Valuation Review",
+    "INCOMPLETE_DOCS_FOR_PAYMENT": "Document verification checklist must be complete (100%) before advancing to Payment Preparation",
+    "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "Document verification checklist must be complete before advancing to Payment Preparation"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Inspection Type",

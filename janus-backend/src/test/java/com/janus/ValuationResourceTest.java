@@ -122,7 +122,8 @@ class ValuationResourceTest {
                 .contentType(ContentType.JSON)
                 .body("""
                         {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
-                         "blNumber": "BL-VAL-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
+                         "blNumber": "BL-VAL-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL",
+                         "incoterm": "FOB"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)

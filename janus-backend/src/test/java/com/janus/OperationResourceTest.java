@@ -336,7 +336,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -405,7 +405,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-CLOSED", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-CLOSED", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -566,7 +566,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-RR-COMP", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
+                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-RR-COMP", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB"}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
