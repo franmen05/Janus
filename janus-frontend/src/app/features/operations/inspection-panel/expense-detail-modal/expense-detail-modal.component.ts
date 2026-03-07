@@ -5,6 +5,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InspectionService } from '../../../../core/services/inspection.service';
 import { ToastService } from '../../../../core/services/toast.service';
+import { getErrorMessage } from '../../../../core/utils/error-message.util';
 import { InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../../../core/models/inspection.model';
 
 @Component({
@@ -210,7 +211,7 @@ export class ExpenseDetailModalComponent {
           this.toastService.success(this.translate.instant('INSPECTION.EXPENSE_ADDED'));
           this.activeModal.close('created');
         },
-        error: (err) => this.toastService.error(err.error?.error || 'Error')
+        error: (err) => this.toastService.error(getErrorMessage(err, this.translate))
       });
     } else {
       this.inspectionService.updateExpense(this.operationId, this.expense!.id, request).subscribe({
@@ -218,7 +219,7 @@ export class ExpenseDetailModalComponent {
           this.toastService.success(this.translate.instant('INSPECTION.EXPENSE_UPDATED'));
           this.activeModal.close('updated');
         },
-        error: (err) => this.toastService.error(err.error?.error || 'Error')
+        error: (err) => this.toastService.error(getErrorMessage(err, this.translate))
       });
     }
   }

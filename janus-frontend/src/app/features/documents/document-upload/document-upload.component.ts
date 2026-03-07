@@ -7,6 +7,7 @@ import { DocumentService } from '../../../core/services/document.service';
 import { DocumentType, DocumentStatus } from '../../../core/models/document.model';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
 import { ToastService } from '../../../core/services/toast.service';
+import { getErrorMessage } from '../../../core/utils/error-message.util';
 
 @Component({
   selector: 'app-document-upload',
@@ -85,7 +86,7 @@ export class DocumentUploadComponent {
         }
         this.router.navigate(['/operations', operationId], { queryParams: { tab: 'documents' } });
       },
-      error: (err) => { this.uploading.set(false); this.toastService.error(err.error?.error ?? this.translate.instant('UPLOAD.FAILED')); }
+      error: (err) => { this.uploading.set(false); this.toastService.error(getErrorMessage(err, this.translate)); }
     });
   }
 

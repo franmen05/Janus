@@ -8,6 +8,7 @@ import { ToastService } from '../../../core/services/toast.service';
 import { Operation, InspectionType } from '../../../core/models/operation.model';
 import { InspectionPhoto, SetInspectionTypeRequest, InspectionExpense } from '../../../core/models/inspection.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { getErrorMessage } from '../../../core/utils/error-message.util';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-detail-modal.component';
@@ -225,7 +226,7 @@ export class InspectionPanelComponent implements OnInit {
         this.changed.emit();
         this.loadPhotos();
       },
-      error: (err) => this.toastService.error(err.error?.error || 'Error')
+      error: (err) => this.toastService.error(getErrorMessage(err, this.translate))
     });
   }
 
@@ -253,7 +254,7 @@ export class InspectionPanelComponent implements OnInit {
       },
       error: (err) => {
         this.uploading.set(false);
-        this.toastService.error(err.error?.error || 'Error');
+        this.toastService.error(getErrorMessage(err, this.translate));
       }
     });
   }
@@ -322,7 +323,7 @@ export class InspectionPanelComponent implements OnInit {
         this.loadExpenses();
         this.toastService.success(this.translate.instant('INSPECTION.EXPENSE_DELETED'));
       },
-      error: (err) => this.toastService.error(err.error?.error || 'Error')
+      error: (err) => this.toastService.error(getErrorMessage(err, this.translate))
     });
   }
 }

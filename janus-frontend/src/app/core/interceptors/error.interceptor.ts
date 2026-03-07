@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { catchError, throwError } from 'rxjs';
 import { ToastService } from '../services/toast.service';
+import { getErrorMessage } from '../utils/error-message.util';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -17,7 +18,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         localStorage.removeItem('janus_user');
         router.navigate(['/login']);
       } else if (error.status === 400 || error.status === 422) {
-        const message = error.error?.error || error.error?.message || translate.instant('TOAST.GENERIC_ERROR');
+        const message = getErrorMessage(error, translate);
         toastService.error(message);
       } else if (error.status === 403) {
         toastService.error(translate.instant('TOAST.ACCESS_DENIED'));

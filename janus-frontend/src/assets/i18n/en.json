@@ -478,7 +478,13 @@
     "GATT_FORM_INCOMPLETE": "GATT Article 1 form must be completed before advancing to Payment Preparation",
     "PERMITS_PENDING": "All external permits must be cleared before advancing to Payment Preparation",
     "LOCAL_CHARGES_NOT_VALIDATED": "Local charges receipt is uploaded but has not been validated",
-    "RECEPTION_RECEIPT_REQUIRED": "A reception receipt must be uploaded before closing the operation"
+    "RECEPTION_RECEIPT_REQUIRED": "A reception receipt must be uploaded before closing the operation",
+    "MISSING_FINAL_APPROVAL": "Final (ADMIN) approval is required before submitting to customs",
+    "NO_DECLARATION": "At least one declaration is required",
+    "NO_OPERATION_ID": "Operation must be persisted before validation",
+    "MISSING_TECHNICAL_APPROVAL": "Technical approval is required before assigning analyst",
+    "INCOMPLETE_DOCS": "Document completeness must be 100% to proceed",
+    "INSPECTION_TYPE_MISSING": "Inspection type must be set before advancing to Valuation Review"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Inspection Type",

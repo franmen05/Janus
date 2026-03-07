@@ -478,7 +478,13 @@
     "GATT_FORM_INCOMPLETE": "El formulario GATT Artículo 1 debe completarse antes de avanzar a Preparación de Pago",
     "PERMITS_PENDING": "Todos los permisos externos deben estar aprobados antes de avanzar a Preparación de Pago",
     "LOCAL_CHARGES_NOT_VALIDATED": "El recibo de cargos locales fue subido pero no ha sido validado",
-    "RECEPTION_RECEIPT_REQUIRED": "Se debe subir un comprobante de recepción antes de cerrar la operación"
+    "RECEPTION_RECEIPT_REQUIRED": "Se debe subir un comprobante de recepción antes de cerrar la operación",
+    "MISSING_FINAL_APPROVAL": "Se requiere la aprobación final (ADMIN) antes de enviar a aduanas",
+    "NO_DECLARATION": "Se requiere al menos una declaración",
+    "NO_OPERATION_ID": "La operación debe estar guardada antes de la validación",
+    "MISSING_TECHNICAL_APPROVAL": "Se requiere la aprobación técnica antes de asignar analista",
+    "INCOMPLETE_DOCS": "La completitud de documentos debe ser 100% para continuar",
+    "INSPECTION_TYPE_MISSING": "El tipo de inspección debe ser establecido antes de avanzar a Revisión de Valoración"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Tipo de Inspección",
