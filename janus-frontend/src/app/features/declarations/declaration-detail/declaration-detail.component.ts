@@ -18,7 +18,7 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
     @if (declaration()) {
       <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
         <h3>{{ 'DECLARATIONS.DETAIL_TITLE' | translate }}: {{ declaration()!.declarationNumber }}</h3>
-        <a [routerLink]="['/operations', declaration()!.operationId]" class="btn btn-outline-secondary btn-sm">{{ 'ACTIONS.CLOSE' | translate }}</a>
+        <a [routerLink]="['/operations', declaration()!.operationId]" [queryParams]="{tab: 'declarations'}" class="btn btn-outline-secondary btn-sm">{{ 'ACTIONS.CLOSE' | translate }}</a>
       </div>
       <div class="card mb-3">
         <div class="card-body">
