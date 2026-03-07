@@ -542,9 +542,19 @@ export class OperationDetailComponent implements OnInit {
     }
   }
 
+  private setDefaultTab(status: string): void {
+    if (this.route.snapshot.queryParamMap.has('tab')) return;
+    if (status === 'VALUATION_REVIEW' || status === 'PENDING_EXTERNAL_APPROVAL') {
+      this.activeTab = 'valuation';
+    }
+  }
+
   reload(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
-    this.operationService.getById(id).subscribe(op => this.operation.set(op));
+    this.operationService.getById(id).subscribe(op => {
+      this.operation.set(op);
+      this.setDefaultTab(op.status);
+    });
     this.operationService.getCompleteness(id).subscribe(c => this.completeness.set(c));
     if (this.authService.hasRole(['ADMIN'])) {
       this.auditService.getByOperation(id).subscribe(logs => this.auditLogs.set(logs));
