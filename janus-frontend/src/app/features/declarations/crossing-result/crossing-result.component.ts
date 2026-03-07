@@ -44,7 +44,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
               <tbody>
                 @for (d of crossing()!.discrepancies; track d.id) {
                   <tr>
-                    <td>{{ d.field }}</td>
+                    <td>{{ 'DECLARATIONS.' + d.field | translate }}</td>
                     <td>{{ d.tariffLineNumber ?? '-' }}</td>
                     <td>{{ d.preliminaryValue }}</td>
                     <td>{{ d.finalValue }}</td>

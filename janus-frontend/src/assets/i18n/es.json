@@ -403,7 +403,11 @@
     "DGA_SUBMISSION_CONFIRM": "¿Está seguro de que desea enviar esta declaración a la DGA?",
     "DUA_REGISTERED": "Número de DUA registrado exitosamente",
     "DGA_SUBMITTED": "Declaración enviada a la DGA exitosamente",
-    "EDIT_TITLE": "Editar Declaración"
+    "EDIT_TITLE": "Editar Declaración",
+    "TARIFF_LINE_MISSING": "Partida Arancelaria Faltante",
+    "TARIFF_LINE_QUANTITY": "Cantidad de Partida Arancelaria",
+    "TARIFF_LINE_VALUE": "Valor de Partida Arancelaria",
+    "TARIFF_LINE_TAX": "Impuesto de Partida Arancelaria"
   },
   "CROSSING": {
     "TITLE": "Cruce Aduanero",
