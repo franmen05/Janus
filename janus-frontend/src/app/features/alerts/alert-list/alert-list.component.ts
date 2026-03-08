@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '../../../core/services/alert.service';
-import { AuthService } from '../../../core/services/auth.service';
 import { Alert } from '../../../core/models/alert.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
-import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
 @Component({
   selector: 'app-alert-list',
