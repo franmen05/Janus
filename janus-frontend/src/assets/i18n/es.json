@@ -429,7 +429,7 @@
     "RESOLVED_BY": "Resuelto Por",
     "NO_CROSSING": "Sin resultado de cruce disponible. Deben registrarse ambas declaraciones (preliminar y final) primero.",
     "RESOLVE_PLACEHOLDER": "Ingrese comentario de resolución...",
-    "REQUIRED_BEFORE_APPROVAL": "Debe realizarse el cruce con la declaración preliminar antes de la aprobación final."
+    "REQUIRED_BEFORE_APPROVAL": "Debe realizarse el cruce con la declaración preliminar antes de pasar a la etapa de pago."
   },
   "ALERTS": {
     "TITLE": "Alertas",
@@ -464,7 +464,7 @@
     "RULE": "Regla",
     "MESSAGE": "Mensaje",
     "BL_NOT_VALIDATED": "El Conocimiento de Embarque (BL) debe estar VALIDADO antes de la Revisión de Valoración",
-    "CROSSING_UNRESOLVED": "Las discrepancias del cruce deben resolverse antes de la Revisión de Valoración",
+    "CROSSING_UNRESOLVED": "Las discrepancias del cruce deben resolverse antes de pasar a la etapa de pago",
     "RESTRICTED_COUNTRY": "El país de origen está restringido — se requiere revisión adicional",
     "MISSING_DOC_BL": "Documento obligatorio faltante: Conocimiento de Embarque (BL)",
     "MISSING_DOC_COMMERCIAL_INVOICE": "Documento obligatorio faltante: Factura Comercial",
@@ -486,7 +486,8 @@
     "INCOMPLETE_DOCS": "La completitud de documentos debe ser 100% para continuar",
     "INSPECTION_TYPE_MISSING": "El tipo de inspección debe ser establecido antes de avanzar a Revisión de Valoración",
     "INCOMPLETE_DOCS_FOR_PAYMENT": "La lista de verificación documental debe estar completa (100%) antes de avanzar a Preparación de Pago",
-    "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "La lista de verificación documental debe estar completa antes de avanzar a Preparación de Pago"
+    "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "La lista de verificación documental debe estar completa antes de avanzar a Preparación de Pago",
+    "DECLARATION_NUMBER_MISSING": "La declaración preliminar debe tener un número de declaración antes de avanzar a Presentado a Aduanas"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Tipo de Inspección",
@@ -706,6 +707,8 @@
     "noDeclarationsYet": "No hay declaraciones registradas aún.",
     "createDeclarationPrompt": "Ir a la pestaña Declaraciones para crear una.",
     "declarationInProgress": "Declaración en proceso. El ADMIN o el CLIENTE pueden aprobar la declaración final.",
+    "submittedToCustoms": "La declaración ha sido presentada a aduanas.",
+    "valuationReview": "Revisión de valoración en proceso.",
     "advancePanel": "Avanzar Operación",
     "advanceDescription": {
       "DRAFT": "Esta operación está en estado Borrador. Avance para continuar el proceso.",
@@ -803,13 +806,15 @@
     "ALREADY_TECHNICAL_APPROVED": "Esta declaración ya tiene aprobación técnica.",
     "TECHNICAL_APPROVAL_REQUIRED": "Se requiere aprobación técnica antes de la aprobación final.",
     "ALREADY_FINAL_APPROVED": "Esta declaración ya tiene aprobación final.",
-    "CROSSING_NOT_APPROVED": "El cruce aduanero debe estar completado y aprobado antes de la aprobación final.",
+    "CROSSING_NOT_APPROVED": "El cruce aduanero debe estar completado y aprobado antes de pasar a la etapa de pago.",
     "GENERIC_ERROR": "Ocurrió un error inesperado.",
     "LIQUIDATION_NO_FINAL_DECLARATION": "No se encontró declaración final para esta operación. Registre una declaración final primero.",
     "LIQUIDATION_ALREADY_APPROVED": "No se puede regenerar una liquidación que ya fue aprobada.",
     "LIQUIDATION_NOT_FOUND": "No se encontró liquidación para esta operación.",
     "LIQUIDATION_NOT_PRELIMINARY": "Solo las liquidaciones preliminares pueden ser aprobadas.",
     "LIQUIDATION_NOT_APPROVED": "Solo las liquidaciones aprobadas pueden hacerse definitivas.",
-    "LIQUIDATION_NOT_DEFINITIVE": "El pago solo puede registrarse para liquidaciones definitivas."
+    "LIQUIDATION_NOT_DEFINITIVE": "El pago solo puede registrarse para liquidaciones definitivas.",
+    "APPROVAL_ONLY_ON_PRELIMINARY": "Las aprobaciones solo pueden realizarse sobre la declaración de pre-liquidación",
+    "FINAL_DECLARATION_NOT_ALLOWED": "Las declaraciones finales solo pueden registrarse a partir de la etapa de Valoración"
   }
 }

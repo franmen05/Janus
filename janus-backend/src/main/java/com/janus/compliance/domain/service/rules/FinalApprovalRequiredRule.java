@@ -26,7 +26,7 @@ public class FinalApprovalRequiredRule implements ComplianceRule {
 
     @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, TransportMode transportMode, OperationCategory category) {
-        return from == OperationStatus.DECLARATION_IN_PROGRESS && to == OperationStatus.SUBMITTED_TO_CUSTOMS;
+        return to == OperationStatus.DECLARATION_IN_PROGRESS;
     }
 
     @Override

@@ -32,10 +32,19 @@ import java.util.Set;
 @ApplicationScoped
 public class DeclarationService {
 
-    private static final Set<OperationStatus> DECLARATION_EDITABLE_STATUSES = Set.of(
+    private static final Set<OperationStatus> PRELIMINARY_EDITABLE_STATUSES = Set.of(
             OperationStatus.DRAFT, OperationStatus.DOCUMENTATION_COMPLETE,
             OperationStatus.IN_REVIEW, OperationStatus.PENDING_CORRECTION,
-            OperationStatus.PRELIQUIDATION_REVIEW
+            OperationStatus.PRELIQUIDATION_REVIEW, OperationStatus.ANALYST_ASSIGNED,
+            OperationStatus.DECLARATION_IN_PROGRESS
+    );
+
+    private static final Set<OperationStatus> FINAL_EDITABLE_STATUSES = Set.of(
+            OperationStatus.DRAFT, OperationStatus.DOCUMENTATION_COMPLETE,
+            OperationStatus.IN_REVIEW, OperationStatus.PENDING_CORRECTION,
+            OperationStatus.PRELIQUIDATION_REVIEW, OperationStatus.ANALYST_ASSIGNED,
+            OperationStatus.DECLARATION_IN_PROGRESS, OperationStatus.SUBMITTED_TO_CUSTOMS,
+            OperationStatus.VALUATION_REVIEW
     );
 
     @Inject
@@ -75,6 +84,12 @@ public class DeclarationService {
 
     @Transactional
     public Declaration registerFinal(Long operationId, Declaration declaration, String username) {
+        var operation = operationService.findById(operationId);
+        if (operation.status != OperationStatus.VALUATION_REVIEW
+                && operation.status != OperationStatus.SUBMITTED_TO_CUSTOMS) {
+            throw new BusinessException("FINAL_DECLARATION_NOT_ALLOWED",
+                    "Final declarations can only be registered from VALUATION_REVIEW stage onwards");
+        }
         return registerDeclaration(operationId, declaration, DeclarationType.FINAL, username);
     }
 
@@ -290,7 +305,10 @@ public class DeclarationService {
 
     private void enforceEditable(Declaration declaration) {
         var status = declaration.operation.status;
-        if (!DECLARATION_EDITABLE_STATUSES.contains(status)) {
+        var editableStatuses = declaration.declarationType == DeclarationType.FINAL
+                ? FINAL_EDITABLE_STATUSES
+                : PRELIMINARY_EDITABLE_STATUSES;
+        if (!editableStatuses.contains(status)) {
             throw new BusinessException("DECLARATION_NOT_EDITABLE",
                     "Declarations can only be edited up to the declaration stage");
         }
@@ -378,6 +396,10 @@ public class DeclarationService {
     public Declaration approveTechnical(Long operationId, Long declarationId, String comment, String username) {
         var declaration = findById(operationId, declarationId);
 
+        if (declaration.declarationType != DeclarationType.PRELIMINARY) {
+            throw new BusinessException("APPROVAL_ONLY_ON_PRELIMINARY", "Approvals can only be performed on the pre-liquidation (preliminary) declaration");
+        }
+
         if (declaration.technicalApprovedBy != null) {
             throw new BusinessException("ALREADY_TECHNICAL_APPROVED", "Declaration already has technical approval");
         }
@@ -395,14 +417,6 @@ public class DeclarationService {
                 null, null, "Technical approval by " + username
         ));
 
-        // Auto-advance operation from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS
-        var operation = declaration.operation;
-        if (operation.status == OperationStatus.PRELIQUIDATION_REVIEW) {
-            operationService.changeStatus(operationId,
-                    new ChangeStatusRequest(OperationStatus.DECLARATION_IN_PROGRESS, "Auto-advanced after technical approval"),
-                    username, null);
-        }
-
         return declaration;
     }
 
@@ -410,16 +424,15 @@ public class DeclarationService {
     public Declaration approveFinal(Long operationId, Long declarationId, String comment, String username) {
         var declaration = findById(operationId, declarationId);
 
+        if (declaration.declarationType != DeclarationType.PRELIMINARY) {
+            throw new BusinessException("APPROVAL_ONLY_ON_PRELIMINARY", "Approvals can only be performed on the pre-liquidation (preliminary) declaration");
+        }
+
         if (declaration.technicalApprovedBy == null) {
             throw new BusinessException("TECHNICAL_APPROVAL_REQUIRED", "Technical approval is required before final approval");
         }
         if (declaration.finalApprovedBy != null) {
             throw new BusinessException("ALREADY_FINAL_APPROVED", "Declaration already has final approval");
-        }
-
-        var crossing = crossingResultRepository.findByOperationId(operationId);
-        if (crossing.isEmpty() || (crossing.get().status != CrossingStatus.MATCH && crossing.get().status != CrossingStatus.RESOLVED)) {
-            throw new BusinessException("CROSSING_NOT_APPROVED", "Customs crossing must be completed and approved before final approval");
         }
 
         declaration.finalApprovedBy = username;
@@ -434,11 +447,11 @@ public class DeclarationService {
         // Flush approval changes so compliance rules can read them
         declarationRepository.flush();
 
-        // Auto-advance operation from DECLARATION_IN_PROGRESS to SUBMITTED_TO_CUSTOMS
+        // Auto-advance operation from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS
         var operation = declaration.operation;
-        if (operation.status == OperationStatus.DECLARATION_IN_PROGRESS) {
+        if (operation.status == OperationStatus.PRELIQUIDATION_REVIEW) {
             operationService.changeStatus(operationId,
-                    new ChangeStatusRequest(OperationStatus.SUBMITTED_TO_CUSTOMS, "Auto-advanced after final approval"),
+                    new ChangeStatusRequest(OperationStatus.DECLARATION_IN_PROGRESS, "Auto-advanced after final approval"),
                     username, null);
         }
 
@@ -448,6 +461,11 @@ public class DeclarationService {
     @Transactional
     public void sendApprovalLink(Long operationId, Long declarationId, String username) {
         var declaration = findById(operationId, declarationId);
+
+        if (declaration.declarationType != DeclarationType.PRELIMINARY) {
+            throw new BusinessException("APPROVAL_ONLY_ON_PRELIMINARY", "Approvals can only be performed on the pre-liquidation (preliminary) declaration");
+        }
+
         var operation = declaration.operation;
 
         var approvalUrl = frontendUrl + "/operations/" + operationId + "?action=approve-final";
@@ -468,6 +486,10 @@ public class DeclarationService {
     @Transactional
     public Declaration reject(Long operationId, Long declarationId, String comment, String username) {
         var declaration = findById(operationId, declarationId);
+
+        if (declaration.declarationType != DeclarationType.PRELIMINARY) {
+            throw new BusinessException("APPROVAL_ONLY_ON_PRELIMINARY", "Approvals can only be performed on the pre-liquidation (preliminary) declaration");
+        }
 
         declaration.rejectedBy = username;
         declaration.rejectedAt = LocalDateTime.now();

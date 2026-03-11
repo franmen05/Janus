@@ -10,7 +10,7 @@ import { DeclarationService } from '../../../core/services/declaration.service';
 import { Operation, OperationStatus } from '../../../core/models/operation.model';
 import { CompletenessResponse, Document, DocumentType } from '../../../core/models/document.model';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
-import { CrossingResult, Declaration } from '../../../core/models/declaration.model';
+import { CrossingResult, Declaration, DeclarationType } from '../../../core/models/declaration.model';
 import { AuditLog } from '../../../core/models/audit.model';
 import { DocumentService } from '../../../core/services/document.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
@@ -28,10 +28,10 @@ import { InspectionPanelComponent } from '../inspection-panel/inspection-panel.c
 import { ValuationPanelComponent } from '../valuation-panel/valuation-panel.component';
 import { PaymentPanelComponent } from '../payment-panel/payment-panel.component';
 const PRE_REVIEW_STATUSES = ['DRAFT', 'DOCUMENTATION_COMPLETE'];
-const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS'];
+const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW'];
 const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const VALUATION_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
-const CROSSING_VISIBLE_STATUSES = ['DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
+const CROSSING_VISIBLE_STATUSES = ['VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const PAYMENT_VISIBLE_STATUSES = ['PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
 const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
 
@@ -113,7 +113,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
               </div>
               <div class="col-md-8">
                 <p class="text-muted mb-2">{{ getReviewDescription() }}</p>
-                @if (authService.hasRole(['ADMIN', 'AGENT']) || (authService.hasRole(['CLIENT']) && operation()!.status === 'DECLARATION_IN_PROGRESS')) {
+                @if (authService.hasRole(['ADMIN', 'AGENT']) || (authService.hasRole(['CLIENT']) && (operation()!.status === 'PRELIQUIDATION_REVIEW' || operation()!.status === 'VALUATION_REVIEW'))) {
                   <div class="d-flex gap-2 flex-wrap">
                     @switch (operation()!.status) {
                       @case ('IN_REVIEW') {
@@ -133,10 +133,23 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                         </button>
                       }
                       @case ('PRELIQUIDATION_REVIEW') {
-                        @if (declarations().length > 0) {
-                          <button class="btn btn-sm btn-success" (click)="approveTechnical()" [disabled]="declarations()[0].technicalApprovedBy != null">{{ 'preliquidation.approveTechnical' | translate }}</button>
-                          <button class="btn btn-sm btn-danger" (click)="rejectDeclaration()" [disabled]="declarations()[0].rejectedBy != null">{{ 'preliquidation.reject' | translate }}</button>
-                          <a [routerLink]="['/operations', operation()!.id, 'declarations', declarations()[0].id, 'preliquidation']" class="btn btn-sm btn-outline-info">{{ 'preliquidation.title' | translate }}</a>
+                        @if (preliminaryDeclaration) {
+                          <button class="btn btn-sm btn-success" (click)="approveTechnical()" [disabled]="preliminaryDeclaration.technicalApprovedBy != null">{{ 'preliquidation.approveTechnical' | translate }}</button>
+                          <button class="btn btn-sm btn-danger" (click)="rejectDeclaration()" [disabled]="preliminaryDeclaration.rejectedBy != null">{{ 'preliquidation.reject' | translate }}</button>
+                          <a [routerLink]="['/operations', operation()!.id, 'declarations', preliminaryDeclaration.id, 'preliquidation']" class="btn btn-sm btn-outline-info">{{ 'preliquidation.title' | translate }}</a>
+                          @if (preliminaryDeclaration.technicalApprovedBy != null) {
+                            @if (authService.hasRole(['ADMIN', 'CLIENT'])) {
+                              <button class="btn btn-sm btn-primary" (click)="approveFinal()" [disabled]="preliminaryDeclaration.finalApprovedBy != null">{{ 'preliquidation.approveFinal' | translate }}</button>
+                            }
+                            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+                              <button class="btn btn-sm btn-outline-secondary" (click)="copyApprovalLink()">
+                                <i class="bi bi-clipboard me-1"></i>{{ 'approval.copyLink' | translate }}
+                              </button>
+                              <button class="btn btn-sm btn-outline-info" (click)="sendApprovalEmail()">
+                                <i class="bi bi-envelope me-1"></i>{{ 'approval.sendEmail' | translate }}
+                              </button>
+                            }
+                          }
                         } @else {
                           <div class="alert alert-info py-2 px-3 mb-0 flex-grow-1">
                             <small><i class="bi bi-info-circle me-1"></i>{{ 'review.noDeclarationsYet' | translate }}
@@ -152,25 +165,12 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                           <i class="bi bi-arrow-right-circle me-1"></i>{{ 'review.proceedToDeclaration' | translate }}
                         </button>
                       }
-                      @case ('DECLARATION_IN_PROGRESS') {
-                        @if (declarations().length > 0) {
-                          @if (isCrossingApproved()) {
-                            @if (authService.hasRole(['ADMIN', 'CLIENT'])) {
-                              <button class="btn btn-sm btn-primary" (click)="approveFinal()" [disabled]="declarations()[0].finalApprovedBy != null">{{ 'preliquidation.approveFinal' | translate }}</button>
-                            }
-                            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-                              <button class="btn btn-sm btn-outline-secondary" (click)="copyApprovalLink()">
-                                <i class="bi bi-clipboard me-1"></i>{{ 'approval.copyLink' | translate }}
-                              </button>
-                              <button class="btn btn-sm btn-outline-info" (click)="sendApprovalEmail()">
-                                <i class="bi bi-envelope me-1"></i>{{ 'approval.sendEmail' | translate }}
-                              </button>
-                            }
-                          } @else {
-                            <div class="alert alert-info py-2 px-3 mb-0 flex-grow-1">
-                              <small><i class="bi bi-info-circle me-1"></i>{{ 'CROSSING.REQUIRED_BEFORE_APPROVAL' | translate }}</small>
-                            </div>
-                          }
+                      @case ('SUBMITTED_TO_CUSTOMS') {}
+                      @case ('VALUATION_REVIEW') {
+                        @if (!isCrossingApproved()) {
+                          <div class="alert alert-info py-2 px-3 mb-0 flex-grow-1">
+                            <small><i class="bi bi-info-circle me-1"></i>{{ 'CROSSING.REQUIRED_BEFORE_APPROVAL' | translate }}</small>
+                          </div>
                         }
                       }
                     }
@@ -521,6 +521,10 @@ export class OperationDetailComponent implements OnInit {
     return cr !== null && (cr.status === 'MATCH' || cr.status === 'RESOLVED');
   });
 
+  get preliminaryDeclaration(): Declaration | undefined {
+    return this.declarations().find(d => d.declarationType === DeclarationType.PRELIMINARY);
+  }
+
   ngOnInit(): void {
     const tab = this.route.snapshot.queryParamMap.get('tab');
     if (tab) { this.activeTab = tab; }
@@ -530,10 +534,11 @@ export class OperationDetailComponent implements OnInit {
       const id = +this.route.snapshot.paramMap.get('id')!;
       this.operationService.getById(id).subscribe(op => {
         this.operation.set(op);
-        if (op.status === 'DECLARATION_IN_PROGRESS') {
+        if (op.status === 'PRELIQUIDATION_REVIEW') {
           this.declarationService.getDeclarations(id).subscribe(decls => {
             this.declarations.set(decls);
-            if (decls.length > 0 && decls[0].finalApprovedBy == null) {
+            const prelim = decls.find(d => d.declarationType === DeclarationType.PRELIMINARY);
+            if (prelim && prelim.finalApprovedBy == null) {
               this.approveFinal();
             }
           });
@@ -576,12 +581,14 @@ export class OperationDetailComponent implements OnInit {
       case 'PRELIQUIDATION_REVIEW': return this.translate.instant('review.preliquidationReview');
       case 'ANALYST_ASSIGNED': return this.translate.instant('review.analystAssigned');
       case 'DECLARATION_IN_PROGRESS': return this.translate.instant('review.declarationInProgress');
+      case 'SUBMITTED_TO_CUSTOMS': return this.translate.instant('review.submittedToCustoms');
+      case 'VALUATION_REVIEW': return this.translate.instant('review.valuationReview');
       default: return '';
     }
   }
 
   approveTechnical(): void {
-    const decl = this.declarations()[0];
+    const decl = this.preliminaryDeclaration;
     if (!decl) return;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
     if (comment === null) return;
@@ -589,7 +596,7 @@ export class OperationDetailComponent implements OnInit {
   }
 
   approveFinal(): void {
-    const decl = this.declarations()[0];
+    const decl = this.preliminaryDeclaration;
     if (!decl) return;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
     if (comment === null) return;
@@ -607,7 +614,7 @@ export class OperationDetailComponent implements OnInit {
 
   sendApprovalEmail(): void {
     const op = this.operation();
-    const decl = this.declarations()[0];
+    const decl = this.preliminaryDeclaration;
     if (!op || !decl) return;
     this.declarationService.sendApprovalLink(op.id, decl.id).subscribe(() => {
       alert(this.translate.instant('approval.emailSent'));
@@ -615,7 +622,7 @@ export class OperationDetailComponent implements OnInit {
   }
 
   rejectDeclaration(): void {
-    const decl = this.declarations()[0];
+    const decl = this.preliminaryDeclaration;
     if (!decl) return;
     const comment = prompt(this.translate.instant('COMMENTS.PLACEHOLDER'));
     if (comment === null) return;

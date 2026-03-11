@@ -52,7 +52,7 @@ class ValuationResourceTest {
         uploadDocument(opId, "PACKING_LIST");
     }
 
-    private static void setupDeclarationWithApprovals(Long opId) {
+    private static Long setupPreliminaryWithApprovals(Long opId) {
         var declId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -73,7 +73,21 @@ class ValuationResourceTest {
                 .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", opId, declId)
                 .then().statusCode(200);
 
-        // Register final declaration for crossing
+        return declId;
+    }
+
+    private static void approveFinalDeclaration(Long opId, Long declId) {
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Final OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", opId, declId)
+                .then().statusCode(200);
+    }
+
+    private static void registerFinalDeclarationAndCrossing(Long opId) {
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -84,21 +98,11 @@ class ValuationResourceTest {
                 .when().post("/api/operations/{opId}/declarations/final", opId)
                 .then().statusCode(201);
 
-        // Execute crossing
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .when().post("/api/operations/{opId}/declarations/crossing/execute", opId)
                 .then().statusCode(201);
-
-        given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"comment": "Final OK"}
-                        """)
-                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", opId, declId)
-                .then().statusCode(200);
     }
 
     private static void advanceToStatus(Long opId, String targetStatus) {
@@ -130,15 +134,21 @@ class ValuationResourceTest {
                 .extract().jsonPath().getLong("id");
 
         uploadAllMandatoryDocs(opId);
-        setupDeclarationWithApprovals(opId);
+        var declId = setupPreliminaryWithApprovals(opId);
 
-        var statuses = new String[]{
-                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW",
-                "ANALYST_ASSIGNED", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS"
-        };
-        for (var status : statuses) {
-            advanceToStatus(opId, status);
-        }
+        // Advance to PRELIQUIDATION_REVIEW
+        advanceToStatus(opId, "DOCUMENTATION_COMPLETE");
+        advanceToStatus(opId, "IN_REVIEW");
+        advanceToStatus(opId, "PRELIQUIDATION_REVIEW");
+
+        // Final approve (auto-advances from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS)
+        approveFinalDeclaration(opId, declId);
+
+        // Advance to SUBMITTED_TO_CUSTOMS
+        advanceToStatus(opId, "SUBMITTED_TO_CUSTOMS");
+
+        // Register final declaration and crossing at SUBMITTED_TO_CUSTOMS
+        registerFinalDeclarationAndCrossing(opId);
 
         // Set inspection type to VISUAL (does not auto-advance like EXPRESO)
         given()
@@ -481,7 +491,7 @@ class ValuationResourceTest {
     @Test
     @Order(60)
     void testGattFormNotRequiredForExpreso() {
-        // Create operation at SUBMITTED_TO_CUSTOMS, set EXPRESO (auto-advances to VALUATION_REVIEW)
+        // Create operation and advance to SUBMITTED_TO_CUSTOMS
         var opId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -494,15 +504,19 @@ class ValuationResourceTest {
                 .extract().jsonPath().getLong("id");
 
         uploadAllMandatoryDocs(opId);
-        setupDeclarationWithApprovals(opId);
+        var declId = setupPreliminaryWithApprovals(opId);
 
-        var statuses = new String[]{
-                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW",
-                "ANALYST_ASSIGNED", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS"
-        };
-        for (var status : statuses) {
-            advanceToStatus(opId, status);
-        }
+        advanceToStatus(opId, "DOCUMENTATION_COMPLETE");
+        advanceToStatus(opId, "IN_REVIEW");
+        advanceToStatus(opId, "PRELIQUIDATION_REVIEW");
+
+        // Final approve (auto-advances from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS)
+        approveFinalDeclaration(opId, declId);
+
+        advanceToStatus(opId, "SUBMITTED_TO_CUSTOMS");
+
+        // Register final declaration and crossing
+        registerFinalDeclarationAndCrossing(opId);
 
         // Set EXPRESO — auto-advances to VALUATION_REVIEW
         given()

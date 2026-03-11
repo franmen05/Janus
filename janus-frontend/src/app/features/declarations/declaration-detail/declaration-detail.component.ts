@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
 import { OperationService } from '../../../core/services/operation.service';
-import { Declaration, TariffLine } from '../../../core/models/declaration.model';
+import { Declaration, DeclarationType, TariffLine } from '../../../core/models/declaration.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.component';
@@ -105,14 +105,25 @@ export class DeclarationDetailComponent implements OnInit {
   tariffLines = signal<TariffLine[]>([]);
   operationStatus = signal<string>('');
 
-  private static readonly DECLARATION_EDITABLE_STATUSES = [
+  private static readonly PRELIMINARY_EDITABLE_STATUSES = [
     'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION',
-    'PRELIQUIDATION_REVIEW'
+    'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS'
   ];
 
-  canEdit = computed(() =>
-    DeclarationDetailComponent.DECLARATION_EDITABLE_STATUSES.includes(this.operationStatus())
-  );
+  private static readonly FINAL_EDITABLE_STATUSES = [
+    'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION',
+    'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS',
+    'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW'
+  ];
+
+  canEdit = computed(() => {
+    const decl = this.declaration();
+    if (!decl) return false;
+    const editableStatuses = decl.declarationType === DeclarationType.FINAL
+      ? DeclarationDetailComponent.FINAL_EDITABLE_STATUSES
+      : DeclarationDetailComponent.PRELIMINARY_EDITABLE_STATUSES;
+    return editableStatuses.includes(this.operationStatus());
+  });
 
   ngOnInit(): void { this.load(); }
 

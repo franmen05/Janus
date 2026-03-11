@@ -23,7 +23,8 @@ public class CrossingResolvedRule implements ComplianceRule {
 
     @Override
     public boolean appliesTo(OperationStatus from, OperationStatus to, TransportMode transportMode, OperationCategory category) {
-        return from == OperationStatus.SUBMITTED_TO_CUSTOMS && to == OperationStatus.VALUATION_REVIEW;
+        return from == OperationStatus.VALUATION_REVIEW
+                && (to == OperationStatus.PAYMENT_PREPARATION || to == OperationStatus.PENDING_EXTERNAL_APPROVAL);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class CrossingResolvedRule implements ComplianceRule {
             return ValidationResult.failure(List.of(
                     new ValidationResult.ValidationError(
                             "CROSSING_UNRESOLVED",
-                            "Crossing discrepancies must be resolved before moving to VALUATION_REVIEW"
+                            "Crossing discrepancies must be resolved before proceeding from VALUATION_REVIEW"
                     )
             ));
         }

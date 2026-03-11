@@ -81,13 +81,18 @@ export class DeclarationListComponent implements OnInit {
   declarations = signal<Declaration[]>([]);
 
   private static readonly FINAL_ALLOWED_STATUSES = [
-    'DECLARATION_IN_PROGRESS', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW',
-    'PAYMENT_PREPARATION', 'IN_TRANSIT'
+    'VALUATION_REVIEW', 'SUBMITTED_TO_CUSTOMS'
   ];
 
-  private static readonly DECLARATION_EDITABLE_STATUSES = [
+  private static readonly PRELIMINARY_EDITABLE_STATUSES = [
     'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION',
-    'PRELIQUIDATION_REVIEW'
+    'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS'
+  ];
+
+  private static readonly FINAL_EDITABLE_STATUSES = [
+    'DRAFT', 'DOCUMENTATION_COMPLETE', 'IN_REVIEW', 'PENDING_CORRECTION',
+    'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'DECLARATION_IN_PROGRESS',
+    'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW'
   ];
 
   canRegisterFinal(): boolean {
@@ -106,8 +111,11 @@ export class DeclarationListComponent implements OnInit {
     return ['CLOSED', 'CANCELLED'].includes(this.operationStatus());
   }
 
-  canEditDeclaration(_decl: Declaration): boolean {
-    return DeclarationListComponent.DECLARATION_EDITABLE_STATUSES.includes(this.operationStatus());
+  canEditDeclaration(decl: Declaration): boolean {
+    const editableStatuses = decl.declarationType === DeclarationType.FINAL
+      ? DeclarationListComponent.FINAL_EDITABLE_STATUSES
+      : DeclarationListComponent.PRELIMINARY_EDITABLE_STATUSES;
+    return editableStatuses.includes(this.operationStatus());
   }
 
   ngOnInit(): void { this.loadDeclarations(); }

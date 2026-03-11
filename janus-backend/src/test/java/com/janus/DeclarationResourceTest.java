@@ -85,8 +85,9 @@ class DeclarationResourceTest {
 
     @Test
     @Order(4)
-    void testRegisterFinalDeclaration() {
-        finalId = given()
+    void testRegisterFinalDeclarationBlockedBeforeValuation() {
+        // Final declaration should be blocked when operation is in DRAFT
+        given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
@@ -103,9 +104,7 @@ class DeclarationResourceTest {
                         """)
                 .when().post("/api/operations/{opId}/declarations/final", operationId)
                 .then()
-                .statusCode(201)
-                .body("declarationType", is("FINAL"))
-                .extract().jsonPath().getLong("id");
+                .statusCode(400);
     }
 
     @Test
@@ -116,7 +115,7 @@ class DeclarationResourceTest {
                 .when().get("/api/operations/{opId}/declarations", operationId)
                 .then()
                 .statusCode(200)
-                .body("size()", is(2));
+                .body("size()", is(1));
     }
 
     @Test
@@ -157,7 +156,7 @@ class DeclarationResourceTest {
 
     @Test
     @Order(8)
-    void testAdvanceToPreliquidationReview() {
+    void testAdvanceToSubmittedToCustoms() {
         // Upload mandatory documents
         uploadDocument(operationId, "BL");
         uploadDocument(operationId, "COMMERCIAL_INVOICE");
@@ -176,10 +175,48 @@ class DeclarationResourceTest {
         changeStatus(operationId, "DOCUMENTATION_COMPLETE");
         changeStatus(operationId, "IN_REVIEW");
         changeStatus(operationId, "PRELIQUIDATION_REVIEW");
+
+        // Final approve (auto-advances from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS)
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Final OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", operationId, preliminaryId)
+                .then().statusCode(200);
+
+        changeStatus(operationId, "SUBMITTED_TO_CUSTOMS");
     }
 
     @Test
     @Order(9)
+    void testRegisterFinalDeclaration() {
+        // Now at SUBMITTED_TO_CUSTOMS, final declaration registration is allowed
+        finalId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {
+                            "declarationNumber": "FINAL-001",
+                            "fobValue": 10500.00,
+                            "cifValue": 12500.00,
+                            "taxableBase": 12500.00,
+                            "totalTaxes": 1875.00,
+                            "freightValue": 1500.00,
+                            "insuranceValue": 500.00,
+                            "gattMethod": "Transaction Value"
+                        }
+                        """)
+                .when().post("/api/operations/{opId}/declarations/final", operationId)
+                .then()
+                .statusCode(201)
+                .body("declarationType", is("FINAL"))
+                .extract().jsonPath().getLong("id");
+    }
+
+    @Test
+    @Order(10)
     void testAddTariffLineToFinal() {
         given()
                 .auth().basic("admin", "admin123")
@@ -202,7 +239,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(10)
+    @Order(11)
     void testGetTariffLines() {
         given()
                 .auth().basic("admin", "admin123")
@@ -213,11 +250,8 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(11)
+    @Order(12)
     void testExecuteCrossingWithDiscrepancies() {
-        changeStatus(operationId, "ANALYST_ASSIGNED");
-        changeStatus(operationId, "DECLARATION_IN_PROGRESS");
-
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -229,7 +263,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(12)
+    @Order(13)
     void testGetCrossingResult() {
         given()
                 .auth().basic("admin", "admin123")
@@ -240,7 +274,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(13)
+    @Order(14)
     void testResolveCrossing() {
         given()
                 .auth().basic("admin", "admin123")
@@ -256,7 +290,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(14)
+    @Order(15)
     void testClientCanViewCrossing() {
         given()
                 .auth().basic("client", "client123")
@@ -266,7 +300,7 @@ class DeclarationResourceTest {
     }
 
     @Test
-    @Order(15)
+    @Order(16)
     void testClientCannotRegisterDeclaration() {
         given()
                 .auth().basic("client", "client123")
@@ -294,23 +328,57 @@ class DeclarationResourceTest {
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
-        // Register identical preliminary and final
-        given()
+        // Upload mandatory docs
+        uploadDocument(opId, "BL");
+        uploadDocument(opId, "COMMERCIAL_INVOICE");
+        uploadDocument(opId, "PACKING_LIST");
+
+        // Register preliminary and approve
+        var declId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
                         {"declarationNumber": "MATCH-P", "fobValue": 5000.00, "cifValue": 6000.00,
-                         "taxableBase": 6000.00, "totalTaxes": 900.00}
+                         "taxableBase": 6000.00, "totalTaxes": 900.00, "freightValue": 800.00, "insuranceValue": 200.00}
                         """)
                 .when().post("/api/operations/{opId}/declarations/preliminary", opId)
-                .then().statusCode(201);
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
 
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
+                        {"comment": "Technical OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", opId, declId)
+                .then().statusCode(200);
+
+        // Advance to PRELIQUIDATION_REVIEW
+        changeStatus(opId, "DOCUMENTATION_COMPLETE");
+        changeStatus(opId, "IN_REVIEW");
+        changeStatus(opId, "PRELIQUIDATION_REVIEW");
+
+        // Final approve (auto-advances to DECLARATION_IN_PROGRESS)
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Final OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", opId, declId)
+                .then().statusCode(200);
+
+        // Advance to SUBMITTED_TO_CUSTOMS
+        changeStatus(opId, "SUBMITTED_TO_CUSTOMS");
+
+        // Register identical final declaration
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
                         {"declarationNumber": "MATCH-F", "fobValue": 5000.00, "cifValue": 6000.00,
-                         "taxableBase": 6000.00, "totalTaxes": 900.00}
+                         "taxableBase": 6000.00, "totalTaxes": 900.00, "freightValue": 800.00, "insuranceValue": 200.00}
                         """)
                 .when().post("/api/operations/{opId}/declarations/final", opId)
                 .then().statusCode(201);
@@ -368,38 +436,18 @@ class DeclarationResourceTest {
                 .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", clientApprovalOpId, clientApprovalDeclId)
                 .then().statusCode(200);
 
-        // Advance: DRAFT -> DOCUMENTATION_COMPLETE -> IN_REVIEW -> PRELIQUIDATION_REVIEW -> ANALYST_ASSIGNED -> DECLARATION_IN_PROGRESS
+        // Advance to PRELIQUIDATION_REVIEW
         changeStatus(clientApprovalOpId, "DOCUMENTATION_COMPLETE");
         changeStatus(clientApprovalOpId, "IN_REVIEW");
         changeStatus(clientApprovalOpId, "PRELIQUIDATION_REVIEW");
-        changeStatus(clientApprovalOpId, "ANALYST_ASSIGNED");
-        changeStatus(clientApprovalOpId, "DECLARATION_IN_PROGRESS");
 
-        // Register final declaration and execute crossing (required for final approval)
-        given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"declarationNumber": "FINAL-CA", "fobValue": 5000.00, "cifValue": 6000.00,
-                         "taxableBase": 6000.00, "totalTaxes": 900.00, "freightValue": 800.00, "insuranceValue": 200.00}
-                        """)
-                .when().post("/api/operations/{opId}/declarations/final", clientApprovalOpId)
-                .then().statusCode(201);
-
-        given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .when().post("/api/operations/{opId}/declarations/crossing/execute", clientApprovalOpId)
-                .then().statusCode(201)
-                .body("status", is("MATCH"));
-
-        // Verify operation is in DECLARATION_IN_PROGRESS
+        // Verify operation is in PRELIQUIDATION_REVIEW (client will approve final here)
         given()
                 .auth().basic("admin", "admin123")
                 .when().get("/api/operations/{id}", clientApprovalOpId)
                 .then()
                 .statusCode(200)
-                .body("status", is("DECLARATION_IN_PROGRESS"));
+                .body("status", is("PRELIQUIDATION_REVIEW"));
     }
 
     @Test
@@ -500,6 +548,14 @@ class DeclarationResourceTest {
                 .then()
                 .statusCode(200)
                 .body("finalApprovedBy", is("client"));
+
+        // Verify auto-advance from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS
+        given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/operations/{id}", clientApprovalOpId)
+                .then()
+                .statusCode(200)
+                .body("status", is("DECLARATION_IN_PROGRESS"));
     }
 
     // ---- Helper methods ----

@@ -429,7 +429,7 @@
     "RESOLVED_BY": "Resolved By",
     "NO_CROSSING": "No crossing result available. Both preliminary and final declarations must be registered first.",
     "RESOLVE_PLACEHOLDER": "Enter resolution comment...",
-    "REQUIRED_BEFORE_APPROVAL": "The crossing with the preliminary declaration must be completed before final approval."
+    "REQUIRED_BEFORE_APPROVAL": "The crossing with the preliminary declaration must be completed before proceeding to payment stage."
   },
   "ALERTS": {
     "TITLE": "Alerts",
@@ -464,7 +464,7 @@
     "RULE": "Rule",
     "MESSAGE": "Message",
     "BL_NOT_VALIDATED": "Bill of Lading must be VALIDATED before Valuation Review",
-    "CROSSING_UNRESOLVED": "Crossing discrepancies must be resolved before Valuation Review",
+    "CROSSING_UNRESOLVED": "Crossing discrepancies must be resolved before proceeding to payment stage",
     "RESTRICTED_COUNTRY": "Origin country is restricted — additional review required",
     "MISSING_DOC_BL": "Required document missing: Bill of Lading",
     "MISSING_DOC_COMMERCIAL_INVOICE": "Required document missing: Commercial Invoice",
@@ -486,7 +486,8 @@
     "INCOMPLETE_DOCS": "Document completeness must be 100% to proceed",
     "INSPECTION_TYPE_MISSING": "Inspection type must be set before advancing to Valuation Review",
     "INCOMPLETE_DOCS_FOR_PAYMENT": "Document verification checklist must be complete (100%) before advancing to Payment Preparation",
-    "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "Document verification checklist must be complete before advancing to Payment Preparation"
+    "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "Document verification checklist must be complete before advancing to Payment Preparation",
+    "DECLARATION_NUMBER_MISSING": "Preliminary declaration must have a declaration number before advancing to Submitted to Customs"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Inspection Type",
@@ -706,6 +707,8 @@
     "noDeclarationsYet": "No declarations registered yet.",
     "createDeclarationPrompt": "Go to Declarations tab to create one.",
     "declarationInProgress": "Declaration is in progress. ADMIN or CLIENT can approve the final declaration.",
+    "submittedToCustoms": "Declaration has been submitted to customs.",
+    "valuationReview": "Valuation review in progress.",
     "advancePanel": "Advance Operation",
     "advanceDescription": {
       "DRAFT": "This operation is in Draft status. Advance to continue the process.",
@@ -803,13 +806,15 @@
     "ALREADY_TECHNICAL_APPROVED": "This declaration already has technical approval.",
     "TECHNICAL_APPROVAL_REQUIRED": "Technical approval is required before final approval.",
     "ALREADY_FINAL_APPROVED": "This declaration already has final approval.",
-    "CROSSING_NOT_APPROVED": "Customs crossing must be completed and approved before final approval.",
+    "CROSSING_NOT_APPROVED": "Customs crossing must be completed and approved before proceeding to payment stage.",
     "GENERIC_ERROR": "An unexpected error occurred.",
     "LIQUIDATION_NO_FINAL_DECLARATION": "No final declaration found for this operation. Register a final declaration first.",
     "LIQUIDATION_ALREADY_APPROVED": "Cannot regenerate a liquidation that has already been approved.",
     "LIQUIDATION_NOT_FOUND": "No liquidation found for this operation.",
     "LIQUIDATION_NOT_PRELIMINARY": "Only preliminary liquidations can be approved.",
     "LIQUIDATION_NOT_APPROVED": "Only approved liquidations can be made definitive.",
-    "LIQUIDATION_NOT_DEFINITIVE": "Payment can only be registered for definitive liquidations."
+    "LIQUIDATION_NOT_DEFINITIVE": "Payment can only be registered for definitive liquidations.",
+    "APPROVAL_ONLY_ON_PRELIMINARY": "Approvals can only be performed on the pre-liquidation declaration",
+    "FINAL_DECLARATION_NOT_ALLOWED": "Final declarations can only be registered from the Valuation stage onwards"
   }
 }

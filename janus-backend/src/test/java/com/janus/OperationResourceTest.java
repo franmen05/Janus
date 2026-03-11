@@ -74,7 +74,7 @@ class OperationResourceTest {
                 .statusCode(200);
     }
 
-    private static void setupDeclarationWithApprovals(Long operationId) {
+    private static Long setupPreliminaryWithApprovals(Long operationId) {
         var declId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -95,7 +95,21 @@ class OperationResourceTest {
                 .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", operationId, declId)
                 .then().statusCode(200);
 
-        // Register final declaration for crossing
+        return declId;
+    }
+
+    private static void approveFinalDeclaration(Long operationId, Long declId) {
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Final OK"}
+                        """)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", operationId, declId)
+                .then().statusCode(200);
+    }
+
+    private static void registerFinalDeclarationAndCrossing(Long operationId) {
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -106,21 +120,11 @@ class OperationResourceTest {
                 .when().post("/api/operations/{opId}/declarations/final", operationId)
                 .then().statusCode(201);
 
-        // Execute crossing
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .when().post("/api/operations/{opId}/declarations/crossing/execute", operationId)
                 .then().statusCode(201);
-
-        given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"comment": "Final OK"}
-                        """)
-                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", operationId, declId)
-                .then().statusCode(200);
     }
 
     // ---- Auth tests ----
@@ -345,10 +349,10 @@ class OperationResourceTest {
         // Upload mandatory docs
         uploadAllMandatoryDocs(opId);
 
-        // Setup declaration with approvals for review compliance rules
-        setupDeclarationWithApprovals(opId);
+        // Setup preliminary declaration with technical approval
+        var declId = setupPreliminaryWithApprovals(opId);
 
-        // DRAFT → DOCUMENTATION_COMPLETE
+        // DRAFT → DOCUMENTATION_COMPLETE → IN_REVIEW → PRELIQUIDATION_REVIEW
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
@@ -358,22 +362,51 @@ class OperationResourceTest {
                 .when().post("/api/operations/{id}/change-status", opId)
                 .then().statusCode(200);
 
-        // Remaining transitions through new review flow
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"newStatus": "IN_REVIEW"}
+                        """)
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then().statusCode(200);
+
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"newStatus": "PRELIQUIDATION_REVIEW"}
+                        """)
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then().statusCode(200);
+
+        // Final approve (auto-advances from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS)
+        approveFinalDeclaration(opId, declId);
+
+        // Advance to SUBMITTED_TO_CUSTOMS
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"newStatus": "SUBMITTED_TO_CUSTOMS"}
+                        """)
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then().statusCode(200);
+
+        // Register final declaration and crossing at SUBMITTED_TO_CUSTOMS
+        registerFinalDeclarationAndCrossing(opId);
+
+        // Set inspection type before VALUATION_REVIEW
+        setInspectionType(opId);
+
+        // Remaining transitions
         var remaining = new String[]{
-                "IN_REVIEW", "PRELIQUIDATION_REVIEW", "ANALYST_ASSIGNED",
-                "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
         };
         for (var status : remaining) {
-            // Set inspection type before VALUATION_REVIEW transition
-            if ("VALUATION_REVIEW".equals(status)) {
-                setInspectionType(opId);
-            }
-            // Complete GATT form before PAYMENT_PREPARATION (required when inspectionType is VISUAL)
             if ("PAYMENT_PREPARATION".equals(status)) {
                 completeGattForm(opId);
             }
-            // Upload reception receipt before CLOSED transition
             if ("CLOSED".equals(status)) {
                 uploadDocument(opId, "RECEPTION_RECEIPT");
             }
@@ -400,51 +433,18 @@ class OperationResourceTest {
     @Test
     @Order(23)
     void testUpdateClosedOperationForbidden() {
-        // Create a fresh operation
-        var opId = given()
+        var opId = advanceToInTransit();
+
+        // Upload reception receipt and close
+        uploadDocument(opId, "RECEPTION_RECEIPT");
+        given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-CLOSED", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB"}
+                        {"newStatus": "CLOSED"}
                         """)
-                .when().post("/api/operations")
-                .then().statusCode(201)
-                .extract().jsonPath().getLong("id");
-
-        // Upload mandatory docs
-        uploadAllMandatoryDocs(opId);
-
-        // Setup declaration with approvals for compliance rules
-        setupDeclarationWithApprovals(opId);
-
-        // Advance through all statuses to CLOSED
-        var statuses = new String[]{
-                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW",
-                "ANALYST_ASSIGNED", "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
-                "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
-        };
-        for (var status : statuses) {
-            // Set inspection type before VALUATION_REVIEW transition
-            if ("VALUATION_REVIEW".equals(status)) {
-                setInspectionType(opId);
-            }
-            // Complete GATT form before PAYMENT_PREPARATION (required when inspectionType is VISUAL)
-            if ("PAYMENT_PREPARATION".equals(status)) {
-                completeGattForm(opId);
-            }
-            // Upload reception receipt before CLOSED transition
-            if ("CLOSED".equals(status)) {
-                uploadDocument(opId, "RECEPTION_RECEIPT");
-            }
-            given()
-                    .auth().basic("admin", "admin123")
-                    .contentType(ContentType.JSON)
-                    .body("""
-                            {"newStatus": "%s"}
-                            """.formatted(status))
-                    .when().post("/api/operations/{id}/change-status", opId)
-                    .then().statusCode(200);
-        }
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then().statusCode(200);
 
         // Attempt to update the CLOSED operation — should fail
         given()
@@ -573,17 +573,47 @@ class OperationResourceTest {
                 .extract().jsonPath().getLong("id");
 
         uploadAllMandatoryDocs(opId);
-        setupDeclarationWithApprovals(opId);
+        var declId = setupPreliminaryWithApprovals(opId);
 
-        var transitions = new String[]{
-                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW", "ANALYST_ASSIGNED",
-                "DECLARATION_IN_PROGRESS", "SUBMITTED_TO_CUSTOMS",
+        // Advance to PRELIQUIDATION_REVIEW
+        var preTransitions = new String[]{
+                "DOCUMENTATION_COMPLETE", "IN_REVIEW", "PRELIQUIDATION_REVIEW"
+        };
+        for (var status : preTransitions) {
+            given()
+                    .auth().basic("admin", "admin123")
+                    .contentType(ContentType.JSON)
+                    .body("""
+                            {"newStatus": "%s"}
+                            """.formatted(status))
+                    .when().post("/api/operations/{id}/change-status", opId)
+                    .then()
+                    .statusCode(200);
+        }
+
+        // Final approve (auto-advances from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS)
+        approveFinalDeclaration(opId, declId);
+
+        // Advance to SUBMITTED_TO_CUSTOMS
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"newStatus": "SUBMITTED_TO_CUSTOMS"}
+                        """)
+                .when().post("/api/operations/{id}/change-status", opId)
+                .then().statusCode(200);
+
+        // Register final declaration and crossing
+        registerFinalDeclarationAndCrossing(opId);
+
+        // Set inspection type before VALUATION_REVIEW
+        setInspectionType(opId);
+
+        var postTransitions = new String[]{
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT"
         };
-        for (var status : transitions) {
-            if ("VALUATION_REVIEW".equals(status)) {
-                setInspectionType(opId);
-            }
+        for (var status : postTransitions) {
             if ("PAYMENT_PREPARATION".equals(status)) {
                 completeGattForm(opId);
             }
