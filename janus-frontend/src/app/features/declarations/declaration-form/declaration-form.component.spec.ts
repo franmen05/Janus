@@ -98,4 +98,51 @@ describe('DeclarationFormComponent', () => {
     expect(component.isEdit()).toBeTrue();
     expect(declarationServiceSpy.getDeclaration).toHaveBeenCalledWith(1, 1);
   });
+
+  describe('insurance calculation', () => {
+    beforeEach(() => {
+      createComponent({ operationId: '1' }, { type: 'PRELIMINARY' });
+    });
+
+    it('should auto-calculate insurance from FOB and percentage', () => {
+      component.form.get('fobValue')!.setValue(1000);
+      expect(component.form.get('insuranceValue')!.value).toBe(20); // 2% of 1000
+    });
+
+    it('should recalculate insurance when percentage changes', () => {
+      component.form.get('fobValue')!.setValue(1000);
+      component.form.get('insurancePercentage')!.setValue(5);
+      expect(component.form.get('insuranceValue')!.value).toBe(50); // 5% of 1000
+    });
+
+    it('should NOT overwrite manual insurance when FOB changes', () => {
+      component.form.get('fobValue')!.setValue(1000); // insurance = 20
+      component.form.get('insuranceValue')!.setValue(99); // manual override
+      component.form.get('fobValue')!.setValue(2000); // should NOT overwrite 99
+      expect(component.form.get('insuranceValue')!.value).toBe(99);
+    });
+
+    it('should recalculate CIF with manual insurance', () => {
+      component.form.get('fobValue')!.setValue(1000);
+      component.form.get('freightValue')!.setValue(100);
+      component.form.get('insuranceValue')!.setValue(50); // manual
+      expect(component.form.get('cifValue')!.value).toBe(1150); // 1000 + 100 + 50
+    });
+
+    it('should resume auto-calc when percentage changes after manual edit', () => {
+      component.form.get('fobValue')!.setValue(1000);
+      component.form.get('insuranceValue')!.setValue(99); // manual
+      component.form.get('insurancePercentage')!.setValue(3); // should reset manual flag
+      expect(component.form.get('insuranceValue')!.value).toBe(30); // 3% of 1000
+    });
+  });
+
+  describe('insurance in edit mode', () => {
+    it('should preserve saved insurance value on load', () => {
+      // mockDeclaration has fobValue=1000, insuranceValue=50
+      createComponent({ operationId: '1', declarationId: '1' });
+      expect(component.form.get('insuranceValue')!.value).toBe(50);
+      expect(component.form.get('fobValue')!.value).toBe(1000);
+    });
+  });
 });

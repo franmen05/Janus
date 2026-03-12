@@ -146,9 +146,7 @@ public class DeclarationService {
 
         declaration.declarationNumber = updated.declarationNumber;
         declaration.fobValue = updated.fobValue;
-        declaration.insuranceValue = updated.fobValue != null
-                ? updated.fobValue.multiply(new BigDecimal("0.02")).setScale(2, java.math.RoundingMode.HALF_UP)
-                : BigDecimal.ZERO;
+        declaration.insuranceValue = updated.insuranceValue;
         declaration.freightValue = updated.freightValue;
         declaration.cifValue = updated.cifValue;
         declaration.taxableBase = updated.cifValue; // taxableBase always equals cifValue
@@ -344,7 +342,7 @@ public class DeclarationService {
     @Transactional
     public Declaration registerDua(Long operationId, Long declarationId, String duaNumber, String username) {
         var declaration = findById(operationId, declarationId);
-        declaration.duaNumber = duaNumber;
+        declaration.declarationNumber = duaNumber;
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "Declaration", declarationId, operationId,

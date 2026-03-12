@@ -26,9 +26,6 @@ public class Declaration extends BaseEntity {
     @Column(name = "declaration_number")
     public String declarationNumber;
 
-    @Column(name = "dua_number")
-    public String duaNumber;
-
     @Column(name = "fob_value", precision = 15, scale = 2)
     public BigDecimal fobValue;
 

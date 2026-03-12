@@ -129,7 +129,7 @@ export class DeclarationListComponent implements OnInit {
   }
 
   registerDua(decl: Declaration): void {
-    const duaNumber = prompt(this.translate.instant('DECLARATIONS.DUA_NUMBER'));
+    const duaNumber = prompt(this.translate.instant('DECLARATIONS.REGISTER_DUA'));
     if (!duaNumber) return;
     this.declarationService.registerDua(this.operationId(), decl.id, duaNumber).subscribe({
       next: () => {
