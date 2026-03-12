@@ -134,31 +134,100 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                       }
                       @case ('PRELIQUIDATION_REVIEW') {
                         @if (preliminaryDeclaration) {
-                          <button class="btn btn-sm btn-success" (click)="approveTechnical()" [disabled]="preliminaryDeclaration.technicalApprovedBy != null">{{ 'preliquidation.approveTechnical' | translate }}</button>
-                          <button class="btn btn-sm btn-danger" (click)="rejectDeclaration()" [disabled]="preliminaryDeclaration.rejectedBy != null">{{ 'preliquidation.reject' | translate }}</button>
-                          <a [routerLink]="['/operations', operation()!.id, 'declarations', preliminaryDeclaration.id, 'preliquidation']" class="btn btn-sm btn-outline-info">{{ 'preliquidation.title' | translate }}</a>
-                          @if (preliminaryDeclaration.technicalApprovedBy != null) {
-                            @if (authService.hasRole(['ADMIN', 'CLIENT'])) {
-                              <button class="btn btn-sm btn-primary" (click)="approveFinal()" [disabled]="preliminaryDeclaration.finalApprovedBy != null">{{ 'preliquidation.approveFinal' | translate }}</button>
-                            }
-                            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-                              <button class="btn btn-sm btn-outline-secondary" (click)="copyApprovalLink()">
-                                <i class="bi bi-clipboard me-1"></i>{{ 'approval.copyLink' | translate }}
+                          <!-- Approval cards grouped by type -->
+                          <div class="w-100">
+                            <div class="row g-2 mb-2">
+                              <!-- Technical Approval -->
+                              <div class="col-md-4">
+                                <div class="card h-100" [class.border-success]="preliminaryDeclaration.technicalApprovedBy">
+                                  <div class="card-body py-2 px-3 d-flex flex-column">
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                      <small class="fw-semibold">{{ 'review.technicalApproval' | translate }}</small>
+                                      @if (preliminaryDeclaration.technicalApprovedBy) {
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                      }
+                                    </div>
+                                    @if (preliminaryDeclaration.technicalApprovedBy) {
+                                      <small class="text-success">{{ 'review.approvedBy' | translate }}: {{ preliminaryDeclaration.technicalApprovedBy }}</small>
+                                    } @else {
+                                      <div class="mt-auto pt-1">
+                                        <button class="btn btn-sm btn-success w-100" (click)="approveTechnical()">{{ 'preliquidation.approveTechnical' | translate }}</button>
+                                      </div>
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- Final Approval -->
+                              <div class="col-md-4">
+                                <div class="card h-100" [class.border-success]="preliminaryDeclaration.finalApprovedBy">
+                                  <div class="card-body py-2 px-3 d-flex flex-column">
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                      <small class="fw-semibold">{{ 'review.finalApproval' | translate }}</small>
+                                      @if (preliminaryDeclaration.finalApprovedBy) {
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                      }
+                                    </div>
+                                    @if (preliminaryDeclaration.finalApprovedBy) {
+                                      <small class="text-success">{{ 'review.approvedBy' | translate }}: {{ preliminaryDeclaration.finalApprovedBy }}</small>
+                                    } @else if (preliminaryDeclaration.technicalApprovedBy) {
+                                      @if (authService.hasRole(['ADMIN', 'CLIENT'])) {
+                                        <div class="mt-auto pt-1">
+                                          <button class="btn btn-sm btn-success w-100" (click)="approveFinal()">{{ 'preliquidation.approveFinal' | translate }}</button>
+                                        </div>
+                                      } @else {
+                                        <span class="badge bg-secondary">{{ 'STATUS.PENDING' | translate }}</span>
+                                      }
+                                    } @else {
+                                      <small class="text-muted">{{ 'review.awaitsTechnical' | translate }}</small>
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- Reject -->
+                              <div class="col-md-4">
+                                <div class="card h-100" [class.border-danger]="preliminaryDeclaration.rejectedBy">
+                                  <div class="card-body py-2 px-3 d-flex flex-column">
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                      <small class="fw-semibold">{{ 'preliquidation.reject' | translate }}</small>
+                                      @if (preliminaryDeclaration.rejectedBy) {
+                                        <i class="bi bi-x-circle-fill text-danger"></i>
+                                      }
+                                    </div>
+                                    @if (preliminaryDeclaration.rejectedBy) {
+                                      <small class="text-danger">{{ 'review.rejectedBy' | translate }}: {{ preliminaryDeclaration.rejectedBy }}</small>
+                                    } @else {
+                                      <div class="mt-auto pt-1">
+                                        <button class="btn btn-sm btn-outline-danger w-100" (click)="rejectDeclaration()">{{ 'preliquidation.reject' | translate }}</button>
+                                      </div>
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- Utility actions -->
+                            <div class="d-flex gap-2 flex-wrap">
+                              <a [routerLink]="['/operations', operation()!.id, 'declarations', preliminaryDeclaration.id, 'preliquidation']" class="btn btn-sm btn-outline-info">
+                                <i class="bi bi-file-earmark-text me-1"></i>{{ 'preliquidation.title' | translate }}
+                              </a>
+                              @if (preliminaryDeclaration.technicalApprovedBy && authService.hasRole(['ADMIN', 'AGENT'])) {
+                                <button class="btn btn-sm btn-outline-secondary" (click)="copyApprovalLink()">
+                                  <i class="bi bi-clipboard me-1"></i>{{ 'approval.copyLink' | translate }}
+                                </button>
+                                <button class="btn btn-sm btn-outline-info" (click)="sendApprovalEmail()">
+                                  <i class="bi bi-envelope me-1"></i>{{ 'approval.sendEmail' | translate }}
+                                </button>
+                              }
+                              <button class="btn btn-sm btn-warning" (click)="changeToStatus('PENDING_CORRECTION')">
+                                <i class="bi bi-arrow-return-left me-1"></i>{{ 'review.sendBackForCorrection' | translate }}
                               </button>
-                              <button class="btn btn-sm btn-outline-info" (click)="sendApprovalEmail()">
-                                <i class="bi bi-envelope me-1"></i>{{ 'approval.sendEmail' | translate }}
-                              </button>
-                            }
-                          }
+                            </div>
+                          </div>
                         } @else {
                           <div class="alert alert-info py-2 px-3 mb-0 flex-grow-1">
                             <small><i class="bi bi-info-circle me-1"></i>{{ 'review.noDeclarationsYet' | translate }}
                             <a href="javascript:void(0)" (click)="activeTab = 'declarations'" class="alert-link">{{ 'review.createDeclarationPrompt' | translate }}</a></small>
                           </div>
                         }
-                        <button class="btn btn-sm btn-warning" (click)="changeToStatus('PENDING_CORRECTION')">
-                          <i class="bi bi-arrow-return-left me-1"></i>{{ 'review.sendBackForCorrection' | translate }}
-                        </button>
                       }
                       @case ('ANALYST_ASSIGNED') {
                         <button class="btn btn-sm btn-primary" (click)="changeToStatus('DECLARATION_IN_PROGRESS')">

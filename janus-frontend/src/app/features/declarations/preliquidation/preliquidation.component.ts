@@ -79,67 +79,92 @@ import { AuthService } from '../../../core/services/auth.service';
             </div>
           }
 
-          <h6 class="text-muted mt-4 mb-2">{{ 'review.approvalPanel' | translate }}</h6>
-          <div class="row">
+          <h6 class="text-muted mt-4 mb-3">{{ 'review.approvalPanel' | translate }}</h6>
+          <div class="row g-3">
+            <!-- Technical Approval -->
             <div class="col-md-4">
-              <div class="card">
-                <div class="card-body">
-                  <h6>{{ 'review.technicalApproval' | translate }}</h6>
+              <div class="card h-100" [class.border-success]="declaration()!.technicalApprovedBy">
+                <div class="card-body d-flex flex-column">
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="mb-0">{{ 'review.technicalApproval' | translate }}</h6>
+                    @if (declaration()!.technicalApprovedBy) {
+                      <i class="bi bi-check-circle-fill text-success"></i>
+                    }
+                  </div>
                   @if (declaration()!.technicalApprovedBy) {
                     <span class="badge bg-success mb-1">{{ 'review.approvedBy' | translate }}: {{ declaration()!.technicalApprovedBy }}</span>
-                    <br><small class="text-muted">{{ declaration()!.technicalApprovedAt | date:'medium' }}</small>
+                    <small class="text-muted">{{ declaration()!.technicalApprovedAt | date:'medium' }}</small>
                     @if (declaration()!.technicalApprovalComment) {
                       <p class="mt-1 mb-0"><small>{{ declaration()!.technicalApprovalComment }}</small></p>
                     }
                   } @else {
-                    <span class="badge bg-secondary">{{ 'STATUS.PENDING' | translate }}</span>
+                    <span class="badge bg-secondary mb-2">{{ 'STATUS.PENDING' | translate }}</span>
+                    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+                      <div class="mt-auto pt-2">
+                        <button class="btn btn-success btn-sm w-100" (click)="approveTechnical()">{{ 'preliquidation.approveTechnical' | translate }}</button>
+                      </div>
+                    }
                   }
                 </div>
               </div>
             </div>
+            <!-- Final Approval -->
             <div class="col-md-4">
-              <div class="card">
-                <div class="card-body">
-                  <h6>{{ 'review.finalApproval' | translate }}</h6>
+              <div class="card h-100" [class.border-success]="declaration()!.finalApprovedBy">
+                <div class="card-body d-flex flex-column">
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="mb-0">{{ 'review.finalApproval' | translate }}</h6>
+                    @if (declaration()!.finalApprovedBy) {
+                      <i class="bi bi-check-circle-fill text-success"></i>
+                    }
+                  </div>
                   @if (declaration()!.finalApprovedBy) {
                     <span class="badge bg-success mb-1">{{ 'review.approvedBy' | translate }}: {{ declaration()!.finalApprovedBy }}</span>
-                    <br><small class="text-muted">{{ declaration()!.finalApprovedAt | date:'medium' }}</small>
+                    <small class="text-muted">{{ declaration()!.finalApprovedAt | date:'medium' }}</small>
                     @if (declaration()!.finalApprovalComment) {
                       <p class="mt-1 mb-0"><small>{{ declaration()!.finalApprovalComment }}</small></p>
                     }
                   } @else {
-                    <span class="badge bg-secondary">{{ 'STATUS.PENDING' | translate }}</span>
+                    <span class="badge bg-secondary mb-2">{{ 'STATUS.PENDING' | translate }}</span>
+                    @if (authService.hasRole(['ADMIN', 'AGENT']) && declaration()!.technicalApprovedBy && !declaration()!.finalApprovedBy) {
+                      <div class="mt-auto pt-2">
+                        <button class="btn btn-success btn-sm w-100" (click)="approveFinal()">{{ 'preliquidation.approveFinal' | translate }}</button>
+                      </div>
+                    }
                   }
                 </div>
               </div>
             </div>
+            <!-- Reject -->
             <div class="col-md-4">
-              <div class="card">
-                <div class="card-body">
-                  <h6>{{ 'preliquidation.reject' | translate }}</h6>
+              <div class="card h-100" [class.border-danger]="declaration()!.rejectedBy">
+                <div class="card-body d-flex flex-column">
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="mb-0">{{ 'preliquidation.reject' | translate }}</h6>
+                    @if (declaration()!.rejectedBy) {
+                      <i class="bi bi-x-circle-fill text-danger"></i>
+                    }
+                  </div>
                   @if (declaration()!.rejectedBy) {
                     <span class="badge bg-danger mb-1">{{ 'review.rejectedBy' | translate }}: {{ declaration()!.rejectedBy }}</span>
-                    <br><small class="text-muted">{{ declaration()!.rejectedAt | date:'medium' }}</small>
+                    <small class="text-muted">{{ declaration()!.rejectedAt | date:'medium' }}</small>
                     @if (declaration()!.rejectionComment) {
                       <p class="mt-1 mb-0"><small>{{ declaration()!.rejectionComment }}</small></p>
                     }
                   } @else {
-                    <span class="badge bg-secondary">-</span>
+                    <span class="badge bg-secondary mb-2">-</span>
+                    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+                      <div class="mt-auto pt-2">
+                        <button class="btn btn-outline-danger btn-sm w-100" (click)="reject()">{{ 'preliquidation.reject' | translate }}</button>
+                      </div>
+                    }
                   }
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="d-flex gap-2 mt-3">
-            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-              @if (!declaration()!.technicalApprovedBy) {
-                <button class="btn btn-success btn-sm" (click)="approveTechnical()">{{ 'preliquidation.approveTechnical' | translate }}</button>
-              }
-              @if (!declaration()!.rejectedBy) {
-                <button class="btn btn-danger btn-sm" (click)="reject()">{{ 'preliquidation.reject' | translate }}</button>
-              }
-            }
+          <div class="d-flex mt-3">
             <button class="btn btn-outline-secondary btn-sm ms-auto" (click)="close()">{{ 'ACTIONS.CLOSE' | translate }}</button>
           </div>
         </div>
