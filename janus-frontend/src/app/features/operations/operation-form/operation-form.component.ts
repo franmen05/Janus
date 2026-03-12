@@ -9,7 +9,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
 import { Client } from '../../../core/models/client.model';
-import { TransportMode, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
+import { TransportMode, OperationType, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
 @Component({
@@ -51,6 +51,18 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                     <i class="bi bi-plus-circle me-1"></i>{{ 'OPERATIONS.CREATE_CLIENT' | translate }}
                   </a>
                 </div>
+              }
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ 'OPERATIONS.OPERATION_TYPE' | translate }} <span class="text-danger">*</span></label>
+              <select class="form-select" formControlName="operationType"
+                      [class.is-invalid]="form.get('operationType')!.invalid && form.get('operationType')!.touched">
+                <option value="">{{ 'OPERATIONS.SELECT_OPERATION_TYPE' | translate }}</option>
+                <option value="IMPORT">{{ 'OPERATION_TYPES.IMPORT' | translate }}</option>
+                <option value="EXPORT">{{ 'OPERATION_TYPES.EXPORT' | translate }}</option>
+              </select>
+              @if (form.get('operationType')!.hasError('required') && form.get('operationType')!.touched) {
+                <div class="invalid-feedback">{{ 'OPERATIONS.OPERATION_TYPE_REQUIRED' | translate }}</div>
               }
             </div>
           </div>
@@ -125,8 +137,8 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
               }
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.DEADLINE' | translate }}</label>
-              <input type="datetime-local" class="form-control" formControlName="deadline">
+              <label class="form-label">{{ 'OPERATIONS.ARRIVAL_DATE' | translate }}</label>
+              <input type="datetime-local" class="form-control" formControlName="arrivalDate">
             </div>
           </div>
           <div class="row mb-3">
@@ -143,7 +155,6 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                       [class.is-invalid]="form.get('blAvailability')!.invalid && form.get('blAvailability')!.touched">
                 <option value="">{{ 'OPERATIONS.SELECT_BL_AVAILABILITY' | translate }}</option>
                 <option value="ORIGINAL">{{ 'BL_AVAILABILITY.ORIGINAL' | translate }}</option>
-                <option value="ENDORSED">{{ 'BL_AVAILABILITY.ENDORSED' | translate }}</option>
                 <option value="NOT_AVAILABLE">{{ 'BL_AVAILABILITY.NOT_AVAILABLE' | translate }}</option>
               </select>
               @if (form.get('blAvailability')!.hasError('required') && form.get('blAvailability')!.touched) {
@@ -194,6 +205,7 @@ export class OperationFormComponent implements OnInit {
 
   form = new FormGroup({
     clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    operationType: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     transportMode: new FormControl(TransportMode.MARITIME, { nonNullable: true, validators: [Validators.required] }),
     cargoType: new FormControl(CargoType.FCL, { nonNullable: true }),
     operationCategory: new FormControl(OperationCategory.CATEGORY_1, { nonNullable: true, validators: [Validators.required] }),
@@ -204,7 +216,7 @@ export class OperationFormComponent implements OnInit {
     estimatedArrival: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     blAvailability: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     notes: new FormControl('', { nonNullable: true }),
-    deadline: new FormControl('', { nonNullable: true }),
+    arrivalDate: new FormControl('', { nonNullable: true }),
     incoterm: new FormControl('', { nonNullable: true })
   });
 
@@ -274,6 +286,7 @@ export class OperationFormComponent implements OnInit {
         }
         this.form.patchValue({
           clientId: op.clientId?.toString() ?? '',
+          operationType: op.operationType ?? '',
           transportMode: op.transportMode,
           cargoType: op.cargoType ?? CargoType.FCL,
           operationCategory: op.operationCategory,
@@ -284,7 +297,7 @@ export class OperationFormComponent implements OnInit {
           estimatedArrival: op.estimatedArrival ?? '',
           blAvailability: op.blAvailability ?? '',
           notes: op.notes ?? '',
-          deadline: op.deadline ?? '',
+          arrivalDate: op.arrivalDate ?? '',
           incoterm: op.incoterm ?? ''
         });
         // Disable BL Availability when operation is at or past VALUATION_REVIEW
@@ -350,6 +363,7 @@ export class OperationFormComponent implements OnInit {
     const val = this.form.getRawValue();
     const request = {
       clientId: +val.clientId,
+      operationType: val.operationType as OperationType,
       transportMode: val.transportMode,
       cargoType: val.transportMode === TransportMode.MARITIME ? val.cargoType as CargoType : undefined,
       operationCategory: val.operationCategory,
@@ -360,7 +374,7 @@ export class OperationFormComponent implements OnInit {
       estimatedArrival: val.estimatedArrival,
       blAvailability: val.blAvailability as BlAvailability,
       notes: val.notes || undefined,
-      deadline: val.deadline || undefined,
+      arrivalDate: val.arrivalDate || undefined,
       incoterm: val.incoterm || undefined
     };
     const obs = this.isEdit() ? this.operationService.update(this.operationId!, request) : this.operationService.create(request);

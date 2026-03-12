@@ -70,7 +70,7 @@
     "BL_ORIGINAL_AVAILABLE": "BL Original Available",
     "BL_ORIGINAL_WARNING": "The original Bill of Lading is not available. This may delay customs processing.",
     "NOTES": "Notes",
-    "DEADLINE": "Deadline",
+    "ARRIVAL_DATE": "Arrival Date",
     "ASSIGNED_AGENT": "Assigned Agent",
     "NOT_ASSIGNED": "Not assigned",
     "CREATED": "Created",
@@ -93,7 +93,10 @@
     "BL_AVAILABILITY_REQUIRED": "BL availability is required",
     "BL_NOT_AVAILABLE_WARNING": "BL is not available. This must be resolved before valuation.",
     "CLIENT_SEARCH_PLACEHOLDER": "Search client by name, tax ID, or email...",
-    "CREATE_CLIENT": "Create new client"
+    "CREATE_CLIENT": "Create new client",
+    "OPERATION_TYPE": "Operation Type",
+    "SELECT_OPERATION_TYPE": "Select operation type",
+    "OPERATION_TYPE_REQUIRED": "Operation type is required"
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -268,6 +271,10 @@
   "TRANSPORT_MODES": {
     "MARITIME": "Maritime",
     "AIR": "Air"
+  },
+  "OPERATION_TYPES": {
+    "IMPORT": "Import",
+    "EXPORT": "Export"
   },
   "OPERATION_CATEGORIES": {
     "CATEGORY_1": "Category 1",

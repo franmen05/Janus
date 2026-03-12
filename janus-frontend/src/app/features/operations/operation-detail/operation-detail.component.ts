@@ -191,6 +191,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                 <div class="row">
                   <div class="col-md-6">
                     <dl>
+                      <dt>{{ 'OPERATIONS.OPERATION_TYPE' | translate }}</dt><dd>{{ 'OPERATION_TYPES.' + operation()!.operationType | translate }}</dd>
                       <dt>{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</dt><dd>{{ operation()!.transportMode | statusLabel }}</dd>
                       @if (operation()!.cargoType) {
                         <dt>{{ 'OPERATIONS.CARGO_TYPE' | translate }}</dt><dd>{{ 'CARGO_TYPES.' + operation()!.cargoType | translate }}</dd>
@@ -224,8 +225,8 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                       @if (operation()!.estimatedArrival) {
                         <dt>{{ 'OPERATIONS.ESTIMATED_ARRIVAL' | translate }}</dt><dd>{{ operation()!.estimatedArrival | date:'medium' }}</dd>
                       }
-                      @if (operation()!.deadline) {
-                        <dt>{{ 'OPERATIONS.DEADLINE' | translate }}</dt><dd>{{ operation()!.deadline | date:'medium' }}</dd>
+                      @if (operation()!.arrivalDate) {
+                        <dt>{{ 'OPERATIONS.ARRIVAL_DATE' | translate }}</dt><dd>{{ operation()!.arrivalDate | date:'medium' }}</dd>
                       }
                       <dt>{{ 'OPERATIONS.BL_AVAILABILITY' | translate }}</dt>
                       <dd class="d-flex align-items-center gap-2">

@@ -11,7 +11,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { AlertService } from '../../../core/services/alert.service';
 import { ComplianceService } from '../../../core/services/compliance.service';
 import { DeclarationService } from '../../../core/services/declaration.service';
-import { OperationStatus, TransportMode, OperationCategory, Operation } from '../../../core/models/operation.model';
+import { OperationStatus, OperationType, TransportMode, OperationCategory, Operation } from '../../../core/models/operation.model';
 import { DocumentType } from '../../../core/models/document.model';
 
 describe('OperationDetailComponent', () => {
@@ -24,10 +24,10 @@ describe('OperationDetailComponent', () => {
 
   const mockOperation: Operation = {
     id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
-    transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
+    operationType: OperationType.IMPORT, transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
     status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
     blNumber: 'BL-001', containerNumber: 'CONT-001', estimatedArrival: '2024-02-01T10:00:00', blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,
-    notes: 'Test notes', deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
+    notes: 'Test notes', arrivalDate: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
   };
 
   beforeEach(async () => {

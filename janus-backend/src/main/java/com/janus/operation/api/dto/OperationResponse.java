@@ -7,6 +7,7 @@ import com.janus.operation.domain.model.InspectionType;
 import com.janus.operation.domain.model.OperationCategory;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
+import com.janus.operation.domain.model.OperationType;
 import com.janus.operation.domain.model.TransportMode;
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ public record OperationResponse(
         String referenceNumber,
         Long clientId,
         String clientName,
+        OperationType operationType,
         TransportMode transportMode,
         CargoType cargoType,
         OperationCategory operationCategory,
@@ -27,7 +29,7 @@ public record OperationResponse(
         BlAvailability blAvailability,
         Boolean blOriginalAvailable,
         String notes,
-        LocalDateTime deadline,
+        LocalDateTime arrivalDate,
         LocalDateTime closedAt,
         InspectionType inspectionType,
         LocalDateTime inspectionSetAt,
@@ -45,6 +47,7 @@ public record OperationResponse(
                 op.referenceNumber,
                 op.client != null ? op.client.id : null,
                 op.client != null ? op.client.name : null,
+                op.operationType,
                 op.transportMode,
                 op.cargoType,
                 op.operationCategory,
@@ -57,7 +60,7 @@ public record OperationResponse(
                 op.blAvailability,
                 op.blAvailability != BlAvailability.NOT_AVAILABLE,
                 op.notes,
-                op.deadline,
+                op.arrivalDate,
                 op.closedAt,
                 op.inspectionType,
                 op.inspectionSetAt,

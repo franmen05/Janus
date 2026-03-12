@@ -125,7 +125,7 @@ class ValuationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
+                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
                          "blNumber": "BL-VAL-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL",
                          "incoterm": "FOB"}
                         """)
@@ -496,7 +496,7 @@ class ValuationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
+                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
                          "blNumber": "BL-VAL-EXPRESO", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")

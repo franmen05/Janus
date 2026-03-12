@@ -95,6 +95,7 @@ public class OperationService {
         var op = new Operation();
         op.referenceNumber = generateReferenceNumber();
         op.client = client;
+        op.operationType = request.operationType();
         op.transportMode = request.transportMode();
         op.cargoType = request.cargoType();
         op.operationCategory = request.operationCategory();
@@ -104,7 +105,7 @@ public class OperationService {
         op.estimatedArrival = request.estimatedArrival();
         op.blAvailability = request.blAvailability();
         op.notes = request.notes();
-        op.deadline = request.deadline();
+        op.arrivalDate = request.arrivalDate();
         op.incoterm = request.incoterm();
         op.blType = request.blType();
         op.childBlNumber = request.childBlNumber();
@@ -184,6 +185,7 @@ public class OperationService {
 
         op.client = clientRepository.findByIdOptional(request.clientId())
                 .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
+        op.operationType = request.operationType();
         op.transportMode = request.transportMode();
         op.cargoType = request.cargoType();
         op.operationCategory = request.operationCategory();
@@ -192,7 +194,7 @@ public class OperationService {
         op.estimatedArrival = request.estimatedArrival();
         op.blAvailability = request.blAvailability();
         op.notes = request.notes();
-        op.deadline = request.deadline();
+        op.arrivalDate = request.arrivalDate();
         op.incoterm = request.incoterm();
         op.blType = request.blType();
         op.childBlNumber = request.childBlNumber();

@@ -70,7 +70,7 @@
     "BL_ORIGINAL_AVAILABLE": "BL Original Disponible",
     "BL_ORIGINAL_WARNING": "El conocimiento de embarque original no está disponible. Esto puede retrasar el procesamiento aduanero.",
     "NOTES": "Notas",
-    "DEADLINE": "Fecha Límite",
+    "ARRIVAL_DATE": "Fecha de Llegada",
     "ASSIGNED_AGENT": "Agente Asignado",
     "NOT_ASSIGNED": "Sin asignar",
     "CREATED": "Creado",
@@ -93,7 +93,10 @@
     "BL_AVAILABILITY_REQUIRED": "La disponibilidad del BL es requerida",
     "BL_NOT_AVAILABLE_WARNING": "El BL no est\u00e1 disponible. Esto debe resolverse antes de la valoraci\u00f3n.",
     "CLIENT_SEARCH_PLACEHOLDER": "Buscar cliente por nombre, RNC o correo...",
-    "CREATE_CLIENT": "Crear nuevo cliente"
+    "CREATE_CLIENT": "Crear nuevo cliente",
+    "OPERATION_TYPE": "Tipo de Operación",
+    "SELECT_OPERATION_TYPE": "Seleccione tipo de operación",
+    "OPERATION_TYPE_REQUIRED": "El tipo de operación es requerido"
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
@@ -266,8 +269,12 @@
     "CONSOLIDATED": "Consolidado"
   },
   "TRANSPORT_MODES": {
-    "MARITIME": "Barco",
-    "AIR": "Avión"
+    "MARITIME": "Marítimo",
+    "AIR": "Aéreo"
+  },
+  "OPERATION_TYPES": {
+    "IMPORT": "Importación",
+    "EXPORT": "Exportación"
   },
   "OPERATION_CATEGORIES": {
     "CATEGORY_1": "Categoría 1",

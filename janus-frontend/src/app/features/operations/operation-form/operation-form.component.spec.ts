@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { OperationFormComponent } from './operation-form.component';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
-import { TransportMode, OperationCategory, OperationStatus, BlAvailability } from '../../../core/models/operation.model';
+import { TransportMode, OperationType, OperationCategory, OperationStatus, BlAvailability } from '../../../core/models/operation.model';
 import { ClientType } from '../../../core/models/client.model';
 
 describe('OperationFormComponent', () => {
@@ -20,10 +20,10 @@ describe('OperationFormComponent', () => {
     operationServiceSpy = jasmine.createSpyObj('OperationService', ['create', 'update', 'getById']);
     operationServiceSpy.create.and.returnValue(of({
       id: 10, referenceNumber: 'OP-010', clientId: 1, clientName: 'Client A',
-      transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
+      operationType: OperationType.IMPORT, transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
       status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
       blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: BlAvailability.NOT_AVAILABLE, blOriginalAvailable: false,
-      notes: null, deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
+      notes: null, arrivalDate: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     }));
 
     clientServiceSpy = jasmine.createSpyObj('ClientService', ['getAll']);
@@ -70,7 +70,7 @@ describe('OperationFormComponent', () => {
   it('should mark form invalid when required fields empty', () => {
     fixture.detectChanges();
     expect(component.form.invalid).toBeTrue();
-    component.form.patchValue({ clientId: '1', containerNumber: 'CONT-001', blNumber: 'BL-001', blAvailability: 'ORIGINAL', estimatedArrival: '2024-06-01' });
+    component.form.patchValue({ clientId: '1', operationType: 'IMPORT', containerNumber: 'CONT-001', blNumber: 'BL-001', blAvailability: 'ORIGINAL', estimatedArrival: '2024-06-01' });
     expect(component.form.valid).toBeTrue();
   });
 
@@ -92,7 +92,7 @@ describe('OperationFormComponent', () => {
   it('should call create on submit for new operations', () => {
     fixture.detectChanges();
     component.form.patchValue({
-      clientId: '1', transportMode: TransportMode.MARITIME,
+      clientId: '1', operationType: 'IMPORT', transportMode: TransportMode.MARITIME,
       operationCategory: OperationCategory.CATEGORY_1, containerNumber: 'CONT-001', blNumber: 'BL-001', blAvailability: 'ORIGINAL', estimatedArrival: '2024-06-01', notes: ''
     });
     component.onSubmit();

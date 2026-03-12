@@ -23,6 +23,10 @@ public class Operation extends BaseEntity {
     public Client client;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "operation_type", nullable = false)
+    public OperationType operationType;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "transport_mode", nullable = false)
     public TransportMode transportMode;
 
@@ -60,7 +64,8 @@ public class Operation extends BaseEntity {
     @Column(name = "closed_at")
     public LocalDateTime closedAt;
 
-    public LocalDateTime deadline;
+    @Column(name = "arrival_date")
+    public LocalDateTime arrivalDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "inspection_type")

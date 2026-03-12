@@ -138,7 +138,7 @@ class InspectionResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
+                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
                          "blNumber": "BL-INSP-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
@@ -373,7 +373,7 @@ class InspectionResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1",
+                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
                          "blNumber": "BL-INSP-DRAFT", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")

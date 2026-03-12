@@ -15,6 +15,11 @@ export enum OperationStatus {
   CANCELLED = 'CANCELLED'
 }
 
+export enum OperationType {
+  IMPORT = 'IMPORT',
+  EXPORT = 'EXPORT'
+}
+
 export enum TransportMode {
   MARITIME = 'MARITIME',
   AIR = 'AIR'
@@ -53,6 +58,7 @@ export interface Operation {
   referenceNumber: string;
   clientId: number;
   clientName: string;
+  operationType: OperationType;
   transportMode: TransportMode;
   cargoType?: CargoType | null;
   operationCategory: OperationCategory;
@@ -67,7 +73,7 @@ export interface Operation {
   blAvailability: BlAvailability;
   blOriginalAvailable: boolean;
   notes: string | null;
-  deadline: string | null;
+  arrivalDate: string | null;
   closedAt: string | null;
   inspectionType?: InspectionType | null;
   inspectionSetAt?: string | null;
@@ -80,6 +86,7 @@ export interface Operation {
 
 export interface CreateOperationRequest {
   clientId: number;
+  operationType: OperationType;
   transportMode: TransportMode;
   cargoType?: CargoType;
   operationCategory: OperationCategory;
@@ -91,7 +98,7 @@ export interface CreateOperationRequest {
   estimatedArrival: string;
   blAvailability: BlAvailability;
   notes?: string;
-  deadline?: string;
+  arrivalDate?: string;
   incoterm?: string;
 }
 

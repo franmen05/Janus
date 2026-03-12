@@ -9,7 +9,7 @@ import { OperationService } from '../../core/services/operation.service';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { AlertService } from '../../core/services/alert.service';
 import { AuthService } from '../../core/services/auth.service';
-import { OperationStatus, TransportMode, OperationCategory, Operation } from '../../core/models/operation.model';
+import { OperationStatus, OperationType, TransportMode, OperationCategory, Operation } from '../../core/models/operation.model';
 import { DashboardMetrics } from '../../core/models/dashboard.model';
 
 describe('DashboardComponent', () => {
@@ -23,24 +23,24 @@ describe('DashboardComponent', () => {
   const mockOperations: Operation[] = [
     {
       id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
-      transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
+      operationType: OperationType.IMPORT, transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
       status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
       blNumber: null, containerNumber: 'CONT-001', estimatedArrival: null, blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,
-      notes: null, deadline: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
+      notes: null, arrivalDate: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     },
     {
       id: 2, referenceNumber: 'OP-002', clientId: 2, clientName: 'Client B',
-      transportMode: TransportMode.AIR, operationCategory: OperationCategory.CATEGORY_2,
+      operationType: OperationType.EXPORT, transportMode: TransportMode.AIR, operationCategory: OperationCategory.CATEGORY_2,
       status: OperationStatus.CLOSED, assignedAgentId: null, assignedAgentName: null,
       blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: 'ORIGINAL' as any, blOriginalAvailable: true,
-      notes: null, deadline: null, closedAt: '2024-01-10', createdAt: '2024-01-02', updatedAt: '2024-01-10'
+      notes: null, arrivalDate: null, closedAt: '2024-01-10', createdAt: '2024-01-02', updatedAt: '2024-01-10'
     },
     {
       id: 3, referenceNumber: 'OP-003', clientId: 1, clientName: 'Client A',
-      transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_3,
+      operationType: OperationType.IMPORT, transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_3,
       status: OperationStatus.CANCELLED, assignedAgentId: null, assignedAgentName: null,
       blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,
-      notes: null, deadline: null, closedAt: null, createdAt: '2024-01-03', updatedAt: '2024-01-03'
+      notes: null, arrivalDate: null, closedAt: null, createdAt: '2024-01-03', updatedAt: '2024-01-03'
     }
   ];
 

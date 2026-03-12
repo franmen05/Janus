@@ -32,8 +32,8 @@ public class OperationRepository implements PanacheRepository<Operation> {
                 OperationStatus.CLOSED, OperationStatus.CANCELLED, threshold);
     }
 
-    public List<Operation> findWithDeadlineBetween(LocalDateTime from, LocalDateTime to) {
-        return list("status NOT IN (?1, ?2) AND deadline IS NOT NULL AND deadline > ?3 AND deadline < ?4",
+    public List<Operation> findWithArrivalDateBetween(LocalDateTime from, LocalDateTime to) {
+        return list("status NOT IN (?1, ?2) AND arrivalDate IS NOT NULL AND arrivalDate > ?3 AND arrivalDate < ?4",
                 OperationStatus.CLOSED, OperationStatus.CANCELLED, from, to);
     }
 }

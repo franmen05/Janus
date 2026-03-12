@@ -33,15 +33,15 @@ public class AlertCheckerScheduler {
     @ConfigProperty(name = "janus.alerts.inactivity-hours", defaultValue = "48")
     int inactivityHours;
 
-    @ConfigProperty(name = "janus.alerts.deadline-approaching-hours", defaultValue = "24")
-    int deadlineApproachingHours;
+    @ConfigProperty(name = "janus.alerts.arrival-date-approaching-hours", defaultValue = "24")
+    int arrivalDateApproachingHours;
 
     @Scheduled(every = "1h", identity = "alert-checker")
     @Transactional
     void checkAlerts() {
         LOG.info("Running alert checks...");
         checkInactivity();
-        checkDeadlineApproaching();
+        checkArrivalDateApproaching();
         checkMissingCriticalDocuments();
         checkBLUnavailable();
     }
@@ -65,20 +65,20 @@ public class AlertCheckerScheduler {
         }
     }
 
-    void checkDeadlineApproaching() {
+    void checkArrivalDateApproaching() {
         var now = LocalDateTime.now();
-        var threshold = now.plusHours(deadlineApproachingHours);
-        var operations = operationRepository.findWithDeadlineBetween(now, threshold);
+        var threshold = now.plusHours(arrivalDateApproachingHours);
+        var operations = operationRepository.findWithArrivalDateBetween(now, threshold);
 
         for (var op : operations) {
             var alert = alertService.createAlert(op, AlertType.DEADLINE_APPROACHING,
-                    "Operation " + op.referenceNumber + " deadline is approaching (within "
-                            + deadlineApproachingHours + " hours)");
+                    "Operation " + op.referenceNumber + " arrival date is approaching (within "
+                            + arrivalDateApproachingHours + " hours)");
             if (alert != null) {
                 notificationService.send(
                         op.id, op.client.email,
-                        "Deadline Approaching - " + op.referenceNumber,
-                        "Operation " + op.referenceNumber + " deadline is approaching."
+                        "Arrival Date Approaching - " + op.referenceNumber,
+                        "Operation " + op.referenceNumber + " arrival date is approaching."
                 );
             }
         }

@@ -5,7 +5,7 @@ import { OperationService } from './operation.service';
 import { environment } from '../../../environments/environment';
 import {
   Operation, CreateOperationRequest, ChangeStatusRequest,
-  OperationStatus, TransportMode, OperationCategory, StatusHistory, BlAvailability
+  OperationStatus, OperationType, TransportMode, OperationCategory, StatusHistory, BlAvailability
 } from '../models/operation.model';
 import { CompletenessResponse } from '../models/document.model';
 
@@ -20,6 +20,7 @@ describe('OperationService', () => {
     referenceNumber: 'OP-2024-0001',
     clientId: 1,
     clientName: 'Test Client',
+    operationType: OperationType.IMPORT,
     transportMode: TransportMode.MARITIME,
     operationCategory: OperationCategory.CATEGORY_1,
     status: OperationStatus.DRAFT,
@@ -31,7 +32,7 @@ describe('OperationService', () => {
     blAvailability: BlAvailability.NOT_AVAILABLE,
     blOriginalAvailable: false,
     notes: null,
-    deadline: null,
+    arrivalDate: null,
     closedAt: null,
     createdAt: '2024-01-01T00:00:00',
     updatedAt: '2024-01-01T00:00:00'
@@ -113,6 +114,7 @@ describe('OperationService', () => {
     it('should call POST /api/operations', () => {
       const request: CreateOperationRequest = {
         clientId: 1,
+        operationType: OperationType.IMPORT,
         transportMode: TransportMode.MARITIME,
         operationCategory: OperationCategory.CATEGORY_1,
         estimatedArrival: '2024-06-01',
@@ -134,6 +136,7 @@ describe('OperationService', () => {
     it('should call PUT /api/operations/{id}', () => {
       const request: CreateOperationRequest = {
         clientId: 1,
+        operationType: OperationType.EXPORT,
         transportMode: TransportMode.AIR,
         operationCategory: OperationCategory.CATEGORY_2,
         estimatedArrival: '2024-06-01',

@@ -51,7 +51,7 @@ public class DashboardService {
         var jpql = "SELECT COUNT(o) FROM Operation o"
                 + " WHERE o.status NOT IN (com.janus.operation.domain.model.OperationStatus.CLOSED,"
                 + " com.janus.operation.domain.model.OperationStatus.CANCELLED)"
-                + " AND o.deadline IS NOT NULL AND o.deadline < CURRENT_TIMESTAMP"
+                + " AND o.arrivalDate IS NOT NULL AND o.arrivalDate < CURRENT_TIMESTAMP"
                 + buildFilterConditions(filter);
         var query = em.createQuery(jpql, Long.class);
         applyFilterParams(query, filter);
