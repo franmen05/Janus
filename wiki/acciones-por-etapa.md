@@ -11,14 +11,15 @@ DRAFT
   ├──→ DOCUMENTATION_COMPLETE
   │       ├──→ IN_REVIEW
   │       │       ├──→ PRELIQUIDATION_REVIEW (sub-estado de IN_REVIEW)
-  │       │       │       ├──→ DECLARATION_IN_PROGRESS (directo)
-  │       │       │       │   └──→ ANALYST_ASSIGNED (sub-estado)
-  │       │       │       │       └──→ SUBMITTED_TO_CUSTOMS
-  │       │       │       │               └──→ VALUATION_REVIEW
-  │       │       │       │                       ├──→ PENDING_EXTERNAL_APPROVAL ──→ (vuelve a VALUATION_REVIEW)
-  │       │       │       │                       └──→ PAYMENT_PREPARATION
-  │       │       │       │                               └──→ IN_TRANSIT
-  │       │       │       │                                       └──→ CLOSED ✓
+  │       │       │       ├──→ ANALYST_ASSIGNED (sub-estado de IN_REVIEW)
+  │       │       │       │       └──→ DECLARATION_IN_PROGRESS
+  │       │       │       │               └──→ SUBMITTED_TO_CUSTOMS
+  │       │       │       │                       └──→ VALUATION_REVIEW
+  │       │       │       │                               ├──→ PENDING_EXTERNAL_APPROVAL ──→ (vuelve a VALUATION_REVIEW)
+  │       │       │       │                               └──→ PAYMENT_PREPARATION
+  │       │       │       │                                       └──→ IN_TRANSIT
+  │       │       │       │                                               └──→ CLOSED ✓
+  │       │       │       ├──→ DECLARATION_IN_PROGRESS (directo, salta ANALYST_ASSIGNED)
   │       │       │       └──→ PENDING_CORRECTION ──→ (vuelve a IN_REVIEW)
   │       │       └──→ PENDING_CORRECTION ──→ (vuelve a IN_REVIEW)
   │       └──→ CANCELLED ✗
@@ -207,6 +208,7 @@ DRAFT
 **Reglas de compliance para avanzar a SUBMITTED\_TO\_CUSTOMS:**
 
 *   `FINAL_APPROVAL_REQUIRED` — Aprobación final requerida
+*   `DECLARATION_NUMBER_REQUIRED` — La declaración preliminar debe tener número de declaración asignado
 *   `BL_ORIGINAL_NOT_AVAILABLE` — BL disponible
 
 ---
@@ -268,6 +270,7 @@ DRAFT
 
 **Reglas de compliance para avanzar a PAYMENT\_PREPARATION:**
 
+*   `CROSSING_RESOLVED` — El cruce debe haberse realizado y las discrepancias resueltas
 *   `GATT_FORM_REQUIRED` — Formulario GATT completado (si inspección VISUAL/FISICA)
 *   `EXTERNAL_PERMITS_CLEARED` — Sin permisos en estado EN\_TRAMITE
 *   `LOCAL_CHARGES_VALIDATED` — Cargos locales validados (si existe recibo)
@@ -437,9 +440,10 @@ Resumen de todas las reglas que bloquean transiciones de estado:
 | BL\_ORIGINAL\_NOT\_AVAILABLE | PAYMENT\_PREPARATION, IN\_TRANSIT, CLOSED | BL debe ser ORIGINAL o ENDORSED | `BL_ORIGINAL_NOT_AVAILABLE` |
 | PRELIQUIDATION\_APPROVED | ANALYST\_ASSIGNED | Aprobación técnica | `NO_DECLARATION`, `MISSING_TECHNICAL_APPROVAL` |
 | FINAL\_APPROVAL\_REQUIRED | SUBMITTED\_TO\_CUSTOMS | Aprobación final (ADMIN o CLIENT) | `MISSING_FINAL_APPROVAL` |
+| DECLARATION\_NUMBER\_REQUIRED | SUBMITTED\_TO\_CUSTOMS | Declaración preliminar con número asignado | `DECLARATION_NUMBER_MISSING` |
 | COMMERCIAL\_INVOICE\_REQUIRED | DECLARATION\_IN\_PROGRESS | CATEGORY\_1: factura comercial VALIDATED | `INVOICE_NOT_VALIDATED` |
 | INSPECTION\_TYPE\_REQUIRED | VALUATION\_REVIEW | Tipo de inspección definido | `INSPECTION_TYPE_MISSING` |
-| CROSSING\_RESOLVED | VALUATION\_REVIEW | Discrepancias de cruce resueltas | `CROSSING_UNRESOLVED` |
+| CROSSING\_RESOLVED | PAYMENT\_PREPARATION, VALUATION\_REVIEW | Cruce realizado y discrepancias resueltas | `CROSSING_NOT_PERFORMED`, `CROSSING_UNRESOLVED` |
 | BL\_VERIFIED\_FOR\_VALUATION | VALUATION\_REVIEW | BL con status VALIDATED | `BL_NOT_VALIDATED` |
 | PHYSICAL\_INSPECTION\_GATT | VALUATION\_REVIEW | CATEGORY\_3: todos los documentos VALIDATED | `PHYSICAL_ALL_DOCS_VALIDATED` |
 | GATT\_FORM\_REQUIRED | PAYMENT\_PREPARATION | GATT completado si inspección VISUAL/FISICA | `GATT_FORM_INCOMPLETE` |
@@ -489,5 +493,5 @@ Los siguientes estados permiten subir y eliminar documentos:
 
 ---
 
-_Actualizado: 2026-03-03_  
+_Actualizado: 2026-03-12_  
 _Fuente: código de janus-backend (Resources, Services, ComplianceRules) y janus-frontend (components)_
