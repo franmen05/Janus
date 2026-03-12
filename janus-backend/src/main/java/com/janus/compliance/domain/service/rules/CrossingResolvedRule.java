@@ -29,6 +29,15 @@ public class CrossingResolvedRule implements ComplianceRule {
 
     @Override
     public ValidationResult validate(Operation operation, List<Document> documents) {
+        var crossingResult = crossingResultRepository.findByOperationId(operation.id);
+        if (crossingResult.isEmpty()) {
+            return ValidationResult.failure(List.of(
+                    new ValidationResult.ValidationError(
+                            "CROSSING_NOT_PERFORMED",
+                            "Crossing must be performed before proceeding to payment preparation"
+                    )
+            ));
+        }
         if (crossingResultRepository.hasUnresolvedForOperation(operation.id)) {
             return ValidationResult.failure(List.of(
                     new ValidationResult.ValidationError(

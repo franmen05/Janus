@@ -471,6 +471,7 @@
     "RULE": "Rule",
     "MESSAGE": "Message",
     "BL_NOT_VALIDATED": "Bill of Lading must be VALIDATED before Valuation Review",
+    "CROSSING_NOT_PERFORMED": "Crossing must be performed before proceeding to payment preparation",
     "CROSSING_UNRESOLVED": "Crossing discrepancies must be resolved before proceeding to payment stage",
     "RESTRICTED_COUNTRY": "Origin country is restricted — additional review required",
     "MISSING_DOC_BL": "Required document missing: Bill of Lading",

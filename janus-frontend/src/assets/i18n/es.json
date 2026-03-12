@@ -471,6 +471,7 @@
     "RULE": "Regla",
     "MESSAGE": "Mensaje",
     "BL_NOT_VALIDATED": "El Conocimiento de Embarque (BL) debe estar VALIDADO antes de la Revisión de Valoración",
+    "CROSSING_NOT_PERFORMED": "El cruce debe ser realizado antes de avanzar a preparación de pago",
     "CROSSING_UNRESOLVED": "Las discrepancias del cruce deben resolverse antes de pasar a la etapa de pago",
     "RESTRICTED_COUNTRY": "El país de origen está restringido — se requiere revisión adicional",
     "MISSING_DOC_BL": "Documento obligatorio faltante: Conocimiento de Embarque (BL)",
