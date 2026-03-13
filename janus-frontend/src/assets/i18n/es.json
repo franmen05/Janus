@@ -99,6 +99,7 @@
     "SELECT_OPERATION_TYPE": "Seleccione tipo de operación",
     "OPERATION_TYPE_REQUIRED": "El tipo de operación es requerido",
     "ARRIVAL_PORT": "Puerto de Arribo",
+    "ARRIVAL_PORT_REQUIRED": "El puerto de arribo es obligatorio",
     "SELECT_PORT": "Seleccionar puerto..."
   },
   "DOCUMENTS": {

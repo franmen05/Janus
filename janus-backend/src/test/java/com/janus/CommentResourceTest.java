@@ -25,7 +25,7 @@ class CommentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Comment test op"}
+                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Comment test op", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)

@@ -145,13 +145,17 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.ARRIVAL_PORT' | translate }}</label>
-              <select class="form-select" formControlName="arrivalPortId">
+              <label class="form-label">{{ 'OPERATIONS.ARRIVAL_PORT' | translate }} <span class="text-danger">*</span></label>
+              <select class="form-select" formControlName="arrivalPortId"
+                      [class.is-invalid]="form.get('arrivalPortId')!.invalid && form.get('arrivalPortId')!.touched">
                 <option value="">{{ 'OPERATIONS.SELECT_PORT' | translate }}</option>
                 @for (port of ports(); track port.id) {
                   <option [value]="port.id">{{ port.code }} - {{ port.name }}</option>
                 }
               </select>
+              @if (form.get('arrivalPortId')!.hasError('required') && form.get('arrivalPortId')!.touched) {
+                <div class="invalid-feedback">{{ 'OPERATIONS.ARRIVAL_PORT_REQUIRED' | translate }}</div>
+              }
             </div>
           </div>
           <div class="row mb-3">
@@ -233,7 +237,7 @@ export class OperationFormComponent implements OnInit {
     notes: new FormControl('', { nonNullable: true }),
     arrivalDate: new FormControl('', { nonNullable: true }),
     incoterm: new FormControl('', { nonNullable: true }),
-    arrivalPortId: new FormControl('', { nonNullable: true })
+    arrivalPortId: new FormControl('', { nonNullable: true, validators: [Validators.required] })
   });
 
   searchClient: OperatorFunction<string, Client[]> = (text$: Observable<string>) =>

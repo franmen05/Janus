@@ -25,5 +25,5 @@ public record CreateOperationRequest(
         String incoterm,
         BlType blType,
         String childBlNumber,
-        Long arrivalPortId
+        @NotNull Long arrivalPortId
 ) {}

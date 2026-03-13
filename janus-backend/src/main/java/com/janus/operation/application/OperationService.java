@@ -29,7 +29,6 @@ import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +96,6 @@ public class OperationService {
         }
 
         var op = new Operation();
-        op.referenceNumber = generateReferenceNumber();
         op.client = client;
         op.operationType = request.operationType();
         op.transportMode = request.transportMode();
@@ -114,10 +112,10 @@ public class OperationService {
         op.blType = request.blType();
         op.childBlNumber = request.childBlNumber();
 
-        if (request.arrivalPortId() != null) {
-            op.arrivalPort = portRepository.findByIdOptional(request.arrivalPortId())
-                    .orElseThrow(() -> new NotFoundException("Port", request.arrivalPortId()));
-        }
+        op.arrivalPort = portRepository.findByIdOptional(request.arrivalPortId())
+                .orElseThrow(() -> new NotFoundException("Port", request.arrivalPortId()));
+
+        op.referenceNumber = generateReferenceNumber(op.arrivalPort.code);
 
         // Validate childBlNumber required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
@@ -355,9 +353,9 @@ public class OperationService {
         statusHistoryRepository.persist(history);
     }
 
-    private String generateReferenceNumber() {
-        var year = Year.now().getValue();
+    private String generateReferenceNumber(String portCode) {
+        var now = LocalDateTime.now();
         var seq = operationRepository.getNextSequence();
-        return String.format("OP-%d-%05d", year, seq);
+        return String.format("OP-%s-%d%02d-%05d", portCode, now.getYear(), now.getMonthValue(), seq);
     }
 }

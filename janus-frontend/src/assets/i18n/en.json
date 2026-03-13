@@ -99,6 +99,7 @@
     "SELECT_OPERATION_TYPE": "Select operation type",
     "OPERATION_TYPE_REQUIRED": "Operation type is required",
     "ARRIVAL_PORT": "Arrival Port",
+    "ARRIVAL_PORT_REQUIRED": "Arrival port is required",
     "SELECT_PORT": "Select port..."
   },
   "DOCUMENTS": {
