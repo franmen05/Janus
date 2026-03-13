@@ -11,6 +11,7 @@
     "ALERTS": "Alerts",
     "USERS": "Users",
     "COMPLIANCE_CONFIG": "Compliance Rules",
+    "PORTS": "Ports",
     "LOGOUT": "Logout",
     "SECTION_MAIN": "Main",
     "SECTION_ADMIN": "Administration"
@@ -96,7 +97,9 @@
     "CREATE_CLIENT": "Create new client",
     "OPERATION_TYPE": "Operation Type",
     "SELECT_OPERATION_TYPE": "Select operation type",
-    "OPERATION_TYPE_REQUIRED": "Operation type is required"
+    "OPERATION_TYPE_REQUIRED": "Operation type is required",
+    "ARRIVAL_PORT": "Arrival Port",
+    "SELECT_PORT": "Select port..."
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -140,6 +143,17 @@
     "SEARCH": "Search by name or Tax ID...",
     "TYPE": "Type",
     "SELECT_TYPE": "Select type..."
+  },
+  "PORTS": {
+    "TITLE": "Ports",
+    "NEW": "New Port",
+    "EDIT_TITLE": "Edit Port",
+    "NEW_TITLE": "New Port",
+    "CODE": "Code",
+    "NAME": "Name",
+    "DESCRIPTION": "Description",
+    "SEARCH": "Search by code or name...",
+    "NO_PORTS": "No ports found"
   },
   "CLIENT_TYPES": {
     "COMPANY": "Company",
@@ -824,6 +838,9 @@
     "LIQUIDATION_NOT_APPROVED": "Only approved liquidations can be made definitive.",
     "LIQUIDATION_NOT_DEFINITIVE": "Payment can only be registered for definitive liquidations.",
     "APPROVAL_ONLY_ON_PRELIMINARY": "Approvals can only be performed on the pre-liquidation declaration",
-    "FINAL_DECLARATION_NOT_ALLOWED": "Final declarations can only be registered from the Valuation stage onwards"
+    "FINAL_DECLARATION_NOT_ALLOWED": "Final declarations can only be registered from the Valuation stage onwards",
+    "DECLARATION_NUMBER_REQUIRED": "Declaration number is required for final declarations.",
+    "GATT_METHOD_REQUIRED": "GATT method is required for final declarations.",
+    "PORT_CODE_ALREADY_EXISTS": "A port with this code already exists."
   }
 }

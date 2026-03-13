@@ -1,6 +1,7 @@
 package com.janus.operation.domain.model;
 
 import com.janus.client.domain.model.Client;
+import com.janus.port.domain.model.Port;
 import com.janus.shared.domain.BaseEntity;
 import com.janus.user.domain.model.User;
 import jakarta.persistence.Column;
@@ -44,6 +45,9 @@ public class Operation extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     public User assignedAgent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Port arrivalPort;
 
     @Column(name = "bl_number")
     public String blNumber;

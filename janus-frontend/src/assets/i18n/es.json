@@ -11,6 +11,7 @@
     "ALERTS": "Alertas",
     "USERS": "Usuarios",
     "COMPLIANCE_CONFIG": "Reglas de Cumplimiento",
+    "PORTS": "Puertos",
     "LOGOUT": "Cerrar Sesión",
     "SECTION_MAIN": "Principal",
     "SECTION_ADMIN": "Administración"
@@ -96,7 +97,9 @@
     "CREATE_CLIENT": "Crear nuevo cliente",
     "OPERATION_TYPE": "Tipo de Operación",
     "SELECT_OPERATION_TYPE": "Seleccione tipo de operación",
-    "OPERATION_TYPE_REQUIRED": "El tipo de operación es requerido"
+    "OPERATION_TYPE_REQUIRED": "El tipo de operación es requerido",
+    "ARRIVAL_PORT": "Puerto de Arribo",
+    "SELECT_PORT": "Seleccionar puerto..."
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
@@ -140,6 +143,17 @@
     "SEARCH": "Buscar por nombre o RNC...",
     "TYPE": "Tipo",
     "SELECT_TYPE": "Seleccionar tipo..."
+  },
+  "PORTS": {
+    "TITLE": "Puertos",
+    "NEW": "Nuevo Puerto",
+    "EDIT_TITLE": "Editar Puerto",
+    "NEW_TITLE": "Nuevo Puerto",
+    "CODE": "Código",
+    "NAME": "Nombre",
+    "DESCRIPTION": "Descripción",
+    "SEARCH": "Buscar por código o nombre...",
+    "NO_PORTS": "No se encontraron puertos"
   },
   "CLIENT_TYPES": {
     "COMPANY": "Empresa",
@@ -824,6 +838,9 @@
     "LIQUIDATION_NOT_APPROVED": "Solo las liquidaciones aprobadas pueden hacerse definitivas.",
     "LIQUIDATION_NOT_DEFINITIVE": "El pago solo puede registrarse para liquidaciones definitivas.",
     "APPROVAL_ONLY_ON_PRELIMINARY": "Las aprobaciones solo pueden realizarse sobre la declaración de pre-liquidación",
-    "FINAL_DECLARATION_NOT_ALLOWED": "Las declaraciones finales solo pueden registrarse a partir de la etapa de Valoración"
+    "FINAL_DECLARATION_NOT_ALLOWED": "Las declaraciones finales solo pueden registrarse a partir de la etapa de Valoración",
+    "DECLARATION_NUMBER_REQUIRED": "El número de declaración es obligatorio para declaraciones finales.",
+    "GATT_METHOD_REQUIRED": "El método GATT es obligatorio para declaraciones finales.",
+    "PORT_CODE_ALREADY_EXISTS": "Ya existe un puerto con este código."
   }
 }

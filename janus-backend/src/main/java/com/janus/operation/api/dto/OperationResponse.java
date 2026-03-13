@@ -38,6 +38,9 @@ public record OperationResponse(
         String childBlNumber,
         Boolean localChargesValidated,
         LocalDateTime valuationFinalizedAt,
+        Long arrivalPortId,
+        String arrivalPortCode,
+        String arrivalPortName,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -69,6 +72,9 @@ public record OperationResponse(
                 op.childBlNumber,
                 op.localChargesValidated,
                 op.valuationFinalizedAt,
+                op.arrivalPort != null ? op.arrivalPort.id : null,
+                op.arrivalPort != null ? op.arrivalPort.code : null,
+                op.arrivalPort != null ? op.arrivalPort.name : null,
                 op.createdAt,
                 op.updatedAt
         );

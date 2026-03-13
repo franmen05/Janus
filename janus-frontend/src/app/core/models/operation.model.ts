@@ -80,6 +80,9 @@ export interface Operation {
   incoterm?: string | null;
   localChargesValidated?: boolean;
   valuationFinalizedAt?: string | null;
+  arrivalPortId?: number | null;
+  arrivalPortCode?: string | null;
+  arrivalPortName?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -100,6 +103,7 @@ export interface CreateOperationRequest {
   notes?: string;
   arrivalDate?: string;
   incoterm?: string;
+  arrivalPortId?: number;
 }
 
 export interface ChangeStatusRequest {

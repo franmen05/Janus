@@ -24,5 +24,6 @@ public record CreateOperationRequest(
         java.time.LocalDateTime arrivalDate,
         String incoterm,
         BlType blType,
-        String childBlNumber
+        String childBlNumber,
+        Long arrivalPortId
 ) {}

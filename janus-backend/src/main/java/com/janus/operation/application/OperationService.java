@@ -13,6 +13,7 @@ import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.model.StatusHistory;
 import com.janus.operation.domain.model.CargoType;
 import com.janus.operation.domain.model.TransportMode;
+import com.janus.port.domain.repository.PortRepository;
 import com.janus.operation.domain.repository.OperationRepository;
 import com.janus.operation.domain.repository.StatusHistoryRepository;
 import com.janus.operation.domain.service.AnalystAssignmentService;
@@ -58,6 +59,9 @@ public class OperationService {
 
     @Inject
     ComplianceValidationService complianceValidationService;
+
+    @Inject
+    PortRepository portRepository;
 
     @Inject
     Event<AuditEvent> auditEvent;
@@ -109,6 +113,11 @@ public class OperationService {
         op.incoterm = request.incoterm();
         op.blType = request.blType();
         op.childBlNumber = request.childBlNumber();
+
+        if (request.arrivalPortId() != null) {
+            op.arrivalPort = portRepository.findByIdOptional(request.arrivalPortId())
+                    .orElseThrow(() -> new NotFoundException("Port", request.arrivalPortId()));
+        }
 
         // Validate childBlNumber required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
@@ -199,6 +208,11 @@ public class OperationService {
         op.blType = request.blType();
         op.childBlNumber = request.childBlNumber();
 
+        if (request.arrivalPortId() != null) {
+            op.arrivalPort = portRepository.findByIdOptional(request.arrivalPortId())
+                    .orElseThrow(() -> new NotFoundException("Port", request.arrivalPortId()));
+        }
+
         // Validate childBlNumber required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
                 && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
@@ -241,6 +255,7 @@ public class OperationService {
         // Force initialization of lazy associations for DTO mapping
         if (op.client != null) { var ignored = op.client.name; }
         if (op.assignedAgent != null) { var ignored = op.assignedAgent.fullName; }
+        if (op.arrivalPort != null) { var ignored = op.arrivalPort.name; }
 
         return op;
     }

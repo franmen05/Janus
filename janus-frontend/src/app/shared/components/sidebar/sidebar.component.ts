@@ -46,6 +46,12 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
                   <span>{{ 'NAV.USERS' | translate }}</span>
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/ports" routerLinkActive="active">
+                  <i class="bi bi-geo-alt"></i>
+                  <span>{{ 'NAV.PORTS' | translate }}</span>
+                </a>
+              </li>
             }
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center" routerLink="/alerts" routerLinkActive="active">

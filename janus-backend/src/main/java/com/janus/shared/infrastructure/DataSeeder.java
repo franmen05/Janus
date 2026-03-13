@@ -3,6 +3,8 @@ package com.janus.shared.infrastructure;
 import com.janus.client.domain.model.Client;
 import com.janus.client.domain.model.ClientType;
 import com.janus.client.domain.repository.ClientRepository;
+import com.janus.port.domain.model.Port;
+import com.janus.port.domain.repository.PortRepository;
 import com.janus.compliance.domain.model.ComplianceRuleConfig;
 import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
 import com.janus.user.domain.model.Role;
@@ -30,8 +32,16 @@ public class DataSeeder {
     @Inject
     ComplianceRuleConfigRepository complianceRuleConfigRepository;
 
+    @Inject
+    PortRepository portRepository;
+
     @Transactional
     void onStart(@Observes StartupEvent event) {
+        if (portRepository.count() == 0) {
+            LOG.info("Seeding ports...");
+            seedPorts();
+            LOG.info("Port seeding complete.");
+        }
         if (userRepository.count() == 0) {
             LOG.info("Seeding initial data...");
             seedClients();
@@ -94,6 +104,21 @@ public class DataSeeder {
         createConfig("EXTERNAL_PERMITS_CLEARED", "enabled", "true", "Enable external permits cleared rule");
         createConfig("LOCAL_CHARGES_VALIDATED", "enabled", "true", "Enable local charges validated rule");
         createConfig("RECEPTION_RECEIPT_REQUIRED", "enabled", "true", "Enable reception receipt required rule for closing operations");
+    }
+
+    private void seedPorts() {
+        createPort("SPS", "Puerto Cortés", "Principal puerto de Honduras");
+        createPort("TGU", "Toncontín", "Aeropuerto Toncontín, Tegucigalpa");
+        createPort("SAP", "Ramón Villeda Morales", "Aeropuerto de San Pedro Sula");
+        createPort("LCE", "La Ceiba", "Puerto de La Ceiba");
+    }
+
+    private void createPort(String code, String name, String description) {
+        var port = new Port();
+        port.code = code;
+        port.name = name;
+        port.description = description;
+        portRepository.persist(port);
     }
 
     private void createConfig(String ruleCode, String paramKey, String paramValue, String description) {

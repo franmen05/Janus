@@ -8,7 +8,9 @@ import { OperatorFunction, Observable, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
 import { ClientService } from '../../../core/services/client.service';
+import { PortService } from '../../../core/services/port.service';
 import { Client } from '../../../core/models/client.model';
+import { Port } from '../../../core/models/port.model';
 import { TransportMode, OperationType, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
@@ -143,6 +145,17 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
+              <label class="form-label">{{ 'OPERATIONS.ARRIVAL_PORT' | translate }}</label>
+              <select class="form-select" formControlName="arrivalPortId">
+                <option value="">{{ 'OPERATIONS.SELECT_PORT' | translate }}</option>
+                @for (port of ports(); track port.id) {
+                  <option [value]="port.id">{{ port.code }} - {{ port.name }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.INCOTERM' | translate }}</label>
               <select class="form-select" formControlName="incoterm">
                 <option value="">-</option>
@@ -183,10 +196,12 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 export class OperationFormComponent implements OnInit {
   private operationService = inject(OperationService);
   private clientService = inject(ClientService);
+  private portService = inject(PortService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
   clients = signal<Client[]>([]);
+  ports = signal<Port[]>([]);
   isEdit = signal(false);
   operationId: number | null = null;
   selectedClient = signal<Client | null>(null);
@@ -217,7 +232,8 @@ export class OperationFormComponent implements OnInit {
     blAvailability: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     notes: new FormControl('', { nonNullable: true }),
     arrivalDate: new FormControl('', { nonNullable: true }),
-    incoterm: new FormControl('', { nonNullable: true })
+    incoterm: new FormControl('', { nonNullable: true }),
+    arrivalPortId: new FormControl('', { nonNullable: true })
   });
 
   searchClient: OperatorFunction<string, Client[]> = (text$: Observable<string>) =>
@@ -277,9 +293,11 @@ export class OperationFormComponent implements OnInit {
       // Use forkJoin to ensure both clients and operation are loaded before client lookup
       forkJoin({
         clients: this.clientService.getAll(),
-        operation: this.operationService.getById(+id)
-      }).subscribe(({ clients, operation: op }) => {
+        operation: this.operationService.getById(+id),
+        ports: this.portService.getAll()
+      }).subscribe(({ clients, operation: op, ports }) => {
         this.clients.set(clients);
+        this.ports.set(ports);
         if (op.status === 'CLOSED' || op.status === 'CANCELLED') {
           this.router.navigate(['/operations', op.id]);
           return;
@@ -298,7 +316,8 @@ export class OperationFormComponent implements OnInit {
           blAvailability: op.blAvailability ?? '',
           notes: op.notes ?? '',
           arrivalDate: op.arrivalDate ?? '',
-          incoterm: op.incoterm ?? ''
+          incoterm: op.incoterm ?? '',
+          arrivalPortId: op.arrivalPortId?.toString() ?? ''
         });
         // Disable BL Availability when operation is at or past VALUATION_REVIEW
         if (this.blAvailabilityLockedStatuses.has(op.status)) {
@@ -313,7 +332,8 @@ export class OperationFormComponent implements OnInit {
         }
       });
     } else {
-      // Not editing: just load clients for the typeahead
+      // Not editing: just load clients for the typeahead and ports
+      this.portService.getAll().subscribe(ports => this.ports.set(ports));
       this.clientService.getAll().subscribe(clients => {
         this.clients.set(clients);
         const clientIdParam = this.route.snapshot.queryParamMap.get('clientId');
@@ -375,7 +395,8 @@ export class OperationFormComponent implements OnInit {
       blAvailability: val.blAvailability as BlAvailability,
       notes: val.notes || undefined,
       arrivalDate: val.arrivalDate || undefined,
-      incoterm: val.incoterm || undefined
+      incoterm: val.incoterm || undefined,
+      arrivalPortId: val.arrivalPortId ? +val.arrivalPortId : undefined
     };
     const obs = this.isEdit() ? this.operationService.update(this.operationId!, request) : this.operationService.create(request);
     obs.subscribe(op => this.router.navigate(['/operations', op.id]));

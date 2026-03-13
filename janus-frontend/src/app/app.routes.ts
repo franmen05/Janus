@@ -93,6 +93,24 @@ export const routes: Routes = [
         canActivate: [roleGuard]
       },
       {
+        path: 'ports',
+        loadComponent: () => import('./features/ports/port-list/port-list.component').then(m => m.PortListComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'ports/new',
+        loadComponent: () => import('./features/ports/port-form/port-form.component').then(m => m.PortFormComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'ports/:id/edit',
+        loadComponent: () => import('./features/ports/port-form/port-form.component').then(m => m.PortFormComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
         path: 'users',
         loadComponent: () => import('./features/users/user-list/user-list.component').then(m => m.UserListComponent),
         data: { roles: ['ADMIN'] },
