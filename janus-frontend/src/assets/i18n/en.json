@@ -480,7 +480,7 @@
     "ACKNOWLEDGED_AT": "Acknowledged At",
     "BANNER_WARNING": "This operation has active alerts",
     "MESSAGES": {
-      "DECLARATION_DEADLINE": "Operation {{ref}} arrived on {{arrivalDate}}. You have until {{deadline}} (5 business days) to file the customs declaration.",
+      "DECLARATION_DEADLINE": "Operation {{ref}} arrived on {{arrivalDate}}. You have 5 business days to file the customs declaration.",
       "INACTIVITY_48H": "Operation {{ref}} has been inactive for more than {{hours}} hours.",
       "DEADLINE_APPROACHING": "Operation {{ref}} arrival date is approaching (within {{hours}} hours).",
       "MISSING_CRITICAL_DOCUMENT": "Operation {{ref}} is in review but has incomplete documentation ({{percentage}}% complete).",

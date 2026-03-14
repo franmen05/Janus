@@ -134,9 +134,8 @@ public class AlertCheckerScheduler {
             var arrivalDate = op.estimatedArrival.toLocalDate();
             var deadline = calculateBusinessDayDeadline(arrivalDate, 5);
             var message = "Operation " + op.referenceNumber + " arrived on "
-                    + arrivalDate.format(dateFormatter) + ". You have until "
-                    + deadline.format(dateFormatter)
-                    + " (5 business days) to file the customs declaration.";
+                    + arrivalDate.format(dateFormatter)
+                    + ". You have 5 business days to file the customs declaration.";
             var messageParams = "{\"ref\":\"" + op.referenceNumber
                     + "\",\"arrivalDate\":\"" + arrivalDate.format(isoFormatter)
                     + "\",\"deadline\":\"" + deadline.format(isoFormatter) + "\"}";
