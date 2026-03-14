@@ -17,7 +17,8 @@
     "SECTION_MONITORING": "Monitoring",
     "LOGOUT": "Logout",
     "SECTION_MAIN": "Main",
-    "SECTION_ADMIN": "Administration"
+    "SECTION_ADMIN": "Administration",
+    "DOCUMENT_TYPES_CONFIG": "Document Types"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -129,7 +130,12 @@
     "TEMPLATES_SECTION": "Document Templates",
     "DELETED": "Deleted",
     "PRINT_NOT_SUPPORTED": "This file type cannot be printed directly. Please download and print manually.",
-    "POPUP_BLOCKED": "Pop-up blocked. Please allow pop-ups for this site to print documents."
+    "POPUP_BLOCKED": "Pop-up blocked. Please allow pop-ups for this site to print documents.",
+    "ALLOW_MULTIPLE": "Allow Multiple",
+    "MULTI_UPLOAD_HINT": "This type allows multiple documents. Drag or select multiple files.",
+    "RENAME_FILE": "Rename",
+    "FILE_NAME": "File Name",
+    "UPLOADING_FILE": "Uploading file {{current}} of {{total}}..."
   },
   "CLIENTS": {
     "TITLE": "Clients",
@@ -341,7 +347,10 @@
     "BROWSE": "Browse Files",
     "ALLOWED": "Allowed: PDF, JPG, PNG. Max: {{size}}MB",
     "REMOVE": "Remove",
-    "FILE_TOO_LARGE": "File exceeds maximum size of {{size}}MB"
+    "FILE_TOO_LARGE": "File exceeds maximum size of {{size}}MB",
+    "DRAG_DROP_MULTIPLE": "Drag & drop files here, or",
+    "BROWSE_MULTIPLE": "Browse Files",
+    "FILES_SELECTED": "{{count}} file(s) selected"
   },
   "UPLOAD": {
     "VALIDATED": "Document uploaded and VALIDATED successfully.",
@@ -857,6 +866,13 @@
     "AUTO_FETCH_ON": "Enabled",
     "AUTO_FETCH_OFF": "Disabled",
     "SCHEDULED_TIME": "Scheduled time"
+  },
+  "DOCUMENT_TYPES_CONFIG": {
+    "TITLE": "Document Type Configuration",
+    "CODE": "Code",
+    "TYPE": "Document Type",
+    "ALLOW_MULTIPLE": "Allow Multiple",
+    "UPDATED": "Document type configuration updated"
   },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "Cannot change from {{from}} to {{to}}. Only the next step is allowed.",

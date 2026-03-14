@@ -85,6 +85,7 @@ public class DocumentResource {
                            @RestForm("file") FileUpload file,
                            @RestForm("documentType") DocumentType documentType,
                            @RestForm("changeReason") String changeReason,
+                           @RestForm("originalName") String originalName,
                            @Context SecurityContext sec) {
         // CARRIER can only upload RECEPTION_RECEIPT
         if (sec.isUserInRole("CARRIER") && documentType != DocumentType.RECEPTION_RECEIPT) {
@@ -94,11 +95,12 @@ public class DocumentResource {
         }
         try {
             var inputStream = Files.newInputStream(file.uploadedFile());
+            var effectiveName = (originalName != null && !originalName.isBlank()) ? originalName : file.fileName();
             var doc = documentService.upload(
                     operationId,
                     documentType,
                     inputStream,
-                    file.fileName(),
+                    effectiveName,
                     file.contentType(),
                     Files.size(file.uploadedFile()),
                     sec.getUserPrincipal().getName(),

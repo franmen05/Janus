@@ -3,6 +3,9 @@ package com.janus.shared.infrastructure;
 import com.janus.client.domain.model.Client;
 import com.janus.client.domain.model.ClientType;
 import com.janus.client.domain.repository.ClientRepository;
+import com.janus.document.domain.model.DocumentType;
+import com.janus.document.domain.model.DocumentTypeConfig;
+import com.janus.document.domain.repository.DocumentTypeConfigRepository;
 import com.janus.exchangerate.domain.model.ExchangeRate;
 import com.janus.exchangerate.domain.repository.ExchangeRateRepository;
 import com.janus.port.domain.model.Port;
@@ -38,6 +41,9 @@ public class DataSeeder {
     PortRepository portRepository;
 
     @Inject
+    DocumentTypeConfigRepository documentTypeConfigRepository;
+
+    @Inject
     ExchangeRateRepository exchangeRateRepository;
 
     @Transactional
@@ -57,6 +63,11 @@ public class DataSeeder {
             LOG.info("Seeding compliance rule configs...");
             seedComplianceRuleConfigs();
             LOG.info("Compliance rule config seeding complete.");
+        }
+        if (documentTypeConfigRepository.count() == 0) {
+            LOG.info("Seeding document type configs...");
+            seedDocumentTypeConfigs();
+            LOG.info("Document type config seeding complete.");
         }
         if (exchangeRateRepository.count() == 0) {
             LOG.info("Seeding exchange rates...");
@@ -138,6 +149,17 @@ public class DataSeeder {
         config.paramValue = paramValue;
         config.description = description;
         complianceRuleConfigRepository.persist(config);
+    }
+
+    private void seedDocumentTypeConfigs() {
+        for (var type : DocumentType.values()) {
+            if (documentTypeConfigRepository.findByCode(type.name()).isEmpty()) {
+                var config = new DocumentTypeConfig();
+                config.code = type.name();
+                config.allowMultiple = false;
+                documentTypeConfigRepository.persist(config);
+            }
+        }
     }
 
     private void seedExchangeRates() {

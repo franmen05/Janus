@@ -163,6 +163,12 @@ export const routes: Routes = [
         loadComponent: () => import('./features/compliance/compliance-config/compliance-config.component').then(m => m.ComplianceConfigComponent),
         data: { roles: ['ADMIN'] },
         canActivate: [roleGuard]
+      },
+      {
+        path: 'admin/document-types',
+        loadComponent: () => import('./features/admin/document-type-config/document-type-config.component').then(m => m.DocumentTypeConfigComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
       }
     ]
   },

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Document, DocumentVersion } from '../models/document.model';
+import { Document, DocumentVersion, DocumentTypeConfig } from '../models/document.model';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService {
@@ -21,12 +21,23 @@ export class DocumentService {
     return this.http.get<Document>(`${this.baseUrl}/api/operations/${operationId}/documents/${id}`);
   }
 
-  upload(operationId: number, file: File, documentType: string, changeReason?: string): Observable<Document> {
+  getDocumentTypes(): Observable<DocumentTypeConfig[]> {
+    return this.http.get<DocumentTypeConfig[]>(`${this.baseUrl}/api/document-types`);
+  }
+
+  updateDocumentType(code: string, allowMultiple: boolean): Observable<DocumentTypeConfig> {
+    return this.http.put<DocumentTypeConfig>(`${this.baseUrl}/api/document-types/${code}`, { allowMultiple });
+  }
+
+  upload(operationId: number, file: File, documentType: string, changeReason?: string, originalName?: string): Observable<Document> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('documentType', documentType);
     if (changeReason) {
       formData.append('changeReason', changeReason);
+    }
+    if (originalName) {
+      formData.append('originalName', originalName);
     }
     return this.http.post<Document>(
       `${this.baseUrl}/api/operations/${operationId}/documents`,

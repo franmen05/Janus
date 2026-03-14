@@ -43,3 +43,8 @@ export interface CompletenessResponse {
   missingDocuments: DocumentType[];
   color: string;
 }
+
+export interface DocumentTypeConfig {
+  code: string;
+  allowMultiple: boolean;
+}

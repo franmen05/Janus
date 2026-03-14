@@ -6,7 +6,9 @@ import com.janus.document.domain.model.Document;
 import com.janus.document.domain.model.DocumentStatus;
 import com.janus.document.domain.model.DocumentType;
 import com.janus.document.domain.model.DocumentVersion;
+import com.janus.document.domain.model.DocumentTypeConfig;
 import com.janus.document.domain.repository.DocumentRepository;
+import com.janus.document.domain.repository.DocumentTypeConfigRepository;
 import com.janus.document.domain.repository.DocumentVersionRepository;
 import com.janus.document.domain.service.DocumentCompletenessService;
 import com.janus.document.domain.service.DocumentValidationService;
@@ -31,6 +33,9 @@ public class DocumentService {
 
     @Inject
     DocumentRepository documentRepository;
+
+    @Inject
+    DocumentTypeConfigRepository documentTypeConfigRepository;
 
     @Inject
     DocumentVersionRepository documentVersionRepository;
@@ -84,15 +89,29 @@ public class DocumentService {
 
         validationService.validateFile(mimeType, fileSize);
 
-        var document = documentRepository.findByOperationAndType(operationId, documentType)
-                .orElseGet(() -> {
-                    var doc = new Document();
-                    doc.operation = operation;
-                    doc.documentType = documentType;
-                    doc.status = DocumentStatus.PENDING;
-                    documentRepository.persist(doc);
-                    return doc;
-                });
+        var allowMultiple = documentTypeConfigRepository.findByCode(documentType.name())
+                .map(config -> config.allowMultiple)
+                .orElse(false);
+
+        var document = allowMultiple
+                ? documentRepository.findByOperationAndTypeAndName(operationId, documentType, originalName)
+                        .orElseGet(() -> {
+                            var doc = new Document();
+                            doc.operation = operation;
+                            doc.documentType = documentType;
+                            doc.status = DocumentStatus.PENDING;
+                            documentRepository.persist(doc);
+                            return doc;
+                        })
+                : documentRepository.findByOperationAndType(operationId, documentType)
+                        .orElseGet(() -> {
+                            var doc = new Document();
+                            doc.operation = operation;
+                            doc.documentType = documentType;
+                            doc.status = DocumentStatus.PENDING;
+                            documentRepository.persist(doc);
+                            return doc;
+                        });
 
         var storedName = UUID.randomUUID() + "_" + originalName;
         var filePath = storageService.store(fileStream, storedName, operation.referenceNumber);

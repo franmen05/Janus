@@ -23,6 +23,13 @@ public class DocumentRepository implements PanacheRepository<Document> {
         return list("operation.id = ?1", operationId);
     }
 
+    public Optional<Document> findByOperationAndTypeAndName(Long operationId, DocumentType type, String originalName) {
+        return find("FROM Document d WHERE d.operation.id = ?1 AND d.documentType = ?2 AND d.active = true " +
+                        "AND EXISTS (SELECT 1 FROM DocumentVersion v WHERE v.document = d AND v.originalName = ?3)",
+                operationId, type, originalName)
+                .firstResultOptional();
+    }
+
     public long countByOperationId(Long operationId) {
         return count("operation.id = ?1 AND active = true", operationId);
     }

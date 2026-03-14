@@ -89,6 +89,12 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
                     <span>{{ 'NAV.COMPLIANCE_CONFIG' | translate }}</span>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/admin/document-types" routerLinkActive="active">
+                    <i class="bi bi-file-earmark-ruled"></i>
+                    <span>{{ 'NAV.DOCUMENT_TYPES_CONFIG' | translate }}</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -137,7 +143,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     const url = this.router.url;
-    if (url.startsWith('/users') || url.startsWith('/ports') || url.startsWith('/exchange-rates') || url.startsWith('/compliance-config')) {
+    if (url.startsWith('/users') || url.startsWith('/ports') || url.startsWith('/exchange-rates') || url.startsWith('/compliance-config') || url.startsWith('/admin/document-types')) {
       this.configCollapsed.set(false);
     }
   }
