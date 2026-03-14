@@ -12,6 +12,9 @@
     "USERS": "Users",
     "COMPLIANCE_CONFIG": "Compliance Rules",
     "PORTS": "Ports",
+    "EXCHANGE_RATES": "Exchange Rates",
+    "SECTION_CONFIG": "Configuration",
+    "SECTION_MONITORING": "Monitoring",
     "LOGOUT": "Logout",
     "SECTION_MAIN": "Main",
     "SECTION_ADMIN": "Administration"
@@ -821,6 +824,40 @@
     "CONCEPT_SECURITY": "Security",
     "CONCEPT_OVERTIME": "Overtime"
   },
+  "EXCHANGE_RATES": {
+    "TITLE": "Exchange Rates",
+    "CURRENT_RATE": "Current Exchange Rate",
+    "NO_ACTIVE_RATE": "No active exchange rate configured",
+    "EFFECTIVE_DATE": "Effective Date",
+    "RATE": "Rate",
+    "SOURCE": "Source",
+    "ACTIVE": "Active",
+    "MANUAL": "Manual",
+    "AUTOMATIC": "Automatic",
+    "FETCH_RATE": "Fetch Current Rate",
+    "FETCHING": "Fetching...",
+    "NEW_RATE": "New Rate",
+    "EDIT_RATE": "Edit Rate",
+    "CREATE_TITLE": "New Exchange Rate",
+    "EDIT_TITLE": "Edit Exchange Rate",
+    "RATE_PLACEHOLDER": "e.g. 58.5000",
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "HISTORY": "Rate History",
+    "USD_TO_DOP": "USD \u2192 DOP",
+    "ACTIONS": "Actions",
+    "YES": "Yes",
+    "NO": "No",
+    "RATE_CREATED": "Exchange rate created successfully",
+    "RATE_UPDATED": "Exchange rate updated successfully",
+    "RATE_FETCHED": "Exchange rate fetched successfully",
+    "FETCH_ERROR": "Failed to fetch exchange rate",
+    "AUTO_FETCH": "Automatic Update",
+    "AUTO_FETCH_DESC": "Automatically fetch the exchange rate daily at the scheduled time",
+    "AUTO_FETCH_ON": "Enabled",
+    "AUTO_FETCH_OFF": "Disabled",
+    "SCHEDULED_TIME": "Scheduled time"
+  },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "Cannot change from {{from}} to {{to}}. Only the next step is allowed.",
     "CONTAINER_NUMBER_REQUIRED": "Container number is required for Maritime FCL transport mode.",
@@ -847,6 +884,8 @@
     "FINAL_DECLARATION_NOT_ALLOWED": "Final declarations can only be registered from the Valuation stage onwards",
     "DECLARATION_NUMBER_REQUIRED": "Declaration number is required for final declarations.",
     "GATT_METHOD_REQUIRED": "GATT method is required for final declarations.",
-    "PORT_CODE_ALREADY_EXISTS": "A port with this code already exists."
+    "PORT_CODE_ALREADY_EXISTS": "A port with this code already exists.",
+    "EXCHANGE_RATE_ALREADY_EXISTS": "An exchange rate already exists for this date.",
+    "EXCHANGE_RATE_PAST_DATE": "Cannot create an exchange rate with a past date."
   }
 }

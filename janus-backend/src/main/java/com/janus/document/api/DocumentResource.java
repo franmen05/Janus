@@ -10,6 +10,7 @@ import com.janus.operation.application.OperationService;
 import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.DELETE;
@@ -47,6 +48,7 @@ public class DocumentResource {
 
     @GET
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @Transactional
     public List<DocumentResponse> list(@PathParam("operationId") Long operationId,
                                        @QueryParam("includeDeleted") @DefaultValue("false") boolean includeDeleted,
                                        @Context SecurityContext sec) {
@@ -68,6 +70,7 @@ public class DocumentResource {
     @GET
     @Path("/{id}")
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @Transactional
     public DocumentResponse getById(@PathParam("operationId") Long operationId,
                                      @PathParam("id") Long id,
                                      @Context SecurityContext sec) {

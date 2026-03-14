@@ -10,6 +10,7 @@ import com.janus.operation.domain.service.StatusTransitionService;
 import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -43,6 +44,7 @@ public class OperationResource {
     SecurityHelper securityHelper;
 
     @GET
+    @Transactional
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
     public List<OperationResponse> list(
             @QueryParam("status") OperationStatus status,
@@ -73,6 +75,7 @@ public class OperationResource {
 
     @GET
     @Path("/{id}")
+    @Transactional
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT", "CARRIER"})
     public OperationResponse getById(@PathParam("id") Long id, @Context SecurityContext sec) {
         var op = operationService.findById(id);
@@ -81,6 +84,7 @@ public class OperationResource {
     }
 
     @POST
+    @Transactional
     @RolesAllowed({"ADMIN", "AGENT"})
     public Response create(@Valid CreateOperationRequest request, @Context SecurityContext sec) {
         var op = operationService.create(request, sec.getUserPrincipal().getName());
@@ -91,6 +95,7 @@ public class OperationResource {
 
     @PUT
     @Path("/{id}")
+    @Transactional
     @RolesAllowed({"ADMIN", "AGENT"})
     public OperationResponse update(@PathParam("id") Long id, @Valid CreateOperationRequest request,
                                      @Context SecurityContext sec) {
@@ -117,6 +122,7 @@ public class OperationResource {
 
     @PATCH
     @Path("/{id}/bl-availability")
+    @Transactional
     @RolesAllowed({"ADMIN", "AGENT"})
     public OperationResponse updateBlAvailability(@PathParam("id") Long id,
                                                    @Valid com.janus.operation.api.dto.BlOriginalAvailableRequest body,
@@ -128,6 +134,7 @@ public class OperationResource {
 
     @GET
     @Path("/{id}/allowed-transitions")
+    @Transactional
     @RolesAllowed({"ADMIN", "AGENT", "CARRIER"})
     public Set<OperationStatus> getAllowedTransitions(@PathParam("id") Long id) {
         var op = operationService.findById(id);
@@ -136,6 +143,7 @@ public class OperationResource {
 
     @GET
     @Path("/{id}/history")
+    @Transactional
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
     public List<StatusHistoryResponse> getHistory(@PathParam("id") Long id, @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(id));

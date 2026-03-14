@@ -141,6 +141,24 @@ export const routes: Routes = [
         canActivate: [roleGuard]
       },
       {
+        path: 'exchange-rates',
+        loadComponent: () => import('./features/exchange-rates/exchange-rate-list/exchange-rate-list.component').then(m => m.ExchangeRateListComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'exchange-rates/new',
+        loadComponent: () => import('./features/exchange-rates/exchange-rate-form/exchange-rate-form.component').then(m => m.ExchangeRateFormComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
+        path: 'exchange-rates/:id/edit',
+        loadComponent: () => import('./features/exchange-rates/exchange-rate-form/exchange-rate-form.component').then(m => m.ExchangeRateFormComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
+      },
+      {
         path: 'compliance-config',
         loadComponent: () => import('./features/compliance/compliance-config/compliance-config.component').then(m => m.ComplianceConfigComponent),
         data: { roles: ['ADMIN'] },

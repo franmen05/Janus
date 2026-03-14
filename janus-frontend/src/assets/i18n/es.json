@@ -12,6 +12,9 @@
     "USERS": "Usuarios",
     "COMPLIANCE_CONFIG": "Reglas de Cumplimiento",
     "PORTS": "Puertos",
+    "EXCHANGE_RATES": "Tasas de Cambio",
+    "SECTION_CONFIG": "Configuración",
+    "SECTION_MONITORING": "Monitoreo",
     "LOGOUT": "Cerrar Sesión",
     "SECTION_MAIN": "Principal",
     "SECTION_ADMIN": "Administración"
@@ -821,6 +824,40 @@
     "CONCEPT_SECURITY": "Seguridad",
     "CONCEPT_OVERTIME": "Horas Extra"
   },
+  "EXCHANGE_RATES": {
+    "TITLE": "Tasas de Cambio",
+    "CURRENT_RATE": "Tasa de Cambio Actual",
+    "NO_ACTIVE_RATE": "No hay tasa de cambio activa configurada",
+    "EFFECTIVE_DATE": "Fecha Efectiva",
+    "RATE": "Tasa",
+    "SOURCE": "Fuente",
+    "ACTIVE": "Activa",
+    "MANUAL": "Manual",
+    "AUTOMATIC": "Automática",
+    "FETCH_RATE": "Obtener Tasa Actual",
+    "FETCHING": "Obteniendo...",
+    "NEW_RATE": "Nueva Tasa",
+    "EDIT_RATE": "Editar Tasa",
+    "CREATE_TITLE": "Nueva Tasa de Cambio",
+    "EDIT_TITLE": "Editar Tasa de Cambio",
+    "RATE_PLACEHOLDER": "ej. 58.5000",
+    "SAVE": "Guardar",
+    "CANCEL": "Cancelar",
+    "HISTORY": "Historial de Tasas",
+    "USD_TO_DOP": "USD \u2192 DOP",
+    "ACTIONS": "Acciones",
+    "YES": "Sí",
+    "NO": "No",
+    "RATE_CREATED": "Tasa de cambio creada exitosamente",
+    "RATE_UPDATED": "Tasa de cambio actualizada exitosamente",
+    "RATE_FETCHED": "Tasa de cambio obtenida exitosamente",
+    "FETCH_ERROR": "Error al obtener la tasa de cambio",
+    "AUTO_FETCH": "Actualización Automática",
+    "AUTO_FETCH_DESC": "Obtener automáticamente la tasa de cambio diariamente a la hora programada",
+    "AUTO_FETCH_ON": "Activada",
+    "AUTO_FETCH_OFF": "Desactivada",
+    "SCHEDULED_TIME": "Hora programada"
+  },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "No se puede cambiar de {{from}} a {{to}}. Solo se permite el siguiente paso.",
     "CONTAINER_NUMBER_REQUIRED": "El número de contenedor es obligatorio para transporte marítimo FCL.",
@@ -847,6 +884,8 @@
     "FINAL_DECLARATION_NOT_ALLOWED": "Las declaraciones finales solo pueden registrarse a partir de la etapa de Valoración",
     "DECLARATION_NUMBER_REQUIRED": "El número de declaración es obligatorio para declaraciones finales.",
     "GATT_METHOD_REQUIRED": "El método GATT es obligatorio para declaraciones finales.",
-    "PORT_CODE_ALREADY_EXISTS": "Ya existe un puerto con este código."
+    "PORT_CODE_ALREADY_EXISTS": "Ya existe un puerto con este código.",
+    "EXCHANGE_RATE_ALREADY_EXISTS": "Ya existe una tasa de cambio para esta fecha.",
+    "EXCHANGE_RATE_PAST_DATE": "No se puede crear una tasa de cambio con fecha pasada."
   }
 }

@@ -1,14 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../core/services/auth.service';
 import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, AlertBadgeComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, NgbCollapseModule, AlertBadgeComponent],
   template: `
     <nav class="sidebar d-flex flex-column">
       <div class="sidebar-nav flex-grow-1 px-2 pt-3">
@@ -38,43 +39,73 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
 
         @if (authService.hasRole(['ADMIN', 'AGENT'])) {
           <div class="nav-section-label px-3 mt-3">{{ 'NAV.SECTION_ADMIN' | translate }}</div>
-          <ul class="nav flex-column">
-            @if (authService.hasRole(['ADMIN'])) {
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/users" routerLinkActive="active">
-                  <i class="bi bi-person-gear"></i>
-                  <span>{{ 'NAV.USERS' | translate }}</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/ports" routerLinkActive="active">
-                  <i class="bi bi-geo-alt"></i>
-                  <span>{{ 'NAV.PORTS' | translate }}</span>
-                </a>
-              </li>
-            }
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center" routerLink="/alerts" routerLinkActive="active">
-                <i class="bi bi-bell"></i>
-                <span class="flex-grow-1">{{ 'NAV.ALERTS' | translate }}</span>
-                <app-alert-badge />
-              </a>
-            </li>
-            @if (authService.hasRole(['ADMIN'])) {
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/audit" routerLinkActive="active">
-                  <i class="bi bi-journal-text"></i>
-                  <span>{{ 'NAV.AUDIT_LOG' | translate }}</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/compliance-config" routerLinkActive="active">
-                  <i class="bi bi-shield-check"></i>
-                  <span>{{ 'NAV.COMPLIANCE_CONFIG' | translate }}</span>
-                </a>
-              </li>
-            }
-          </ul>
+
+          <!-- Monitoring Section -->
+          <div class="nav-group">
+            <button class="btn btn-link nav-group-toggle w-100 text-start d-flex align-items-center px-3 py-2"
+                    (click)="monitoringCollapsed.set(!monitoringCollapsed())">
+              <i class="bi me-2" [class.bi-chevron-down]="!monitoringCollapsed()" [class.bi-chevron-right]="monitoringCollapsed()"></i>
+              <span>{{ 'NAV.SECTION_MONITORING' | translate }}</span>
+            </button>
+            <div [ngbCollapse]="monitoringCollapsed()">
+              <ul class="nav flex-column nav-group-children">
+                <li class="nav-item">
+                  <a class="nav-link d-flex align-items-center" routerLink="/alerts" routerLinkActive="active">
+                    <i class="bi bi-bell"></i>
+                    <span class="flex-grow-1">{{ 'NAV.ALERTS' | translate }}</span>
+                    <app-alert-badge />
+                  </a>
+                </li>
+                @if (authService.hasRole(['ADMIN'])) {
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/audit" routerLinkActive="active">
+                      <i class="bi bi-journal-text"></i>
+                      <span>{{ 'NAV.AUDIT_LOG' | translate }}</span>
+                    </a>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+
+          <!-- Configuration Section -->
+          @if (authService.hasRole(['ADMIN'])) {
+            <div class="nav-group">
+              <button class="btn btn-link nav-group-toggle w-100 text-start d-flex align-items-center px-3 py-2"
+                      (click)="configCollapsed.set(!configCollapsed())">
+                <i class="bi me-2" [class.bi-chevron-down]="!configCollapsed()" [class.bi-chevron-right]="configCollapsed()"></i>
+                <span>{{ 'NAV.SECTION_CONFIG' | translate }}</span>
+              </button>
+              <div [ngbCollapse]="configCollapsed()">
+                <ul class="nav flex-column nav-group-children">
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/users" routerLinkActive="active">
+                      <i class="bi bi-person-gear"></i>
+                      <span>{{ 'NAV.USERS' | translate }}</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/ports" routerLinkActive="active">
+                      <i class="bi bi-geo-alt"></i>
+                      <span>{{ 'NAV.PORTS' | translate }}</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/exchange-rates" routerLinkActive="active">
+                      <i class="bi bi-currency-exchange"></i>
+                      <span>{{ 'NAV.EXCHANGE_RATES' | translate }}</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink="/compliance-config" routerLinkActive="active">
+                      <i class="bi bi-shield-check"></i>
+                      <span>{{ 'NAV.COMPLIANCE_CONFIG' | translate }}</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          }
         }
       </div>
 
@@ -93,10 +124,41 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
         </button>
       </div>
     </nav>
-  `
+  `,
+  styles: [`
+    .nav-group-toggle {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      border: none;
+      background: none;
+    }
+    .nav-group-toggle:hover {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .nav-group-children .nav-link {
+      padding-left: 2.2rem;
+    }
+  `]
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   authService = inject(AuthService);
+  private router = inject(Router);
+
+  monitoringCollapsed = signal(true);
+  configCollapsed = signal(true);
+
+  ngOnInit(): void {
+    const url = this.router.url;
+    if (url.startsWith('/alerts') || url.startsWith('/audit')) {
+      this.monitoringCollapsed.set(false);
+    }
+    if (url.startsWith('/users') || url.startsWith('/ports') || url.startsWith('/exchange-rates') || url.startsWith('/compliance-config')) {
+      this.configCollapsed.set(false);
+    }
+  }
 
   onLogout(): void {
     this.authService.logout();

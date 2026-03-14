@@ -89,6 +89,7 @@ public class InspectionResource {
     @GET
     @Path("/photos")
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @Transactional
     public List<InspectionPhotoResponse> listPhotos(@PathParam("operationId") Long operationId,
                                                      @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
@@ -140,6 +141,7 @@ public class InspectionResource {
     @GET
     @Path("/expenses")
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
+    @Transactional
     public ExpenseSummaryResponse listExpenses(@PathParam("operationId") Long operationId) {
         var expenses = inspectionService.getExpenses(operationId).stream()
                 .map(InspectionExpenseResponse::from)

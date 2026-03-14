@@ -3,6 +3,8 @@ package com.janus.shared.infrastructure;
 import com.janus.client.domain.model.Client;
 import com.janus.client.domain.model.ClientType;
 import com.janus.client.domain.repository.ClientRepository;
+import com.janus.exchangerate.domain.model.ExchangeRate;
+import com.janus.exchangerate.domain.repository.ExchangeRateRepository;
 import com.janus.port.domain.model.Port;
 import com.janus.port.domain.repository.PortRepository;
 import com.janus.compliance.domain.model.ComplianceRuleConfig;
@@ -35,6 +37,9 @@ public class DataSeeder {
     @Inject
     PortRepository portRepository;
 
+    @Inject
+    ExchangeRateRepository exchangeRateRepository;
+
     @Transactional
     void onStart(@Observes StartupEvent event) {
         if (portRepository.count() == 0) {
@@ -52,6 +57,11 @@ public class DataSeeder {
             LOG.info("Seeding compliance rule configs...");
             seedComplianceRuleConfigs();
             LOG.info("Compliance rule config seeding complete.");
+        }
+        if (exchangeRateRepository.count() == 0) {
+            LOG.info("Seeding exchange rates...");
+            seedExchangeRates();
+            LOG.info("Exchange rate seeding complete.");
         }
     }
 
@@ -128,6 +138,17 @@ public class DataSeeder {
         config.paramValue = paramValue;
         config.description = description;
         complianceRuleConfigRepository.persist(config);
+    }
+
+    private void seedExchangeRates() {
+        var rate = new ExchangeRate();
+        rate.sourceCurrency = "USD";
+        rate.targetCurrency = "DOP";
+        rate.rate = new java.math.BigDecimal("58.5000");
+        rate.effectiveDate = java.time.LocalDate.of(2026, 3, 14);
+        rate.source = "MANUAL";
+        rate.active = true;
+        exchangeRateRepository.persist(rate);
     }
 
     private void createUser(String username, String password, String fullName,

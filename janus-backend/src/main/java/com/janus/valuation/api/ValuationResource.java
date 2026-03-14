@@ -10,6 +10,7 @@ import com.janus.valuation.api.dto.ValuationChecklistResponse;
 import com.janus.valuation.application.ValuationService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -48,6 +49,7 @@ public class ValuationResource {
     @GET
     @Path("/permits")
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
+    @Transactional
     public List<ExternalPermitResponse> getPermits(@PathParam("operationId") Long operationId) {
         return valuationService.getPermits(operationId).stream()
                 .map(ExternalPermitResponse::from)
