@@ -103,7 +103,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
           </div>
           <div class="card-body">
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <dt>{{ 'review.subStatus' | translate }}</dt>
                 <dd>
                   <span class="badge" [ngClass]="operation()!.status === 'PENDING_CORRECTION' ? 'bg-warning text-dark' : 'bg-info'">
@@ -111,7 +111,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                   </span>
                 </dd>
               </div>
-              <div class="col-md-8">
+              <div class="col-md-9">
                 <p class="text-muted mb-2">{{ getReviewDescription() }}</p>
                 @if (authService.hasRole(['ADMIN', 'AGENT']) || (authService.hasRole(['CLIENT']) && (operation()!.status === 'PRELIQUIDATION_REVIEW' || operation()!.status === 'VALUATION_REVIEW'))) {
                   <div class="d-flex gap-2 flex-wrap">
@@ -136,7 +136,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                         @if (preliminaryDeclaration) {
                           <!-- Approval cards grouped by type -->
                           <div class="w-100">
-                            <div class="row g-2 mb-2">
+                            <div class="row g-2 mb-2 justify-content-center">
                               <!-- Technical Approval -->
                               <div class="col-md-4">
                                 <div class="card h-100" [class.border-success]="preliminaryDeclaration.technicalApprovedBy">
@@ -205,7 +205,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                               </div>
                             </div>
                             <!-- Utility actions -->
-                            <div class="d-flex gap-2 flex-wrap">
+                            <div class="d-flex gap-2 flex-wrap justify-content-center">
                               <a [routerLink]="['/operations', operation()!.id, 'declarations', preliminaryDeclaration.id, 'preliquidation']" class="btn btn-sm btn-outline-info">
                                 <i class="bi bi-file-earmark-text me-1"></i>{{ 'preliquidation.title' | translate }}
                               </a>
