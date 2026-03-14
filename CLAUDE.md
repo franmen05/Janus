@@ -7,6 +7,7 @@
 - **janus-backend/** — Quarkus 3.27.2 REST API (Java 21, Gradle)
 - **janus-frontend/** — Angular 20 + Bootstrap 5 (TypeScript)
 - **docs/** — Documentation (requirements, plans, user stories)
+  - **docs/plan/** — Implementation plans. When the user asks to save/store a plan, always write it here as a markdown file.
 
 | Area | Dev | Test | URL |
 |------|-----|------|-----|
