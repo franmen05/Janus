@@ -90,6 +90,16 @@ public class DeclarationService {
             throw new BusinessException("FINAL_DECLARATION_NOT_ALLOWED",
                     "Final declarations can only be registered from VALUATION_REVIEW stage onwards");
         }
+
+        if (declaration.declarationNumber == null || declaration.declarationNumber.isBlank()) {
+            throw new BusinessException("DECLARATION_NUMBER_REQUIRED",
+                    "Declaration number is required for final declarations");
+        }
+        if (declaration.gattMethod == null || declaration.gattMethod.isBlank()) {
+            throw new BusinessException("GATT_METHOD_REQUIRED",
+                    "GATT method is required for final declarations");
+        }
+
         return registerDeclaration(operationId, declaration, DeclarationType.FINAL, username);
     }
 
