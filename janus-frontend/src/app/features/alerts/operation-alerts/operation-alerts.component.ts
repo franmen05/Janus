@@ -5,16 +5,17 @@ import { AlertService } from '../../../core/services/alert.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Alert } from '../../../core/models/alert.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
+import { AlertMessagePipe } from '../../../shared/pipes/alert-message.pipe';
 
 @Component({
   selector: 'app-operation-alerts',
   standalone: true,
-  imports: [CommonModule, TranslateModule, StatusLabelPipe],
+  imports: [CommonModule, TranslateModule, StatusLabelPipe, AlertMessagePipe],
   template: `
     @for (alert of activeAlerts(); track alert.id) {
       <div class="alert alert-warning d-flex justify-content-between align-items-center mb-2">
         <div>
-          <strong>{{ alert.alertType | statusLabel }}:</strong> {{ alert.message }}
+          <strong>{{ alert.alertType | statusLabel }}:</strong> {{ alert | alertMessage }}
         </div>
         <button class="btn btn-sm btn-outline-warning" (click)="acknowledge(alert)">
           {{ 'ALERTS.ACKNOWLEDGE' | translate }}

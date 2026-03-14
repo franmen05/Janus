@@ -5,11 +5,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '../../../core/services/alert.service';
 import { Alert } from '../../../core/models/alert.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
+import { AlertMessagePipe } from '../../../shared/pipes/alert-message.pipe';
 
 @Component({
   selector: 'app-alert-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, AlertMessagePipe],
   template: `
     <h2 class="mb-4">{{ 'ALERTS.TITLE' | translate }}</h2>
 
@@ -32,7 +33,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                 <td><a [routerLink]="['/operations', alert.operationId]">{{ alert.operationRef }}</a></td>
                 <td><app-status-badge [status]="alert.alertType" /></td>
                 <td><app-status-badge [status]="alert.status" /></td>
-                <td class="d-none d-md-table-cell">{{ alert.message }}</td>
+                <td class="d-none d-md-table-cell">{{ alert | alertMessage }}</td>
                 <td class="d-none d-sm-table-cell">{{ alert.createdAt | date:'medium' }}</td>
                 <td>
                   @if (alert.status === 'ACTIVE') {

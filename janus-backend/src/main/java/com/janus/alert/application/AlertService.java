@@ -57,6 +57,11 @@ public class AlertService {
 
     @Transactional
     public Alert createAlert(Operation operation, AlertType alertType, String message) {
+        return createAlert(operation, alertType, message, null);
+    }
+
+    @Transactional
+    public Alert createAlert(Operation operation, AlertType alertType, String message, String messageParams) {
         if (alertRepository.existsActiveForOperation(operation.id, alertType)) {
             return null; // Don't create duplicate active alerts
         }
@@ -65,6 +70,7 @@ public class AlertService {
         alert.operation = operation;
         alert.alertType = alertType;
         alert.message = message;
+        alert.messageParams = messageParams;
         alertRepository.persist(alert);
 
         auditEvent.fire(new AuditEvent(

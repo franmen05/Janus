@@ -128,6 +128,7 @@ public class AlertCheckerScheduler {
         var now = LocalDateTime.now();
         var operations = operationRepository.findArrivedWithoutDeclaration(now);
         var dateFormatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+        var isoFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
 
         for (var op : operations) {
             var arrivalDate = op.estimatedArrival.toLocalDate();
@@ -136,8 +137,11 @@ public class AlertCheckerScheduler {
                     + arrivalDate.format(dateFormatter) + ". You have until "
                     + deadline.format(dateFormatter)
                     + " (5 business days) to file the customs declaration.";
+            var messageParams = "{\"ref\":\"" + op.referenceNumber
+                    + "\",\"arrivalDate\":\"" + arrivalDate.format(isoFormatter)
+                    + "\",\"deadline\":\"" + deadline.format(isoFormatter) + "\"}";
 
-            var alert = alertService.createAlert(op, AlertType.DECLARATION_DEADLINE, message);
+            var alert = alertService.createAlert(op, AlertType.DECLARATION_DEADLINE, message, messageParams);
             if (alert != null && op.client != null && op.client.email != null) {
                 notificationService.send(
                         op.id, op.client.email,

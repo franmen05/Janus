@@ -29,6 +29,9 @@ public class Alert extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     public String message;
 
+    @Column(name = "message_params", columnDefinition = "TEXT")
+    public String messageParams;
+
     @Column(name = "acknowledged_by")
     public String acknowledgedBy;
 

@@ -19,6 +19,7 @@ export interface Alert {
   alertType: AlertType;
   status: AlertStatus;
   message: string;
+  messageParams: string | null;
   acknowledgedBy: string | null;
   acknowledgedAt: string | null;
   createdAt: string;

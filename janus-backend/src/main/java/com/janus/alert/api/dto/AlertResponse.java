@@ -12,6 +12,7 @@ public record AlertResponse(
         AlertType alertType,
         AlertStatus status,
         String message,
+        String messageParams,
         String acknowledgedBy,
         LocalDateTime acknowledgedAt,
         LocalDateTime createdAt
@@ -24,6 +25,7 @@ public record AlertResponse(
                 alert.alertType,
                 alert.status,
                 alert.message,
+                alert.messageParams,
                 alert.acknowledgedBy,
                 alert.acknowledgedAt,
                 alert.createdAt

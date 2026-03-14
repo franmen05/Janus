@@ -12,11 +12,12 @@ import { DashboardMetrics, DashboardFilter } from '../../core/models/dashboard.m
 import { Alert } from '../../core/models/alert.model';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
+import { AlertMessagePipe } from '../../shared/pipes/alert-message.pipe';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe, AlertMessagePipe],
   template: `
     <h2 class="mb-4">{{ 'DASHBOARD.TITLE' | translate }}</h2>
 
@@ -175,7 +176,7 @@ import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
                   <tr>
                     <td><a [routerLink]="['/operations', alert.operationId]">{{ alert.operationRef }}</a></td>
                     <td><span class="badge" [class]="alert.alertType === 'DEADLINE_APPROACHING' ? 'bg-danger' : 'bg-warning text-dark'">{{ alert.alertType | statusLabel }}</span></td>
-                    <td class="d-none d-md-table-cell">{{ alert.message }}</td>
+                    <td class="d-none d-md-table-cell">{{ alert | alertMessage }}</td>
                     <td>{{ alert.createdAt | date:'short' }}</td>
                   </tr>
                 }

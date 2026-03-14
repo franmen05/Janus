@@ -478,7 +478,14 @@
     "ACKNOWLEDGE": "Reconocer",
     "ACKNOWLEDGED_BY": "Reconocida Por",
     "ACKNOWLEDGED_AT": "Reconocida En",
-    "BANNER_WARNING": "Esta operación tiene alertas activas"
+    "BANNER_WARNING": "Esta operación tiene alertas activas",
+    "MESSAGES": {
+      "DECLARATION_DEADLINE": "La operación {{ref}} llegó el {{arrivalDate}}. Tiene hasta el {{deadline}} (5 días hábiles) para realizar la declaración aduanera.",
+      "INACTIVITY_48H": "La operación {{ref}} ha estado inactiva por más de {{hours}} horas.",
+      "DEADLINE_APPROACHING": "La fecha de llegada de la operación {{ref}} se acerca (dentro de {{hours}} horas).",
+      "MISSING_CRITICAL_DOCUMENT": "La operación {{ref}} está en revisión pero tiene documentación incompleta ({{percentage}}% completo).",
+      "BL_UNAVAILABLE": "La operación {{ref}} no tiene el BL original disponible."
+    }
   },
   "ALERT_TYPES": {
     "INACTIVITY_48H": "Inactividad (48h)",
