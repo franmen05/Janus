@@ -66,6 +66,7 @@ src/main/java/com/janus/
 
 ### Commit Messages
 - Use conventional commits format
+- Do NOT add `Co-Authored-By` or any signature/trailer lines
 - Examples:
   - `feat: add user authentication endpoint`
   - `fix: resolve null pointer in OrderService`
