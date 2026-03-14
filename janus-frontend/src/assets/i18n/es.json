@@ -623,6 +623,11 @@
     "UPLOAD_SUCCESS": "Comprobante de recepción subido exitosamente",
     "ALREADY_CLOSED": "La operación está cerrada. El comprobante fue subido."
   },
+  "THEME": {
+    "LIGHT": "Claro",
+    "DARK": "Oscuro",
+    "AUTO": "Automático"
+  },
   "LANG": {
     "ES": "Español",
     "EN": "English"

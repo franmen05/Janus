@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgbDropdownModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
+import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -78,6 +79,22 @@ import { LanguageService } from '../../../core/services/language.service';
               <li class="d-lg-none"><hr class="dropdown-divider border-secondary"></li>
               <li class="nav-item" ngbDropdown>
                 <a class="nav-link" ngbDropdownToggle role="button">
+                  @switch (themeService.currentMode()) {
+                    @case ('light') { <i class="bi bi-sun-fill"></i> }
+                    @case ('dark') { <i class="bi bi-moon-stars-fill"></i> }
+                    @case ('auto') { <i class="bi bi-circle-half"></i> }
+                  }
+                </a>
+                <div ngbDropdownMenu class="dropdown-menu-end">
+                  @for (opt of themeOptions; track opt.mode) {
+                    <button ngbDropdownItem [class.active]="opt.mode === themeService.currentMode()" (click)="themeService.setMode(opt.mode)">
+                      <i class="bi {{ opt.icon }} me-2"></i>{{ opt.labelKey | translate }}
+                    </button>
+                  }
+                </div>
+              </li>
+              <li class="nav-item" ngbDropdown>
+                <a class="nav-link" ngbDropdownToggle role="button">
                   {{ langService.currentLanguage().toUpperCase() }}
                 </a>
                 <div ngbDropdownMenu class="dropdown-menu-end">
@@ -96,7 +113,14 @@ import { LanguageService } from '../../../core/services/language.service';
 export class NavbarComponent {
   authService = inject(AuthService);
   langService = inject(LanguageService);
+  themeService = inject(ThemeService);
   menuCollapsed = signal(true);
+
+  themeOptions: { mode: ThemeMode; icon: string; labelKey: string }[] = [
+    { mode: 'light', icon: 'bi-sun-fill', labelKey: 'THEME.LIGHT' },
+    { mode: 'dark', icon: 'bi-moon-stars-fill', labelKey: 'THEME.DARK' },
+    { mode: 'auto', icon: 'bi-circle-half', labelKey: 'THEME.AUTO' }
+  ];
 
   toggleMenu(): void {
     this.menuCollapsed.update(v => !v);

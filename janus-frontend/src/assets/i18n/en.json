@@ -623,6 +623,11 @@
     "UPLOAD_SUCCESS": "Reception receipt uploaded successfully",
     "ALREADY_CLOSED": "Operation is closed. Receipt was uploaded."
   },
+  "THEME": {
+    "LIGHT": "Light",
+    "DARK": "Dark",
+    "AUTO": "Automatic"
+  },
   "LANG": {
     "ES": "Español",
     "EN": "English"

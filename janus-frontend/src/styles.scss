@@ -10,6 +10,24 @@ body {
   background-color: #f8f9fa;
 }
 
+[data-bs-theme="dark"] body {
+  background-color: #1a1d21;
+}
+
+[data-bs-theme="dark"] .content-area {
+  background-color: #1a1d21;
+}
+
+[data-bs-theme="dark"] .card-dashboard:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-bs-theme="dark"] .table-light {
+  --bs-table-bg: #2b3035;
+  --bs-table-border-color: #373b3e;
+  --bs-table-color: #dee2e6;
+}
+
 // Sidebar
 .sidebar {
   height: 100%;
