@@ -11,7 +11,10 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @ApplicationScoped
 public class AlertCheckerScheduler {
@@ -39,11 +42,16 @@ public class AlertCheckerScheduler {
     @Scheduled(every = "1h", identity = "alert-checker")
     @Transactional
     void checkAlerts() {
+        runChecks();
+    }
+
+    public void runChecks() {
         LOG.info("Running alert checks...");
         checkInactivity();
         checkArrivalDateApproaching();
         checkMissingCriticalDocuments();
         checkBLUnavailable();
+        checkDeclarationDeadline();
     }
 
     void checkInactivity() {
@@ -114,5 +122,41 @@ public class AlertCheckerScheduler {
                 }
             }
         }
+    }
+
+    void checkDeclarationDeadline() {
+        var now = LocalDateTime.now();
+        var operations = operationRepository.findArrivedWithoutDeclaration(now);
+        var dateFormatter = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+
+        for (var op : operations) {
+            var arrivalDate = op.estimatedArrival.toLocalDate();
+            var deadline = calculateBusinessDayDeadline(arrivalDate, 5);
+            var message = "Operation " + op.referenceNumber + " arrived on "
+                    + arrivalDate.format(dateFormatter) + ". You have until "
+                    + deadline.format(dateFormatter)
+                    + " (5 business days) to file the customs declaration.";
+
+            var alert = alertService.createAlert(op, AlertType.DECLARATION_DEADLINE, message);
+            if (alert != null && op.client != null && op.client.email != null) {
+                notificationService.send(
+                        op.id, op.client.email,
+                        "Declaration Deadline - " + op.referenceNumber,
+                        message
+                );
+            }
+        }
+    }
+
+    private LocalDate calculateBusinessDayDeadline(LocalDate startDate, int businessDays) {
+        var date = startDate;
+        var count = 0;
+        while (count < businessDays) {
+            date = date.plusDays(1);
+            if (date.getDayOfWeek() != DayOfWeek.SATURDAY && date.getDayOfWeek() != DayOfWeek.SUNDAY) {
+                count++;
+            }
+        }
+        return date;
     }
 }

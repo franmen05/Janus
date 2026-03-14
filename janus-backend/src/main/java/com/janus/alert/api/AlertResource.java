@@ -1,6 +1,7 @@
 package com.janus.alert.api;
 
 import com.janus.alert.api.dto.AlertResponse;
+import com.janus.alert.application.AlertCheckerScheduler;
 import com.janus.alert.application.AlertService;
 import com.janus.operation.application.OperationService;
 import com.janus.shared.infrastructure.security.SecurityHelper;
@@ -14,8 +15,10 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Map;
 
 @Path("/api/alerts")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,6 +32,9 @@ public class AlertResource {
 
     @Inject
     OperationService operationService;
+
+    @Inject
+    AlertCheckerScheduler alertCheckerScheduler;
 
     @GET
     @RolesAllowed({"ADMIN", "AGENT"})
@@ -47,6 +53,14 @@ public class AlertResource {
         return alertService.getAlertsByOperationId(operationId).stream()
                 .map(AlertResponse::from)
                 .toList();
+    }
+
+    @POST
+    @Path("/trigger-check")
+    @RolesAllowed({"ADMIN"})
+    public Response triggerCheck() {
+        alertCheckerScheduler.runChecks();
+        return Response.ok(Map.of("status", "done")).build();
     }
 
     @POST

@@ -36,4 +36,15 @@ public class OperationRepository implements PanacheRepository<Operation> {
         return list("status NOT IN (?1, ?2) AND arrivalDate IS NOT NULL AND arrivalDate > ?3 AND arrivalDate < ?4",
                 OperationStatus.CLOSED, OperationStatus.CANCELLED, from, to);
     }
+
+    public List<Operation> findArrivedWithoutDeclaration(LocalDateTime now) {
+        return list("estimatedArrival IS NOT NULL AND estimatedArrival <= ?1 AND status IN (?2, ?3, ?4, ?5, ?6, ?7)",
+                now,
+                OperationStatus.DRAFT,
+                OperationStatus.DOCUMENTATION_COMPLETE,
+                OperationStatus.IN_REVIEW,
+                OperationStatus.PENDING_CORRECTION,
+                OperationStatus.PRELIQUIDATION_REVIEW,
+                OperationStatus.ANALYST_ASSIGNED);
+    }
 }

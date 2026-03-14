@@ -250,6 +250,7 @@
     "DEADLINE_APPROACHING": "Fecha Límite",
     "MISSING_CRITICAL_DOCUMENT": "Doc Faltante",
     "BL_UNAVAILABLE": "BL No Disponible",
+    "DECLARATION_DEADLINE": "Plazo Decl.",
     "ACTIVE": "Activa",
     "ACKNOWLEDGED": "Reconocida",
     "FCL": "FCL",
@@ -483,7 +484,8 @@
     "INACTIVITY_48H": "Inactividad (48h)",
     "DEADLINE_APPROACHING": "Fecha Límite Próxima",
     "MISSING_CRITICAL_DOCUMENT": "Documento Crítico Faltante",
-    "BL_UNAVAILABLE": "BL No Disponible"
+    "BL_UNAVAILABLE": "BL No Disponible",
+    "DECLARATION_DEADLINE": "Plazo de Declaración (5 días)"
   },
   "ALERT_STATUS": {
     "ACTIVE": "Activa",

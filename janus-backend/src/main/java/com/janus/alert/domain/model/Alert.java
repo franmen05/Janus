@@ -19,7 +19,7 @@ public class Alert extends BaseEntity {
     public Operation operation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "alert_type", nullable = false)
+    @Column(name = "alert_type", nullable = false, columnDefinition = "VARCHAR(50)")
     public AlertType alertType;
 
     @Enumerated(EnumType.STRING)

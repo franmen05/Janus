@@ -250,6 +250,7 @@
     "DEADLINE_APPROACHING": "Deadline",
     "MISSING_CRITICAL_DOCUMENT": "Missing Doc",
     "BL_UNAVAILABLE": "BL Unavailable",
+    "DECLARATION_DEADLINE": "Decl. Deadline",
     "ACTIVE": "Active",
     "ACKNOWLEDGED": "Acknowledged",
     "FCL": "FCL",
@@ -483,7 +484,8 @@
     "INACTIVITY_48H": "Inactivity (48h)",
     "DEADLINE_APPROACHING": "Deadline Approaching",
     "MISSING_CRITICAL_DOCUMENT": "Missing Critical Document",
-    "BL_UNAVAILABLE": "BL Unavailable"
+    "BL_UNAVAILABLE": "BL Unavailable",
+    "DECLARATION_DEADLINE": "Declaration Deadline (5 days)"
   },
   "ALERT_STATUS": {
     "ACTIVE": "Active",
