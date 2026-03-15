@@ -51,4 +51,48 @@ public class InspectionExpense extends BaseEntity {
 
     @Column(nullable = false)
     public boolean active = true;
+
+    // ── New Charge Modal fields ──────────────────────────────────────────
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "charge_type", columnDefinition = "VARCHAR(20) DEFAULT 'EXPENSE' NOT NULL")
+    public ChargeType chargeType = ChargeType.EXPENSE;
+
+    @Column(columnDefinition = "INT DEFAULT 1 NOT NULL")
+    public int quantity = 1;
+
+    @Column(length = 50)
+    public String units;
+
+    @Column(precision = 15, scale = 4)
+    public BigDecimal rate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_type")
+    public PaymentType paymentType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "bill_to_type")
+    public BillToType billToType;
+
+    @Column(name = "bill_to_name", length = 255)
+    public String billToName;
+
+    @Column(name = "invoice_number", length = 100)
+    public String invoiceNumber;
+
+    @Column(name = "invoice_date")
+    public LocalDate invoiceDate;
+
+    @Column(name = "reference_number_charge", length = 100)
+    public String referenceNumberCharge;
+
+    @Column(name = "show_on_documents", columnDefinition = "BOOLEAN DEFAULT TRUE NOT NULL")
+    public boolean showOnDocuments = true;
+
+    @Column(name = "update_related", columnDefinition = "BOOLEAN DEFAULT FALSE NOT NULL")
+    public boolean updateRelated = false;
+
+    @Column(columnDefinition = "TEXT")
+    public String notes;
 }

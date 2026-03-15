@@ -11,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -93,4 +94,21 @@ public class Operation extends BaseEntity {
 
     @Column(name = "valuation_finalized_at")
     public LocalDateTime valuationFinalizedAt;
+
+    // ── Cargo dimension fields ───────────────────────────────────────────
+
+    @Column
+    public Integer pieces;
+
+    @Column(name = "gross_weight", precision = 15, scale = 3)
+    public BigDecimal grossWeight;
+
+    @Column(name = "volumetric_weight", precision = 15, scale = 3)
+    public BigDecimal volumetricWeight;
+
+    @Column(precision = 15, scale = 3)
+    public BigDecimal volume;
+
+    @Column(name = "declared_value", precision = 15, scale = 2)
+    public BigDecimal declaredValue;
 }

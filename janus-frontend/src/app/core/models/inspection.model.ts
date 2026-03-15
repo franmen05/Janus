@@ -19,6 +19,9 @@ export interface SetInspectionTypeRequest {
 }
 
 export type ExpenseCategory = string;
+export type ChargeType = 'INCOME' | 'EXPENSE';
+export type PaymentType = 'COLLECT' | 'PREPAID';
+export type BillToType = 'CLIENT' | 'THIRD_PARTY' | 'CARRIER';
 
 export interface InspectionExpense {
   id: number;
@@ -35,11 +38,26 @@ export interface InspectionExpense {
   reimbursable: boolean;
   paymentStatus: string;
   createdAt: string;
+  chargeType: ChargeType;
+  quantity: number;
+  units: string | null;
+  rate: number | null;
+  paymentType: PaymentType | null;
+  billToType: BillToType | null;
+  billToName: string | null;
+  invoiceNumber: string | null;
+  invoiceDate: string | null;
+  referenceNumberCharge: string | null;
+  showOnDocuments: boolean;
+  updateRelated: boolean;
+  notes: string | null;
 }
 
 export interface ExpenseSummary {
   expenses: InspectionExpense[];
   total: number;
+  incomeTotal: number;
+  expenseTotal: number;
 }
 
 export interface CreateExpenseRequest {
@@ -52,4 +70,17 @@ export interface CreateExpenseRequest {
   justification?: string;
   reimbursable?: boolean;
   paymentStatus?: string;
+  chargeType?: ChargeType;
+  quantity?: number;
+  units?: string;
+  rate?: number;
+  paymentType?: PaymentType;
+  billToType?: BillToType;
+  billToName?: string;
+  invoiceNumber?: string;
+  invoiceDate?: string;
+  referenceNumber?: string;
+  showOnDocuments?: boolean;
+  updateRelated?: boolean;
+  notes?: string;
 }

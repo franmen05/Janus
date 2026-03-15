@@ -5,6 +5,7 @@ import com.janus.audit.domain.model.AuditEvent;
 import com.janus.document.domain.service.DocumentValidationService;
 import com.janus.document.infrastructure.storage.StorageService;
 import com.janus.inspection.api.dto.CreateExpenseRequest;
+import com.janus.inspection.domain.model.ChargeType;
 import com.janus.inspection.domain.model.InspectionExpense;
 import com.janus.inspection.domain.model.PaymentStatus;
 import com.janus.inspection.domain.model.InspectionPhoto;
@@ -198,6 +199,24 @@ public class InspectionService {
         expense.paymentStatus = request.paymentStatus() != null ? request.paymentStatus() : PaymentStatus.PENDING;
         expense.reimbursable = request.reimbursable() != null ? request.reimbursable() : true;
 
+        // New charge modal fields
+        expense.chargeType = request.chargeType() != null ? request.chargeType() : ChargeType.EXPENSE;
+        expense.quantity = request.quantity() != null ? request.quantity() : 1;
+        expense.units = request.units();
+        expense.rate = request.rate();
+        if (expense.rate != null && expense.quantity > 0) {
+            expense.amount = BigDecimal.valueOf(expense.quantity).multiply(expense.rate);
+        }
+        expense.paymentType = request.paymentType();
+        expense.billToType = request.billToType();
+        expense.billToName = request.billToName();
+        expense.invoiceNumber = request.invoiceNumber();
+        expense.invoiceDate = request.invoiceDate();
+        expense.referenceNumberCharge = request.referenceNumber();
+        expense.showOnDocuments = request.showOnDocuments() != null ? request.showOnDocuments() : true;
+        expense.updateRelated = request.updateRelated() != null ? request.updateRelated() : false;
+        expense.notes = request.notes();
+
         userRepository.findByUsername(username).ifPresent(u -> expense.registeredBy = u);
 
         inspectionExpenseRepository.persist(expense);
@@ -205,10 +224,10 @@ public class InspectionService {
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.CREATE, "InspectionExpense", expense.id, operationId,
                 null, null,
-                "Expense added: " + request.category() + " - " + request.amount()
+                "Expense added: " + request.category() + " - " + expense.amount
         ));
 
-        LOG.infof("Expense added for operation %d by %s: %s %s", operationId, username, request.amount(), expense.currency);
+        LOG.infof("Expense added for operation %d by %s: %s %s", operationId, username, expense.amount, expense.currency);
 
         return expense;
     }
@@ -251,10 +270,28 @@ public class InspectionService {
         expense.paymentStatus = request.paymentStatus() != null ? request.paymentStatus() : expense.paymentStatus;
         expense.reimbursable = request.reimbursable() != null ? request.reimbursable() : expense.reimbursable;
 
+        // New charge modal fields
+        expense.chargeType = request.chargeType() != null ? request.chargeType() : expense.chargeType;
+        expense.quantity = request.quantity() != null ? request.quantity() : expense.quantity;
+        expense.units = request.units();
+        expense.rate = request.rate();
+        if (expense.rate != null && expense.quantity > 0) {
+            expense.amount = BigDecimal.valueOf(expense.quantity).multiply(expense.rate);
+        }
+        expense.paymentType = request.paymentType();
+        expense.billToType = request.billToType();
+        expense.billToName = request.billToName();
+        expense.invoiceNumber = request.invoiceNumber();
+        expense.invoiceDate = request.invoiceDate();
+        expense.referenceNumberCharge = request.referenceNumber();
+        expense.showOnDocuments = request.showOnDocuments() != null ? request.showOnDocuments() : expense.showOnDocuments;
+        expense.updateRelated = request.updateRelated() != null ? request.updateRelated() : expense.updateRelated;
+        expense.notes = request.notes();
+
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "InspectionExpense", expense.id, operationId,
                 null, null,
-                "Expense updated: " + request.category() + " - " + request.amount()
+                "Expense updated: " + request.category() + " - " + expense.amount
         ));
 
         return expense;
@@ -285,13 +322,24 @@ public class InspectionService {
         ));
     }
 
-    public List<InspectionExpense> getExpenses(Long operationId) {
+    public List<InspectionExpense> getExpenses(Long operationId, ChargeType chargeType) {
         operationService.findById(operationId);
+        if (chargeType != null) {
+            return inspectionExpenseRepository.findByOperationIdAndChargeType(operationId, chargeType);
+        }
         return inspectionExpenseRepository.findByOperationId(operationId);
     }
 
     public BigDecimal getExpensesTotal(Long operationId) {
         operationService.findById(operationId);
         return inspectionExpenseRepository.sumAmountByOperationId(operationId);
+    }
+
+    public BigDecimal getIncomeTotal(Long operationId) {
+        return inspectionExpenseRepository.sumAmountByOperationIdAndChargeType(operationId, ChargeType.INCOME);
+    }
+
+    public BigDecimal getExpenseTotal(Long operationId) {
+        return inspectionExpenseRepository.sumAmountByOperationIdAndChargeType(operationId, ChargeType.EXPENSE);
     }
 }

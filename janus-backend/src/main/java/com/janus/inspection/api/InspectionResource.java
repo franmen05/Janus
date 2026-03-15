@@ -6,6 +6,7 @@ import com.janus.inspection.api.dto.ExpenseSummaryResponse;
 import com.janus.inspection.api.dto.InspectionExpenseResponse;
 import com.janus.inspection.api.dto.InspectionPhotoResponse;
 import com.janus.inspection.application.InspectionService;
+import com.janus.inspection.domain.model.ChargeType;
 import com.janus.operation.api.dto.SetInspectionTypeRequest;
 import com.janus.operation.application.OperationService;
 import com.janus.shared.infrastructure.security.SecurityHelper;
@@ -21,6 +22,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -142,12 +144,15 @@ public class InspectionResource {
     @Path("/expenses")
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     @Transactional
-    public ExpenseSummaryResponse listExpenses(@PathParam("operationId") Long operationId) {
-        var expenses = inspectionService.getExpenses(operationId).stream()
+    public ExpenseSummaryResponse listExpenses(@PathParam("operationId") Long operationId,
+                                               @QueryParam("chargeType") ChargeType chargeType) {
+        var expenses = inspectionService.getExpenses(operationId, chargeType).stream()
                 .map(InspectionExpenseResponse::from)
                 .toList();
         var total = inspectionService.getExpensesTotal(operationId);
-        return new ExpenseSummaryResponse(expenses, total);
+        var incomeTotal = inspectionService.getIncomeTotal(operationId);
+        var expenseTotal = inspectionService.getExpenseTotal(operationId);
+        return new ExpenseSummaryResponse(expenses, total, incomeTotal, expenseTotal);
     }
 
     @PUT

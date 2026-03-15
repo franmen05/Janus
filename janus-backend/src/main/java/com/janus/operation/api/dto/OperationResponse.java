@@ -9,6 +9,7 @@ import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.model.OperationType;
 import com.janus.operation.domain.model.TransportMode;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record OperationResponse(
@@ -42,7 +43,13 @@ public record OperationResponse(
         String arrivalPortCode,
         String arrivalPortName,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        // Cargo dimension fields
+        Integer pieces,
+        BigDecimal grossWeight,
+        BigDecimal volumetricWeight,
+        BigDecimal volume,
+        BigDecimal declaredValue
 ) {
     public static OperationResponse from(Operation op) {
         return new OperationResponse(
@@ -76,7 +83,12 @@ public record OperationResponse(
                 op.arrivalPort != null ? op.arrivalPort.code : null,
                 op.arrivalPort != null ? op.arrivalPort.name : null,
                 op.createdAt,
-                op.updatedAt
+                op.updatedAt,
+                op.pieces,
+                op.grossWeight,
+                op.volumetricWeight,
+                op.volume,
+                op.declaredValue
         );
     }
 }

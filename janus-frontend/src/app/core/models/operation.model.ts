@@ -85,6 +85,11 @@ export interface Operation {
   arrivalPortName?: string | null;
   createdAt: string;
   updatedAt: string;
+  pieces?: number | null;
+  grossWeight?: number | null;
+  volumetricWeight?: number | null;
+  volume?: number | null;
+  declaredValue?: number | null;
 }
 
 export interface CreateOperationRequest {

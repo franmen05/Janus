@@ -1,12 +1,14 @@
-import { Component, input, output, inject, OnInit, signal } from '@angular/core';
+import { Component, input, output, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InspectionService } from '../../../core/services/inspection.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { ClientService } from '../../../core/services/client.service';
+import { Client } from '../../../core/models/client.model';
 import { Operation, InspectionType } from '../../../core/models/operation.model';
-import { InspectionPhoto, SetInspectionTypeRequest, InspectionExpense } from '../../../core/models/inspection.model';
+import { InspectionPhoto, SetInspectionTypeRequest, InspectionExpense, ChargeType } from '../../../core/models/inspection.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
@@ -102,44 +104,65 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
           }
         }
 
-        <!-- Expenses section: visible when inspection type is set -->
+        <!-- Charges section: visible when inspection type is set -->
         @if (operation()?.inspectionType && canViewExpenses()) {
           <hr>
-          <h6>{{ 'INSPECTION.EXPENSES_TITLE' | translate }}</h6>
-          <!-- Add expense button -->
+          <h6>{{ 'INSPECTION.CHARGES_TITLE' | translate }}</h6>
+
+          <!-- Tabs -->
+          <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+              <button class="nav-link" [class.active]="activeChargeTab() === 'INCOME'" (click)="activeChargeTab.set('INCOME')">
+                {{ 'INSPECTION.TAB_INCOME' | translate }}
+                <span class="badge bg-secondary ms-1">{{ incomeTotal() | number:'1.2-2' }}</span>
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" [class.active]="activeChargeTab() === 'EXPENSE'" (click)="activeChargeTab.set('EXPENSE')">
+                {{ 'INSPECTION.TAB_EXPENSES' | translate }}
+                <span class="badge bg-secondary ms-1">{{ expenseTotal() | number:'1.2-2' }}</span>
+              </button>
+            </li>
+          </ul>
+
+          <!-- Add charge button -->
           @if (canManageExpenses()) {
-            <button class="btn btn-sm btn-primary" (click)="openAddExpense()">
-              <i class="bi bi-plus-circle me-1"></i>{{ 'INSPECTION.ADD_EXPENSE' | translate }}
+            <button class="btn btn-sm btn-primary mb-2" (click)="openAddExpense()">
+              <i class="bi bi-plus-circle me-1"></i>{{ 'INSPECTION.ADD_CHARGE' | translate }}
             </button>
           }
-          @if (expenses().length > 0) {
+          @if (filteredExpenses().length > 0) {
             <div class="table-responsive">
               <table class="table table-sm table-hover">
                 <thead>
                   <tr>
                     <th>{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }}</th>
-                    <th>{{ 'INSPECTION.EXPENSE_DESCRIPTION' | translate }}</th>
+                    <th class="text-center">{{ 'INSPECTION.QUANTITY' | translate }}</th>
+                    <th class="text-end d-none d-md-table-cell">{{ 'INSPECTION.RATE' | translate }}</th>
                     <th class="text-end">{{ 'INSPECTION.EXPENSE_AMOUNT' | translate }}</th>
                     <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_CURRENCY' | translate }}</th>
-                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_DATE' | translate }}</th>
-                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.RESPONSIBLE' | translate }}</th>
-                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_JUSTIFICATION' | translate }}</th>
-                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_REGISTERED_BY' | translate }}</th>
+                    <th class="d-none d-md-table-cell">{{ 'INSPECTION.BILL_TO' | translate }}</th>
+                    <th class="d-none d-lg-table-cell">{{ 'INSPECTION.PAYMENT_TYPE' | translate }}</th>
                     <th class="d-none d-md-table-cell">{{ 'INSPECTION.PAYMENT_STATUS' | translate }}</th>
                     <th>{{ 'COMMON.ACTIONS' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @for (expense of expenses(); track expense.id) {
+                  @for (expense of filteredExpenses(); track expense.id) {
                     <tr>
                       <td>{{ 'INSPECTION.CATEGORY_' + expense.category | translate }}</td>
-                      <td>{{ expense.description || '-' }}</td>
+                      <td class="text-center">{{ expense.quantity }}</td>
+                      <td class="text-end d-none d-md-table-cell">{{ expense.rate != null ? (expense.rate | number:'1.2-2') : '-' }}</td>
                       <td class="text-end">{{ expense.amount | number:'1.2-2' }}</td>
                       <td class="d-none d-md-table-cell">{{ expense.currency }}</td>
-                      <td class="d-none d-md-table-cell">{{ expense.expenseDate | date:'shortDate' }}</td>
-                      <td class="d-none d-md-table-cell">{{ expense.responsable || '-' }}</td>
-                      <td class="d-none d-md-table-cell">{{ expense.justification || '-' }}</td>
-                      <td class="d-none d-md-table-cell">{{ expense.registeredByFullName }}</td>
+                      <td class="d-none d-md-table-cell">{{ expense.billToName || '-' }}</td>
+                      <td class="d-none d-lg-table-cell">
+                        @if (expense.paymentType) {
+                          {{ 'INSPECTION.PAYMENT_' + expense.paymentType | translate }}
+                        } @else {
+                          -
+                        }
+                      </td>
                       <td class="d-none d-md-table-cell">
                         <span class="badge" [class.bg-success]="expense.paymentStatus === 'PAID'" [class.bg-warning]="expense.paymentStatus === 'PENDING'">
                           {{ 'INSPECTION.PAYMENT_' + expense.paymentStatus | translate }}
@@ -147,11 +170,11 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
                       </td>
                       <td>
                           <button class="btn btn-sm btn-outline-secondary me-1" (click)="openExpenseDetail(expense)" title="{{ 'ACTIONS.VIEW' | translate }}">
-                            <i class="bi bi-eye"></i> {{ 'ACTIONS.VIEW' | translate }}
+                            <i class="bi bi-eye"></i>
                           </button>
                           @if (canManageExpenses()) {
                             <button class="btn btn-sm btn-outline-danger" (click)="deleteExpense(expense.id)">
-                              {{ 'INSPECTION.DELETE_EXPENSE' | translate }}
+                              <i class="bi bi-trash"></i>
                             </button>
                           }
                         </td>
@@ -160,9 +183,9 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
                 </tbody>
                 <tfoot>
                   <tr class="fw-bold">
-                    <td colspan="2">{{ 'INSPECTION.EXPENSE_TOTAL' | translate }}</td>
-                    <td class="text-end">{{ expensesTotal() | number:'1.2-2' }}</td>
-                    <td colspan="7"></td>
+                    <td colspan="3">{{ (activeChargeTab() === 'INCOME' ? 'INSPECTION.INCOME_TOTAL' : 'INSPECTION.EXPENSE_TOTAL') | translate }}</td>
+                    <td class="text-end">{{ activeChargeTab() === 'INCOME' ? (incomeTotal() | number:'1.2-2') : (expenseTotal() | number:'1.2-2') }}</td>
+                    <td colspan="5"></td>
                   </tr>
                 </tfoot>
               </table>
@@ -186,6 +209,7 @@ export class InspectionPanelComponent implements OnInit {
   private translate = inject(TranslateService);
   private toastService = inject(ToastService);
   private modalService = inject(NgbModal);
+  private clientService = inject(ClientService);
   authService = inject(AuthService);
 
   photos = signal<InspectionPhoto[]>([]);
@@ -193,15 +217,25 @@ export class InspectionPanelComponent implements OnInit {
   selectedFile: File | null = null;
   caption = '';
 
-  // Expenses state
-  expenses = signal<InspectionExpense[]>([]);
+  // Charges state
+  allExpenses = signal<InspectionExpense[]>([]);
   expensesTotal = signal<number>(0);
+  incomeTotal = signal<number>(0);
+  expenseTotal = signal<number>(0);
+  activeChargeTab = signal<ChargeType>('EXPENSE');
+  clients = signal<Client[]>([]);
+
+  filteredExpenses = computed(() => {
+    const tab = this.activeChargeTab();
+    return this.allExpenses().filter(e => (e.chargeType || 'EXPENSE') === tab);
+  });
 
   inspectionTypes = Object.values(InspectionType);
 
   ngOnInit(): void {
     this.loadPhotos();
     this.loadExpenses();
+    this.clientService.getAll().subscribe(c => this.clients.set(c));
   }
 
   canSetType(): boolean {
@@ -278,35 +312,64 @@ export class InspectionPanelComponent implements OnInit {
     if (op?.inspectionType) {
       this.inspectionService.getExpenses(this.operationId()).subscribe({
         next: (summary) => {
-          this.expenses.set(summary.expenses);
+          this.allExpenses.set(summary.expenses);
           this.expensesTotal.set(summary.total);
+          this.incomeTotal.set(summary.incomeTotal);
+          this.expenseTotal.set(summary.expenseTotal);
         },
         error: () => {
-          this.expenses.set([]);
+          this.allExpenses.set([]);
           this.expensesTotal.set(0);
+          this.incomeTotal.set(0);
+          this.expenseTotal.set(0);
         }
       });
     }
   }
 
   openAddExpense(): void {
-    const ref = this.modalService.open(ExpenseDetailModalComponent, { size: 'lg' });
+    const ref = this.modalService.open(ExpenseDetailModalComponent, { size: 'xl' });
+    const op = this.operation();
     ref.componentInstance.expense = null;
     ref.componentInstance.operationId = this.operationId();
     ref.componentInstance.canEdit = true;
+    ref.componentInstance.clients = this.clients();
+    ref.componentInstance.operationSummary = op ? {
+      pieces: op.pieces,
+      grossWeight: op.grossWeight,
+      volumetricWeight: op.volumetricWeight,
+      volume: op.volume,
+      declaredValue: op.declaredValue,
+      clientName: op.clientName,
+      blNumber: op.blNumber
+    } : null;
     ref.componentInstance.initForm();
     ref.closed.subscribe((result) => {
-      if (result === 'created') {
+      if (result === 'created' || result === 'created-continue') {
         this.loadExpenses();
+        if (result === 'created-continue') {
+          this.openAddExpense();
+        }
       }
     });
   }
 
   openExpenseDetail(expense: InspectionExpense): void {
-    const ref = this.modalService.open(ExpenseDetailModalComponent, { size: 'lg' });
+    const ref = this.modalService.open(ExpenseDetailModalComponent, { size: 'xl' });
+    const op = this.operation();
     ref.componentInstance.expense = expense;
     ref.componentInstance.operationId = this.operationId();
     ref.componentInstance.canEdit = this.canManageExpenses();
+    ref.componentInstance.clients = this.clients();
+    ref.componentInstance.operationSummary = op ? {
+      pieces: op.pieces,
+      grossWeight: op.grossWeight,
+      volumetricWeight: op.volumetricWeight,
+      volume: op.volume,
+      declaredValue: op.declaredValue,
+      clientName: op.clientName,
+      blNumber: op.blNumber
+    } : null;
     ref.componentInstance.initForm();
     ref.closed.subscribe((result) => {
       if (result === 'updated') {

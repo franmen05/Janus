@@ -5,5 +5,7 @@ import java.util.List;
 
 public record ExpenseSummaryResponse(
         List<InspectionExpenseResponse> expenses,
-        BigDecimal total
+        BigDecimal total,
+        BigDecimal incomeTotal,
+        BigDecimal expenseTotal
 ) {}

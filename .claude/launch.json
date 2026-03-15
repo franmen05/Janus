@@ -3,15 +3,15 @@
   "configurations": [
     {
       "name": "backend",
-      "runtimeExecutable": "./gradlew",
-      "runtimeArgs": ["quarkusDev"],
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "gradlew.bat", "quarkusDev"],
       "port": 8080,
       "cwd": "janus-backend"
     },
     {
       "name": "frontend",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["ng", "serve", "--port", "4200"],
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "npx", "ng", "serve", "--port", "4200"],
       "port": 4200,
       "cwd": "janus-frontend"
     }
