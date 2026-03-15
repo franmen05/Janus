@@ -443,7 +443,16 @@
     "TARIFF_LINE_QUANTITY": "Tariff Line Quantity",
     "TARIFF_LINE_VALUE": "Tariff Line Value",
     "TARIFF_LINE_TAX": "Tariff Line Tax",
-    "FOB_VALUE_MIN": "FOB value must be greater than 0"
+    "FOB_VALUE_MIN": "FOB value must be greater than 0",
+    "EXCHANGE_RATE": "Exchange Rate",
+    "EXCHANGE_RATE_DATE": "Rate Effective Date",
+    "EXCHANGE_RATE_RESET": "Reset to auto",
+    "FOB_VALUE_USD": "FOB Value (USD)",
+    "FREIGHT_VALUE_USD": "Freight (USD)",
+    "INSURANCE_VALUE_USD": "Insurance (USD)",
+    "CIF_VALUE_USD": "CIF Value (USD)",
+    "USD_VALUES": "Original Values (USD)",
+    "DOP_VALUES": "Converted Values (DOP)"
   },
   "CROSSING": {
     "TITLE": "Customs Crossing",
@@ -911,6 +920,7 @@
     "GATT_METHOD_REQUIRED": "GATT method is required for final declarations.",
     "PORT_CODE_ALREADY_EXISTS": "A port with this code already exists.",
     "EXCHANGE_RATE_ALREADY_EXISTS": "An exchange rate already exists for this date.",
-    "EXCHANGE_RATE_PAST_DATE": "Cannot create an exchange rate with a past date."
+    "EXCHANGE_RATE_PAST_DATE": "Cannot create an exchange rate with a past date.",
+    "NO_EXCHANGE_RATE": "No exchange rate available. Please enter manually."
   }
 }

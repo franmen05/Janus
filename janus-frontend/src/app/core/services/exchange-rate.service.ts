@@ -21,6 +21,10 @@ export class ExchangeRateService {
     return this.http.get<ExchangeRate>(`${this.apiUrl}/current`);
   }
 
+  getForDate(date: string): Observable<ExchangeRate> {
+    return this.http.get<ExchangeRate>(`${this.apiUrl}/for-date`, { params: { date } });
+  }
+
   create(request: CreateExchangeRateRequest): Observable<ExchangeRate> {
     return this.http.post<ExchangeRate>(this.apiUrl, request);
   }

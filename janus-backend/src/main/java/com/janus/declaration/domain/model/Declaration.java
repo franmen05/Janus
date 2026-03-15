@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -67,6 +68,24 @@ public class Declaration extends BaseEntity {
 
     @Column(name = "gatt_completed_by")
     public String gattCompletedBy;
+
+    @Column(name = "fob_value_usd", precision = 15, scale = 2)
+    public BigDecimal fobValueUsd;
+
+    @Column(name = "freight_value_usd", precision = 15, scale = 2)
+    public BigDecimal freightValueUsd;
+
+    @Column(name = "insurance_value_usd", precision = 15, scale = 2)
+    public BigDecimal insuranceValueUsd;
+
+    @Column(name = "cif_value_usd", precision = 15, scale = 2)
+    public BigDecimal cifValueUsd;
+
+    @Column(name = "exchange_rate", precision = 15, scale = 4)
+    public BigDecimal exchangeRate;
+
+    @Column(name = "exchange_rate_date")
+    public LocalDate exchangeRateDate;
 
     @Column(columnDefinition = "TEXT")
     public String notes;

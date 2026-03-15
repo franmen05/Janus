@@ -17,30 +17,45 @@ import { AuthService } from '../../../core/services/auth.service';
           <h6 class="mb-0">{{ 'preliquidation.title' | translate }} - {{ declaration()!.declarationNumber }}</h6>
         </div>
         <div class="card-body">
+          @if (declaration()!.exchangeRate) {
+            <div class="alert alert-info py-2 mb-3">
+              <strong>{{ 'DECLARATIONS.EXCHANGE_RATE' | translate }}:</strong>
+              1 USD = {{ declaration()!.exchangeRate | number:'1.4-4' }} DOP
+              @if (declaration()!.exchangeRateDate) {
+                <span class="text-muted ms-2">({{ declaration()!.exchangeRateDate }})</span>
+              }
+            </div>
+          }
           <h6 class="text-muted mb-3">{{ 'preliquidation.taxSummary' | translate }}</h6>
           <div class="row">
             <div class="col-md-3">
               <div class="border rounded p-3 text-center">
                 <small class="text-muted d-block">{{ 'preliquidation.fobValue' | translate }}</small>
-                <strong class="fs-5">{{ declaration()!.fobValue | number:'1.2-2' }}</strong>
+                <strong class="fs-5">RD$ {{ declaration()!.fobValue | number:'1.2-2' }}</strong>
+                @if (declaration()!.exchangeRate && declaration()!.fobValueUsd != null) {
+                  <small class="text-muted d-block">US$ {{ declaration()!.fobValueUsd | number:'1.2-2' }}</small>
+                }
               </div>
             </div>
             <div class="col-md-3">
               <div class="border rounded p-3 text-center">
                 <small class="text-muted d-block">{{ 'preliquidation.cifValue' | translate }}</small>
-                <strong class="fs-5">{{ declaration()!.cifValue | number:'1.2-2' }}</strong>
+                <strong class="fs-5">RD$ {{ declaration()!.cifValue | number:'1.2-2' }}</strong>
+                @if (declaration()!.exchangeRate && declaration()!.cifValueUsd != null) {
+                  <small class="text-muted d-block">US$ {{ declaration()!.cifValueUsd | number:'1.2-2' }}</small>
+                }
               </div>
             </div>
             <div class="col-md-3">
               <div class="border rounded p-3 text-center">
                 <small class="text-muted d-block">{{ 'preliquidation.taxableBase' | translate }}</small>
-                <strong class="fs-5">{{ declaration()!.taxableBase | number:'1.2-2' }}</strong>
+                <strong class="fs-5">RD$ {{ declaration()!.taxableBase | number:'1.2-2' }}</strong>
               </div>
             </div>
             <div class="col-md-3">
               <div class="border rounded p-3 text-center bg-light">
                 <small class="text-muted d-block">{{ 'preliquidation.totalTaxes' | translate }}</small>
-                <strong class="fs-5 text-primary">{{ declaration()!.totalTaxes | number:'1.2-2' }}</strong>
+                <strong class="fs-5 text-primary">RD$ {{ declaration()!.totalTaxes | number:'1.2-2' }}</strong>
               </div>
             </div>
           </div>

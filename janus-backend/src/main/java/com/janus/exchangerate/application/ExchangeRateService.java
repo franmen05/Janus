@@ -41,6 +41,24 @@ public class ExchangeRateService {
                 .orElseThrow(() -> new NotFoundException("ExchangeRate", "active USD/DOP"));
     }
 
+    public ExchangeRate getRateForDate(LocalDate date) {
+        // 1. Try exact date
+        var exact = exchangeRateRepository.findByDate("USD", "DOP", date);
+        if (exact.isPresent()) {
+            return exact.get();
+        }
+
+        // 2. Try closest rate before that date
+        var closest = exchangeRateRepository.findClosestRate("USD", "DOP", date);
+        if (closest.isPresent()) {
+            return closest.get();
+        }
+
+        // 3. Fall back to current active rate
+        return exchangeRateRepository.findActive("USD", "DOP")
+                .orElseThrow(() -> new NotFoundException("ExchangeRate", "NO_EXCHANGE_RATE"));
+    }
+
     @Transactional
     public ExchangeRate create(BigDecimal rate, LocalDate effectiveDate, String source, String username) {
         if (effectiveDate.isBefore(LocalDate.now())) {

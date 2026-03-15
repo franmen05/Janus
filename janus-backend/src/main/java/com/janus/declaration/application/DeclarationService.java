@@ -6,7 +6,9 @@ import com.janus.declaration.domain.model.CrossingDiscrepancy;
 import com.janus.declaration.domain.model.CrossingResult;
 import com.janus.declaration.domain.model.CrossingStatus;
 import com.janus.declaration.domain.model.Declaration;
+import com.janus.exchangerate.application.ExchangeRateService;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import com.janus.declaration.domain.model.DeclarationType;
 import com.janus.declaration.domain.model.TariffLine;
 import com.janus.declaration.domain.repository.CrossingDiscrepancyRepository;
@@ -18,6 +20,7 @@ import com.janus.declaration.domain.service.PreliquidationService;
 import com.janus.notification.application.NotificationService;
 import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.application.OperationService;
+import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.NotFoundException;
@@ -69,6 +72,9 @@ public class DeclarationService {
     OperationService operationService;
 
     @Inject
+    ExchangeRateService exchangeRateService;
+
+    @Inject
     NotificationService notificationService;
 
     @Inject
@@ -114,6 +120,9 @@ public class DeclarationService {
         declaration.operation = operation;
         declaration.declarationType = type;
 
+        // Convert USD values to DOP if USD values are provided
+        applyExchangeRateConversion(declaration, operation);
+
         // Auto-calculate CIF value if fob/freight/insurance are provided
         var fob = declaration.fobValue != null ? declaration.fobValue : BigDecimal.ZERO;
         var freight = declaration.freightValue != null ? declaration.freightValue : BigDecimal.ZERO;
@@ -158,11 +167,25 @@ public class DeclarationService {
         declaration.fobValue = updated.fobValue;
         declaration.insuranceValue = updated.insuranceValue;
         declaration.freightValue = updated.freightValue;
-        declaration.cifValue = updated.cifValue;
-        declaration.taxableBase = updated.cifValue; // taxableBase always equals cifValue
         declaration.totalTaxes = updated.totalTaxes;
         declaration.gattMethod = updated.gattMethod;
         declaration.notes = updated.notes;
+
+        // Map USD fields from updated entity
+        declaration.fobValueUsd = updated.fobValueUsd;
+        declaration.freightValueUsd = updated.freightValueUsd;
+        declaration.insuranceValueUsd = updated.insuranceValueUsd;
+        declaration.exchangeRate = updated.exchangeRate;
+
+        // Convert USD values to DOP if USD values are provided
+        applyExchangeRateConversion(declaration, declaration.operation);
+
+        // Recalculate CIF and taxable base
+        var fob = declaration.fobValue != null ? declaration.fobValue : BigDecimal.ZERO;
+        var freight = declaration.freightValue != null ? declaration.freightValue : BigDecimal.ZERO;
+        var insurance = declaration.insuranceValue != null ? declaration.insuranceValue : BigDecimal.ZERO;
+        declaration.cifValue = fob.add(freight).add(insurance);
+        declaration.taxableBase = declaration.cifValue;
 
         invalidateCrossingIfFinal(declaration, operationId);
 
@@ -309,6 +332,57 @@ public class DeclarationService {
             line.taxAmount = totalValue.multiply(line.taxRate)
                     .divide(new BigDecimal("100"), 2, java.math.RoundingMode.HALF_UP);
         }
+    }
+
+    private void applyExchangeRateConversion(Declaration declaration, Operation operation) {
+        if (declaration.fobValueUsd == null) {
+            return;
+        }
+
+        BigDecimal rate;
+        java.time.LocalDate rateDate;
+
+        if (declaration.exchangeRate != null) {
+            // Manual override: use provided rate, look up date from closest rate
+            rate = declaration.exchangeRate;
+            var arrivalDate = operation.estimatedArrival != null
+                    ? operation.estimatedArrival.toLocalDate()
+                    : java.time.LocalDate.now();
+            try {
+                var rateEntity = exchangeRateService.getRateForDate(arrivalDate);
+                rateDate = rateEntity.effectiveDate;
+            } catch (Exception e) {
+                rateDate = arrivalDate;
+            }
+        } else {
+            // Auto: look up rate for operation's arrival date
+            var arrivalDate = operation.estimatedArrival != null
+                    ? operation.estimatedArrival.toLocalDate()
+                    : java.time.LocalDate.now();
+            var rateEntity = exchangeRateService.getRateForDate(arrivalDate);
+            rate = rateEntity.rate;
+            rateDate = rateEntity.effectiveDate;
+        }
+
+        declaration.exchangeRate = rate;
+        declaration.exchangeRateDate = rateDate;
+
+        // Convert USD to DOP
+        declaration.fobValue = declaration.fobValueUsd.multiply(rate).setScale(2, RoundingMode.HALF_UP);
+
+        if (declaration.freightValueUsd != null) {
+            declaration.freightValue = declaration.freightValueUsd.multiply(rate).setScale(2, RoundingMode.HALF_UP);
+        }
+
+        if (declaration.insuranceValueUsd != null) {
+            declaration.insuranceValue = declaration.insuranceValueUsd.multiply(rate).setScale(2, RoundingMode.HALF_UP);
+        }
+
+        // Calculate CIF in USD
+        var fobUsd = declaration.fobValueUsd != null ? declaration.fobValueUsd : BigDecimal.ZERO;
+        var freightUsd = declaration.freightValueUsd != null ? declaration.freightValueUsd : BigDecimal.ZERO;
+        var insuranceUsd = declaration.insuranceValueUsd != null ? declaration.insuranceValueUsd : BigDecimal.ZERO;
+        declaration.cifValueUsd = fobUsd.add(freightUsd).add(insuranceUsd);
     }
 
     private void enforceEditable(Declaration declaration) {

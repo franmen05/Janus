@@ -12,6 +12,10 @@ public record CreateDeclarationRequest(
         BigDecimal totalTaxes,
         BigDecimal freightValue,
         BigDecimal insuranceValue,
+        BigDecimal fobValueUsd,
+        BigDecimal freightValueUsd,
+        BigDecimal insuranceValueUsd,
+        BigDecimal exchangeRate,
         String gattMethod,
         String notes
 ) {}

@@ -20,6 +20,11 @@ public class ExchangeRateRepository implements PanacheRepository<ExchangeRate> {
                 sourceCurrency, targetCurrency, date).firstResultOptional();
     }
 
+    public Optional<ExchangeRate> findClosestRate(String sourceCurrency, String targetCurrency, LocalDate date) {
+        return find("sourceCurrency = ?1 and targetCurrency = ?2 and effectiveDate <= ?3 order by effectiveDate desc",
+                sourceCurrency, targetCurrency, date).firstResultOptional();
+    }
+
     public List<ExchangeRate> listAllOrdered() {
         return list("order by effectiveDate desc, createdAt desc");
     }

@@ -174,6 +174,10 @@ public class DeclarationResource {
         d.cifValue = r.cifValue();
         d.taxableBase = r.taxableBase();
         d.totalTaxes = r.totalTaxes();
+        d.fobValueUsd = r.fobValueUsd();
+        d.freightValueUsd = r.freightValueUsd();
+        d.insuranceValueUsd = r.insuranceValueUsd();
+        d.exchangeRate = r.exchangeRate();
         d.gattMethod = r.gattMethod();
         d.notes = r.notes();
         return d;

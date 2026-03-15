@@ -42,6 +42,12 @@ export interface Declaration {
   gattJustification: string | null;
   gattCompletedAt: string | null;
   gattCompletedBy: string | null;
+  fobValueUsd: number | null;
+  freightValueUsd: number | null;
+  insuranceValueUsd: number | null;
+  cifValueUsd: number | null;
+  exchangeRate: number | null;
+  exchangeRateDate: string | null;
   notes: string | null;
   submittedAt: string | null;
   createdAt: string;
@@ -66,6 +72,10 @@ export interface CreateDeclarationRequest {
   insuranceValue: number;
   gattMethod: string;
   notes?: string;
+  fobValueUsd?: number;
+  freightValueUsd?: number;
+  insuranceValueUsd?: number;
+  exchangeRate?: number;
 }
 
 export interface TariffLine {

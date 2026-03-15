@@ -443,7 +443,16 @@
     "TARIFF_LINE_QUANTITY": "Cantidad de Partida Arancelaria",
     "TARIFF_LINE_VALUE": "Valor de Partida Arancelaria",
     "TARIFF_LINE_TAX": "Impuesto de Partida Arancelaria",
-    "FOB_VALUE_MIN": "El valor FOB debe ser mayor a 0"
+    "FOB_VALUE_MIN": "El valor FOB debe ser mayor a 0",
+    "EXCHANGE_RATE": "Tasa de Cambio",
+    "EXCHANGE_RATE_DATE": "Fecha Efectiva",
+    "EXCHANGE_RATE_RESET": "Restablecer",
+    "FOB_VALUE_USD": "Valor FOB (USD)",
+    "FREIGHT_VALUE_USD": "Flete (USD)",
+    "INSURANCE_VALUE_USD": "Seguro (USD)",
+    "CIF_VALUE_USD": "Valor CIF (USD)",
+    "USD_VALUES": "Valores Originales (USD)",
+    "DOP_VALUES": "Valores Convertidos (DOP)"
   },
   "CROSSING": {
     "TITLE": "Cruce Aduanero",
@@ -911,6 +920,7 @@
     "GATT_METHOD_REQUIRED": "El método GATT es obligatorio para declaraciones finales.",
     "PORT_CODE_ALREADY_EXISTS": "Ya existe un puerto con este código.",
     "EXCHANGE_RATE_ALREADY_EXISTS": "Ya existe una tasa de cambio para esta fecha.",
-    "EXCHANGE_RATE_PAST_DATE": "No se puede crear una tasa de cambio con fecha pasada."
+    "EXCHANGE_RATE_PAST_DATE": "No se puede crear una tasa de cambio con fecha pasada.",
+    "NO_EXCHANGE_RATE": "No hay tasa de cambio disponible. Ingrese manualmente."
   }
 }

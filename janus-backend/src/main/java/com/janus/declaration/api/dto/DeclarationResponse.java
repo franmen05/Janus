@@ -3,6 +3,7 @@ package com.janus.declaration.api.dto;
 import com.janus.declaration.domain.model.Declaration;
 import com.janus.declaration.domain.model.DeclarationType;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record DeclarationResponse(
@@ -16,6 +17,12 @@ public record DeclarationResponse(
         BigDecimal totalTaxes,
         BigDecimal freightValue,
         BigDecimal insuranceValue,
+        BigDecimal fobValueUsd,
+        BigDecimal freightValueUsd,
+        BigDecimal insuranceValueUsd,
+        BigDecimal cifValueUsd,
+        BigDecimal exchangeRate,
+        LocalDate exchangeRateDate,
         String gattMethod,
         Boolean gattCommercialLinks,
         BigDecimal gattCommissions,
@@ -41,7 +48,10 @@ public record DeclarationResponse(
         return new DeclarationResponse(
                 d.id, d.operation.id, d.declarationType, d.declarationNumber,
                 d.fobValue, d.cifValue, d.taxableBase, d.totalTaxes,
-                d.freightValue, d.insuranceValue, d.gattMethod,
+                d.freightValue, d.insuranceValue,
+                d.fobValueUsd, d.freightValueUsd, d.insuranceValueUsd,
+                d.cifValueUsd, d.exchangeRate, d.exchangeRateDate,
+                d.gattMethod,
                 d.gattCommercialLinks, d.gattCommissions, d.gattUnrecordedTransport,
                 d.gattAdjustmentAmount, d.gattJustification, d.gattCompletedAt, d.gattCompletedBy,
                 d.notes, d.submittedAt, d.createdAt,
