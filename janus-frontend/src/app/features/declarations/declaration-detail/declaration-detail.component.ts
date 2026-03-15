@@ -20,27 +20,48 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
         <h3>{{ 'DECLARATIONS.DETAIL_TITLE' | translate }}: {{ declaration()!.declarationNumber }}</h3>
         <a [routerLink]="['/operations', declaration()!.operationId]" [queryParams]="{tab: 'declarations'}" class="btn btn-outline-secondary btn-sm">{{ 'ACTIONS.CLOSE' | translate }}</a>
       </div>
+      @if (declaration()!.exchangeRate) {
+        <div class="alert alert-info py-2 mb-3">
+          <strong>{{ 'DECLARATIONS.EXCHANGE_RATE' | translate }}:</strong>
+          1 USD = {{ declaration()!.exchangeRate | number:'1.4-4' }} DOP
+          @if (declaration()!.exchangeRateDate) {
+            <span class="text-muted ms-2">({{ declaration()!.exchangeRateDate }})</span>
+          }
+        </div>
+      }
       <div class="card mb-3">
         <div class="card-body">
           <div class="row">
             <div class="col-md-4">
               <dl>
                 <dt>{{ 'DECLARATIONS.TYPE' | translate }}</dt><dd><app-status-badge [status]="declaration()!.declarationType" /></dd>
-                <dt>{{ 'DECLARATIONS.FOB_VALUE' | translate }}</dt><dd>{{ declaration()!.fobValue | number:'1.2-2' }}</dd>
-                <dt>{{ 'DECLARATIONS.CIF_VALUE' | translate }}</dt><dd>{{ declaration()!.cifValue | number:'1.2-2' }}</dd>
+                <dt>{{ 'DECLARATIONS.FOB_VALUE' | translate }}</dt><dd>RD$ {{ declaration()!.fobValue | number:'1.2-2' }}</dd>
+                @if (declaration()!.fobValueUsd != null) {
+                  <dd class="text-muted small mt-n2">US$ {{ declaration()!.fobValueUsd | number:'1.2-2' }}</dd>
+                }
+                <dt>{{ 'DECLARATIONS.CIF_VALUE' | translate }}</dt><dd>RD$ {{ declaration()!.cifValue | number:'1.2-2' }}</dd>
+                @if (declaration()!.cifValueUsd != null) {
+                  <dd class="text-muted small mt-n2">US$ {{ declaration()!.cifValueUsd | number:'1.2-2' }}</dd>
+                }
               </dl>
             </div>
             <div class="col-md-4">
               <dl>
-                <dt>{{ 'DECLARATIONS.TAXABLE_BASE' | translate }}</dt><dd>{{ declaration()!.taxableBase | number:'1.2-2' }}</dd>
-                <dt>{{ 'DECLARATIONS.TOTAL_TAXES' | translate }}</dt><dd>{{ declaration()!.totalTaxes | number:'1.2-2' }}</dd>
+                <dt>{{ 'DECLARATIONS.TAXABLE_BASE' | translate }}</dt><dd>RD$ {{ declaration()!.taxableBase | number:'1.2-2' }}</dd>
+                <dt>{{ 'DECLARATIONS.TOTAL_TAXES' | translate }}</dt><dd>RD$ {{ declaration()!.totalTaxes | number:'1.2-2' }}</dd>
                 <dt>{{ 'DECLARATIONS.GATT_METHOD' | translate }}</dt><dd>{{ declaration()!.gattMethod }}</dd>
               </dl>
             </div>
             <div class="col-md-4">
               <dl>
-                <dt>{{ 'DECLARATIONS.FREIGHT_VALUE' | translate }}</dt><dd>{{ declaration()!.freightValue | number:'1.2-2' }}</dd>
-                <dt>{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }}</dt><dd>{{ declaration()!.insuranceValue | number:'1.2-2' }}</dd>
+                <dt>{{ 'DECLARATIONS.FREIGHT_VALUE' | translate }}</dt><dd>RD$ {{ declaration()!.freightValue | number:'1.2-2' }}</dd>
+                @if (declaration()!.freightValueUsd != null) {
+                  <dd class="text-muted small mt-n2">US$ {{ declaration()!.freightValueUsd | number:'1.2-2' }}</dd>
+                }
+                <dt>{{ 'DECLARATIONS.INSURANCE_VALUE' | translate }}</dt><dd>RD$ {{ declaration()!.insuranceValue | number:'1.2-2' }}</dd>
+                @if (declaration()!.insuranceValueUsd != null) {
+                  <dd class="text-muted small mt-n2">US$ {{ declaration()!.insuranceValueUsd | number:'1.2-2' }}</dd>
+                }
               </dl>
             </div>
           </div>
