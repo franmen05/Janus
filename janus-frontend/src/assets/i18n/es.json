@@ -18,7 +18,8 @@
     "LOGOUT": "Cerrar Sesión",
     "SECTION_MAIN": "Principal",
     "SECTION_ADMIN": "Administración",
-    "DOCUMENT_TYPES_CONFIG": "Tipos de Documento"
+    "DOCUMENT_TYPES_CONFIG": "Tipos de Documento",
+    "EXPENSE_CATEGORIES": "Categorías de Gastos"
   },
   "LOGIN": {
     "USERNAME": "Usuario",
@@ -892,6 +893,21 @@
     "ALLOW_MULTIPLE": "Permitir Múltiples",
     "UPDATED": "Configuración de tipo de documento actualizada"
   },
+  "EXPENSE_CONFIG": {
+    "TITLE": "Categorías de Gastos",
+    "NAME": "Nombre Interno",
+    "LABEL_ES": "Etiqueta (Español)",
+    "LABEL_EN": "Etiqueta (Inglés)",
+    "SORT_ORDER": "Orden",
+    "ADD": "Agregar Categoría",
+    "CREATED": "Categoría creada exitosamente",
+    "UPDATED": "Categoría actualizada exitosamente",
+    "DELETED": "Categoría eliminada exitosamente",
+    "DELETE_CONFIRM": "¿Está seguro que desea eliminar esta categoría?",
+    "HAS_EXPENSES": "No se puede eliminar: la categoría tiene gastos asociados",
+    "ACTIVE": "Activa",
+    "INACTIVE": "Inactiva"
+  },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "No se puede cambiar de {{from}} a {{to}}. Solo se permite el siguiente paso.",
     "CONTAINER_NUMBER_REQUIRED": "El número de contenedor es obligatorio para transporte marítimo FCL.",
@@ -921,6 +937,10 @@
     "PORT_CODE_ALREADY_EXISTS": "Ya existe un puerto con este código.",
     "EXCHANGE_RATE_ALREADY_EXISTS": "Ya existe una tasa de cambio para esta fecha.",
     "EXCHANGE_RATE_PAST_DATE": "No se puede crear una tasa de cambio con fecha pasada.",
-    "NO_EXCHANGE_RATE": "No hay tasa de cambio disponible. Ingrese manualmente."
+    "NO_EXCHANGE_RATE": "No hay tasa de cambio disponible. Ingrese manualmente.",
+    "INVALID_EXPENSE_CATEGORY": "Categoría de gasto inválida",
+    "INACTIVE_EXPENSE_CATEGORY": "La categoría de gasto está inactiva",
+    "EXPENSE_CATEGORY_NAME_EXISTS": "Ya existe una categoría con este nombre",
+    "EXPENSE_CATEGORY_HAS_EXPENSES": "No se puede eliminar: la categoría tiene gastos asociados"
   }
 }

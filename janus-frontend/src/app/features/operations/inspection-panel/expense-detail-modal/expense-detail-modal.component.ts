@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +7,8 @@ import { InspectionService } from '../../../../core/services/inspection.service'
 import { ToastService } from '../../../../core/services/toast.service';
 import { getErrorMessage } from '../../../../core/utils/error-message.util';
 import { InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../../../core/models/inspection.model';
+import { ExpenseCategoryService } from '../../../../core/services/expense-category.service';
+import { ExpenseCategoryConfig } from '../../../../core/models/expense-category.model';
 
 @Component({
   selector: 'app-expense-detail-modal',
@@ -57,8 +59,12 @@ import { InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../
               <label class="form-label">{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }} <span class="text-danger">*</span></label>
               <select class="form-select" formControlName="category">
                 <option value="" disabled>{{ 'INSPECTION.EXPENSE_CATEGORY' | translate }}...</option>
-                @for (cat of expenseCategories; track cat) {
-                  <option [value]="cat">{{ 'INSPECTION.CATEGORY_' + cat | translate }}</option>
+                @if (categoriesLoading()) {
+                  <option disabled>{{ 'COMMON.LOADING' | translate }}</option>
+                } @else {
+                  @for (cat of activeCategories(); track cat.name) {
+                    <option [value]="cat.name">{{ getCategoryLabel(cat) }}</option>
+                  }
                 }
               </select>
             </div>
@@ -120,11 +126,12 @@ import { InspectionExpense, ExpenseCategory, CreateExpenseRequest } from '../../
     </div>
   `
 })
-export class ExpenseDetailModalComponent {
+export class ExpenseDetailModalComponent implements OnInit {
   activeModal = inject(NgbActiveModal);
   private inspectionService = inject(InspectionService);
   private toastService = inject(ToastService);
   private translate = inject(TranslateService);
+  private expenseCategoryService = inject(ExpenseCategoryService);
 
   expense: InspectionExpense | null = null;
   operationId!: number;
@@ -137,7 +144,29 @@ export class ExpenseDetailModalComponent {
 
   editing = signal(false);
 
-  expenseCategories: ExpenseCategory[] = ['LABOR', 'EQUIPMENT', 'TRANSPORT', 'SECURITY', 'OVERTIME', 'OTHER'];
+  activeCategories = signal<ExpenseCategoryConfig[]>([]);
+  categoriesLoading = signal(true);
+
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  getCategoryLabel(cat: ExpenseCategoryConfig): string {
+    return this.translate.currentLang === 'es' ? cat.labelEs : cat.labelEn;
+  }
+
+  private loadCategories(): void {
+    this.categoriesLoading.set(true);
+    this.expenseCategoryService.getActive().subscribe({
+      next: categories => {
+        this.activeCategories.set(categories);
+        this.categoriesLoading.set(false);
+      },
+      error: () => {
+        this.categoriesLoading.set(false);
+      }
+    });
+  }
 
   editForm = new FormGroup({
     category: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),

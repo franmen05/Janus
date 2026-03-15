@@ -18,7 +18,8 @@
     "LOGOUT": "Logout",
     "SECTION_MAIN": "Main",
     "SECTION_ADMIN": "Administration",
-    "DOCUMENT_TYPES_CONFIG": "Document Types"
+    "DOCUMENT_TYPES_CONFIG": "Document Types",
+    "EXPENSE_CATEGORIES": "Expense Categories"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -892,6 +893,21 @@
     "ALLOW_MULTIPLE": "Allow Multiple",
     "UPDATED": "Document type configuration updated"
   },
+  "EXPENSE_CONFIG": {
+    "TITLE": "Expense Categories",
+    "NAME": "Internal Name",
+    "LABEL_ES": "Label (Spanish)",
+    "LABEL_EN": "Label (English)",
+    "SORT_ORDER": "Sort Order",
+    "ADD": "Add Category",
+    "CREATED": "Category created successfully",
+    "UPDATED": "Category updated successfully",
+    "DELETED": "Category deleted successfully",
+    "DELETE_CONFIRM": "Are you sure you want to delete this category?",
+    "HAS_EXPENSES": "Cannot delete: category has associated expenses",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive"
+  },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "Cannot change from {{from}} to {{to}}. Only the next step is allowed.",
     "CONTAINER_NUMBER_REQUIRED": "Container number is required for Maritime FCL transport mode.",
@@ -921,6 +937,10 @@
     "PORT_CODE_ALREADY_EXISTS": "A port with this code already exists.",
     "EXCHANGE_RATE_ALREADY_EXISTS": "An exchange rate already exists for this date.",
     "EXCHANGE_RATE_PAST_DATE": "Cannot create an exchange rate with a past date.",
-    "NO_EXCHANGE_RATE": "No exchange rate available. Please enter manually."
+    "NO_EXCHANGE_RATE": "No exchange rate available. Please enter manually.",
+    "INVALID_EXPENSE_CATEGORY": "Invalid expense category",
+    "INACTIVE_EXPENSE_CATEGORY": "Expense category is inactive",
+    "EXPENSE_CATEGORY_NAME_EXISTS": "A category with this name already exists",
+    "EXPENSE_CATEGORY_HAS_EXPENSES": "Cannot delete: category has associated expenses"
   }
 }

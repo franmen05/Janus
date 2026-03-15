@@ -18,7 +18,7 @@ export interface SetInspectionTypeRequest {
   comment?: string;
 }
 
-export type ExpenseCategory = 'LABOR' | 'EQUIPMENT' | 'TRANSPORT' | 'SECURITY' | 'OVERTIME' | 'OTHER' | 'STORAGE' | 'DEMURRAGE' | 'FREIGHT' | 'LOCAL_CHARGES';
+export type ExpenseCategory = string;
 
 export interface InspectionExpense {
   id: number;

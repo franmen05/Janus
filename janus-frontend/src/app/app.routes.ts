@@ -169,6 +169,12 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/document-type-config/document-type-config.component').then(m => m.DocumentTypeConfigComponent),
         data: { roles: ['ADMIN'] },
         canActivate: [roleGuard]
+      },
+      {
+        path: 'admin/expense-categories',
+        loadComponent: () => import('./features/admin/expense-category-config/expense-category-config.component').then(m => m.ExpenseCategoryConfigComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
       }
     ]
   },

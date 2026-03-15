@@ -8,6 +8,7 @@ import com.janus.inspection.api.dto.CreateExpenseRequest;
 import com.janus.inspection.domain.model.InspectionExpense;
 import com.janus.inspection.domain.model.PaymentStatus;
 import com.janus.inspection.domain.model.InspectionPhoto;
+import com.janus.inspection.domain.repository.ExpenseCategoryConfigRepository;
 import com.janus.inspection.domain.repository.InspectionExpenseRepository;
 import com.janus.inspection.domain.repository.InspectionPhotoRepository;
 import com.janus.notification.application.NotificationService;
@@ -49,6 +50,9 @@ public class InspectionService {
 
     @Inject
     InspectionExpenseRepository inspectionExpenseRepository;
+
+    @Inject
+    ExpenseCategoryConfigRepository expenseCategoryConfigRepository;
 
     @Inject
     UserRepository userRepository;
@@ -174,6 +178,14 @@ public class InspectionService {
                     "Expenses can only be added when operation is in SUBMITTED_TO_CUSTOMS or VALUATION_REVIEW status");
         }
 
+        var categoryConfig = expenseCategoryConfigRepository.findByName(request.category())
+                .orElseThrow(() -> new BusinessException("INVALID_EXPENSE_CATEGORY",
+                        "Expense category '" + request.category() + "' does not exist"));
+        if (!categoryConfig.active) {
+            throw new BusinessException("INACTIVE_EXPENSE_CATEGORY",
+                    "Expense category '" + request.category() + "' is not active");
+        }
+
         var expense = new InspectionExpense();
         expense.operation = operation;
         expense.category = request.category();
@@ -219,6 +231,14 @@ public class InspectionService {
 
         if (!expense.active) {
             throw new BusinessException("Cannot update a deleted expense");
+        }
+
+        var categoryConfig = expenseCategoryConfigRepository.findByName(request.category())
+                .orElseThrow(() -> new BusinessException("INVALID_EXPENSE_CATEGORY",
+                        "Expense category '" + request.category() + "' does not exist"));
+        if (!categoryConfig.active) {
+            throw new BusinessException("INACTIVE_EXPENSE_CATEGORY",
+                    "Expense category '" + request.category() + "' is not active");
         }
 
         expense.category = request.category();

@@ -90,7 +90,7 @@ public class LiquidationService {
             if (expense.reimbursable) {
                 var expenseLine = new LiquidationLine();
                 expenseLine.liquidation = liquidation;
-                expenseLine.concept = expense.category != null ? expense.category.name() : "OTHER";
+                expenseLine.concept = expense.category != null ? expense.category : "OTHER";
                 expenseLine.description = expense.description;
                 expenseLine.amount = expense.amount;
                 expenseLine.lineOrder = lineOrder++;

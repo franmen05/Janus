@@ -23,9 +23,8 @@ public class InspectionExpense extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     public User registeredBy;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    public ExpenseCategory category;
+    public String category;
 
     @Column(columnDefinition = "TEXT")
     public String description;

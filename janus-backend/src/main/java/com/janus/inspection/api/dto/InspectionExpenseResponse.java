@@ -27,7 +27,7 @@ public record InspectionExpenseResponse(
                 expense.operation != null ? expense.operation.id : null,
                 expense.registeredBy != null ? expense.registeredBy.username : null,
                 expense.registeredBy != null ? expense.registeredBy.fullName : null,
-                expense.category != null ? expense.category.name() : null,
+                expense.category,
                 expense.description,
                 expense.amount,
                 expense.currency,
