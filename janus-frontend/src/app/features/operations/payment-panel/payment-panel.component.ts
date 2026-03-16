@@ -49,7 +49,7 @@ import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/mode
           <!-- Summary cards -->
           <div class="row g-3 mb-4">
             <div class="col-6 col-md-3">
-              <div class="card bg-light border-0">
+              <div class="card border">
                 <div class="card-body py-2 text-center">
                   <small class="text-muted d-block">{{ 'PAYMENT.CUSTOMS_TAXES' | translate }}</small>
                   <strong class="fs-6">{{ liquidation()!.totalCustomsTaxes | number:'1.2-2' }}</strong>
@@ -57,7 +57,7 @@ import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/mode
               </div>
             </div>
             <div class="col-6 col-md-3">
-              <div class="card bg-light border-0">
+              <div class="card border">
                 <div class="card-body py-2 text-center">
                   <small class="text-muted d-block">{{ 'PAYMENT.THIRD_PARTY' | translate }}</small>
                   <strong class="fs-6">{{ liquidation()!.totalThirdParty | number:'1.2-2' }}</strong>
@@ -65,7 +65,7 @@ import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/mode
               </div>
             </div>
             <div class="col-6 col-md-3">
-              <div class="card bg-light border-0">
+              <div class="card border">
                 <div class="card-body py-2 text-center">
                   <small class="text-muted d-block">{{ 'PAYMENT.AGENCY_SERVICES' | translate }}</small>
                   <strong class="fs-6">{{ liquidation()!.totalAgencyServices | number:'1.2-2' }}</strong>
@@ -87,7 +87,7 @@ import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/mode
             <h6 class="mb-2">{{ 'PAYMENT.LINES_TITLE' | translate }}</h6>
             <div class="table-responsive mb-3">
               <table class="table table-sm table-hover">
-                <thead class="table-light">
+                <thead>
                   <tr>
                     <th>{{ 'PAYMENT.CONCEPT' | translate }}</th>
                     <th class="d-none d-sm-table-cell">{{ 'PAYMENT.DESCRIPTION' | translate }}</th>
