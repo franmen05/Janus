@@ -21,7 +21,7 @@ export interface SetInspectionTypeRequest {
 export type ExpenseCategory = string;
 export type ChargeType = 'INCOME' | 'EXPENSE';
 export type PaymentType = 'COLLECT' | 'PREPAID';
-export type BillToType = 'CLIENT' | 'THIRD_PARTY' | 'CARRIER';
+export type BillToType = 'COMPANY' | 'CONSIGNEE' | 'INDIVIDUAL';
 
 export interface InspectionExpense {
   id: number;

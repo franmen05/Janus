@@ -135,7 +135,6 @@
     "ALLOW_MULTIPLE": "Allow Multiple",
     "MULTI_UPLOAD_HINT": "This type allows multiple documents. Drag or select multiple files.",
     "RENAME_FILE": "Rename",
-    "FILE_NAME": "File Name",
     "UPLOADING_FILE": "Uploading file {{current}} of {{total}}..."
   },
   "CLIENTS": {
@@ -605,9 +604,9 @@
     "PAYMENT_COLLECT": "Collect",
     "PAYMENT_PREPAID": "Prepaid",
     "BILL_TO": "Bill To",
-    "BILL_TO_CLIENT": "Client",
-    "BILL_TO_THIRD_PARTY": "Third Party",
-    "BILL_TO_CARRIER": "Carrier",
+    "BILL_TO_COMPANY": "Company",
+    "BILL_TO_CONSIGNEE": "Consignee",
+    "BILL_TO_INDIVIDUAL": "Individual",
     "BILL_TO_NAME": "Bill To Name",
     "INVOICE_NUMBER": "Number",
     "INVOICE_DATE": "Date",
@@ -632,7 +631,9 @@
     "UNITS_PALLETS": "Pallets",
     "UNITS_PIECES": "Pieces",
     "UNITS_TONS": "Tons",
-    "UNITS_FLAT": "Flat Rate"
+    "UNITS_FLAT": "Flat Rate",
+    "PAYMENT_TYPE_TOOLTIP": "Indicates if the charge is paid in advance (Prepaid) or upon receiving the goods (Collect)",
+    "PAYMENT_STATUS_TOOLTIP": "Current payment status. If marked as Paid, the payment date becomes required"
   },
   "PERMIT_TYPES": {
     "VUCE": "VUCE",
@@ -700,7 +701,7 @@
     "AUTO": "Automatic"
   },
   "LANG": {
-    "ES": "Español",
+    "ES": "Espa\u00f1ol",
     "EN": "English"
   },
   "DELETE_CONFIRM": {

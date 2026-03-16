@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { NgbActiveModal, NgbTypeaheadModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbTypeaheadModule, NgbNavModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { Client } from '../../../../core/models/client.model';
 @Component({
   selector: 'app-expense-detail-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, NgbTypeaheadModule, NgbNavModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule, NgbTypeaheadModule, NgbNavModule, NgbTooltipModule],
   styles: [`
     .modal-body .form-label {
       white-space: nowrap;
@@ -114,17 +114,6 @@ import { Client } from '../../../../core/models/client.model';
           </li>
         </ul>
 
-        <!-- Info bar -->
-        @if (operationSummary) {
-          <div class="d-flex gap-2 flex-wrap mb-3">
-            <span class="badge bg-success">{{ 'INSPECTION.PIECES' | translate }}: {{ operationSummary.pieces ?? 0 }}</span>
-            <span class="badge bg-success">{{ 'INSPECTION.WEIGHT' | translate }}: {{ operationSummary.grossWeight ?? 0 }} kg</span>
-            <span class="badge bg-success">{{ 'INSPECTION.VOL_WEIGHT' | translate }}: {{ operationSummary.volumetricWeight ?? 0 }} kg</span>
-            <span class="badge bg-success">{{ 'INSPECTION.VOLUME' | translate }}: {{ operationSummary.volume ?? 0 }} m3</span>
-            <span class="badge bg-success">{{ 'INSPECTION.DECLARED_VALUE' | translate }}: {{ (operationSummary.declaredValue ?? 0) | number:'1.2-2' }}</span>
-          </div>
-        }
-
         <!-- Edit form -->
         <form [formGroup]="editForm">
           <!-- Row 1: Category, Quantity, Units, Rate, Amount, Currency, Payment Type -->
@@ -172,7 +161,9 @@ import { Client } from '../../../../core/models/client.model';
               </select>
             </div>
             <div class="col">
-              <label class="form-label">{{ 'INSPECTION.PAYMENT_TYPE' | translate }}</label>
+              <label class="form-label">
+                {{ 'INSPECTION.PAYMENT_TYPE' | translate }} <i class="bi bi-info-circle text-muted" style="cursor:pointer" [ngbTooltip]="'INSPECTION.PAYMENT_TYPE_TOOLTIP' | translate" triggers="click:blur" placement="top"></i>
+              </label>
               <select class="form-select form-select-sm" formControlName="paymentType">
                 <option value="">-</option>
                 <option value="COLLECT">{{ 'INSPECTION.PAYMENT_COLLECT' | translate }}</option>
@@ -187,9 +178,9 @@ import { Client } from '../../../../core/models/client.model';
               <label class="form-label">{{ 'INSPECTION.BILL_TO' | translate }}</label>
               <select class="form-select form-select-sm" formControlName="billToType">
                 <option value="">-</option>
-                <option value="CLIENT">{{ 'INSPECTION.BILL_TO_CLIENT' | translate }}</option>
-                <option value="THIRD_PARTY">{{ 'INSPECTION.BILL_TO_THIRD_PARTY' | translate }}</option>
-                <option value="CARRIER">{{ 'INSPECTION.BILL_TO_CARRIER' | translate }}</option>
+                <option value="COMPANY">{{ 'INSPECTION.BILL_TO_COMPANY' | translate }}</option>
+                <option value="CONSIGNEE">{{ 'INSPECTION.BILL_TO_CONSIGNEE' | translate }}</option>
+                <option value="INDIVIDUAL">{{ 'INSPECTION.BILL_TO_INDIVIDUAL' | translate }}</option>
               </select>
             </div>
             <div class="col-md-3">
@@ -222,7 +213,9 @@ import { Client } from '../../../../core/models/client.model';
               <input type="text" class="form-control form-control-sm" formControlName="description">
             </div>
             <div class="col-md-3">
-              <label class="form-label">{{ 'INSPECTION.PAYMENT_STATUS' | translate }}</label>
+              <label class="form-label">
+                {{ 'INSPECTION.PAYMENT_STATUS' | translate }} <i class="bi bi-info-circle text-muted" style="cursor:pointer" [ngbTooltip]="'INSPECTION.PAYMENT_STATUS_TOOLTIP' | translate" triggers="click:blur" placement="top"></i>
+              </label>
               <select class="form-select form-select-sm" formControlName="paymentStatus">
                 <option value="PENDING">{{ 'INSPECTION.PAYMENT_PENDING' | translate }}</option>
                 <option value="PAID">{{ 'INSPECTION.PAYMENT_PAID' | translate }}</option>
@@ -271,9 +264,10 @@ import { Client } from '../../../../core/models/client.model';
       } @else {
         <button type="button" class="btn btn-outline-secondary" (click)="cancelEditing()">{{ 'ACTIONS.CANCEL' | translate }}</button>
         @if (isAddMode) {
-          <button type="button" class="btn btn-outline-primary" (click)="saveAndAdd()" [disabled]="editForm.invalid">{{ 'INSPECTION.SAVE_AND_ADD' | translate }}</button>
+          <button type="button" class="btn btn-primary" (click)="saveAndAdd()" [disabled]="editForm.invalid">{{ 'INSPECTION.SAVE_AND_ADD' | translate }}</button>
+        } @else {
+          <button type="button" class="btn btn-primary" (click)="save()" [disabled]="editForm.invalid">{{ 'ACTIONS.SAVE' | translate }}</button>
         }
-        <button type="button" class="btn btn-primary" (click)="save()" [disabled]="editForm.invalid">{{ 'ACTIONS.SAVE' | translate }}</button>
       }
     </div>
   `
@@ -358,17 +352,31 @@ export class ExpenseDetailModalComponent implements OnInit {
     notes: new FormControl<string>('', { nonNullable: true })
   });
 
-  // Client typeahead
+  // Client typeahead — filters by selected billToType and searches name, taxId, email
   searchClient: OperatorFunction<string, Client[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      map(term => term.length < 2 ? [] :
-        this.clients.filter(c => c.name.toLowerCase().includes(term.toLowerCase())).slice(0, 10)
-      )
+      map(term => {
+        const selectedType = this.editForm.controls.billToType.value;
+        let filtered = this.clients.filter(c => c.active);
+        // Filter by clientType matching selected billToType
+        if (selectedType) {
+          filtered = filtered.filter(c => c.clientType === selectedType);
+        }
+        if (term.length < 1) {
+          return filtered.slice(0, 10);
+        }
+        const lower = term.toLowerCase();
+        return filtered.filter(c =>
+          c.name.toLowerCase().includes(lower) ||
+          c.taxId?.toLowerCase().includes(lower) ||
+          c.email?.toLowerCase().includes(lower)
+        ).slice(0, 10);
+      })
     );
 
-  clientResultFormatter = (client: Client) => `${client.name} (${client.taxId})`;
+  clientResultFormatter = (client: Client) => `${client.name} \u2014 ${client.taxId} \u00b7 ${client.email}`;
   clientInputFormatter = (client: any) => typeof client === 'string' ? client : client.name;
 
   onClientSelected(event: any): void {
@@ -428,11 +436,9 @@ export class ExpenseDetailModalComponent implements OnInit {
     // Auto-compute amount from quantity * rate
     this.editForm.controls.quantity.valueChanges.subscribe(() => this.computeAmount());
     this.editForm.controls.rate.valueChanges.subscribe(() => this.computeAmount());
-    // Auto-populate billToName when billToType is CLIENT
-    this.editForm.controls.billToType.valueChanges.subscribe(type => {
-      if (type === 'CLIENT' && this.operationSummary?.clientName) {
-        this.editForm.controls.billToName.setValue(this.operationSummary.clientName);
-      }
+    // Clear billToName when billToType changes (filter changed, previous selection no longer valid)
+    this.editForm.controls.billToType.valueChanges.subscribe(() => {
+      this.editForm.controls.billToName.setValue('');
     });
   }
 
