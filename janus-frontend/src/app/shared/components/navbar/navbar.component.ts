@@ -42,13 +42,6 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
                   </a>
                 </li>
               }
-              @if (authService.hasRole(['ADMIN'])) {
-                <li class="nav-item d-lg-none">
-                  <a class="nav-link" routerLink="/users" routerLinkActive="active" (click)="closeMenu()">
-                    <i class="bi bi-person-gear me-2"></i>{{ 'NAV.USERS' | translate }}
-                  </a>
-                </li>
-              }
               @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                 <li class="nav-item d-lg-none">
                   <a class="nav-link" routerLink="/alerts" routerLinkActive="active" (click)="closeMenu()">
@@ -60,6 +53,42 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
                 <li class="nav-item d-lg-none">
                   <a class="nav-link" routerLink="/audit" routerLinkActive="active" (click)="closeMenu()">
                     <i class="bi bi-journal-text me-2"></i>{{ 'NAV.AUDIT_LOG' | translate }}
+                  </a>
+                </li>
+                <li class="d-lg-none"><hr class="dropdown-divider border-secondary"></li>
+                <li class="d-lg-none">
+                  <span class="nav-link text-muted small fw-semibold text-uppercase">
+                    <i class="bi bi-gear me-2"></i>{{ 'NAV.SECTION_CONFIG' | translate }}
+                  </span>
+                </li>
+                <li class="nav-item d-lg-none">
+                  <a class="nav-link" routerLink="/users" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-person-gear me-2"></i>{{ 'NAV.USERS' | translate }}
+                  </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                  <a class="nav-link" routerLink="/ports" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-geo-alt me-2"></i>{{ 'NAV.PORTS' | translate }}
+                  </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                  <a class="nav-link" routerLink="/exchange-rates" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-currency-exchange me-2"></i>{{ 'NAV.EXCHANGE_RATES' | translate }}
+                  </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                  <a class="nav-link" routerLink="/compliance-config" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-shield-check me-2"></i>{{ 'NAV.COMPLIANCE_CONFIG' | translate }}
+                  </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                  <a class="nav-link" routerLink="/admin/document-types" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-file-earmark-ruled me-2"></i>{{ 'NAV.DOCUMENT_TYPES_CONFIG' | translate }}
+                  </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                  <a class="nav-link" routerLink="/admin/expense-categories" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-tag me-2"></i>{{ 'NAV.EXPENSE_CATEGORIES' | translate }}
                   </a>
                 </li>
               }
