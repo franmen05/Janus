@@ -117,10 +117,10 @@ public class OperationService {
 
         op.referenceNumber = generateReferenceNumber(op.arrivalPort.code);
 
-        // Validate childBlNumber required for CONSOLIDATED BL
+        // Validate childBlNumber (HBL) required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
                 && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
-            throw new BusinessException("CHILD_BL_REQUIRED", "Child BL number is required for consolidated BL");
+            throw new BusinessException("CHILD_BL_REQUIRED", "HBL number is required for consolidated BL");
         }
 
         if (request.assignedAgentId() != null) {
@@ -211,10 +211,10 @@ public class OperationService {
                     .orElseThrow(() -> new NotFoundException("Port", request.arrivalPortId()));
         }
 
-        // Validate childBlNumber required for CONSOLIDATED BL
+        // Validate childBlNumber (HBL) required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
                 && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
-            throw new BusinessException("CHILD_BL_REQUIRED", "Child BL number is required for consolidated BL");
+            throw new BusinessException("CHILD_BL_REQUIRED", "HBL number is required for consolidated BL");
         }
 
         if (request.assignedAgentId() != null) {
