@@ -62,8 +62,8 @@ public class AlertService {
 
     @Transactional
     public Alert createAlert(Operation operation, AlertType alertType, String message, String messageParams) {
-        if (alertRepository.existsActiveForOperation(operation.id, alertType)) {
-            return null; // Don't create duplicate active alerts
+        if (alertRepository.existsUnresolvedForOperation(operation.id, alertType)) {
+            return null; // Don't create duplicate alerts for active or acknowledged ones
         }
 
         var alert = new Alert();

@@ -22,8 +22,8 @@ public class AlertRepository implements PanacheRepository<Alert> {
         return delete("operation.id", operationId);
     }
 
-    public boolean existsActiveForOperation(Long operationId, AlertType alertType) {
-        return count("operation.id = ?1 AND alertType = ?2 AND status = ?3",
-                operationId, alertType, AlertStatus.ACTIVE) > 0;
+    public boolean existsUnresolvedForOperation(Long operationId, AlertType alertType) {
+        return count("operation.id = ?1 AND alertType = ?2 AND status IN (?3, ?4)",
+                operationId, alertType, AlertStatus.ACTIVE, AlertStatus.ACKNOWLEDGED) > 0;
     }
 }
