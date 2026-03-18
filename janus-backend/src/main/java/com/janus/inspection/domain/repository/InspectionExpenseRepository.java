@@ -23,6 +23,10 @@ public class InspectionExpenseRepository implements PanacheRepository<Inspection
         return list("operation.id = ?1 and active = true and chargeType = ?2 order by id desc", operationId, chargeType);
     }
 
+    public long deleteByOperationId(Long operationId) {
+        return delete("operation.id", operationId);
+    }
+
     public BigDecimal sumAmountByOperationId(Long operationId) {
         var result = em.createQuery(
                         "select coalesce(sum(e.amount), 0) from InspectionExpense e where e.operation.id = :opId and e.active = true",

@@ -18,6 +18,10 @@ public class AlertRepository implements PanacheRepository<Alert> {
         return list("operation.id = ?1 ORDER BY createdAt DESC", operationId);
     }
 
+    public long deleteByOperationId(Long operationId) {
+        return delete("operation.id", operationId);
+    }
+
     public boolean existsActiveForOperation(Long operationId, AlertType alertType) {
         return count("operation.id = ?1 AND alertType = ?2 AND status = ?3",
                 operationId, alertType, AlertStatus.ACTIVE) > 0;

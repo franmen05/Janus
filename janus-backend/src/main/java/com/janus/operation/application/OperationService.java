@@ -1,8 +1,18 @@
 package com.janus.operation.application;
 
+import com.janus.alert.domain.repository.AlertRepository;
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
 import com.janus.client.domain.repository.ClientRepository;
+import com.janus.comment.domain.repository.OperationCommentRepository;
+import com.janus.declaration.domain.repository.CrossingDiscrepancyRepository;
+import com.janus.declaration.domain.repository.CrossingResultRepository;
+import com.janus.declaration.domain.repository.DeclarationRepository;
+import com.janus.declaration.domain.repository.TariffLineRepository;
+import com.janus.document.domain.repository.DocumentRepository;
+import com.janus.document.domain.repository.DocumentVersionRepository;
+import com.janus.inspection.domain.repository.InspectionExpenseRepository;
+import com.janus.inspection.domain.repository.InspectionPhotoRepository;
 import com.janus.notification.application.NotificationService;
 import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.api.dto.CreateOperationRequest;
@@ -24,6 +34,7 @@ import com.janus.shared.infrastructure.exception.NotFoundException;
 import com.janus.shared.infrastructure.util.JsonUtil;
 import com.janus.user.domain.model.User;
 import com.janus.user.domain.repository.UserRepository;
+import com.janus.valuation.domain.repository.ExternalPermitRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -61,6 +72,39 @@ public class OperationService {
 
     @Inject
     PortRepository portRepository;
+
+    @Inject
+    AlertRepository alertRepository;
+
+    @Inject
+    OperationCommentRepository operationCommentRepository;
+
+    @Inject
+    CrossingDiscrepancyRepository crossingDiscrepancyRepository;
+
+    @Inject
+    CrossingResultRepository crossingResultRepository;
+
+    @Inject
+    DeclarationRepository declarationRepository;
+
+    @Inject
+    TariffLineRepository tariffLineRepository;
+
+    @Inject
+    DocumentVersionRepository documentVersionRepository;
+
+    @Inject
+    DocumentRepository documentRepository;
+
+    @Inject
+    InspectionExpenseRepository inspectionExpenseRepository;
+
+    @Inject
+    InspectionPhotoRepository inspectionPhotoRepository;
+
+    @Inject
+    ExternalPermitRepository externalPermitRepository;
 
     @Inject
     Event<AuditEvent> auditEvent;
@@ -328,7 +372,22 @@ public class OperationService {
                 null, null, "Operation deleted: " + op.referenceNumber
         ));
 
+        // Delete indirect children first
+        crossingDiscrepancyRepository.deleteByOperationId(id);
+        crossingResultRepository.deleteByOperationId(id);
+        tariffLineRepository.deleteByOperationId(id);
+        declarationRepository.deleteByOperationId(id);
+        documentVersionRepository.deleteByOperationId(id);
+        documentRepository.deleteByOperationId(id);
+
+        // Delete direct children
+        alertRepository.deleteByOperationId(id);
+        operationCommentRepository.deleteByOperationId(id);
+        inspectionExpenseRepository.deleteByOperationId(id);
+        inspectionPhotoRepository.deleteByOperationId(id);
+        externalPermitRepository.deleteByOperationId(id);
         statusHistoryRepository.deleteByOperationId(id);
+
         operationRepository.delete(op);
     }
 

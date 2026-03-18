@@ -13,6 +13,10 @@ public class ExternalPermitRepository implements PanacheRepository<ExternalPermi
         return list("operation.id = ?1", operationId);
     }
 
+    public long deleteByOperationId(Long operationId) {
+        return delete("operation.id", operationId);
+    }
+
     public boolean hasBlockingPermits(Long operationId) {
         return count("operation.id = ?1 and status = ?2", operationId, ExternalPermitStatus.EN_TRAMITE) > 0;
     }

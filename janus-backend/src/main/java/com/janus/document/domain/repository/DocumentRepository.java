@@ -30,6 +30,10 @@ public class DocumentRepository implements PanacheRepository<Document> {
                 .firstResultOptional();
     }
 
+    public long deleteByOperationId(Long operationId) {
+        return delete("operation.id", operationId);
+    }
+
     public long countByOperationId(Long operationId) {
         return count("operation.id = ?1 AND active = true", operationId);
     }

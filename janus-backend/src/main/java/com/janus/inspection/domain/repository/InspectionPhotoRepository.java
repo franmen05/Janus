@@ -12,6 +12,10 @@ public class InspectionPhotoRepository implements PanacheRepository<InspectionPh
         return list("operation.id = ?1 and active = true", operationId);
     }
 
+    public long deleteByOperationId(Long operationId) {
+        return delete("operation.id", operationId);
+    }
+
     public long countByOperationId(Long operationId) {
         return count("operation.id = ?1 and active = true", operationId);
     }

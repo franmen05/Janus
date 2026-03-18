@@ -11,4 +11,8 @@ public class OperationCommentRepository implements PanacheRepository<OperationCo
     public List<OperationComment> findByOperationId(Long operationId) {
         return list("operation.id = ?1 ORDER BY createdAt ASC", operationId);
     }
+
+    public long deleteByOperationId(Long operationId) {
+        return delete("operation.id", operationId);
+    }
 }

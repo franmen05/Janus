@@ -21,6 +21,10 @@ public class DocumentVersionRepository implements PanacheRepository<DocumentVers
         return list("document.operation.id = ?1 ORDER BY uploadedAt ASC", operationId);
     }
 
+    public long deleteByOperationId(Long operationId) {
+        return delete("document.id IN (SELECT d.id FROM Document d WHERE d.operation.id = ?1)", operationId);
+    }
+
     public int getNextVersionNumber(Long documentId) {
         return findByDocumentId(documentId).stream()
                 .mapToInt(v -> v.versionNumber)

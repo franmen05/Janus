@@ -17,4 +17,8 @@ public class DeclarationRepository implements PanacheRepository<Declaration> {
     public Optional<Declaration> findByOperationAndType(Long operationId, DeclarationType type) {
         return find("operation.id = ?1 AND declarationType = ?2", operationId, type).firstResultOptional();
     }
+
+    public long deleteByOperationId(Long operationId) {
+        return delete("operation.id", operationId);
+    }
 }
