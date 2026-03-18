@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../../core/services/alert.service';
 
@@ -7,18 +7,11 @@ import { AlertService } from '../../../core/services/alert.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    @if (count() > 0) {
-      <span class="badge bg-danger rounded-pill">{{ count() }}</span>
+    @if (alertService.activeCount() > 0) {
+      <span class="badge bg-danger rounded-pill">{{ alertService.activeCount() }}</span>
     }
   `
 })
-export class AlertBadgeComponent implements OnInit {
-  private alertService = inject(AlertService);
-  count = signal(0);
-
-  ngOnInit(): void {
-    this.alertService.getActiveAlerts().subscribe(alerts => {
-      this.count.set(alerts.filter(a => a.status === 'ACTIVE').length);
-    });
-  }
+export class AlertBadgeComponent {
+  protected alertService = inject(AlertService);
 }
