@@ -5,5 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 public record CreatePortRequest(
         @NotBlank String code,
         @NotBlank String name,
-        String description
+        String description,
+        String address
 ) {}

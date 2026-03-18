@@ -17,4 +17,7 @@ public class Port extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     public String description;
+
+    @Column(columnDefinition = "TEXT")
+    public String address;
 }

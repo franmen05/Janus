@@ -35,6 +35,7 @@ public class PortService {
         port.code = request.code();
         port.name = request.name();
         port.description = request.description();
+        port.address = request.address();
         portRepository.persist(port);
         return port;
     }
@@ -52,6 +53,7 @@ public class PortService {
         port.code = request.code();
         port.name = request.name();
         port.description = request.description();
+        port.address = request.address();
         return port;
     }
 }

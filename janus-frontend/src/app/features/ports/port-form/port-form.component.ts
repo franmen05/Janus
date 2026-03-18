@@ -25,6 +25,10 @@ import { PortService } from '../../../core/services/port.service';
             </div>
           </div>
           <div class="mb-3">
+            <label class="form-label">{{ 'PORTS.ADDRESS' | translate }}</label>
+            <input type="text" class="form-control" formControlName="address">
+          </div>
+          <div class="mb-3">
             <label class="form-label">{{ 'PORTS.DESCRIPTION' | translate }}</label>
             <textarea class="form-control" formControlName="description" rows="2"></textarea>
           </div>
@@ -48,7 +52,8 @@ export class PortFormComponent implements OnInit {
   form = new FormGroup({
     code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    description: new FormControl('', { nonNullable: true })
+    description: new FormControl('', { nonNullable: true }),
+    address: new FormControl('', { nonNullable: true })
   });
 
   ngOnInit(): void {
@@ -57,7 +62,7 @@ export class PortFormComponent implements OnInit {
       this.isEdit.set(true);
       this.portId = +id;
       this.portService.getById(+id).subscribe(p => {
-        this.form.patchValue({ code: p.code, name: p.name, description: p.description ?? '' });
+        this.form.patchValue({ code: p.code, name: p.name, description: p.description ?? '', address: p.address ?? '' });
       });
     }
   }
@@ -65,7 +70,7 @@ export class PortFormComponent implements OnInit {
   onSubmit(): void {
     if (this.form.invalid) return;
     const val = this.form.getRawValue();
-    const request = { code: val.code, name: val.name, description: val.description || undefined };
+    const request = { code: val.code, name: val.name, description: val.description || undefined, address: val.address || undefined };
     const obs = this.isEdit() ? this.portService.update(this.portId!, request) : this.portService.create(request);
     obs.subscribe(() => this.router.navigate(['/ports']));
   }

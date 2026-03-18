@@ -162,6 +162,7 @@
     "CODE": "Code",
     "NAME": "Name",
     "DESCRIPTION": "Description",
+    "ADDRESS": "Address",
     "SEARCH": "Search by code or name...",
     "NO_PORTS": "No ports found"
   },

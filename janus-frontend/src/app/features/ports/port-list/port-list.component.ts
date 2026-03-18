@@ -32,6 +32,7 @@ import { AuthService } from '../../../core/services/auth.service';
               <th>{{ 'PORTS.CODE' | translate }}</th>
               <th>{{ 'PORTS.NAME' | translate }}</th>
               <th class="d-none d-md-table-cell">{{ 'PORTS.DESCRIPTION' | translate }}</th>
+              <th class="d-none d-md-table-cell">{{ 'PORTS.ADDRESS' | translate }}</th>
               <th>{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
           </thead>
@@ -41,6 +42,7 @@ import { AuthService } from '../../../core/services/auth.service';
                 <td class="fw-bold">{{ port.code }}</td>
                 <td>{{ port.name }}</td>
                 <td class="d-none d-md-table-cell">{{ port.description ?? '-' }}</td>
+                <td class="d-none d-md-table-cell">{{ port.address ?? '-' }}</td>
                 <td>
                   @if (authService.hasRole(['ADMIN'])) {
                     <a [routerLink]="['/ports', port.id, 'edit']" class="btn btn-sm btn-outline-primary">{{ 'ACTIONS.EDIT' | translate }}</a>
@@ -49,7 +51,7 @@ import { AuthService } from '../../../core/services/auth.service';
               </tr>
             }
             @empty {
-              <tr><td colspan="4" class="text-center text-muted py-3">{{ 'PORTS.NO_PORTS' | translate }}</td></tr>
+              <tr><td colspan="5" class="text-center text-muted py-3">{{ 'PORTS.NO_PORTS' | translate }}</td></tr>
             }
           </tbody>
         </table>
@@ -67,7 +69,8 @@ export class PortListComponent implements OnInit {
     if (!term) return this.ports();
     return this.ports().filter(p =>
       p.code.toLowerCase().includes(term) ||
-      p.name.toLowerCase().includes(term)
+      p.name.toLowerCase().includes(term) ||
+      (p.address?.toLowerCase().includes(term) ?? false)
     );
   });
 
