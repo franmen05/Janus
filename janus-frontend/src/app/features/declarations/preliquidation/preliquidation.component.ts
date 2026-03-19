@@ -5,11 +5,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeclarationService } from '../../../core/services/declaration.service';
 import { Declaration, TariffLine } from '../../../core/models/declaration.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { DocumentListComponent } from '../../documents/document-list/document-list.component';
 
 @Component({
   selector: 'app-preliquidation',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, DocumentListComponent],
   template: `
     @if (declaration()) {
       <div class="card mb-3">
@@ -93,6 +94,10 @@ import { AuthService } from '../../../core/services/auth.service';
               </table>
             </div>
           }
+
+          <div class="mt-4">
+            <app-document-list [operationId]="declaration()!.operationId" />
+          </div>
 
           <h6 class="text-muted mt-4 mb-3">{{ 'review.approvalPanel' | translate }}</h6>
           <div class="row g-3">
