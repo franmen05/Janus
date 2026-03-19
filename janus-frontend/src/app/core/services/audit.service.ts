@@ -9,9 +9,11 @@ export class AuditService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/audit`;
 
-  getAll(username?: string): Observable<AuditLog[]> {
+  getAll(username?: string, from?: string, to?: string): Observable<AuditLog[]> {
     let params = new HttpParams();
     if (username) params = params.set('username', username);
+    if (from) params = params.set('from', from);
+    if (to) params = params.set('to', to);
     return this.http.get<AuditLog[]>(this.apiUrl, { params });
   }
 

@@ -9,6 +9,7 @@ import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.event.TransactionPhase;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @ApplicationScoped
@@ -45,7 +46,7 @@ public class AuditService {
     }
 
     public List<AuditLog> findAll() {
-        return auditLogRepository.listAll();
+        return auditLogRepository.list("ORDER BY createdAt DESC");
     }
 
     public List<AuditLog> findByEntity(String entityName, Long entityId) {
@@ -58,5 +59,22 @@ public class AuditService {
 
     public List<AuditLog> findByOperationId(Long operationId) {
         return auditLogRepository.findByOperationId(operationId);
+    }
+
+    public List<AuditLog> findFiltered(String username, LocalDateTime from, LocalDateTime to) {
+        boolean hasUsername = username != null && !username.isBlank();
+        boolean hasDateRange = from != null && to != null;
+
+        if (hasUsername && hasDateRange) {
+            return auditLogRepository.list(
+                    "username = ?1 AND createdAt >= ?2 AND createdAt <= ?3 ORDER BY createdAt DESC",
+                    username, from, to);
+        } else if (hasUsername) {
+            return auditLogRepository.findByUsername(username);
+        } else if (hasDateRange) {
+            return auditLogRepository.findByDateRange(from, to);
+        } else {
+            return auditLogRepository.list("ORDER BY createdAt DESC");
+        }
     }
 }

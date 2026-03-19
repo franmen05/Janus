@@ -46,8 +46,8 @@ public class UserResource {
 
     @POST
     @RolesAllowed("ADMIN")
-    public Response create(@Valid CreateUserRequest request) {
-        var user = userService.create(request);
+    public Response create(@Valid CreateUserRequest request, @Context SecurityContext sec) {
+        var user = userService.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
                 .entity(UserResponse.from(user))
                 .build();
@@ -56,15 +56,15 @@ public class UserResource {
     @PUT
     @Path("/{id}")
     @RolesAllowed("ADMIN")
-    public UserResponse update(@PathParam("id") Long id, @Valid UpdateUserRequest request) {
-        return UserResponse.from(userService.update(id, request));
+    public UserResponse update(@PathParam("id") Long id, @Valid UpdateUserRequest request, @Context SecurityContext sec) {
+        return UserResponse.from(userService.update(id, request, sec.getUserPrincipal().getName()));
     }
 
     @PATCH
     @Path("/{id}/active")
     @RolesAllowed("ADMIN")
-    public UserResponse toggleActive(@PathParam("id") Long id) {
-        return UserResponse.from(userService.toggleActive(id));
+    public UserResponse toggleActive(@PathParam("id") Long id, @Context SecurityContext sec) {
+        return UserResponse.from(userService.toggleActive(id, sec.getUserPrincipal().getName()));
     }
 
     @GET

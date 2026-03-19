@@ -16,8 +16,10 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import java.util.List;
 
 @Path("/api/expense-categories")
@@ -49,8 +51,9 @@ public class ExpenseCategoryResource {
 
     @POST
     @RolesAllowed("ADMIN")
-    public Response create(@Valid CreateExpenseCategoryRequest request) {
-        var config = service.create(request);
+    public Response create(@Valid CreateExpenseCategoryRequest request,
+                           @Context SecurityContext sec) {
+        var config = service.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
                 .entity(ExpenseCategoryResponse.from(config))
                 .build();
@@ -60,24 +63,27 @@ public class ExpenseCategoryResource {
     @Path("/{id}")
     @RolesAllowed("ADMIN")
     public ExpenseCategoryResponse update(@PathParam("id") Long id,
-                                          @Valid UpdateExpenseCategoryRequest request) {
-        var config = service.update(id, request);
+                                          @Valid UpdateExpenseCategoryRequest request,
+                                          @Context SecurityContext sec) {
+        var config = service.update(id, request, sec.getUserPrincipal().getName());
         return ExpenseCategoryResponse.from(config);
     }
 
     @PUT
     @Path("/{id}/toggle")
     @RolesAllowed("ADMIN")
-    public ExpenseCategoryResponse toggleActive(@PathParam("id") Long id) {
-        var config = service.toggleActive(id);
+    public ExpenseCategoryResponse toggleActive(@PathParam("id") Long id,
+                                                @Context SecurityContext sec) {
+        var config = service.toggleActive(id, sec.getUserPrincipal().getName());
         return ExpenseCategoryResponse.from(config);
     }
 
     @DELETE
     @Path("/{id}")
     @RolesAllowed("ADMIN")
-    public Response delete(@PathParam("id") Long id) {
-        service.delete(id);
+    public Response delete(@PathParam("id") Long id,
+                           @Context SecurityContext sec) {
+        service.delete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
     }
 }

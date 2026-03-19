@@ -12,8 +12,10 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import java.util.List;
 
 @Path("/api/compliance/config")
@@ -37,21 +39,21 @@ public class ComplianceRuleConfigResource {
     }
 
     @POST
-    public Response create(ComplianceRuleConfig entity) {
-        var created = service.create(entity);
+    public Response create(ComplianceRuleConfig entity, @Context SecurityContext sec) {
+        var created = service.create(entity, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
     @PUT
     @Path("/{id}")
-    public ComplianceRuleConfig update(@PathParam("id") Long id, ComplianceRuleConfig update) {
-        return service.update(id, update);
+    public ComplianceRuleConfig update(@PathParam("id") Long id, ComplianceRuleConfig update, @Context SecurityContext sec) {
+        return service.update(id, update, sec.getUserPrincipal().getName());
     }
 
     @DELETE
     @Path("/{id}")
-    public Response delete(@PathParam("id") Long id) {
-        service.delete(id);
+    public Response delete(@PathParam("id") Long id, @Context SecurityContext sec) {
+        service.delete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
     }
 }

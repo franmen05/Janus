@@ -14,6 +14,8 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.SecurityContext;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Path("/api/audit")
@@ -31,13 +33,15 @@ public class AuditResource {
 
     @GET
     @RolesAllowed("ADMIN")
-    public List<AuditLogResponse> list(@QueryParam("username") String username) {
-        if (username != null && !username.isBlank()) {
-            return auditService.findByUsername(username).stream()
-                    .map(AuditLogResponse::from)
-                    .toList();
-        }
-        return auditService.findAll().stream()
+    public List<AuditLogResponse> list(@QueryParam("username") String username,
+                                       @QueryParam("from") String from,
+                                       @QueryParam("to") String to) {
+        LocalDateTime fromDateTime = from != null && !from.isBlank()
+                ? LocalDate.parse(from).atStartOfDay() : null;
+        LocalDateTime toDateTime = to != null && !to.isBlank()
+                ? LocalDate.parse(to).atTime(23, 59, 59) : null;
+
+        return auditService.findFiltered(username, fromDateTime, toDateTime).stream()
                 .map(AuditLogResponse::from)
                 .toList();
     }

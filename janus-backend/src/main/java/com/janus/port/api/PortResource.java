@@ -13,8 +13,10 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import java.util.List;
 
 @Path("/api/ports")
@@ -42,8 +44,8 @@ public class PortResource {
 
     @POST
     @RolesAllowed("ADMIN")
-    public Response create(@Valid CreatePortRequest request) {
-        var port = portService.create(request);
+    public Response create(@Valid CreatePortRequest request, @Context SecurityContext sec) {
+        var port = portService.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
                 .entity(PortResponse.from(port))
                 .build();
@@ -52,7 +54,7 @@ public class PortResource {
     @PUT
     @Path("/{id}")
     @RolesAllowed("ADMIN")
-    public PortResponse update(@PathParam("id") Long id, @Valid CreatePortRequest request) {
-        return PortResponse.from(portService.update(id, request));
+    public PortResponse update(@PathParam("id") Long id, @Valid CreatePortRequest request, @Context SecurityContext sec) {
+        return PortResponse.from(portService.update(id, request, sec.getUserPrincipal().getName()));
     }
 }

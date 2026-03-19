@@ -13,8 +13,10 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
 import java.util.List;
 
 @Path("/api/clients")
@@ -42,8 +44,8 @@ public class ClientResource {
 
     @POST
     @RolesAllowed({"ADMIN", "AGENT"})
-    public Response create(@Valid CreateClientRequest request) {
-        var client = clientService.create(request);
+    public Response create(@Valid CreateClientRequest request, @Context SecurityContext sec) {
+        var client = clientService.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
                 .entity(ClientResponse.from(client))
                 .build();
@@ -52,7 +54,7 @@ public class ClientResource {
     @PUT
     @Path("/{id}")
     @RolesAllowed({"ADMIN", "AGENT"})
-    public ClientResponse update(@PathParam("id") Long id, @Valid CreateClientRequest request) {
-        return ClientResponse.from(clientService.update(id, request));
+    public ClientResponse update(@PathParam("id") Long id, @Valid CreateClientRequest request, @Context SecurityContext sec) {
+        return ClientResponse.from(clientService.update(id, request, sec.getUserPrincipal().getName()));
     }
 }

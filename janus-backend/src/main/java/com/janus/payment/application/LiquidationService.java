@@ -11,8 +11,11 @@ import com.janus.payment.domain.model.Liquidation;
 import com.janus.payment.domain.model.LiquidationLine;
 import com.janus.payment.domain.model.LiquidationStatus;
 import com.janus.payment.domain.model.Payment;
+import com.janus.audit.domain.model.AuditAction;
+import com.janus.audit.domain.model.AuditEvent;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
@@ -30,6 +33,9 @@ public class LiquidationService {
 
     @Inject
     PreliquidationService preliquidationService;
+
+    @Inject
+    Event<AuditEvent> auditEvent;
 
     @Transactional
     public Liquidation generateLiquidation(Long operationId, BigDecimal agencyServiceFee, String username) {
@@ -124,6 +130,11 @@ public class LiquidationService {
         LOG.infof("Liquidation generated for operation %d by %s, grand total: %s",
                 operationId, username, liquidation.grandTotal);
 
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.CREATE, "Liquidation", liquidation.id, operationId,
+                null, null, "Liquidation generated with grand total: " + liquidation.grandTotal
+        ));
+
         return liquidation;
     }
 
@@ -148,6 +159,11 @@ public class LiquidationService {
 
         LOG.infof("Liquidation approved for operation %d by %s", operationId, username);
 
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.APPROVAL, "Liquidation", liquidation.id, operationId,
+                null, null, "Liquidation approved" + (comment != null ? ": " + comment : "")
+        ));
+
         return liquidation;
     }
 
@@ -170,6 +186,11 @@ public class LiquidationService {
 
         LOG.infof("Liquidation made definitive for operation %d by %s, DGA code: %s",
                 operationId, username, dgaPaymentCode);
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.STATUS_CHANGE, "Liquidation", liquidation.id, operationId,
+                null, null, "Liquidation made definitive, DGA code: " + dgaPaymentCode
+        ));
 
         return liquidation;
     }
@@ -207,6 +228,11 @@ public class LiquidationService {
 
         LOG.infof("Payment registered for operation %d by %s, amount: %s",
                 operationId, username, request.amount());
+
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.CREATE, "Payment", payment.id, operationId,
+                null, null, "Payment registered, amount: " + request.amount()
+        ));
 
         return payment;
     }

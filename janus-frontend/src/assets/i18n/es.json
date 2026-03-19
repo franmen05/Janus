@@ -182,7 +182,9 @@
     "DETAILS": "Detalles",
     "IP": "IP",
     "NO_LOGS": "No se encontraron registros de auditor\u00eda",
-    "CHANGES": "Cambios"
+    "CHANGES": "Cambios",
+    "FROM": "Desde",
+    "TO": "Hasta"
   },
   "TABS": {
     "INFO": "Info",

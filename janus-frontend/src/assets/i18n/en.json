@@ -182,7 +182,9 @@
     "DETAILS": "Details",
     "IP": "IP",
     "NO_LOGS": "No audit logs found",
-    "CHANGES": "Changes"
+    "CHANGES": "Changes",
+    "FROM": "From",
+    "TO": "To"
   },
   "TABS": {
     "INFO": "Info",
