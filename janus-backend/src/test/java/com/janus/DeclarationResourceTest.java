@@ -56,8 +56,7 @@ class DeclarationResourceTest {
                             "taxableBase": 12000.00,
                             "totalTaxes": 1800.00,
                             "freightValue": 1500.00,
-                            "insuranceValue": 500.00,
-                            "gattMethod": "Transaction Value"
+                            "insuranceValue": 500.00
                         }
                         """)
                 .when().post("/api/operations/{opId}/declarations/preliminary", operationId)
@@ -98,8 +97,7 @@ class DeclarationResourceTest {
                             "taxableBase": 12500.00,
                             "totalTaxes": 1875.00,
                             "freightValue": 1500.00,
-                            "insuranceValue": 500.00,
-                            "gattMethod": "Transaction Value"
+                            "insuranceValue": 500.00
                         }
                         """)
                 .when().post("/api/operations/{opId}/declarations/final", operationId)
@@ -204,8 +202,7 @@ class DeclarationResourceTest {
                             "taxableBase": 12500.00,
                             "totalTaxes": 1875.00,
                             "freightValue": 1500.00,
-                            "insuranceValue": 500.00,
-                            "gattMethod": "Transaction Value"
+                            "insuranceValue": 500.00
                         }
                         """)
                 .when().post("/api/operations/{opId}/declarations/final", operationId)
@@ -378,8 +375,7 @@ class DeclarationResourceTest {
                 .contentType(ContentType.JSON)
                 .body("""
                         {"declarationNumber": "MATCH-F", "fobValue": 5000.00, "cifValue": 6000.00,
-                         "taxableBase": 6000.00, "totalTaxes": 900.00, "freightValue": 800.00, "insuranceValue": 200.00,
-                         "gattMethod": "Transaction Value"}
+                         "taxableBase": 6000.00, "totalTaxes": 900.00, "freightValue": 800.00, "insuranceValue": 200.00}
                         """)
                 .when().post("/api/operations/{opId}/declarations/final", opId)
                 .then().statusCode(201);

@@ -3,9 +3,7 @@ package com.janus.valuation.api;
 import com.janus.operation.api.dto.OperationResponse;
 import com.janus.valuation.api.dto.ExternalPermitRequest;
 import com.janus.valuation.api.dto.ExternalPermitResponse;
-import com.janus.valuation.api.dto.GattFormResponse;
 import com.janus.valuation.api.dto.LocalChargesValidatedRequest;
-import com.janus.valuation.api.dto.UpdateGattFormRequest;
 import com.janus.valuation.api.dto.ValuationChecklistResponse;
 import com.janus.valuation.application.ValuationService;
 import jakarta.annotation.security.RolesAllowed;
@@ -87,24 +85,6 @@ public class ValuationResource {
                                   @Context SecurityContext sec) {
         valuationService.deletePermit(operationId, permitId, sec.getUserPrincipal().getName());
         return Response.noContent().build();
-    }
-
-    // ── GATT Form ──
-
-    @GET
-    @Path("/gatt-form")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
-    public GattFormResponse getGattForm(@PathParam("operationId") Long operationId) {
-        return valuationService.getGattForm(operationId);
-    }
-
-    @PUT
-    @Path("/gatt-form")
-    @RolesAllowed({"ADMIN", "AGENT"})
-    public GattFormResponse saveGattForm(@PathParam("operationId") Long operationId,
-                                          @Valid UpdateGattFormRequest request,
-                                          @Context SecurityContext sec) {
-        return valuationService.saveGattForm(operationId, request, sec.getUserPrincipal().getName());
     }
 
     // ── Finalize ──

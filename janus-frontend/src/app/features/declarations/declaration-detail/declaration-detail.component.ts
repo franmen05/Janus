@@ -49,7 +49,6 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
               <dl>
                 <dt>{{ 'DECLARATIONS.TAXABLE_BASE' | translate }}</dt><dd>RD$ {{ declaration()!.taxableBase | number:'1.2-2' }}</dd>
                 <dt>{{ 'DECLARATIONS.TOTAL_TAXES' | translate }}</dt><dd>RD$ {{ declaration()!.totalTaxes | number:'1.2-2' }}</dd>
-                <dt>{{ 'DECLARATIONS.GATT_METHOD' | translate }}</dt><dd>{{ declaration()!.gattMethod }}</dd>
               </dl>
             </div>
             <div class="col-md-4">

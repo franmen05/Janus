@@ -16,6 +16,5 @@ public record CreateDeclarationRequest(
         BigDecimal freightValueUsd,
         BigDecimal insuranceValueUsd,
         BigDecimal exchangeRate,
-        String gattMethod,
         String notes
 ) {}

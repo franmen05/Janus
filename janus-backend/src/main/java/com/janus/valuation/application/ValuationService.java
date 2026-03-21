@@ -2,7 +2,6 @@ package com.janus.valuation.application;
 
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
-import com.janus.declaration.domain.model.Declaration;
 import com.janus.declaration.domain.repository.DeclarationRepository;
 import com.janus.document.domain.model.DocumentStatus;
 import com.janus.document.domain.model.DocumentType;
@@ -10,7 +9,6 @@ import com.janus.document.domain.repository.DocumentRepository;
 import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.application.OperationService;
 import com.janus.operation.domain.model.BlAvailability;
-import com.janus.operation.domain.model.InspectionType;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.model.TransportMode;
@@ -18,8 +16,6 @@ import com.janus.shared.infrastructure.audit.AuditDiffUtil;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.util.JsonUtil;
 import com.janus.valuation.api.dto.ExternalPermitRequest;
-import com.janus.valuation.api.dto.GattFormResponse;
-import com.janus.valuation.api.dto.UpdateGattFormRequest;
 import com.janus.valuation.api.dto.ValuationChecklistResponse;
 import com.janus.valuation.domain.model.ExternalPermit;
 import com.janus.valuation.domain.model.ExternalPermitStatus;
@@ -172,89 +168,6 @@ public class ValuationService {
         handlePermitAutoTransition(operation, username);
     }
 
-    // ── GATT Form ──
-
-    public GattFormResponse getGattForm(Long operationId) {
-        var operation = operationService.findById(operationId);
-        boolean required = isGattRequired(operation);
-
-        var declaration = declarationRepository.findByOperationId(operationId).stream()
-                .findFirst().orElse(null);
-
-        if (declaration == null) {
-            return new GattFormResponse(null, null, null, null, null, null, null,
-                    null, null, null, null, required);
-        }
-
-        var adjustedBase = calculateAdjustedTaxableBase(declaration);
-
-        return new GattFormResponse(
-                declaration.id, declaration.gattMethod,
-                declaration.gattCommercialLinks, declaration.gattCommissions,
-                declaration.gattUnrecordedTransport, declaration.gattAdjustmentAmount,
-                declaration.gattJustification,
-                declaration.taxableBase, adjustedBase,
-                declaration.gattCompletedAt, declaration.gattCompletedBy,
-                required
-        );
-    }
-
-    @Transactional
-    public GattFormResponse saveGattForm(Long operationId, UpdateGattFormRequest request, String username) {
-        var operation = operationService.findById(operationId);
-        validateValuationStatus(operation);
-
-        if (!isGattRequired(operation)) {
-            throw new BusinessException("GATT form is not required for this operation (inspection type: " + operation.inspectionType + ")");
-        }
-
-        var declaration = declarationRepository.findByOperationId(operationId).stream()
-                .findFirst()
-                .orElseThrow(() -> new BusinessException("No declaration found for this operation"));
-
-        var beforeMap = new LinkedHashMap<String, Object>();
-        beforeMap.put("gattCommercialLinks", declaration.gattCommercialLinks != null ? declaration.gattCommercialLinks : false);
-        beforeMap.put("gattCommissions", declaration.gattCommissions != null ? declaration.gattCommissions.toString() : "0");
-        beforeMap.put("gattUnrecordedTransport", declaration.gattUnrecordedTransport != null ? declaration.gattUnrecordedTransport.toString() : "0");
-        beforeMap.put("gattAdjustmentAmount", declaration.gattAdjustmentAmount != null ? declaration.gattAdjustmentAmount.toString() : "0");
-        beforeMap.put("gattJustification", declaration.gattJustification != null ? declaration.gattJustification : "");
-
-        declaration.gattMethod = "GATT_ARTICLE_1";
-        declaration.gattCommercialLinks = request.commercialLinks();
-        declaration.gattCommissions = request.commissions();
-        declaration.gattUnrecordedTransport = request.unrecordedTransport();
-        declaration.gattAdjustmentAmount = request.adjustmentAmount();
-        declaration.gattJustification = request.justification();
-        declaration.gattCompletedAt = LocalDateTime.now();
-        declaration.gattCompletedBy = username;
-
-        var afterMap = new LinkedHashMap<String, Object>();
-        afterMap.put("gattCommercialLinks", declaration.gattCommercialLinks != null ? declaration.gattCommercialLinks : false);
-        afterMap.put("gattCommissions", declaration.gattCommissions != null ? declaration.gattCommissions.toString() : "0");
-        afterMap.put("gattUnrecordedTransport", declaration.gattUnrecordedTransport != null ? declaration.gattUnrecordedTransport.toString() : "0");
-        afterMap.put("gattAdjustmentAmount", declaration.gattAdjustmentAmount != null ? declaration.gattAdjustmentAmount.toString() : "0");
-        afterMap.put("gattJustification", declaration.gattJustification != null ? declaration.gattJustification : "");
-        var diff = AuditDiffUtil.buildDiff(beforeMap, afterMap);
-
-        auditEvent.fire(new AuditEvent(
-                username, AuditAction.UPDATE, "Declaration", declaration.id, operationId,
-                diff[0], diff[1],
-                "GATT Article 1 form completed"
-        ));
-
-        var adjustedBase = calculateAdjustedTaxableBase(declaration);
-
-        return new GattFormResponse(
-                declaration.id, declaration.gattMethod,
-                declaration.gattCommercialLinks, declaration.gattCommissions,
-                declaration.gattUnrecordedTransport, declaration.gattAdjustmentAmount,
-                declaration.gattJustification,
-                declaration.taxableBase, adjustedBase,
-                declaration.gattCompletedAt, declaration.gattCompletedBy,
-                true
-        );
-    }
-
     // ── Checklist ──
 
     public ValuationChecklistResponse getChecklist(Long operationId) {
@@ -311,16 +224,7 @@ public class ValuationService {
                 "PACKING_LIST_PRESENT", "Packing list uploaded", packingListPresent,
                 packingListPresent ? "Packing list present" : "Packing list is missing"));
 
-        // 6. GATT form completed (if required)
-        boolean gattRequired = isGattRequired(operation);
-        if (gattRequired) {
-            boolean gattCompleted = declaration != null && declaration.gattCompletedAt != null;
-            items.add(new ValuationChecklistResponse.ChecklistItem(
-                    "GATT_COMPLETED", "GATT Article 1 form completed", gattCompleted,
-                    gattCompleted ? "GATT form completed by " + declaration.gattCompletedBy : "GATT form required (inspection: " + operation.inspectionType + ")"));
-        }
-
-        // 7. External permits cleared
+        // 6. External permits cleared
         boolean hasBlockingPermits = permitRepository.hasBlockingPermits(operationId);
         boolean hasPermits = permitRepository.hasAnyPermits(operationId);
         boolean permitsPassed = !hasBlockingPermits;
@@ -328,7 +232,7 @@ public class ValuationService {
                 "PERMITS_CLEARED", "External permits cleared", permitsPassed,
                 hasBlockingPermits ? "Some permits are still EN_TRAMITE" : (hasPermits ? "All permits cleared" : "No external permits registered")));
 
-        // 8. Local charges validated
+        // 7. Local charges validated
         boolean localChargesValidated = Boolean.TRUE.equals(operation.localChargesValidated);
         boolean hasLocalChargesDoc = documents.stream()
                 .filter(d -> d.active)
@@ -352,15 +256,6 @@ public class ValuationService {
 
         if (operation.status != OperationStatus.VALUATION_REVIEW) {
             throw new BusinessException("Operation must be in VALUATION_REVIEW status to finalize valuation");
-        }
-
-        // Validate GATT completion when required by inspection type
-        if (isGattRequired(operation)) {
-            boolean gattCompleted = declarationRepository.findByOperationId(operationId).stream()
-                    .anyMatch(d -> d.gattCompletedAt != null);
-            if (!gattCompleted) {
-                throw new BusinessException("GATT form must be completed for operations with VISUAL or FISICA inspection");
-            }
         }
 
         operation.valuationFinalizedAt = LocalDateTime.now();
@@ -399,6 +294,7 @@ public class ValuationService {
         // Force lazy init for DTO mapping
         if (operation.client != null) { var ignored = operation.client.name; }
         if (operation.assignedAgent != null) { var ignored = operation.assignedAgent.fullName; }
+        if (operation.arrivalPort != null) { var ignored = operation.arrivalPort.code; }
 
         return operation;
     }
@@ -410,19 +306,6 @@ public class ValuationService {
             throw new BusinessException(
                     "Operation must be in VALUATION_REVIEW or PENDING_EXTERNAL_APPROVAL status");
         }
-    }
-
-    private boolean isGattRequired(Operation operation) {
-        return operation.inspectionType == InspectionType.VISUAL
-                || operation.inspectionType == InspectionType.FISICA;
-    }
-
-    private BigDecimal calculateAdjustedTaxableBase(Declaration declaration) {
-        var base = declaration.taxableBase != null ? declaration.taxableBase : BigDecimal.ZERO;
-        var commissions = declaration.gattCommissions != null ? declaration.gattCommissions : BigDecimal.ZERO;
-        var transport = declaration.gattUnrecordedTransport != null ? declaration.gattUnrecordedTransport : BigDecimal.ZERO;
-        var adjustment = declaration.gattAdjustmentAmount != null ? declaration.gattAdjustmentAmount : BigDecimal.ZERO;
-        return base.add(commissions).add(transport).add(adjustment);
     }
 
     private void handlePermitAutoTransition(Operation operation, String username) {

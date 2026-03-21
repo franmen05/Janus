@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { Operation } from '../models/operation.model';
 import {
   ExternalPermit, ExternalPermitRequest,
-  ValuationChecklist, GattFormResponse, UpdateGattFormRequest
+  ValuationChecklist
 } from '../models/valuation.model';
 
 @Injectable({ providedIn: 'root' })
@@ -31,14 +31,6 @@ export class ValuationService {
 
   deletePermit(operationId: number, permitId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/api/operations/${operationId}/valuation/permits/${permitId}`);
-  }
-
-  getGattForm(operationId: number): Observable<GattFormResponse> {
-    return this.http.get<GattFormResponse>(`${this.apiUrl}/api/operations/${operationId}/valuation/gatt-form`);
-  }
-
-  saveGattForm(operationId: number, request: UpdateGattFormRequest): Observable<GattFormResponse> {
-    return this.http.put<GattFormResponse>(`${this.apiUrl}/api/operations/${operationId}/valuation/gatt-form`, request);
   }
 
   finalizeValuation(operationId: number): Observable<void> {

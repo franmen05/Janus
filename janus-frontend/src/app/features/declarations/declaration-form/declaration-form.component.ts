@@ -22,10 +22,6 @@ import { ExchangeRate } from '../../../core/models/exchange-rate.model';
               <label class="form-label">{{ 'DECLARATIONS.DECLARATION_NUMBER' | translate }}</label>
               <input type="text" class="form-control" formControlName="declarationNumber">
             </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ 'DECLARATIONS.GATT_METHOD' | translate }}</label>
-              <input type="text" class="form-control" formControlName="gattMethod">
-            </div>
           </div>
 
           <!-- Exchange Rate Info Bar -->
@@ -177,7 +173,6 @@ export class DeclarationFormComponent implements OnInit {
     freightValue: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
     insurancePercentage: new FormControl(2, { nonNullable: true }),
     insuranceValue: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
-    gattMethod: new FormControl('', { nonNullable: true }),
     notes: new FormControl('', { nonNullable: true }),
     exchangeRate: new FormControl<number | null>(null, { nonNullable: false })
   });
@@ -273,7 +268,6 @@ export class DeclarationFormComponent implements OnInit {
           totalTaxes: d.totalTaxes ?? 0,
           freightValue: freightUsd,
           insuranceValue: insuranceUsd,
-          gattMethod: d.gattMethod ?? '',
           notes: d.notes ?? ''
         });
         this.form.get('taxableBase')!.setValue(d.cifValue ?? 0, { emitEvent: false });
@@ -359,7 +353,6 @@ export class DeclarationFormComponent implements OnInit {
       totalTaxes: val.totalTaxes,
       freightValue: rate ? freightDop : val.freightValue,
       insuranceValue: rate ? insuranceDop : val.insuranceValue,
-      gattMethod: val.gattMethod,
       notes: val.notes || undefined,
       fobValueUsd: val.fobValue,
       freightValueUsd: val.freightValue,

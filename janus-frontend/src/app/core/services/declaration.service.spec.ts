@@ -18,8 +18,6 @@ describe('DeclarationService', () => {
     id: 1, operationId: 1, declarationType: DeclarationType.PRELIMINARY,
     declarationNumber: 'DECL-001', fobValue: 1000, cifValue: 1200,
     taxableBase: 1200, totalTaxes: 180, freightValue: 150, insuranceValue: 50,
-    gattMethod: 'Method 1', gattCommercialLinks: null, gattCommissions: null, gattUnrecordedTransport: null,
-    gattAdjustmentAmount: null, gattJustification: null, gattCompletedAt: null, gattCompletedBy: null,
     notes: null, submittedAt: null, createdAt: '2024-01-01T00:00:00',
     technicalApprovedBy: null, technicalApprovedAt: null, technicalApprovalComment: null,
     finalApprovedBy: null, finalApprovedAt: null, finalApprovalComment: null,
@@ -82,7 +80,6 @@ describe('DeclarationService', () => {
       const request: CreateDeclarationRequest = {
         declarationNumber: 'DECL-001', fobValue: 1000, cifValue: 1200,
         taxableBase: 1200, totalTaxes: 180, freightValue: 150, insuranceValue: 50,
-        gattMethod: 'Method 1'
       };
       service.createPreliminary(1, request).subscribe(decl => {
         expect(decl).toEqual(mockDeclaration);
@@ -98,7 +95,6 @@ describe('DeclarationService', () => {
       const request: CreateDeclarationRequest = {
         declarationNumber: 'DECL-002', fobValue: 1000, cifValue: 1200,
         taxableBase: 1200, totalTaxes: 180, freightValue: 150, insuranceValue: 50,
-        gattMethod: 'Method 1'
       };
       service.createFinal(1, request).subscribe();
       const req = httpMock.expectOne(`${apiUrl}/1/declarations/final`);

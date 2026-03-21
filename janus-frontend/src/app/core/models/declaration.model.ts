@@ -34,14 +34,6 @@ export interface Declaration {
   totalTaxes: number;
   freightValue: number;
   insuranceValue: number;
-  gattMethod: string;
-  gattCommercialLinks: boolean | null;
-  gattCommissions: number | null;
-  gattUnrecordedTransport: number | null;
-  gattAdjustmentAmount: number | null;
-  gattJustification: string | null;
-  gattCompletedAt: string | null;
-  gattCompletedBy: string | null;
   fobValueUsd: number | null;
   freightValueUsd: number | null;
   insuranceValueUsd: number | null;
@@ -70,7 +62,6 @@ export interface CreateDeclarationRequest {
   totalTaxes: number;
   freightValue: number;
   insuranceValue: number;
-  gattMethod: string;
   notes?: string;
   fobValueUsd?: number;
   freightValueUsd?: number;

@@ -393,52 +393,6 @@ class ValuationResourceTest {
                 .statusCode(204);
     }
 
-    // ── GATT Form ────────────────────────────────────────────────────────
-
-    @Test
-    @Order(40)
-    void testGetGattForm() {
-        given()
-                .auth().basic("admin", "admin123")
-                .when().get("/api/operations/{id}/valuation/gatt-form", operationId)
-                .then()
-                .statusCode(200)
-                .body("required", is(true));
-    }
-
-    @Test
-    @Order(41)
-    void testSaveGattForm() {
-        given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"commercialLinks": false, "commissions": 50.00, "unrecordedTransport": 25.00,
-                         "adjustmentAmount": 10.00, "justification": "Standard valuation"}
-                        """)
-                .when().put("/api/operations/{id}/valuation/gatt-form", operationId)
-                .then()
-                .statusCode(200)
-                .body("commercialLinks", is(false))
-                .body("gattMethod", is("GATT_ARTICLE_1"))
-                .body("completedAt", notNullValue())
-                .body("completedBy", is("admin"));
-    }
-
-    @Test
-    @Order(42)
-    void testClientCannotSaveGattForm() {
-        given()
-                .auth().basic("client", "client123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"commercialLinks": false, "commissions": 0, "unrecordedTransport": 0, "adjustmentAmount": 0, "justification": "Test"}
-                        """)
-                .when().put("/api/operations/{id}/valuation/gatt-form", operationId)
-                .then()
-                .statusCode(403);
-    }
-
     // ── Finalize valuation ───────────────────────────────────────────────
 
     @Test
@@ -486,66 +440,4 @@ class ValuationResourceTest {
                 .statusCode(403);
     }
 
-    // ── GATT not required for EXPRESO ────────────────────────────────────
-
-    @Test
-    @Order(60)
-    void testGattFormNotRequiredForExpreso() {
-        // Create operation and advance to SUBMITTED_TO_CUSTOMS
-        var opId = given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
-                         "blNumber": "BL-VAL-EXPRESO", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
-                        """)
-                .when().post("/api/operations")
-                .then().statusCode(201)
-                .extract().jsonPath().getLong("id");
-
-        uploadAllMandatoryDocs(opId);
-        var declId = setupPreliminaryWithApprovals(opId);
-
-        advanceToStatus(opId, "DOCUMENTATION_COMPLETE");
-        advanceToStatus(opId, "IN_REVIEW");
-        advanceToStatus(opId, "PRELIQUIDATION_REVIEW");
-
-        // Final approve (auto-advances from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS)
-        approveFinalDeclaration(opId, declId);
-
-        advanceToStatus(opId, "SUBMITTED_TO_CUSTOMS");
-
-        // Register final declaration and crossing
-        registerFinalDeclarationAndCrossing(opId);
-
-        // Set EXPRESO — auto-advances to VALUATION_REVIEW
-        given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"inspectionType": "EXPRESO"}
-                        """)
-                .when().post("/api/operations/{id}/inspection/type", opId)
-                .then()
-                .statusCode(200);
-
-        // GATT form should NOT be required
-        given()
-                .auth().basic("admin", "admin123")
-                .when().get("/api/operations/{id}/valuation/gatt-form", opId)
-                .then()
-                .statusCode(200)
-                .body("required", is(false));
-
-        // Saving GATT should fail since not required
-        given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"commercialLinks": false, "commissions": 0, "unrecordedTransport": 0, "adjustmentAmount": 0, "justification": "Test"}
-                        """)
-                .when().put("/api/operations/{id}/valuation/gatt-form", opId)
-                .then()
-                .statusCode(400);
-    }
 }

@@ -101,11 +101,6 @@ public class DeclarationService {
             throw new BusinessException("DECLARATION_NUMBER_REQUIRED",
                     "Declaration number is required for final declarations");
         }
-        if (declaration.gattMethod == null || declaration.gattMethod.isBlank()) {
-            throw new BusinessException("GATT_METHOD_REQUIRED",
-                    "GATT method is required for final declarations");
-        }
-
         return registerDeclaration(operationId, declaration, DeclarationType.FINAL, username);
     }
 
@@ -168,7 +163,6 @@ public class DeclarationService {
         declaration.insuranceValue = updated.insuranceValue;
         declaration.freightValue = updated.freightValue;
         declaration.totalTaxes = updated.totalTaxes;
-        declaration.gattMethod = updated.gattMethod;
         declaration.notes = updated.notes;
 
         // Map USD fields from updated entity

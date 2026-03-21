@@ -178,7 +178,6 @@ public class DeclarationResource {
         d.freightValueUsd = r.freightValueUsd();
         d.insuranceValueUsd = r.insuranceValueUsd();
         d.exchangeRate = r.exchangeRate();
-        d.gattMethod = r.gattMethod();
         d.notes = r.notes();
         return d;
     }

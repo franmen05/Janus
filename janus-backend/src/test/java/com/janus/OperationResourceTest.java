@@ -62,18 +62,6 @@ class OperationResourceTest {
                 .statusCode(200);
     }
 
-    private static void completeGattForm(Long operationId) {
-        given()
-                .auth().basic("admin", "admin123")
-                .contentType(ContentType.JSON)
-                .body("""
-                        {"commercialLinks": false, "commissions": 0, "unrecordedTransport": 0, "adjustmentAmount": 0, "justification": "Test"}
-                        """)
-                .when().put("/api/operations/{opId}/valuation/gatt-form", operationId)
-                .then()
-                .statusCode(200);
-    }
-
     private static Long setupPreliminaryWithApprovals(Long operationId) {
         var declId = given()
                 .auth().basic("admin", "admin123")
@@ -404,9 +392,6 @@ class OperationResourceTest {
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT", "CLOSED"
         };
         for (var status : remaining) {
-            if ("PAYMENT_PREPARATION".equals(status)) {
-                completeGattForm(opId);
-            }
             if ("CLOSED".equals(status)) {
                 uploadDocument(opId, "RECEPTION_RECEIPT");
             }
@@ -614,9 +599,6 @@ class OperationResourceTest {
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT"
         };
         for (var status : postTransitions) {
-            if ("PAYMENT_PREPARATION".equals(status)) {
-                completeGattForm(opId);
-            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)

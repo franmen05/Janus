@@ -1,6 +1,6 @@
 import { Component, input, output, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ValuationService } from '../../../core/services/valuation.service';
@@ -8,13 +8,13 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Operation } from '../../../core/models/operation.model';
 import {
   ExternalPermit, ExternalPermitRequest, ExternalPermitType, ExternalPermitStatus,
-  ValuationChecklist, GattFormResponse, UpdateGattFormRequest
+  ValuationChecklist
 } from '../../../core/models/valuation.model';
 
 @Component({
   selector: 'app-valuation-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbAccordionModule, TranslateModule],
+  imports: [CommonModule, FormsModule, NgbAccordionModule, TranslateModule],
   template: `
     <div ngbAccordion [closeOthers]="false">
       <!-- Section A: Document Checklist -->
@@ -186,97 +186,7 @@ import {
         </div>
       </div>
 
-      <!-- Section C: GATT Article 1 Form -->
-      @if (isGattRequired()) {
-        <div ngbAccordionItem="gatt">
-          <h2 ngbAccordionHeader>
-            <button ngbAccordionButton>
-              <i class="bi bi-calculator me-2"></i>{{ 'VALUATION.GATT_TITLE' | translate }}
-              @if (gattForm()?.completedAt) {
-                <span class="badge bg-success ms-2">{{ 'VALUATION.GATT_COMPLETED' | translate }}</span>
-              } @else {
-                <span class="badge bg-warning text-dark ms-2">{{ 'VALUATION.GATT_PENDING' | translate }}</span>
-              }
-            </button>
-          </h2>
-          <div ngbAccordionCollapse>
-            <div ngbAccordionBody>
-              <ng-template>
-                @if (gattForm()) {
-                  @if (gattForm()!.completedAt && !canEdit()) {
-                    <!-- Read-only view when completed or not editable -->
-                    <div class="alert alert-success py-2 mb-3">
-                      <i class="bi bi-check-circle me-1"></i>
-                      {{ 'VALUATION.GATT_COMPLETED_BY' | translate:{ user: gattForm()!.completedBy, date: (gattForm()!.completedAt | date:'medium') } }}
-                    </div>
-                  }
-
-                  <form [formGroup]="gattFormGroup" (ngSubmit)="submitGattForm()">
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <div class="form-check mb-3">
-                          <input type="checkbox" class="form-check-input" id="commercialLinks" formControlName="commercialLinks">
-                          <label class="form-check-label" for="commercialLinks">{{ 'VALUATION.GATT_COMMERCIAL_LINKS' | translate }}</label>
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label">{{ 'VALUATION.GATT_COMMISSIONS' | translate }}</label>
-                          <div class="input-group input-group-sm">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" formControlName="commissions" step="0.01">
-                          </div>
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label">{{ 'VALUATION.GATT_UNRECORDED_TRANSPORT' | translate }}</label>
-                          <div class="input-group input-group-sm">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" formControlName="unrecordedTransport" step="0.01">
-                          </div>
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label">{{ 'VALUATION.GATT_ADJUSTMENT' | translate }}</label>
-                          <div class="input-group input-group-sm">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" formControlName="adjustmentAmount" step="0.01">
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="mb-3">
-                          <label class="form-label">{{ 'VALUATION.GATT_JUSTIFICATION' | translate }} <span class="text-danger">*</span></label>
-                          <textarea class="form-control" formControlName="justification" rows="4"></textarea>
-                        </div>
-                        <div class="card bg-light">
-                          <div class="card-body py-2">
-                            <h6 class="mb-2">{{ 'VALUATION.GATT_CALCULATION' | translate }}</h6>
-                            <dl class="row mb-0 small">
-                              <dt class="col-7">{{ 'VALUATION.GATT_ORIGINAL_BASE' | translate }}</dt>
-                              <dd class="col-5 text-end">{{ gattForm()!.originalTaxableBase | number:'1.2-2' }}</dd>
-                              <dt class="col-7">{{ 'VALUATION.GATT_ADJUSTED_BASE' | translate }}</dt>
-                              <dd class="col-5 text-end fw-bold">{{ calculatedAdjustedBase() | number:'1.2-2' }}</dd>
-                            </dl>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    @if (canEdit()) {
-                      <button type="submit" class="btn btn-primary btn-sm mt-2" [disabled]="gattFormGroup.invalid || savingGatt()">
-                        @if (savingGatt()) {
-                          <span class="spinner-border spinner-border-sm me-1"></span>
-                        }
-                        {{ 'ACTIONS.SAVE' | translate }}
-                      </button>
-                    }
-                  </form>
-                } @else {
-                  <div class="text-center text-muted py-3">{{ 'COMMON.LOADING' | translate }}</div>
-                }
-              </ng-template>
-            </div>
-          </div>
-        </div>
-      }
-
-      <!-- Section D: Finalize Valuation -->
+      <!-- Section C: Finalize Valuation -->
       @if (canFinalize()) {
         <div ngbAccordionItem="finalize">
           <h2 ngbAccordionHeader>
@@ -319,10 +229,8 @@ export class ValuationPanelComponent implements OnInit {
   // State signals
   checklist = signal<ValuationChecklist | null>(null);
   permits = signal<ExternalPermit[]>([]);
-  gattForm = signal<GattFormResponse | null>(null);
   showPermitForm = signal(false);
   editingPermitId = signal<number | null>(null);
-  savingGatt = signal(false);
   finalizing = signal(false);
 
   // Permit form fields
@@ -339,24 +247,10 @@ export class ValuationPanelComponent implements OnInit {
   permitTypes = Object.values(ExternalPermitType);
   permitStatuses = Object.values(ExternalPermitStatus);
 
-  // GATT reactive form
-  gattFormGroup = new FormGroup({
-    commercialLinks: new FormControl(false),
-    commissions: new FormControl(0),
-    unrecordedTransport: new FormControl(0),
-    adjustmentAmount: new FormControl(0),
-    justification: new FormControl('', Validators.required)
-  });
-
   // Computed
   hasBlockingPermits = computed(() =>
     this.permits().some(p => p.status === ExternalPermitStatus.EN_TRAMITE)
   );
-
-  isGattRequired = computed(() => {
-    const op = this.operation();
-    return op?.inspectionType === 'VISUAL' || op?.inspectionType === 'FISICA';
-  });
 
   canEdit = computed(() => {
     const op = this.operation();
@@ -371,16 +265,6 @@ export class ValuationPanelComponent implements OnInit {
     return this.authService.hasRole(['ADMIN', 'AGENT']) && op.status === 'VALUATION_REVIEW';
   });
 
-  calculatedAdjustedBase = computed(() => {
-    const gatt = this.gattForm();
-    if (!gatt) return 0;
-    const base = gatt.originalTaxableBase ?? 0;
-    const c = this.gattFormGroup.get('commissions')?.value ?? 0;
-    const t = this.gattFormGroup.get('unrecordedTransport')?.value ?? 0;
-    const a = this.gattFormGroup.get('adjustmentAmount')?.value ?? 0;
-    return base + c + t + a;
-  });
-
   ngOnInit(): void {
     this.loadData();
   }
@@ -389,23 +273,6 @@ export class ValuationPanelComponent implements OnInit {
     const id = this.operationId();
     this.valuationService.getChecklist(id).subscribe(c => this.checklist.set(c));
     this.valuationService.getPermits(id).subscribe(p => this.permits.set(p));
-    if (this.isGattRequired()) {
-      this.valuationService.getGattForm(id).subscribe(g => {
-        this.gattForm.set(g);
-        if (g.commissions != null) {
-          this.gattFormGroup.patchValue({
-            commercialLinks: g.commercialLinks ?? false,
-            commissions: g.commissions ?? 0,
-            unrecordedTransport: g.unrecordedTransport ?? 0,
-            adjustmentAmount: g.adjustmentAmount ?? 0,
-            justification: g.justification ?? ''
-          });
-        }
-        if (!this.canEdit() || g.completedAt) {
-          this.gattFormGroup.disable();
-        }
-      });
-    }
   }
 
   // ── Permits ──
@@ -467,30 +334,6 @@ export class ValuationPanelComponent implements OnInit {
     this.valuationService.toggleLocalChargesValidated(this.operationId(), checked).subscribe(() => {
       this.loadData();
       this.changed.emit();
-    });
-  }
-
-  // ── GATT ──
-
-  submitGattForm(): void {
-    if (this.gattFormGroup.invalid) return;
-    this.savingGatt.set(true);
-    const request: UpdateGattFormRequest = {
-      commercialLinks: this.gattFormGroup.value.commercialLinks ?? false,
-      commissions: this.gattFormGroup.value.commissions ?? 0,
-      unrecordedTransport: this.gattFormGroup.value.unrecordedTransport ?? 0,
-      adjustmentAmount: this.gattFormGroup.value.adjustmentAmount ?? 0,
-      justification: this.gattFormGroup.value.justification ?? ''
-    };
-    this.valuationService.saveGattForm(this.operationId(), request).subscribe({
-      next: (g) => {
-        this.gattForm.set(g);
-        this.savingGatt.set(false);
-        this.gattFormGroup.disable();
-        this.loadData();
-        this.changed.emit();
-      },
-      error: () => this.savingGatt.set(false)
     });
   }
 

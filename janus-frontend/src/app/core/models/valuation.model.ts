@@ -48,25 +48,3 @@ export interface ChecklistItem {
   detail: string;
 }
 
-export interface GattFormResponse {
-  declarationId: number | null;
-  gattMethod: string | null;
-  commercialLinks: boolean | null;
-  commissions: number | null;
-  unrecordedTransport: number | null;
-  adjustmentAmount: number | null;
-  justification: string | null;
-  originalTaxableBase: number | null;
-  adjustedTaxableBase: number | null;
-  completedAt: string | null;
-  completedBy: string | null;
-  required: boolean;
-}
-
-export interface UpdateGattFormRequest {
-  commercialLinks: boolean;
-  commissions: number;
-  unrecordedTransport: number;
-  adjustmentAmount: number;
-  justification: string;
-}
