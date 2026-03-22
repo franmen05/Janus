@@ -242,7 +242,7 @@ export class InspectionPanelComponent implements OnInit {
     const op = this.operation();
     if (!op) return false;
     if (!this.authService.hasRole(['ADMIN', 'AGENT'])) return false;
-    return op.status === 'SUBMITTED_TO_CUSTOMS' || op.status === 'VALUATION_REVIEW';
+    return op.status === 'SUBMITTED_TO_CUSTOMS' || op.status === 'VALUATION_REVIEW' || op.status === 'PAYMENT_PREPARATION';
   }
 
   setType(type: InspectionType): void {
