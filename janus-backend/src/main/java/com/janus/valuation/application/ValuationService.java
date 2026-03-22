@@ -216,15 +216,7 @@ public class ValuationService {
                 "INCOTERM_SET", "Incoterm defined", incotermSet,
                 incotermSet ? "Incoterm: " + operation.incoterm : "Incoterm not set"));
 
-        // 5. Packing list present
-        boolean packingListPresent = documents.stream()
-                .filter(d -> d.active)
-                .anyMatch(d -> d.documentType == DocumentType.PACKING_LIST);
-        items.add(new ValuationChecklistResponse.ChecklistItem(
-                "PACKING_LIST_PRESENT", "Packing list uploaded", packingListPresent,
-                packingListPresent ? "Packing list present" : "Packing list is missing"));
-
-        // 6. External permits cleared
+        // 5. External permits cleared
         boolean hasBlockingPermits = permitRepository.hasBlockingPermits(operationId);
         boolean hasPermits = permitRepository.hasAnyPermits(operationId);
         boolean permitsPassed = !hasBlockingPermits;

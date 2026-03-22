@@ -657,7 +657,6 @@
     "CHECKLIST_INVOICE_PRESENT": "Commercial Invoice Uploaded",
     "CHECKLIST_FOB_VALUE_SET": "FOB Value Declared",
     "CHECKLIST_INCOTERM_SET": "Incoterm Defined",
-    "CHECKLIST_PACKING_LIST_PRESENT": "Packing List Uploaded",
     "CHECKLIST_PERMITS_CLEARED": "External Permits Cleared",
     "CHECKLIST_BL_AVAILABILITY_CONFIRMED": "BL Availability Confirmed",
     "CHECKLIST_LOCAL_CHARGES_VALIDATED": "Local Charges Validated",

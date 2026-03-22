@@ -657,7 +657,6 @@
     "CHECKLIST_INVOICE_PRESENT": "Factura Comercial Subida",
     "CHECKLIST_FOB_VALUE_SET": "Valor FOB Declarado",
     "CHECKLIST_INCOTERM_SET": "Incoterm Definido",
-    "CHECKLIST_PACKING_LIST_PRESENT": "Lista de Empaque Subida",
     "CHECKLIST_PERMITS_CLEARED": "Permisos Externos Aprobados",
     "CHECKLIST_BL_AVAILABILITY_CONFIRMED": "Disponibilidad BL Confirmada",
     "CHECKLIST_LOCAL_CHARGES_VALIDATED": "Cargos Locales Validados",
