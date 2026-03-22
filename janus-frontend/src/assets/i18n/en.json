@@ -433,6 +433,7 @@
     "TOTAL_VALUE": "Total Value",
     "TAX_RATE": "Tax Rate (%)",
     "TAX_AMOUNT": "Tax Amount",
+    "TARIFF_TOTALS": "Total",
     "NO_TARIFF_LINES": "No tariff lines added",
     "REGISTER_DUA": "Register DUA",
     "SUBMIT_TO_DGA": "Submit to DGA",

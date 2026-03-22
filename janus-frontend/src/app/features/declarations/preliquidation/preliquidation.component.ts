@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -91,6 +91,16 @@ import { DocumentListComponent } from '../../documents/document-list/document-li
                     </tr>
                   }
                 </tbody>
+                <tfoot class="table-light fw-bold">
+                  <tr>
+                    <td colspan="3">{{ 'DECLARATIONS.TARIFF_TOTALS' | translate }}</td>
+                    <td>{{ tariffTotals().quantity | number:'1.2-2' }}</td>
+                    <td></td>
+                    <td>{{ tariffTotals().totalValue | number:'1.2-2' }}</td>
+                    <td></td>
+                    <td>{{ tariffTotals().taxAmount | number:'1.2-2' }}</td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           }
@@ -204,6 +214,14 @@ export class PreliquidationComponent implements OnInit {
 
   declaration = signal<Declaration | null>(null);
   tariffLines = signal<TariffLine[]>([]);
+  tariffTotals = computed(() => {
+    const lines = this.tariffLines();
+    return {
+      quantity: lines.reduce((sum, l) => sum + (l.quantity || 0), 0),
+      totalValue: lines.reduce((sum, l) => sum + (l.totalValue || 0), 0),
+      taxAmount: lines.reduce((sum, l) => sum + (l.taxAmount || 0), 0)
+    };
+  });
 
   ngOnInit(): void { this.load(); }
 
