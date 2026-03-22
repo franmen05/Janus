@@ -476,7 +476,8 @@
     "RESOLVED_BY": "Resuelto Por",
     "NO_CROSSING": "Sin resultado de cruce disponible. Deben registrarse ambas declaraciones (preliminar y final) primero.",
     "RESOLVE_PLACEHOLDER": "Ingrese comentario de resoluci\u00f3n...",
-    "REQUIRED_BEFORE_APPROVAL": "Debe realizarse el cruce con la declaraci\u00f3n preliminar antes de pasar a la etapa de pago."
+    "REQUIRED_BEFORE_APPROVAL": "Debe realizarse el cruce con la declaraci\u00f3n preliminar antes de pasar a la etapa de pago.",
+    "TOTAL": "Total"
   },
   "ALERTS": {
     "TITLE": "Alertas",

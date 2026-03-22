@@ -27,7 +27,7 @@ import { AuthService } from '../../../core/services/auth.service';
     }
     @if (comments().length > 0) {
       @for (comment of comments(); track comment.id) {
-        <div class="card mb-2" [class.border-start]="comment.internal" [class.border-warning]="comment.internal" [class.border-3]="comment.internal" [class.bg-light]="comment.internal">
+        <div class="card mb-2" [class.border-start]="comment.internal" [class.border-warning]="comment.internal" [class.border-3]="comment.internal" [class.bg-body-secondary]="comment.internal">
           <div class="card-body py-2">
             <div class="d-flex flex-wrap gap-2 justify-content-between">
               <div>

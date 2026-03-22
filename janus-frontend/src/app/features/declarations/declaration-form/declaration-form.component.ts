@@ -106,7 +106,7 @@ import { ExchangeRate } from '../../../core/models/exchange-rate.model';
               </div>
               <div class="col-6 col-md-3">
                 <label class="form-label">{{ 'DECLARATIONS.CIF_VALUE' | translate }} (DOP)</label>
-                <input type="text" class="form-control bg-light fw-bold" [value]="cifDop() | number:'1.2-2'" readonly>
+                <input type="text" class="form-control bg-body-secondary fw-bold" [value]="cifDop() | number:'1.2-2'" readonly>
               </div>
             </div>
           }

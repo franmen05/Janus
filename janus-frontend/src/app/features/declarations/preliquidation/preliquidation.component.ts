@@ -54,7 +54,7 @@ import { DocumentListComponent } from '../../documents/document-list/document-li
               </div>
             </div>
             <div class="col-md-3">
-              <div class="border rounded p-3 text-center bg-light">
+              <div class="border rounded p-3 text-center bg-body-secondary">
                 <small class="text-muted d-block">{{ 'preliquidation.totalTaxes' | translate }}</small>
                 <strong class="fs-5 text-primary">RD$ {{ declaration()!.totalTaxes | number:'1.2-2' }}</strong>
               </div>

@@ -1,4 +1,4 @@
-import { Component, input, inject, OnInit, output, signal } from '@angular/core';
+import { Component, input, inject, OnInit, output, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -52,6 +52,15 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
                   </tr>
                 }
               </tbody>
+              <tfoot>
+                <tr class="fw-bold table-dark">
+                  <td>{{ 'CROSSING.TOTAL' | translate }}</td>
+                  <td></td>
+                  <td>{{ discrepancyTotals().preliminary | number:'1.2-2' }}</td>
+                  <td>{{ discrepancyTotals().final | number:'1.2-2' }}</td>
+                  <td>{{ discrepancyTotals().difference | number:'1.2-2' }}</td>
+                </tr>
+              </tfoot>
             </table>
           }
           @if (crossing()!.status === 'DISCREPANCY' && authService.hasRole(['ADMIN', 'AGENT'])) {
@@ -75,6 +84,14 @@ export class CrossingResultComponent implements OnInit {
   crossing = signal<CrossingResult | null>(null);
   resolved = output<CrossingResult>();
   resolveComment = '';
+  discrepancyTotals = computed(() => {
+    const discrepancies = this.crossing()?.discrepancies ?? [];
+    return {
+      preliminary: discrepancies.reduce((sum, d) => sum + parseFloat(d.preliminaryValue || '0'), 0),
+      final: discrepancies.reduce((sum, d) => sum + parseFloat(d.finalValue || '0'), 0),
+      difference: discrepancies.reduce((sum, d) => sum + (d.difference ?? 0), 0)
+    };
+  });
 
   ngOnInit(): void { this.loadCrossing(); }
 

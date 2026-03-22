@@ -476,7 +476,8 @@
     "RESOLVED_BY": "Resolved By",
     "NO_CROSSING": "No crossing result available. Both preliminary and final declarations must be registered first.",
     "RESOLVE_PLACEHOLDER": "Enter resolution comment...",
-    "REQUIRED_BEFORE_APPROVAL": "The crossing with the preliminary declaration must be completed before proceeding to payment stage."
+    "REQUIRED_BEFORE_APPROVAL": "The crossing with the preliminary declaration must be completed before proceeding to payment stage.",
+    "TOTAL": "Total"
   },
   "ALERTS": {
     "TITLE": "Alerts",
