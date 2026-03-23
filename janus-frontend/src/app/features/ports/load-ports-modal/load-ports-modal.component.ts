@@ -43,7 +43,7 @@ import { CatalogCountry, CatalogPort } from '../../../core/models/port.model';
       @if (!loading() && selectedCountry() && catalogPorts().length > 0) {
         <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
           <table class="table table-hover table-sm mb-0">
-            <thead class="table-light sticky-top">
+            <thead class="sticky-top" style="background: var(--bs-table-bg, var(--bs-body-bg));">
               <tr>
                 <th style="width: 40px;">
                   <input type="checkbox" class="form-check-input"
@@ -58,7 +58,7 @@ import { CatalogCountry, CatalogPort } from '../../../core/models/port.model';
             </thead>
             <tbody>
               @for (port of catalogPorts(); track port.code) {
-                <tr [class.table-secondary]="port.alreadyLoaded">
+                <tr [style.opacity]="port.alreadyLoaded ? '0.6' : '1'">
                   <td>
                     <input type="checkbox" class="form-check-input"
                            [checked]="port.alreadyLoaded || selectedCodes().has(port.code)"
