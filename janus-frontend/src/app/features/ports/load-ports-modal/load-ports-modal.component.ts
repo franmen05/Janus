@@ -66,10 +66,10 @@ import { CatalogCountry, CatalogPort } from '../../../core/models/port.model';
                            (change)="togglePort(port.code, $event)">
                   </td>
                   <td class="fw-bold">{{ port.code }}</td>
-                  <td>
+                  <td style="max-width: 350px;">
                     {{ port.name }}
                     @if (port.description) {
-                      <br><small class="text-muted">{{ port.description }}</small>
+                      <br><small class="text-muted text-truncate d-inline-block" style="max-width: 100%;" [title]="port.description">{{ port.description }}</small>
                     }
                   </td>
                   <td>
