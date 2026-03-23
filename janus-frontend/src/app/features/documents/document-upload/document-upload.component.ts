@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DocumentService } from '../../../core/services/document.service';
-import { DocumentStatus, DocumentTypeConfig } from '../../../core/models/document.model';
+import {DocumentStatus, DocumentType, DocumentTypeConfig} from '../../../core/models/document.model';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
 import { ToastService } from '../../../core/services/toast.service';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
@@ -99,7 +99,7 @@ export class DocumentUploadComponent implements OnInit {
   private translate = inject(TranslateService);
   private toastService = inject(ToastService);
 
-  selectedType = 'BL';
+  selectedType = DocumentType.BL;
   selectedFile: File | null = null;
   changeReason = '';
   uploading = signal(false);
