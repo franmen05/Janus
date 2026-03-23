@@ -70,7 +70,7 @@ import { ChargeCrossReference } from '../../../core/models/inspection.model';
                   <tbody>
                     @for (cat of allCategories(); track cat) {
                       <tr>
-                        <td>{{ cat }}</td>
+                        <td>{{ 'INSPECTION.CATEGORY_' + cat | translate }}</td>
                         <td class="text-end">{{ getIncomeForCategory(cat) !== null ? (getIncomeForCategory(cat)! | number:'1.2-2') : '-' }}</td>
                         <td class="text-end">{{ getExpenseForCategory(cat) !== null ? (getExpenseForCategory(cat)! | number:'1.2-2') : '-' }}</td>
                       </tr>
