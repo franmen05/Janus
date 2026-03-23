@@ -66,7 +66,12 @@ import { CatalogCountry, CatalogPort } from '../../../core/models/port.model';
                            (change)="togglePort(port.code, $event)">
                   </td>
                   <td class="fw-bold">{{ port.code }}</td>
-                  <td>{{ port.name }}</td>
+                  <td>
+                    {{ port.name }}
+                    @if (port.description) {
+                      <br><small class="text-muted">{{ port.description }}</small>
+                    }
+                  </td>
                   <td>
                     @if (port.alreadyLoaded) {
                       <span class="badge bg-secondary">{{ 'PORTS.ALREADY_LOADED' | translate }}</span>

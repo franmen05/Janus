@@ -93,14 +93,18 @@
       "name": "Dominican Republic",
       "nameEs": "República Dominicana",
       "ports": [
-        { "code": "DOSDQ", "name": "Santo Domingo" },
-        { "code": "DOHAI", "name": "Río Haina" },
-        { "code": "DOCAU", "name": "Caucedo" },
-        { "code": "DOPOP", "name": "Puerto Plata" },
-        { "code": "DOBCC", "name": "Boca Chica" },
-        { "code": "DOSPM", "name": "San Pedro de Macorís" },
-        { "code": "DOLRM", "name": "La Romana" },
-        { "code": "DOMAN", "name": "Manzanillo" }
+        { "code": "DOHAI", "name": "Río Haina", "description": "Principal puerto comercial del país. Tamaño mediano, profundidad del canal 9.4-10m. Opera con líneas como Maersk, Hapag-Lloyd, CMA CGM, Seaboard Marine. Administrado por APORDOM." },
+        { "code": "DOCAU", "name": "Caucedo", "description": "Puerto multimodal privado, supervisado por el Estado. Terminal de contenedores con inversión de más de US$200M. Líneas: CMA CGM, Hapag-Lloyd, Maersk, MSC, ZIM. Coordenadas: 18°25'N 69°40'W." },
+        { "code": "DOSDQ", "name": "Santo Domingo", "description": "Puerto de aguas profundas, tamaño mediano. Profundidad del canal 7.1-9.1m, anclaje 12.5-13.7m. Terminal de contenedores operado por APORDOM. Coordenadas: 18°28'N 69°52'W." },
+        { "code": "DOPOP", "name": "Puerto Plata", "description": "Puerto costero natural en la costa norte. Tamaño pequeño. Profundidad del canal 11-12.2m, muelle de carga 7.1-9.1m. Líneas: Crowley, Seaboard Marine. Coordenadas: 19°48'N 70°42'W." },
+        { "code": "DOLRM", "name": "La Romana", "description": "Puerto privado de río natural. Tamaño pequeño, profundidad 7.1-9.1m. Puerto de carga de azúcar y melaza del Central Romana. También puerto de cruceros con ~140 escalas/temporada." },
+        { "code": "DOMAN", "name": "Manzanillo", "description": "Ubicado en Provincia Montecristi, costa noroeste. El más profundo del país con hasta 48 pies (16m) de calado. Muelles de 227.70m lineales. Exporta contenedores refrigerados (bananos). Coordenadas: 19°43'N 71°45'W." },
+        { "code": "DOSPM", "name": "San Pedro de Macorís", "description": "Ubicado en la desembocadura del río Higuamo, 70km al este de Santo Domingo. Exporta cemento, clinker, azúcar, melaza y fertilizantes. Importa trigo y fertilizantes a granel." },
+        { "code": "DOBCC", "name": "Boca Chica", "description": "Puerto estatal ubicado en la Provincia Santo Domingo. Administrado por APORDOM." },
+        { "code": "DOBRX", "name": "Barahona", "description": "Puerto estatal ubicado en la Provincia Barahona, costa sur. Administrado por APORDOM." },
+        { "code": "DOSAM", "name": "Arroyo Barril (Samaná)", "description": "Puerto estatal en la Bahía de Samaná, Provincia Samaná. Administrado por APORDOM." },
+        { "code": "DOCBJ", "name": "Cabo Rojo", "description": "Puerto estatal concesionado al sector privado. Ubicado en la Provincia Pedernales, extremo suroeste del país." },
+        { "code": "DOAZU", "name": "Azua", "description": "Puerto estatal ubicado en la Provincia Azua, costa sur. Administrado por APORDOM." }
       ]
     },
     {

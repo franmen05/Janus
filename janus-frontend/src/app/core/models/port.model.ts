@@ -25,6 +25,7 @@ export interface CatalogCountry {
 export interface CatalogPort {
   code: string;
   name: string;
+  description: string | null;
   alreadyLoaded: boolean;
 }
 

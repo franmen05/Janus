@@ -44,7 +44,7 @@ public class PortCatalogService {
         return countries;
     }
 
-    public record CatalogPort(String code, String name) {}
+    public record CatalogPort(String code, String name, String description) {}
 
     public List<CatalogPort> getPortsByCountry(String countryCode) {
         for (JsonNode country : catalogRoot.get("countries")) {
@@ -53,7 +53,8 @@ public class PortCatalogService {
                 for (JsonNode port : country.get("ports")) {
                     ports.add(new CatalogPort(
                             port.get("code").asText(),
-                            port.get("name").asText()
+                            port.get("name").asText(),
+                            port.has("description") ? port.get("description").asText() : null
                     ));
                 }
                 return ports;

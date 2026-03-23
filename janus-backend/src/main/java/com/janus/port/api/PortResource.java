@@ -87,7 +87,7 @@ public class PortResource {
         var existingCodes = Set.copyOf(portRepository.findExistingCodes(codes));
 
         return catalogPorts.stream()
-                .map(cp -> new CatalogPortResponse(cp.code(), cp.name(), existingCodes.contains(cp.code())))
+                .map(cp -> new CatalogPortResponse(cp.code(), cp.name(), cp.description(), existingCodes.contains(cp.code())))
                 .toList();
     }
 
