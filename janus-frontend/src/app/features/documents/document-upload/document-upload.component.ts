@@ -1,10 +1,10 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DocumentService } from '../../../core/services/document.service';
-import { DocumentType, DocumentStatus, DocumentTypeConfig } from '../../../core/models/document.model';
+import { DocumentStatus, DocumentTypeConfig } from '../../../core/models/document.model';
 import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
 import { ToastService } from '../../../core/services/toast.service';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
@@ -26,7 +26,7 @@ interface FileEntry {
         <div class="mb-3">
           <label class="form-label">{{ 'DOCUMENTS.DOCUMENT_TYPE' | translate }}</label>
           <select class="form-select" [(ngModel)]="selectedType" (ngModelChange)="onTypeChange()">
-            @for (t of documentTypes; track t.value) { <option [value]="t.value">{{ t.labelKey | translate }}</option> }
+            @for (t of documentTypes(); track t.value) { <option [value]="t.value">{{ t.labelKey | translate }}</option> }
           </select>
         </div>
         <div class="mb-3">
@@ -99,7 +99,7 @@ export class DocumentUploadComponent implements OnInit {
   private translate = inject(TranslateService);
   private toastService = inject(ToastService);
 
-  selectedType = DocumentType.BL;
+  selectedType = 'BL';
   selectedFile: File | null = null;
   changeReason = '';
   uploading = signal(false);
@@ -111,13 +111,9 @@ export class DocumentUploadComponent implements OnInit {
   isMultipleAllowed = signal(false);
   fileEntries = signal<FileEntry[]>([]);
 
-  documentTypes = [
-    { value: DocumentType.BL, labelKey: 'DOCUMENT_TYPES.BL' },
-    { value: DocumentType.COMMERCIAL_INVOICE, labelKey: 'DOCUMENT_TYPES.COMMERCIAL_INVOICE' },
-    { value: DocumentType.PACKING_LIST, labelKey: 'DOCUMENT_TYPES.PACKING_LIST' },
-    { value: DocumentType.CERTIFICATE, labelKey: 'DOCUMENT_TYPES.CERTIFICATE' },
-    { value: DocumentType.OTHER, labelKey: 'DOCUMENT_TYPES.OTHER' }
-  ];
+  documentTypes = computed(() =>
+    this.documentTypeConfigs().map(c => ({ value: c.code, labelKey: 'DOCUMENT_TYPES.' + c.code }))
+  );
 
   ngOnInit(): void {
     this.documentService.getDocumentTypes().subscribe({
