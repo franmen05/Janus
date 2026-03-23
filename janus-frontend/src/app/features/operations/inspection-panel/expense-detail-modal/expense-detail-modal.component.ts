@@ -485,7 +485,7 @@ export class ExpenseDetailModalComponent implements OnInit {
       rate: val.rate || undefined,
       paymentType: (val.paymentType as PaymentType) || undefined,
       billToType: (val.billToType as BillToType) || undefined,
-      billToName: val.billToName || undefined,
+      billToName: (typeof val.billToName === 'object' && val.billToName !== null ? (val.billToName as any).name : val.billToName) || undefined,
       invoiceNumber: val.invoiceNumber || undefined,
       invoiceDate: val.invoiceDate || undefined,
       referenceNumber: val.referenceNumber || undefined,
