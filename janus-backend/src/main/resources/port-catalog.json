@@ -5,15 +5,15 @@
       "name": "Honduras",
       "nameEs": "Honduras",
       "ports": [
-        { "code": "HNPCR", "name": "Puerto Cortés" },
-        { "code": "HNLCE", "name": "La Ceiba" },
-        { "code": "HNRTB", "name": "Roatán" },
-        { "code": "HNTEA", "name": "Tela" },
-        { "code": "HNAMP", "name": "Amapala" },
-        { "code": "HNPCA", "name": "Puerto Castilla" },
-        { "code": "HNTJI", "name": "Trujillo" },
-        { "code": "HNSLO", "name": "San Lorenzo" },
-        { "code": "HNPEU", "name": "Puerto Lempira" }
+        { "code": "HNPCR", "name": "Puerto Cortés", "description": "Principal puerto comercial de Honduras y Centroamérica. Puerto de aguas profundas en el Caribe. Maneja contenedores, graneles y carga general." },
+        { "code": "HNLCE", "name": "La Ceiba", "description": "Puerto en la costa norte del Caribe hondureño. Terminal de carga general y pasajeros hacia las Islas de la Bahía." },
+        { "code": "HNRTB", "name": "Roatán", "description": "Puerto insular en la Isla de Roatán, Islas de la Bahía. Puerto de cruceros y carga. Destino turístico importante." },
+        { "code": "HNTEA", "name": "Tela", "description": "Puerto pequeño en la costa norte del Caribe. Históricamente vinculado a la exportación de bananos." },
+        { "code": "HNAMP", "name": "Amapala", "description": "Puerto en la Isla del Tigre, Golfo de Fonseca, costa sur. Puerto histórico del Pacífico hondureño." },
+        { "code": "HNPCA", "name": "Puerto Castilla", "description": "Puerto en la Bahía de Trujillo, costa norte del Caribe. Maneja exportaciones agrícolas." },
+        { "code": "HNTJI", "name": "Trujillo", "description": "Puerto en la Bahía de Trujillo, costa norte. Ciudad costera histórica, primer sitio de desembarco español en Honduras." },
+        { "code": "HNSLO", "name": "San Lorenzo", "description": "Puerto en el Golfo de Fonseca, costa del Pacífico sur. Puerto de cabotaje y carga menor." },
+        { "code": "HNPEU", "name": "Puerto Lempira", "description": "Puerto en la costa de la Mosquitia, noreste de Honduras. Puerto pequeño de acceso a la región de La Mosquitia." }
       ]
     },
     {
@@ -21,12 +21,12 @@
       "name": "Guatemala",
       "nameEs": "Guatemala",
       "ports": [
-        { "code": "GTPRQ", "name": "Puerto Quetzal" },
-        { "code": "GTSTC", "name": "Santo Tomás de Castilla" },
-        { "code": "GTPBR", "name": "Puerto Barrios" },
-        { "code": "GTCHR", "name": "Champerico" },
-        { "code": "GTPSJ", "name": "Puerto San José" },
-        { "code": "GTLIV", "name": "Lívingston" }
+        { "code": "GTPRQ", "name": "Puerto Quetzal", "description": "Principal puerto del Pacífico guatemalteco. Puerto moderno de contenedores y graneles. Profundidad 12m." },
+        { "code": "GTSTC", "name": "Santo Tomás de Castilla", "description": "Principal puerto del Caribe guatemalteco. Maneja la mayor parte del comercio exterior. Profundidad 10m." },
+        { "code": "GTPBR", "name": "Puerto Barrios", "description": "Puerto del Caribe en la Bahía de Amatique. Históricamente vinculado a la exportación de bananos por United Fruit Company." },
+        { "code": "GTCHR", "name": "Champerico", "description": "Puerto pequeño en la costa del Pacífico. Puerto pesquero y de cabotaje." },
+        { "code": "GTPSJ", "name": "Puerto San José", "description": "Puerto en la costa del Pacífico. Puerto de pesca y comercio menor." },
+        { "code": "GTLIV", "name": "Lívingston", "description": "Puerto fluvial en la desembocadura del Río Dulce al Caribe. Acceso solo por agua. Centro cultural garífuna." }
       ]
     },
     {
@@ -34,10 +34,10 @@
       "name": "El Salvador",
       "nameEs": "El Salvador",
       "ports": [
-        { "code": "SVAQJ", "name": "Acajutla" },
-        { "code": "SVLUN", "name": "La Unión" },
-        { "code": "SVEZB", "name": "Cutuco" },
-        { "code": "SVLLD", "name": "La Libertad" }
+        { "code": "SVAQJ", "name": "Acajutla", "description": "Principal puerto marítimo de El Salvador en el Pacífico. Maneja el 95% de contenedores de importación y exportación del país." },
+        { "code": "SVLUN", "name": "La Unión", "description": "Puerto en el Golfo de Fonseca, este del país. Puerto moderno inaugurado en 2009 con inversión de US$200M." },
+        { "code": "SVEZB", "name": "Cutuco", "description": "Terminal portuaria asociada a La Unión en el Golfo de Fonseca. Terminal de carga general." },
+        { "code": "SVLLD", "name": "La Libertad", "description": "Puerto pesquero y comercial en la costa del Pacífico central. También destino turístico de playa." }
       ]
     },
     {
@@ -45,11 +45,11 @@
       "name": "Costa Rica",
       "nameEs": "Costa Rica",
       "ports": [
-        { "code": "CRLIO", "name": "Puerto Limón" },
-        { "code": "CRGLF", "name": "Golfito" },
-        { "code": "CRPAS", "name": "Puntarenas" },
-        { "code": "CRCAL", "name": "Caldera" },
-        { "code": "CRXQP", "name": "Quepos" }
+        { "code": "CRLIO", "name": "Puerto Limón", "description": "Principal puerto del Caribe costarricense. Maneja la mayor parte de exportaciones de banano y piña. Puerto de cruceros." },
+        { "code": "CRGLF", "name": "Golfito", "description": "Puerto en el Golfo Dulce, costa sur del Pacífico. Antiguo puerto bananero de United Fruit Company." },
+        { "code": "CRPAS", "name": "Puntarenas", "description": "Puerto en el Golfo de Nicoya, costa del Pacífico. Puerto pesquero y de cruceros. Ciudad turística." },
+        { "code": "CRCAL", "name": "Caldera", "description": "Principal puerto del Pacífico costarricense. Puerto de contenedores y graneles. Profundidad 12m." },
+        { "code": "CRXQP", "name": "Quepos", "description": "Puerto pequeño en la costa central del Pacífico. Puerto pesquero y turístico cerca del Parque Nacional Manuel Antonio." }
       ]
     },
     {
@@ -57,11 +57,11 @@
       "name": "Panama",
       "nameEs": "Panamá",
       "ports": [
-        { "code": "PABLB", "name": "Balboa" },
-        { "code": "PAONX", "name": "Colón" },
-        { "code": "PAPTY", "name": "Panamá City" },
-        { "code": "PABOC", "name": "Bocas del Toro" },
-        { "code": "PAPAM", "name": "Almirante" }
+        { "code": "PABLB", "name": "Balboa", "description": "Puerto mediano en la entrada del Pacífico del Canal de Panamá. Profundidad 12.5-13.7m. Operado por Panama Ports Company (PPC). Líneas: Maersk, Evergreen. Coordenadas: 8°56'N 79°33'W." },
+        { "code": "PAONX", "name": "Colón", "description": "Puerto terminal en el Caribe, entrada atlántica del Canal de Panamá. Líneas: COSCO, Evergreen, Seaboard Marine, ZIM. Coordenadas: 9°22'N 79°53'W." },
+        { "code": "PAPTY", "name": "Panamá City", "description": "Capital y principal centro logístico del país. Hub de conexión del comercio marítimo global a través del Canal de Panamá." },
+        { "code": "PABOC", "name": "Bocas del Toro", "description": "Puerto pequeño en el Caribe panameño. Profundidad del canal 7.1-9.1m. Muelle de carga 6.4-7.6m. Puerto de carga general. Coordenadas: 9°20'N 82°15'W." },
+        { "code": "PAPAM", "name": "Almirante", "description": "Puerto costero natural pequeño en la costa atlántica noroeste. Principal carga: bananos para exportación. Profundidad del canal 7.1-9.1m. Operado por Boca Fruit Company (Chiquita)." }
       ]
     },
     {
@@ -69,13 +69,13 @@
       "name": "Nicaragua",
       "nameEs": "Nicaragua",
       "ports": [
-        { "code": "NICIO", "name": "Corinto" },
-        { "code": "NIBEF", "name": "Bluefields" },
-        { "code": "NIPSN", "name": "Puerto Sandino" },
-        { "code": "NISJS", "name": "San Juan del Sur" },
-        { "code": "NIELB", "name": "El Bluff" },
-        { "code": "NIPUZ", "name": "Puerto Cabezas" },
-        { "code": "NIRNI", "name": "Corn Island" }
+        { "code": "NICIO", "name": "Corinto", "description": "Principal puerto del Pacífico nicaragüense. Puerto de aguas profundas que maneja la mayoría del comercio exterior." },
+        { "code": "NIBEF", "name": "Bluefields", "description": "Puerto en la costa del Caribe sur. Principal puerto de la Región Autónoma del Caribe Sur (RACCS)." },
+        { "code": "NIPSN", "name": "Puerto Sandino", "description": "Puerto en el Pacífico, al oeste de Managua. Terminal petrolera y de carga general." },
+        { "code": "NISJS", "name": "San Juan del Sur", "description": "Puerto turístico y pesquero en la costa sur del Pacífico. Destino turístico popular." },
+        { "code": "NIELB", "name": "El Bluff", "description": "Puerto en la costa del Caribe, cerca de Bluefields. Terminal de carga." },
+        { "code": "NIPUZ", "name": "Puerto Cabezas", "description": "Puerto en la costa del Caribe norte. Principal puerto de la Región Autónoma del Caribe Norte (RACCN)." },
+        { "code": "NIRNI", "name": "Corn Island", "description": "Puerto insular en las Islas del Maíz, Caribe. Puerto pequeño de pasajeros y carga." }
       ]
     },
     {
@@ -83,9 +83,9 @@
       "name": "Belize",
       "nameEs": "Belice",
       "ports": [
-        { "code": "BZBZE", "name": "Belize City" },
-        { "code": "BZBGK", "name": "Big Creek" },
-        { "code": "BZCMT", "name": "Commerce Bight" }
+        { "code": "BZBZE", "name": "Belize City", "description": "Principal puerto de Belice en la costa del Caribe. Centro económico y antigua capital." },
+        { "code": "BZBGK", "name": "Big Creek", "description": "Puerto en la costa sur de Belice. Terminal de exportación de bananos y cítricos." },
+        { "code": "BZCMT", "name": "Commerce Bight", "description": "Puerto en la costa sur. Terminal de carga general." }
       ]
     },
     {
@@ -112,11 +112,11 @@
       "name": "Cuba",
       "nameEs": "Cuba",
       "ports": [
-        { "code": "CUHAV", "name": "La Habana" },
-        { "code": "CUSCU", "name": "Santiago de Cuba" },
-        { "code": "CUCFG", "name": "Cienfuegos" },
-        { "code": "CUMAR", "name": "Mariel" },
-        { "code": "CUMAT", "name": "Matanzas" }
+        { "code": "CUHAV", "name": "La Habana", "description": "Capital y principal puerto de Cuba. Puerto de aguas profundas en la costa norte. Centro histórico y económico." },
+        { "code": "CUSCU", "name": "Santiago de Cuba", "description": "Segundo puerto más importante de Cuba, costa sureste. Puerto de aguas profundas natural." },
+        { "code": "CUCFG", "name": "Cienfuegos", "description": "Puerto de aguas profundas en la costa sur central de Cuba. Puerto industrial y de carga." },
+        { "code": "CUMAR", "name": "Mariel", "description": "Puerto de desarrollo especial al oeste de La Habana. Zona Especial de Desarrollo con terminal de contenedores moderna inaugurada en 2014." },
+        { "code": "CUMAT", "name": "Matanzas", "description": "Puerto en la costa norte, al este de La Habana. Puerto industrial y petrolero." }
       ]
     },
     {
@@ -124,10 +124,10 @@
       "name": "Jamaica",
       "nameEs": "Jamaica",
       "ports": [
-        { "code": "JMKIN", "name": "Kingston" },
-        { "code": "JMMOB", "name": "Montego Bay" },
-        { "code": "JMPKE", "name": "Port Kaiser" },
-        { "code": "JMOCH", "name": "Ocho Rios" }
+        { "code": "JMKIN", "name": "Kingston", "description": "Principal puerto de Jamaica y uno de los mayores puertos de trasbordo del Caribe. Puerto de aguas profundas natural." },
+        { "code": "JMMOB", "name": "Montego Bay", "description": "Puerto en la costa noroeste de Jamaica. Puerto de cruceros y turismo." },
+        { "code": "JMPKE", "name": "Port Kaiser", "description": "Terminal de exportación de bauxita/alúmina en la costa sur." },
+        { "code": "JMOCH", "name": "Ocho Rios", "description": "Puerto de cruceros en la costa norte de Jamaica. Importante destino turístico." }
       ]
     },
     {
@@ -135,10 +135,10 @@
       "name": "Trinidad and Tobago",
       "nameEs": "Trinidad y Tobago",
       "ports": [
-        { "code": "TTPOS", "name": "Port of Spain" },
-        { "code": "TTPTP", "name": "Point Lisas" },
-        { "code": "TTTOB", "name": "Scarborough" },
-        { "code": "TTPLP", "name": "Pointe-a-Pierre" }
+        { "code": "TTPOS", "name": "Port of Spain", "description": "Capital y principal puerto de Trinidad y Tobago. Puerto de contenedores y carga general en el Golfo de Paria." },
+        { "code": "TTPTP", "name": "Point Lisas", "description": "Puerto industrial en la costa oeste de Trinidad. Terminal de productos petroquímicos y manufactura." },
+        { "code": "TTTOB", "name": "Scarborough", "description": "Puerto principal de la isla de Tobago. Puerto de pasajeros y carga." },
+        { "code": "TTPLP", "name": "Pointe-a-Pierre", "description": "Terminal petrolera en la costa oeste de Trinidad. Refinería de petróleo de Petrotrin." }
       ]
     },
     {
@@ -146,10 +146,10 @@
       "name": "Puerto Rico",
       "nameEs": "Puerto Rico",
       "ports": [
-        { "code": "PRSJU", "name": "San Juan" },
-        { "code": "PRPSE", "name": "Ponce" },
-        { "code": "PRMAZ", "name": "Mayagüez" },
-        { "code": "PRFAJ", "name": "Fajardo" }
+        { "code": "PRSJU", "name": "San Juan", "description": "Capital y principal puerto de Puerto Rico. Puerto de contenedores, cruceros y carga. Uno de los más activos del Caribe." },
+        { "code": "PRPSE", "name": "Ponce", "description": "Puerto en la costa sur de Puerto Rico. Puerto de carga y pasajeros." },
+        { "code": "PRMAZ", "name": "Mayagüez", "description": "Puerto en la costa oeste. Puerto pesquero y de comercio regional." },
+        { "code": "PRFAJ", "name": "Fajardo", "description": "Puerto en la costa noreste. Terminal de ferries hacia las islas de Vieques y Culebra." }
       ]
     },
     {
@@ -157,21 +157,21 @@
       "name": "United States",
       "nameEs": "Estados Unidos",
       "ports": [
-        { "code": "USLAX", "name": "Los Angeles" },
-        { "code": "USLGB", "name": "Long Beach" },
-        { "code": "USHOU", "name": "Houston" },
-        { "code": "USMIA", "name": "Miami" },
-        { "code": "USNYC", "name": "New York / New Jersey" },
-        { "code": "USSAV", "name": "Savannah" },
-        { "code": "USSEA", "name": "Seattle" },
-        { "code": "USTIW", "name": "Tacoma" },
-        { "code": "USBAL", "name": "Baltimore" },
-        { "code": "USCHS", "name": "Charleston" },
-        { "code": "USORF", "name": "Norfolk" },
-        { "code": "USJAX", "name": "Jacksonville" },
-        { "code": "USOAK", "name": "Oakland" },
-        { "code": "USNOR", "name": "New Orleans" },
-        { "code": "USPHL", "name": "Philadelphia" }
+        { "code": "USLAX", "name": "Los Angeles", "description": "Puerto más grande de EE.UU. y de Norteamérica. +9M TEUs/año. Principal puerta de entrada del comercio transpacífico." },
+        { "code": "USLGB", "name": "Long Beach", "description": "Segundo puerto más activo de EE.UU. +8M TEUs/año. Adyacente a Los Angeles, juntos forman el complejo portuario más grande del hemisferio occidental." },
+        { "code": "USHOU", "name": "Houston", "description": "Puerto más grande del Golfo de México. Principal puerto de exportación de EE.UU. Hub de petróleo, gas y petroquímicos." },
+        { "code": "USMIA", "name": "Miami", "description": "Puerto de cruceros más grande del mundo. Principal gateway comercial con América Latina y el Caribe." },
+        { "code": "USNYC", "name": "New York / New Jersey", "description": "Puerto más grande de la costa este de EE.UU. +7M TEUs/año. Tercer puerto más activo del país." },
+        { "code": "USSAV", "name": "Savannah", "description": "Cuarto puerto de contenedores más activo de EE.UU. Puerto de aguas profundas en el río Savannah." },
+        { "code": "USSEA", "name": "Seattle", "description": "Puerto del noroeste del Pacífico. Importante para comercio con Asia. Parte de la Northwest Seaport Alliance con Tacoma." },
+        { "code": "USTIW", "name": "Tacoma", "description": "Puerto en Puget Sound, Washington. Parte de la Northwest Seaport Alliance con Seattle. Comercio transpacífico." },
+        { "code": "USBAL", "name": "Baltimore", "description": "Puerto en la Bahía de Chesapeake. Especializado en automóviles, maquinaria pesada y carga rodante (Ro-Ro)." },
+        { "code": "USCHS", "name": "Charleston", "description": "Puerto de aguas profundas en Carolina del Sur. Rápido crecimiento en contenedores. Profundidad 15.8m." },
+        { "code": "USORF", "name": "Norfolk", "description": "Puerto en Virginia, base naval más grande del mundo. Puerto de contenedores y carbón de exportación." },
+        { "code": "USJAX", "name": "Jacksonville", "description": "Puerto en Florida, río St. Johns. Líder nacional en carga rodante (automóviles). Puerto de contenedores en crecimiento." },
+        { "code": "USOAK", "name": "Oakland", "description": "Puerto en la Bahía de San Francisco. Quinto puerto de contenedores más activo de la costa oeste." },
+        { "code": "USNOR", "name": "New Orleans", "description": "Puerto en el río Mississippi. Puerto de graneles más grande de EE.UU. por tonelaje. Exporta granos, carbón, petróleo." },
+        { "code": "USPHL", "name": "Philadelphia", "description": "Puerto más grande del río Delaware. Maneja fruta fresca, carga refrigerada y contenedores." }
       ]
     },
     {
@@ -179,16 +179,16 @@
       "name": "Mexico",
       "nameEs": "México",
       "ports": [
-        { "code": "MXVER", "name": "Veracruz" },
-        { "code": "MXZLO", "name": "Manzanillo" },
-        { "code": "MXLZC", "name": "Lázaro Cárdenas" },
-        { "code": "MXATM", "name": "Altamira" },
-        { "code": "MXESE", "name": "Ensenada" },
-        { "code": "MXPGO", "name": "Progreso" },
-        { "code": "MXTAM", "name": "Tampico" },
-        { "code": "MXCOA", "name": "Coatzacoalcos" },
-        { "code": "MXSCX", "name": "Salina Cruz" },
-        { "code": "MXTUX", "name": "Tuxpan" }
+        { "code": "MXVER", "name": "Veracruz", "description": "Principal puerto del Golfo de México. El más antiguo e histórico de México. Maneja contenedores, automóviles y carga general." },
+        { "code": "MXZLO", "name": "Manzanillo", "description": "Puerto más activo de México en el Pacífico. +3M TEUs/año. Principal gateway del comercio transpacífico mexicano." },
+        { "code": "MXLZC", "name": "Lázaro Cárdenas", "description": "Puerto de aguas profundas en el Pacífico, Michoacán. Profundidad 16m. Maneja contenedores, minerales y acero." },
+        { "code": "MXATM", "name": "Altamira", "description": "Puerto industrial en Tamaulipas, Golfo de México. Puerto de contenedores y productos petroquímicos." },
+        { "code": "MXESE", "name": "Ensenada", "description": "Puerto en Baja California, Pacífico norte. Puerto de contenedores, pesca y cruceros." },
+        { "code": "MXPGO", "name": "Progreso", "description": "Puerto en la costa norte de Yucatán, Golfo de México. Muelle más largo de México (6.5km). Exporta henequén y productos agrícolas." },
+        { "code": "MXTAM", "name": "Tampico", "description": "Puerto en el Golfo de México, Tamaulipas. Uno de los puertos más antiguos de México. Petróleo y carga general." },
+        { "code": "MXCOA", "name": "Coatzacoalcos", "description": "Puerto en el Golfo de México, Veracruz. Puerto petrolero e industrial. Terminal del Istmo de Tehuantepec." },
+        { "code": "MXSCX", "name": "Salina Cruz", "description": "Puerto en el Pacífico, Oaxaca. Terminal del Istmo de Tehuantepec. Refinería de Pemex y terminal petrolera." },
+        { "code": "MXTUX", "name": "Tuxpan", "description": "Puerto en el Golfo de México, Veracruz. Puerto de carga general, bananos y petróleo." }
       ]
     },
     {
@@ -196,14 +196,14 @@
       "name": "Canada",
       "nameEs": "Canadá",
       "ports": [
-        { "code": "CAVAN", "name": "Vancouver" },
-        { "code": "CAMTR", "name": "Montreal" },
-        { "code": "CAHAL", "name": "Halifax" },
-        { "code": "CATOR", "name": "Toronto" },
-        { "code": "CAPRR", "name": "Prince Rupert" },
-        { "code": "CASJB", "name": "Saint John" },
-        { "code": "CAHAM", "name": "Hamilton" },
-        { "code": "CAQUE", "name": "Québec" }
+        { "code": "CAVAN", "name": "Vancouver", "description": "Puerto más grande de Canadá y tercero de Norteamérica. Gateway del comercio transpacífico canadiense. +3.5M TEUs/año." },
+        { "code": "CAMTR", "name": "Montreal", "description": "Puerto interior más grande de Norteamérica en el río San Lorenzo. Puerto de contenedores que opera todo el año." },
+        { "code": "CAHAL", "name": "Halifax", "description": "Puerto de aguas profundas en la costa atlántica de Nueva Escocia. Puerto más profundo de Norteamérica." },
+        { "code": "CATOR", "name": "Toronto", "description": "Puerto en el Lago Ontario. Puerto de graneles, carga general y contenedores." },
+        { "code": "CAPRR", "name": "Prince Rupert", "description": "Puerto de aguas profundas en la costa del Pacífico norte de Columbia Británica. Ruta más corta a Asia desde Norteamérica." },
+        { "code": "CASJB", "name": "Saint John", "description": "Puerto de aguas profundas en la Bahía de Fundy, Nuevo Brunswick. Único puerto libre de hielo del Atlántico canadiense." },
+        { "code": "CAHAM", "name": "Hamilton", "description": "Puerto en el extremo oeste del Lago Ontario. Maneja acero, graneles y carga general." },
+        { "code": "CAQUE", "name": "Québec", "description": "Puerto en el río San Lorenzo. Puerto histórico de aguas profundas. Cruceros y graneles." }
       ]
     },
     {
@@ -211,12 +211,12 @@
       "name": "Colombia",
       "nameEs": "Colombia",
       "ports": [
-        { "code": "COCTG", "name": "Cartagena" },
-        { "code": "COBUN", "name": "Buenaventura" },
-        { "code": "COBAQ", "name": "Barranquilla" },
-        { "code": "COSMR", "name": "Santa Marta" },
-        { "code": "COTRB", "name": "Turbo" },
-        { "code": "COTCO", "name": "Tumaco" }
+        { "code": "COCTG", "name": "Cartagena", "description": "Principal puerto de contenedores de Colombia en el Caribe. Puerto de aguas profundas. +3M TEUs/año. Patrimonio UNESCO." },
+        { "code": "COBUN", "name": "Buenaventura", "description": "Principal puerto del Pacífico colombiano. Maneja más del 60% del comercio exterior marítimo del país." },
+        { "code": "COBAQ", "name": "Barranquilla", "description": "Puerto fluvial y marítimo en la desembocadura del río Magdalena, Caribe. Puerto de carga general y contenedores." },
+        { "code": "COSMR", "name": "Santa Marta", "description": "Puerto natural de aguas profundas más antiguo de Colombia. Profundidad 18m. Exporta carbón y bananos." },
+        { "code": "COTRB", "name": "Turbo", "description": "Puerto en el Golfo de Urabá, Caribe. Principal puerto bananero de Colombia." },
+        { "code": "COTCO", "name": "Tumaco", "description": "Puerto en la costa del Pacífico sur, Nariño. Puerto pesquero y de exportación de aceite de palma." }
       ]
     },
     {
@@ -224,11 +224,11 @@
       "name": "Venezuela",
       "nameEs": "Venezuela",
       "ports": [
-        { "code": "VELAG", "name": "La Guaira" },
-        { "code": "VEPBL", "name": "Puerto Cabello" },
-        { "code": "VEMAR", "name": "Maracaibo" },
-        { "code": "VEGUQ", "name": "Guanta" },
-        { "code": "VEPRZ", "name": "Puerto La Cruz" }
+        { "code": "VELAG", "name": "La Guaira", "description": "Principal puerto de Venezuela, sirve a Caracas. Puerto de contenedores y carga general en la costa del Caribe." },
+        { "code": "VEPBL", "name": "Puerto Cabello", "description": "Puerto más grande de Venezuela. Maneja la mayor parte del comercio exterior. Puerto de aguas profundas en el Caribe." },
+        { "code": "VEMAR", "name": "Maracaibo", "description": "Puerto en el Lago de Maracaibo, al noroeste. Puerto petrolero e industrial." },
+        { "code": "VEGUQ", "name": "Guanta", "description": "Puerto en la costa noreste de Venezuela. Exporta minerales y productos industriales." },
+        { "code": "VEPRZ", "name": "Puerto La Cruz", "description": "Puerto en la costa noreste. Terminal petrolera y petroquímica de PDVSA." }
       ]
     },
     {
@@ -236,11 +236,11 @@
       "name": "Ecuador",
       "nameEs": "Ecuador",
       "ports": [
-        { "code": "ECGYE", "name": "Guayaquil" },
-        { "code": "ECESM", "name": "Esmeraldas" },
-        { "code": "ECMEC", "name": "Manta" },
-        { "code": "ECMCH", "name": "Machala" },
-        { "code": "ECBHA", "name": "Bahía de Caráquez" }
+        { "code": "ECGYE", "name": "Guayaquil", "description": "Principal puerto de Ecuador. Puerto fluvial en el río Guayas. Maneja más del 70% del comercio exterior ecuatoriano." },
+        { "code": "ECESM", "name": "Esmeraldas", "description": "Puerto en la costa norte del Pacífico. Terminal petrolera y de carga general." },
+        { "code": "ECMEC", "name": "Manta", "description": "Puerto pesquero más grande de Ecuador en la costa central del Pacífico. Puerto de atún y carga." },
+        { "code": "ECMCH", "name": "Machala", "description": "Puerto en la costa sur, Provincia El Oro. Asociado a la exportación de bananos." },
+        { "code": "ECBHA", "name": "Bahía de Caráquez", "description": "Puerto en la costa central de Manabí. Puerto de cabotaje y pesca artesanal." }
       ]
     },
     {
@@ -248,13 +248,13 @@
       "name": "Peru",
       "nameEs": "Perú",
       "ports": [
-        { "code": "PECLL", "name": "Callao" },
-        { "code": "PEPAI", "name": "Paita" },
-        { "code": "PEILQ", "name": "Ilo" },
-        { "code": "PEPIS", "name": "Pisco" },
-        { "code": "PECHM", "name": "Chimbote" },
-        { "code": "PEMLQ", "name": "Mollendo" },
-        { "code": "PETRU", "name": "Trujillo" }
+        { "code": "PECLL", "name": "Callao", "description": "Principal puerto del Perú. Puerto de aguas profundas que maneja más del 75% del comercio exterior. Adyacente a Lima." },
+        { "code": "PEPAI", "name": "Paita", "description": "Segundo puerto más importante del Perú, costa norte. Puerto pesquero y de contenedores. Profundidad 10m." },
+        { "code": "PEILQ", "name": "Ilo", "description": "Puerto en la costa sur del Perú. Puerto de exportación de minerales de la minería del sur." },
+        { "code": "PEPIS", "name": "Pisco", "description": "Puerto en la costa central del Perú. Puerto de exportación de minerales, harina de pescado y productos agrícolas." },
+        { "code": "PECHM", "name": "Chimbote", "description": "Puerto pesquero más grande del Perú, costa norte. Centro de la industria de harina de pescado." },
+        { "code": "PEMLQ", "name": "Mollendo", "description": "Puerto en la costa sur, Arequipa. Puerto de carga general y minerales." },
+        { "code": "PETRU", "name": "Trujillo", "description": "Puerto en la costa norte del Perú. Terminal de carga asociada a la región agroindustrial." }
       ]
     },
     {
@@ -262,18 +262,18 @@
       "name": "Brazil",
       "nameEs": "Brasil",
       "ports": [
-        { "code": "BRSSZ", "name": "Santos" },
-        { "code": "BRPNG", "name": "Paranaguá" },
-        { "code": "BRRIG", "name": "Rio Grande" },
-        { "code": "BRRIO", "name": "Río de Janeiro" },
-        { "code": "BRITJ", "name": "Itajaí" },
-        { "code": "BRSSA", "name": "Salvador" },
-        { "code": "BRSUA", "name": "Suape" },
-        { "code": "BRFOR", "name": "Fortaleza" },
-        { "code": "BRMAO", "name": "Manaus" },
-        { "code": "BRVIT", "name": "Vitória" },
-        { "code": "BRBEL", "name": "Belém" },
-        { "code": "BRNVT", "name": "Navegantes" }
+        { "code": "BRSSZ", "name": "Santos", "description": "Puerto más grande de Latinoamérica y del hemisferio sur. +4M TEUs/año. Principal puerto de exportación de café, soya y azúcar del mundo." },
+        { "code": "BRPNG", "name": "Paranaguá", "description": "Segundo puerto de exportación de graneles de Brasil, en Paraná. Principal exportador de soya y maíz." },
+        { "code": "BRRIG", "name": "Rio Grande", "description": "Puerto más al sur de Brasil, Rio Grande do Sul. Puerto de graneles agrícolas y contenedores." },
+        { "code": "BRRIO", "name": "Río de Janeiro", "description": "Puerto histórico en la Bahía de Guanabara. Puerto de contenedores, carga general y cruceros." },
+        { "code": "BRITJ", "name": "Itajaí", "description": "Puerto en Santa Catarina, sur de Brasil. Puerto de contenedores y carga refrigerada." },
+        { "code": "BRSSA", "name": "Salvador", "description": "Puerto en la Bahía de Todos los Santos, Bahía. Puerto más antiguo de Brasil. Contenedores y carga general." },
+        { "code": "BRSUA", "name": "Suape", "description": "Puerto industrial en Pernambuco, nordeste de Brasil. Puerto de aguas profundas con complejo industrial-portuario." },
+        { "code": "BRFOR", "name": "Fortaleza", "description": "Puerto en Ceará, nordeste de Brasil. Puerto de contenedores y carga general. Hub del nordeste." },
+        { "code": "BRMAO", "name": "Manaus", "description": "Puerto fluvial en el río Amazonas. Zona Franca de Manaus. Puerto más grande del interior de la Amazonia." },
+        { "code": "BRVIT", "name": "Vitória", "description": "Puerto en Espírito Santo, sureste de Brasil. Exporta mineral de hierro, celulosa y café." },
+        { "code": "BRBEL", "name": "Belém", "description": "Puerto fluvial en el río Pará/Amazonas. Principal gateway de la región amazónica norte." },
+        { "code": "BRNVT", "name": "Navegantes", "description": "Puerto en Santa Catarina, sur de Brasil. Puerto de contenedores moderno complementario a Itajaí." }
       ]
     },
     {
@@ -281,16 +281,16 @@
       "name": "Chile",
       "nameEs": "Chile",
       "ports": [
-        { "code": "CLVAP", "name": "Valparaíso" },
-        { "code": "CLSAI", "name": "San Antonio" },
-        { "code": "CLIQQ", "name": "Iquique" },
-        { "code": "CLARI", "name": "Arica" },
-        { "code": "CLCNL", "name": "Coronel" },
-        { "code": "CLTAL", "name": "Talcahuano" },
-        { "code": "CLPUQ", "name": "Punta Arenas" },
-        { "code": "CLANF", "name": "Antofagasta" },
-        { "code": "CLCQQ", "name": "Coquimbo" },
-        { "code": "CLPMC", "name": "Puerto Montt" }
+        { "code": "CLVAP", "name": "Valparaíso", "description": "Principal puerto de Chile y Patrimonio UNESCO. Puerto de contenedores en la costa central del Pacífico." },
+        { "code": "CLSAI", "name": "San Antonio", "description": "Puerto más activo de Chile. +1.7M TEUs/año. Puerto de contenedores en la costa central." },
+        { "code": "CLIQQ", "name": "Iquique", "description": "Puerto de la Zona Franca (ZOFRI) en el norte de Chile. Puerto de importación y distribución para la región." },
+        { "code": "CLARI", "name": "Arica", "description": "Puerto más al norte de Chile. Puerto de tránsito para Bolivia. Zona franca." },
+        { "code": "CLCNL", "name": "Coronel", "description": "Puerto de exportación de carbón y productos forestales en la Región del Biobío." },
+        { "code": "CLTAL", "name": "Talcahuano", "description": "Puerto militar e industrial en la Región del Biobío. Base naval de la Armada de Chile." },
+        { "code": "CLPUQ", "name": "Punta Arenas", "description": "Puerto más austral de Chile continental, en el Estrecho de Magallanes. Puerto logístico antártico." },
+        { "code": "CLANF", "name": "Antofagasta", "description": "Puerto en el norte de Chile. Principal puerto de exportación de cobre y minerales de la gran minería." },
+        { "code": "CLCQQ", "name": "Coquimbo", "description": "Puerto en la Región de Coquimbo, centro-norte de Chile. Puerto de minerales, fruta y contenedores." },
+        { "code": "CLPMC", "name": "Puerto Montt", "description": "Puerto en el sur de Chile. Gateway a la Patagonia y la industria salmonera. Puerto de pasajeros y carga." }
       ]
     },
     {
@@ -298,16 +298,16 @@
       "name": "Argentina",
       "nameEs": "Argentina",
       "ports": [
-        { "code": "ARBUE", "name": "Buenos Aires" },
-        { "code": "ARROS", "name": "Rosario" },
-        { "code": "ARBHI", "name": "Bahía Blanca" },
-        { "code": "ARSLA", "name": "San Lorenzo" },
-        { "code": "ARMDQ", "name": "Mar del Plata" },
-        { "code": "ARUSH", "name": "Ushuaia" },
-        { "code": "ARQUE", "name": "Quequén" },
-        { "code": "ARZAE", "name": "Zárate" },
-        { "code": "ARCMP", "name": "Campana" },
-        { "code": "ARLPG", "name": "La Plata" }
+        { "code": "ARBUE", "name": "Buenos Aires", "description": "Principal puerto de Argentina. Puerto de contenedores más grande del país en el Río de la Plata. +1.5M TEUs/año." },
+        { "code": "ARROS", "name": "Rosario", "description": "Puerto fluvial en el río Paraná. Mayor complejo agroexportador del mundo. Exporta soya, maíz y trigo." },
+        { "code": "ARBHI", "name": "Bahía Blanca", "description": "Puerto de aguas profundas en la costa atlántica. Exporta cereales, petroquímicos y petróleo." },
+        { "code": "ARSLA", "name": "San Lorenzo", "description": "Puerto en el río Paraná, Provincia Santa Fe. Parte del gran complejo agroexportador de Rosario-San Lorenzo." },
+        { "code": "ARMDQ", "name": "Mar del Plata", "description": "Puerto pesquero más grande de Argentina, costa atlántica. También base naval y puerto de contenedores." },
+        { "code": "ARUSH", "name": "Ushuaia", "description": "Puerto más austral del mundo en Tierra del Fuego. Gateway a la Antártida. Puerto de cruceros y pesca." },
+        { "code": "ARQUE", "name": "Quequén", "description": "Puerto en la costa atlántica bonaerense. Puerto cerealero de exportación." },
+        { "code": "ARZAE", "name": "Zárate", "description": "Puerto industrial en el río Paraná, Provincia Buenos Aires. Terminal de automóviles y carga rodante." },
+        { "code": "ARCMP", "name": "Campana", "description": "Puerto industrial en el río Paraná. Terminal de combustibles y productos siderúrgicos." },
+        { "code": "ARLPG", "name": "La Plata", "description": "Puerto en el Río de la Plata, capital de la Provincia Buenos Aires. Puerto de refinería de petróleo (YPF)." }
       ]
     },
     {
@@ -315,10 +315,10 @@
       "name": "Uruguay",
       "nameEs": "Uruguay",
       "ports": [
-        { "code": "UYMVD", "name": "Montevideo" },
-        { "code": "UYNVP", "name": "Nueva Palmira" },
-        { "code": "UYPDP", "name": "Punta del Este" },
-        { "code": "UYFBG", "name": "Fray Bentos" }
+        { "code": "UYMVD", "name": "Montevideo", "description": "Principal puerto de Uruguay en el Río de la Plata. Puerto de contenedores, graneles y cruceros. +800K TEUs/año." },
+        { "code": "UYNVP", "name": "Nueva Palmira", "description": "Puerto fluvial en la confluencia de los ríos Uruguay y Paraná. Puerto granelero de la Hidrovía Paraná-Paraguay." },
+        { "code": "UYPDP", "name": "Punta del Este", "description": "Puerto turístico y de yates en la costa atlántica. Terminal de cruceros." },
+        { "code": "UYFBG", "name": "Fray Bentos", "description": "Puerto fluvial en el río Uruguay. Puerto asociado a la industria de celulosa." }
       ]
     },
     {
@@ -326,15 +326,15 @@
       "name": "Spain",
       "nameEs": "España",
       "ports": [
-        { "code": "ESBCN", "name": "Barcelona" },
-        { "code": "ESVLC", "name": "Valencia" },
-        { "code": "ESALG", "name": "Algeciras" },
-        { "code": "ESLPA", "name": "Las Palmas" },
-        { "code": "ESBIO", "name": "Bilbao" },
-        { "code": "ESVGO", "name": "Vigo" },
-        { "code": "ESTAR", "name": "Tarragona" },
-        { "code": "ESCAR", "name": "Cartagena" },
-        { "code": "ESCAD", "name": "Cádiz" }
+        { "code": "ESBCN", "name": "Barcelona", "description": "Principal puerto del Mediterráneo español. +3.5M TEUs/año. Puerto de cruceros más grande de Europa." },
+        { "code": "ESVLC", "name": "Valencia", "description": "Puerto más activo de España y del Mediterráneo. +5M TEUs/año. Hub de contenedores de MSC." },
+        { "code": "ESALG", "name": "Algeciras", "description": "Puerto en el Estrecho de Gibraltar. +5M TEUs/año. Principal puerto de trasbordo de España. Operado por APM Terminals y TTI." },
+        { "code": "ESLPA", "name": "Las Palmas", "description": "Puerto en Gran Canaria, Islas Canarias. Hub atlántico para rutas África-Europa-América." },
+        { "code": "ESBIO", "name": "Bilbao", "description": "Principal puerto del norte de España en el Cantábrico. Puerto industrial, contenedores y Ro-Ro." },
+        { "code": "ESVGO", "name": "Vigo", "description": "Puerto pesquero más grande de Europa. Costa atlántica de Galicia. Puerto de automóviles y contenedores." },
+        { "code": "ESTAR", "name": "Tarragona", "description": "Puerto en la costa mediterránea de Cataluña. Puerto industrial, productos químicos y petróleo." },
+        { "code": "ESCAR", "name": "Cartagena", "description": "Puerto de aguas profundas en Murcia, Mediterráneo. Puerto militar, petrolero y de graneles." },
+        { "code": "ESCAD", "name": "Cádiz", "description": "Puerto en la costa atlántica de Andalucía. Puerto de cruceros, contenedores y astilleros navales." }
       ]
     },
     {
@@ -342,11 +342,11 @@
       "name": "Netherlands",
       "nameEs": "Países Bajos",
       "ports": [
-        { "code": "NLRTM", "name": "Rotterdam" },
-        { "code": "NLAMS", "name": "Amsterdam" },
-        { "code": "NLVLI", "name": "Vlissingen" },
-        { "code": "NLMOE", "name": "Moerdijk" },
-        { "code": "NLTNZ", "name": "Terneuzen" }
+        { "code": "NLRTM", "name": "Rotterdam", "description": "Puerto más grande de Europa. +14M TEUs/año. Hub logístico global. Gateway principal del comercio europeo." },
+        { "code": "NLAMS", "name": "Amsterdam", "description": "Puerto en el Mar del Norte. Puerto de graneles (cacao, petróleo, carbón). Cuarto puerto de Europa." },
+        { "code": "NLVLI", "name": "Vlissingen", "description": "Puerto en la desembocadura del río Escalda, Zelanda. Puerto de carga pesada y productos agrícolas." },
+        { "code": "NLMOE", "name": "Moerdijk", "description": "Puerto industrial interior. Terminal de contenedores y productos químicos." },
+        { "code": "NLTNZ", "name": "Terneuzen", "description": "Puerto en el Canal Gante-Terneuzen, Zelanda. Puerto industrial y de graneles." }
       ]
     },
     {
@@ -354,12 +354,12 @@
       "name": "Germany",
       "nameEs": "Alemania",
       "ports": [
-        { "code": "DEHAM", "name": "Hamburg" },
-        { "code": "DEBRV", "name": "Bremerhaven" },
-        { "code": "DEWVN", "name": "Wilhelmshaven" },
-        { "code": "DELBC", "name": "Lübeck" },
-        { "code": "DERSK", "name": "Rostock" },
-        { "code": "DEBRE", "name": "Bremen" }
+        { "code": "DEHAM", "name": "Hamburg", "description": "Puerto más grande de Alemania y tercero de Europa. +8M TEUs/año. Puerto fluvial en el río Elba." },
+        { "code": "DEBRV", "name": "Bremerhaven", "description": "Cuarto puerto de contenedores de Europa. +5M TEUs/año. Puerto en la desembocadura del río Weser." },
+        { "code": "DEWVN", "name": "Wilhelmshaven", "description": "Puerto de aguas profundas más grande de Alemania. JadeWeserPort con calado de 18m. Terminal de GNL." },
+        { "code": "DELBC", "name": "Lübeck", "description": "Puerto en el Mar Báltico. Principal puerto de carga rodante (Ro-Ro) del Báltico." },
+        { "code": "DERSK", "name": "Rostock", "description": "Puerto en el Mar Báltico, nordeste de Alemania. Puerto de ferries, cruceros y graneles." },
+        { "code": "DEBRE", "name": "Bremen", "description": "Puerto interior en el río Weser. Puerto de automóviles, algodón y carga general." }
       ]
     },
     {
@@ -367,10 +367,10 @@
       "name": "Belgium",
       "nameEs": "Bélgica",
       "ports": [
-        { "code": "BEANR", "name": "Antwerp" },
-        { "code": "BEZEE", "name": "Zeebrugge" },
-        { "code": "BEGNE", "name": "Ghent" },
-        { "code": "BEOST", "name": "Ostend" }
+        { "code": "BEANR", "name": "Antwerp", "description": "Segundo puerto más grande de Europa. +12M TEUs/año. Puerto fluvial en el río Escalda. Hub de productos químicos." },
+        { "code": "BEZEE", "name": "Zeebrugge", "description": "Puerto de aguas profundas en la costa belga del Mar del Norte. Puerto de GNL, automóviles y contenedores." },
+        { "code": "BEGNE", "name": "Ghent", "description": "Puerto interior en el Canal Gante-Terneuzen. Puerto industrial: acero, automóviles y graneles." },
+        { "code": "BEOST", "name": "Ostend", "description": "Puerto en la costa belga del Mar del Norte. Puerto de ferries, pesca y energía eólica offshore." }
       ]
     },
     {
@@ -378,15 +378,15 @@
       "name": "Italy",
       "nameEs": "Italia",
       "ports": [
-        { "code": "ITGOA", "name": "Genoa" },
-        { "code": "ITGIT", "name": "Gioia Tauro" },
-        { "code": "ITLIV", "name": "Livorno" },
-        { "code": "ITNAP", "name": "Naples" },
-        { "code": "ITTRS", "name": "Trieste" },
-        { "code": "ITCVV", "name": "Civitavecchia" },
-        { "code": "ITVCE", "name": "Venice" },
-        { "code": "ITSPE", "name": "La Spezia" },
-        { "code": "ITSAL", "name": "Salerno" }
+        { "code": "ITGOA", "name": "Genoa", "description": "Puerto más grande de Italia y del Mediterráneo occidental. Puerto de contenedores, cruceros y carga general." },
+        { "code": "ITGIT", "name": "Gioia Tauro", "description": "Puerto de trasbordo más grande de Italia en Calabria. +3M TEUs/año. Hub de contenedores del Mediterráneo central." },
+        { "code": "ITLIV", "name": "Livorno", "description": "Puerto en la Toscana, costa oeste. Puerto de automóviles (Ro-Ro), contenedores y cruceros." },
+        { "code": "ITNAP", "name": "Naples", "description": "Puerto de Nápoles en el sur de Italia. Puerto de contenedores, ferries y cruceros." },
+        { "code": "ITTRS", "name": "Trieste", "description": "Puerto de aguas profundas en el norte del Adriático. Profundidad 18m. Punto de entrada para Europa Central." },
+        { "code": "ITCVV", "name": "Civitavecchia", "description": "Puerto de Roma en el Mar Tirreno. Principal puerto de cruceros de Italia." },
+        { "code": "ITVCE", "name": "Venice", "description": "Puerto en la laguna de Venecia, Adriático. Puerto de cruceros (controversial) y carga industrial." },
+        { "code": "ITSPE", "name": "La Spezia", "description": "Puerto de contenedores en Liguria. Tercer puerto de contenedores de Italia." },
+        { "code": "ITSAL", "name": "Salerno", "description": "Puerto en Campania, sur de Italia. Puerto de contenedores y carga refrigerada." }
       ]
     },
     {
@@ -394,13 +394,13 @@
       "name": "France",
       "nameEs": "Francia",
       "ports": [
-        { "code": "FRLEH", "name": "Le Havre" },
-        { "code": "FRMRS", "name": "Marseille" },
-        { "code": "FRDKK", "name": "Dunkerque" },
-        { "code": "FRNTE", "name": "Nantes" },
-        { "code": "FRBOD", "name": "Bordeaux" },
-        { "code": "FRURO", "name": "Rouen" },
-        { "code": "FRLRH", "name": "La Rochelle" }
+        { "code": "FRLEH", "name": "Le Havre", "description": "Puerto más grande de Francia en el Canal de la Mancha. +3M TEUs/año. Gateway del comercio francés. Profundidad 15.5m." },
+        { "code": "FRMRS", "name": "Marseille", "description": "Puerto más grande del Mediterráneo francés. Puerto de contenedores, petróleo y cruceros. El más antiguo de Francia." },
+        { "code": "FRDKK", "name": "Dunkerque", "description": "Tercer puerto de Francia en el Mar del Norte. Puerto industrial: acero, GNL, graneles." },
+        { "code": "FRNTE", "name": "Nantes", "description": "Puerto del Atlántico en la desembocadura del río Loira. Puerto de graneles y energía." },
+        { "code": "FRBOD", "name": "Bordeaux", "description": "Puerto fluvial en el río Garona. Puerto de cruceros y carga. Centro vinícola histórico." },
+        { "code": "FRURO", "name": "Rouen", "description": "Puerto fluvial en el río Sena. Principal puerto cerealero de Europa occidental." },
+        { "code": "FRLRH", "name": "La Rochelle", "description": "Puerto en la costa atlántica. Puerto de graneles, madera y productos agrícolas." }
       ]
     },
     {
@@ -408,13 +408,13 @@
       "name": "United Kingdom",
       "nameEs": "Reino Unido",
       "ports": [
-        { "code": "GBFXT", "name": "Felixstowe" },
-        { "code": "GBSOU", "name": "Southampton" },
-        { "code": "GBLON", "name": "London" },
-        { "code": "GBLIV", "name": "Liverpool" },
-        { "code": "GBIMM", "name": "Immingham" },
-        { "code": "GBGRG", "name": "Grangemouth" },
-        { "code": "GBTIL", "name": "Tilbury" }
+        { "code": "GBFXT", "name": "Felixstowe", "description": "Puerto de contenedores más grande de Gran Bretaña. +3.5M TEUs/año. Costa este, Suffolk." },
+        { "code": "GBSOU", "name": "Southampton", "description": "Segundo puerto de contenedores del Reino Unido. Principal puerto de cruceros de Gran Bretaña." },
+        { "code": "GBLON", "name": "London", "description": "Puerto en el río Támesis. London Gateway, uno de los puertos más modernos del mundo." },
+        { "code": "GBLIV", "name": "Liverpool", "description": "Puerto histórico en la costa noroeste. Patrimonio UNESCO. Puerto de contenedores y graneles." },
+        { "code": "GBIMM", "name": "Immingham", "description": "Puerto de mayor tonelaje del Reino Unido en el Humber. Puerto de carbón, petróleo y graneles." },
+        { "code": "GBGRG", "name": "Grangemouth", "description": "Puerto más grande de Escocia en el Firth of Forth. Refinería de petróleo y terminal de contenedores." },
+        { "code": "GBTIL", "name": "Tilbury", "description": "Puerto en el río Támesis, Essex. Puerto de contenedores, papel y productos forestales." }
       ]
     },
     {
@@ -422,17 +422,17 @@
       "name": "China",
       "nameEs": "China",
       "ports": [
-        { "code": "CNSHG", "name": "Shanghai" },
-        { "code": "CNSNZ", "name": "Shenzhen" },
-        { "code": "CNNGB", "name": "Ningbo" },
-        { "code": "CNQIN", "name": "Qingdao" },
-        { "code": "CNTXG", "name": "Tianjin" },
-        { "code": "CNCAN", "name": "Guangzhou" },
-        { "code": "CNXAM", "name": "Xiamen" },
-        { "code": "CNDAL", "name": "Dalian" },
-        { "code": "CNLYG", "name": "Lianyungang" },
-        { "code": "CNFOC", "name": "Fuzhou" },
-        { "code": "CNZHU", "name": "Zhuhai" }
+        { "code": "CNSHG", "name": "Shanghai", "description": "Puerto más activo del mundo, en la desembocadura del río Yangtsé. Tamaño: muy grande. +43M TEUs/año. Líneas: COSCO, Maersk, MSC, CMA CGM, Evergreen. Coordenadas: 31°24'N 121°29'E." },
+        { "code": "CNSNZ", "name": "Shenzhen", "description": "Gran puerto de contenedores en el sur de China. +25M TEUs/año. Líneas: CMA CGM, COSCO, Hapag-Lloyd, Maersk, MSC, OOCL, ZIM. Coordenadas: 22°31'N 114°01'E." },
+        { "code": "CNNGB", "name": "Ningbo", "description": "Puerto multifuncional de aguas profundas en la Bahía de Hangzhou. Tamaño mediano. 309 muelles productivos. Maneja ~344M toneladas/año y 10M TEUs. Calado máximo 22m." },
+        { "code": "CNQIN", "name": "Qingdao", "description": "Puerto en el Mar Amarillo, Provincia Shandong. Séptimo más activo del mundo. +70 muelles de aguas profundas hasta 22m. Terminal automatizada de contenedores pionera en Asia." },
+        { "code": "CNTXG", "name": "Tianjin", "description": "Principal puerto del norte de China, sirviendo a Beijing. +15M TEUs/año. Puerto de aguas profundas con terminales de contenedores, graneles y petróleo." },
+        { "code": "CNCAN", "name": "Guangzhou", "description": "Puerto fluvial y marítimo en el Delta del Río Perla, sur de China. +20M TEUs/año. Centro de comercio histórico." },
+        { "code": "CNXAM", "name": "Xiamen", "description": "Puerto de aguas profundas en la Provincia Fujian, sureste de China. Importante hub de contenedores en el Estrecho de Taiwán." },
+        { "code": "CNDAL", "name": "Dalian", "description": "Principal puerto del noreste de China en la Península de Liaodong. Puerto de aguas profundas libre de hielo. Maneja petróleo, minerales y contenedores." },
+        { "code": "CNLYG", "name": "Lianyungang", "description": "Puerto en la Provincia Jiangsu, extremo oriental del puente terrestre euroasiático. Puerto multipropósito de graneles y contenedores." },
+        { "code": "CNFOC", "name": "Fuzhou", "description": "Puerto en la Provincia Fujian, costa sureste de China. Maneja contenedores, graneles y carga general." },
+        { "code": "CNZHU", "name": "Zhuhai", "description": "Puerto en el Delta del Río Perla, adyacente a Macao. Puerto de carga general y contenedores." }
       ]
     },
     {
@@ -440,7 +440,7 @@
       "name": "Hong Kong",
       "nameEs": "Hong Kong",
       "ports": [
-        { "code": "HKHKG", "name": "Hong Kong" }
+        { "code": "HKHKG", "name": "Hong Kong", "description": "Uno de los puertos de contenedores más activos del mundo. +19M TEUs/año. Hub de trasbordo del sudeste asiático. Puerto de aguas profundas con 9 terminales de contenedores." }
       ]
     },
     {
@@ -448,14 +448,14 @@
       "name": "Japan",
       "nameEs": "Japón",
       "ports": [
-        { "code": "JPTYO", "name": "Tokyo" },
-        { "code": "JPYOK", "name": "Yokohama" },
-        { "code": "JPNGO", "name": "Nagoya" },
-        { "code": "JPOSA", "name": "Osaka" },
-        { "code": "JPUKB", "name": "Kobe" },
-        { "code": "JPKIT", "name": "Kitakyushu" },
-        { "code": "JPSMZ", "name": "Shimizu" },
-        { "code": "JPHKT", "name": "Hakata" }
+        { "code": "JPTYO", "name": "Tokyo", "description": "Puerto de la capital de Japón en la Bahía de Tokyo. Puerto de contenedores y carga general." },
+        { "code": "JPYOK", "name": "Yokohama", "description": "Puerto más grande de Japón en la Bahía de Tokyo. +3M TEUs/año. Puerto de contenedores y automóviles." },
+        { "code": "JPNGO", "name": "Nagoya", "description": "Puerto en la Bahía de Ise. Principal puerto de exportación de Toyota. Mayor puerto de automóviles del mundo." },
+        { "code": "JPOSA", "name": "Osaka", "description": "Puerto en la Bahía de Osaka. Segundo centro económico de Japón. Puerto de contenedores y ferries." },
+        { "code": "JPUKB", "name": "Kobe", "description": "Puerto de aguas profundas en la Bahía de Osaka. Hub de trasbordo. Reconstruido tras el terremoto de 1995." },
+        { "code": "JPKIT", "name": "Kitakyushu", "description": "Puerto en el norte de Kyushu. Puerto industrial y de contenedores." },
+        { "code": "JPSMZ", "name": "Shimizu", "description": "Puerto en la Bahía de Suruga, Prefectura Shizuoka. Puerto de contenedores y atún congelado." },
+        { "code": "JPHKT", "name": "Hakata", "description": "Puerto en Fukuoka, norte de Kyushu. Puerto de ferries internacionales y contenedores." }
       ]
     },
     {
@@ -463,11 +463,11 @@
       "name": "South Korea",
       "nameEs": "Corea del Sur",
       "ports": [
-        { "code": "KRPUS", "name": "Busan" },
-        { "code": "KRINC", "name": "Incheon" },
-        { "code": "KRKAN", "name": "Gwangyang" },
-        { "code": "KRUSN", "name": "Ulsan" },
-        { "code": "KRPTK", "name": "Pyeongtaek" }
+        { "code": "KRPUS", "name": "Busan", "description": "Puerto más grande de Corea del Sur y quinto del mundo. +22M TEUs/año. Hub de trasbordo del noreste asiático." },
+        { "code": "KRINC", "name": "Incheon", "description": "Puerto de Seoul en la costa oeste. Puerto de contenedores y pasajeros. Cercano al aeropuerto internacional." },
+        { "code": "KRKAN", "name": "Gwangyang", "description": "Puerto de aguas profundas en la costa sur. Segundo puerto de Corea. Complejo siderúrgico POSCO." },
+        { "code": "KRUSN", "name": "Ulsan", "description": "Puerto industrial en la costa sureste. Mayor puerto de automóviles de Hyundai/KIA. Puerto petrolero." },
+        { "code": "KRPTK", "name": "Pyeongtaek", "description": "Puerto en la costa oeste. Puerto de automóviles y carga militar. Base naval de EE.UU. cercana." }
       ]
     },
     {
@@ -475,9 +475,9 @@
       "name": "Singapore",
       "nameEs": "Singapur",
       "ports": [
-        { "code": "SGSIN", "name": "Singapore" },
-        { "code": "SGJUR", "name": "Jurong" },
-        { "code": "SGPAS", "name": "Pasir Panjang" }
+        { "code": "SGSIN", "name": "Singapore", "description": "Segundo puerto de contenedores más activo del mundo. +37M TEUs/año. Hub de trasbordo global. Puerto libre." },
+        { "code": "SGJUR", "name": "Jurong", "description": "Puerto industrial en la isla de Jurong. Terminal de graneles, productos químicos y gas." },
+        { "code": "SGPAS", "name": "Pasir Panjang", "description": "Terminal de contenedores principal de Singapur. 6 terminales con capacidad de +30M TEUs/año." }
       ]
     },
     {
@@ -485,11 +485,11 @@
       "name": "Taiwan",
       "nameEs": "Taiwán",
       "ports": [
-        { "code": "TWKHH", "name": "Kaohsiung" },
-        { "code": "TWKEL", "name": "Keelung" },
-        { "code": "TWTPE", "name": "Taipei" },
-        { "code": "TWTXG", "name": "Taichung" },
-        { "code": "TWHUN", "name": "Hualien" }
+        { "code": "TWKHH", "name": "Kaohsiung", "description": "Puerto más grande de Taiwán, costa suroeste. +10M TEUs/año. Hub de contenedores del sudeste asiático." },
+        { "code": "TWKEL", "name": "Keelung", "description": "Puerto en el norte de Taiwán. Puerto de contenedores y cruceros. Cercano a Taipei." },
+        { "code": "TWTPE", "name": "Taipei", "description": "Puerto interior asociado a la capital. Puerto de carga general." },
+        { "code": "TWTXG", "name": "Taichung", "description": "Puerto en la costa oeste central de Taiwán. Puerto de graneles, contenedores e industrial." },
+        { "code": "TWHUN", "name": "Hualien", "description": "Puerto en la costa este de Taiwán. Puerto de minerales y cemento." }
       ]
     }
   ]
