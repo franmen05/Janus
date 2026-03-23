@@ -289,6 +289,8 @@
     "LIQUIDATION_DOCUMENT": "Documento de Liquidaci\u00f3n",
     "PAYMENT_RECEIPT": "Comprobante de Pago",
     "AGENCY_INVOICE": "Factura de Agencia",
+    "INITIAL_DECLARATION": "Declaración Inicial",
+    "FINAL_DECLARATION": "Declaración Final",
     "OTHER": "Otro"
   },
   "CARGO_TYPES": {
