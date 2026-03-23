@@ -23,6 +23,8 @@ export type ChargeType = 'INCOME' | 'EXPENSE';
 export type PaymentType = 'COLLECT' | 'PREPAID';
 export type BillToType = 'COMPANY' | 'CONSIGNEE' | 'INDIVIDUAL';
 
+export type BillingStatus = 'NONE' | 'SENT_TO_BILLING' | 'INVOICED';
+
 export interface InspectionExpense {
   id: number;
   operationId: number;
@@ -51,6 +53,23 @@ export interface InspectionExpense {
   showOnDocuments: boolean;
   updateRelated: boolean;
   notes: string | null;
+  billingStatus: BillingStatus;
+}
+
+export interface CategoryBreakdown {
+  category: string;
+  amount: number;
+}
+
+export interface ChargeCrossReference {
+  totalIncome: number;
+  totalExpenses: number;
+  balance: number;
+  incomeByCategory: CategoryBreakdown[];
+  expenseByCategory: CategoryBreakdown[];
+  incomeSentToBillingCount: number;
+  totalIncomeCount: number;
+  allIncomeSentToBilling: boolean;
 }
 
 export interface ExpenseSummary {

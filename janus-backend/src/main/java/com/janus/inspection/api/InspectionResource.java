@@ -1,10 +1,12 @@
 package com.janus.inspection.api;
 
 import com.janus.document.infrastructure.storage.StorageService;
+import com.janus.inspection.api.dto.ChargeCrossReferenceResponse;
 import com.janus.inspection.api.dto.CreateExpenseRequest;
 import com.janus.inspection.api.dto.ExpenseSummaryResponse;
 import com.janus.inspection.api.dto.InspectionExpenseResponse;
 import com.janus.inspection.api.dto.InspectionPhotoResponse;
+import com.janus.inspection.api.dto.SendToBillingResponse;
 import com.janus.inspection.application.InspectionService;
 import com.janus.inspection.domain.model.ChargeType;
 import com.janus.operation.api.dto.SetInspectionTypeRequest;
@@ -176,5 +178,20 @@ public class InspectionResource {
                                    @Context SecurityContext sec) {
         inspectionService.deleteExpense(operationId, expenseId, sec.getUserPrincipal().getName());
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/expenses/cross-reference")
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
+    public ChargeCrossReferenceResponse getCrossReference(@PathParam("operationId") Long operationId) {
+        return inspectionService.getChargeCrossReference(operationId);
+    }
+
+    @POST
+    @Path("/expenses/send-to-billing")
+    @RolesAllowed({"ADMIN", "AGENT"})
+    public SendToBillingResponse sendToBilling(@PathParam("operationId") Long operationId,
+                                                @Context SecurityContext sec) {
+        return inspectionService.sendAllIncomeToBilling(operationId, sec.getUserPrincipal().getName());
     }
 }

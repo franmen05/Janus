@@ -3,15 +3,110 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PaymentService } from '../../../core/services/payment.service';
+import { InspectionService } from '../../../core/services/inspection.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Operation } from '../../../core/models/operation.model';
 import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/models/payment.model';
+import { ChargeCrossReference } from '../../../core/models/inspection.model';
 
 @Component({
   selector: 'app-payment-panel',
   standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule],
   template: `
+    <!-- Cross-Reference Section -->
+    @if (crossReference()) {
+      <div class="card mb-3">
+        <div class="card-header">
+          <h6 class="mb-0"><i class="bi bi-arrow-left-right me-2"></i>{{ 'PAYMENT.CROSS_REFERENCE_TITLE' | translate }}</h6>
+        </div>
+        <div class="card-body">
+          @if (crossReference()!.totalIncome === 0 && crossReference()!.totalExpenses === 0) {
+            <p class="text-muted text-center mb-0">{{ 'PAYMENT.NO_CHARGES' | translate }}</p>
+          } @else {
+            <!-- Summary cards -->
+            <div class="row g-3 mb-3">
+              <div class="col-md-4">
+                <div class="card border">
+                  <div class="card-body py-2 text-center">
+                    <small class="text-muted d-block">{{ 'PAYMENT.TOTAL_INCOME' | translate }}</small>
+                    <strong class="fs-6 text-success">{{ crossReference()!.totalIncome | number:'1.2-2' }}</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card border">
+                  <div class="card-body py-2 text-center">
+                    <small class="text-muted d-block">{{ 'PAYMENT.TOTAL_EXPENSES' | translate }}</small>
+                    <strong class="fs-6 text-danger">{{ crossReference()!.totalExpenses | number:'1.2-2' }}</strong>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card border">
+                  <div class="card-body py-2 text-center">
+                    <small class="text-muted d-block">{{ 'PAYMENT.BALANCE' | translate }}</small>
+                    <strong class="fs-6" [ngClass]="{
+                      'text-success': crossReference()!.balance > 0,
+                      'text-danger': crossReference()!.balance < 0,
+                      'text-muted': crossReference()!.balance === 0
+                    }">{{ crossReference()!.balance | number:'1.2-2' }}</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Breakdown table -->
+            @if (allCategories().length > 0) {
+              <div class="table-responsive mb-3">
+                <table class="table table-sm table-hover">
+                  <thead>
+                    <tr>
+                      <th>{{ 'PAYMENT.CATEGORY' | translate }}</th>
+                      <th class="text-end text-success">{{ 'PAYMENT.INCOME' | translate }}</th>
+                      <th class="text-end text-danger">{{ 'PAYMENT.EXPENSES' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (cat of allCategories(); track cat) {
+                      <tr>
+                        <td>{{ cat }}</td>
+                        <td class="text-end">{{ getIncomeForCategory(cat) !== null ? (getIncomeForCategory(cat)! | number:'1.2-2') : '-' }}</td>
+                        <td class="text-end">{{ getExpenseForCategory(cat) !== null ? (getExpenseForCategory(cat)! | number:'1.2-2') : '-' }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+
+            <!-- Send to billing -->
+            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+              <div class="d-flex align-items-center justify-content-between border-top pt-3">
+                <span class="text-muted">
+                  @if (crossReference()!.allIncomeSentToBilling) {
+                    <i class="bi bi-check-circle-fill text-success me-1"></i>{{ 'PAYMENT.ALL_SENT_TO_BILLING' | translate }}
+                  } @else {
+                    {{ 'PAYMENT.BILLING_PROGRESS' | translate:{ sent: crossReference()!.incomeSentToBillingCount, total: crossReference()!.totalIncomeCount } }}
+                  }
+                </span>
+                <button class="btn btn-outline-primary btn-sm"
+                        (click)="sendToBilling()"
+                        [disabled]="crossReference()!.allIncomeSentToBilling || crossReference()!.totalIncomeCount === 0 || sendingToBilling()">
+                  @if (sendingToBilling()) {
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    {{ 'PAYMENT.SENDING_TO_BILLING' | translate }}
+                  } @else {
+                    <i class="bi bi-send me-1"></i>{{ 'PAYMENT.SEND_TO_BILLING' | translate }}
+                  }
+                </button>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
+
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h6 class="mb-0"><i class="bi bi-cash-stack me-2"></i>{{ 'PAYMENT.TITLE' | translate }}</h6>
@@ -276,14 +371,26 @@ export class PaymentPanelComponent implements OnInit {
   changed = output<void>();
 
   private paymentService = inject(PaymentService);
+  private inspectionService = inject(InspectionService);
   private translate = inject(TranslateService);
   authService = inject(AuthService);
 
   // State
   liquidation = signal<Liquidation | null>(null);
   payment = signal<Payment | null>(null);
+  crossReference = signal<ChargeCrossReference | null>(null);
+  sendingToBilling = signal(false);
   generating = signal(false);
   saving = signal(false);
+
+  allCategories = computed(() => {
+    const cr = this.crossReference();
+    if (!cr) return [];
+    const cats = new Set<string>();
+    cr.incomeByCategory.forEach(c => cats.add(c.category));
+    cr.expenseByCategory.forEach(c => cats.add(c.category));
+    return Array.from(cats).sort();
+  });
 
   // Generate form
   agencyFee: number | null = null;
@@ -317,6 +424,10 @@ export class PaymentPanelComponent implements OnInit {
       if (l?.status === 'PAID') {
         this.paymentService.getPayment(id).subscribe(p => this.payment.set(p));
       }
+    });
+    this.inspectionService.getCrossReference(id).subscribe({
+      next: (cr) => this.crossReference.set(cr),
+      error: () => this.crossReference.set(null)
     });
   }
 
@@ -406,6 +517,40 @@ export class PaymentPanelComponent implements OnInit {
       },
       error: (err) => {
         this.saving.set(false);
+        this.handleError(err);
+      }
+    });
+  }
+
+  getIncomeForCategory(category: string): number | null {
+    const cr = this.crossReference();
+    if (!cr) return null;
+    const found = cr.incomeByCategory.find(c => c.category === category);
+    return found ? found.amount : null;
+  }
+
+  getExpenseForCategory(category: string): number | null {
+    const cr = this.crossReference();
+    if (!cr) return null;
+    const found = cr.expenseByCategory.find(c => c.category === category);
+    return found ? found.amount : null;
+  }
+
+  sendToBilling(): void {
+    this.sendingToBilling.set(true);
+    this.inspectionService.sendAllIncomeToBilling(this.operationId()).subscribe({
+      next: (result) => {
+        this.sendingToBilling.set(false);
+        const msg = this.translate.instant('PAYMENT.SENT_TO_BILLING_SUCCESS', { count: result.updatedCount });
+        alert(msg);
+        this.inspectionService.getCrossReference(this.operationId()).subscribe({
+          next: (cr) => this.crossReference.set(cr),
+          error: () => {}
+        });
+        this.changed.emit();
+      },
+      error: (err) => {
+        this.sendingToBilling.set(false);
         this.handleError(err);
       }
     });

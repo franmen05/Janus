@@ -1,5 +1,6 @@
 package com.janus.inspection.domain.repository;
 
+import com.janus.inspection.domain.model.BillingStatus;
 import com.janus.inspection.domain.model.ChargeType;
 import com.janus.inspection.domain.model.InspectionExpense;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
@@ -44,5 +45,19 @@ public class InspectionExpenseRepository implements PanacheRepository<Inspection
                 .setParameter("type", chargeType)
                 .getSingleResult();
         return result != null ? result : BigDecimal.ZERO;
+    }
+
+    public List<InspectionExpense> findActiveIncomeWithBillingStatus(Long operationId, BillingStatus billingStatus) {
+        return list("operation.id = ?1 and active = true and chargeType = ?2 and billingStatus = ?3",
+                operationId, ChargeType.INCOME, billingStatus);
+    }
+
+    public long countActiveByChargeType(Long operationId, ChargeType chargeType) {
+        return count("operation.id = ?1 and active = true and chargeType = ?2", operationId, chargeType);
+    }
+
+    public long countActiveByChargeTypeAndBillingStatus(Long operationId, ChargeType chargeType, BillingStatus billingStatus) {
+        return count("operation.id = ?1 and active = true and chargeType = ?2 and billingStatus = ?3",
+                operationId, chargeType, billingStatus);
     }
 }

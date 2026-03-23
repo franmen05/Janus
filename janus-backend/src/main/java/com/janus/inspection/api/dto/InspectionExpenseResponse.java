@@ -33,7 +33,8 @@ public record InspectionExpenseResponse(
         String referenceNumberCharge,
         boolean showOnDocuments,
         boolean updateRelated,
-        String notes
+        String notes,
+        String billingStatus
 ) {
     public static InspectionExpenseResponse from(InspectionExpense expense) {
         return new InspectionExpenseResponse(
@@ -63,7 +64,8 @@ public record InspectionExpenseResponse(
                 expense.referenceNumberCharge,
                 expense.showOnDocuments,
                 expense.updateRelated,
-                expense.notes
+                expense.notes,
+                expense.billingStatus != null ? expense.billingStatus.name() : null
         );
     }
 }

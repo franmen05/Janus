@@ -888,7 +888,20 @@
     "CONCEPT_EQUIPMENT": "Equipos",
     "CONCEPT_TRANSPORT": "Transporte",
     "CONCEPT_SECURITY": "Seguridad",
-    "CONCEPT_OVERTIME": "Horas Extra"
+    "CONCEPT_OVERTIME": "Horas Extra",
+    "CROSS_REFERENCE_TITLE": "Cruce Ingresos vs Gastos",
+    "TOTAL_INCOME": "Total Ingresos",
+    "TOTAL_EXPENSES": "Total Gastos",
+    "BALANCE": "Balance",
+    "CATEGORY": "Categor\u00eda",
+    "INCOME": "Ingresos",
+    "EXPENSES": "Gastos",
+    "SEND_TO_BILLING": "Enviar Todo a Facturaci\u00f3n",
+    "SENDING_TO_BILLING": "Enviando...",
+    "SENT_TO_BILLING_SUCCESS": "{{count}} ingresos enviados a facturaci\u00f3n",
+    "BILLING_PROGRESS": "{{sent}} de {{total}} ingresos enviados a facturaci\u00f3n",
+    "ALL_SENT_TO_BILLING": "Todos los ingresos enviados a facturaci\u00f3n",
+    "NO_CHARGES": "No hay cargos registrados"
   },
   "EXCHANGE_RATES": {
     "TITLE": "Tasas de Cambio",

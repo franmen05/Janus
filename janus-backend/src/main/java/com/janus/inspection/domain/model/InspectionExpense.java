@@ -95,4 +95,8 @@ public class InspectionExpense extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     public String notes;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "billing_status", columnDefinition = "VARCHAR(20) DEFAULT 'NONE' NOT NULL")
+    public BillingStatus billingStatus = BillingStatus.NONE;
 }

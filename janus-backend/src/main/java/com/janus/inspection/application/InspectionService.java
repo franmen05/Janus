@@ -4,7 +4,10 @@ import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
 import com.janus.document.domain.service.DocumentValidationService;
 import com.janus.document.infrastructure.storage.StorageService;
+import com.janus.inspection.api.dto.ChargeCrossReferenceResponse;
 import com.janus.inspection.api.dto.CreateExpenseRequest;
+import com.janus.inspection.api.dto.SendToBillingResponse;
+import com.janus.inspection.domain.model.BillingStatus;
 import com.janus.inspection.domain.model.ChargeType;
 import com.janus.inspection.domain.model.InspectionExpense;
 import com.janus.inspection.domain.model.PaymentStatus;
@@ -28,8 +31,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 
@@ -342,5 +347,81 @@ public class InspectionService {
 
     public BigDecimal getExpenseTotal(Long operationId) {
         return inspectionExpenseRepository.sumAmountByOperationIdAndChargeType(operationId, ChargeType.EXPENSE);
+    }
+
+    // ── Cross-reference & Billing ─────────────────────────────────────────
+
+    public ChargeCrossReferenceResponse getChargeCrossReference(Long operationId) {
+        operationService.findById(operationId);
+
+        var allActive = inspectionExpenseRepository.findByOperationId(operationId);
+
+        var incomeCharges = allActive.stream()
+                .filter(e -> e.chargeType == ChargeType.INCOME)
+                .toList();
+        var expenseCharges = allActive.stream()
+                .filter(e -> e.chargeType == ChargeType.EXPENSE)
+                .toList();
+
+        var totalIncome = incomeCharges.stream()
+                .map(e -> e.amount != null ? e.amount : BigDecimal.ZERO)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        var totalExpenses = expenseCharges.stream()
+                .map(e -> e.amount != null ? e.amount : BigDecimal.ZERO)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        var balance = totalIncome.subtract(totalExpenses);
+
+        var incomeByCategory = buildCategoryBreakdown(incomeCharges);
+        var expenseByCategory = buildCategoryBreakdown(expenseCharges);
+
+        long totalIncomeCount = incomeCharges.size();
+        long incomeSentToBillingCount = incomeCharges.stream()
+                .filter(e -> e.billingStatus != BillingStatus.NONE)
+                .count();
+        boolean allIncomeSentToBilling = totalIncomeCount > 0 && incomeSentToBillingCount == totalIncomeCount;
+
+        return new ChargeCrossReferenceResponse(
+                totalIncome, totalExpenses, balance,
+                incomeByCategory, expenseByCategory,
+                incomeSentToBillingCount, totalIncomeCount, allIncomeSentToBilling
+        );
+    }
+
+    @Transactional
+    public SendToBillingResponse sendAllIncomeToBilling(Long operationId, String username) {
+        operationService.findById(operationId);
+
+        var pendingIncomeCharges = inspectionExpenseRepository
+                .findActiveIncomeWithBillingStatus(operationId, BillingStatus.NONE);
+
+        for (var charge : pendingIncomeCharges) {
+            charge.billingStatus = BillingStatus.SENT_TO_BILLING;
+        }
+
+        if (!pendingIncomeCharges.isEmpty()) {
+            auditEvent.fire(new AuditEvent(
+                    username, AuditAction.UPDATE, "InspectionExpense", null, operationId,
+                    null, null,
+                    "Sent " + pendingIncomeCharges.size() + " income charges to billing"
+            ));
+        }
+
+        LOG.infof("Sent %d income charges to billing for operation %d by %s",
+                pendingIncomeCharges.size(), operationId, username);
+
+        return new SendToBillingResponse(pendingIncomeCharges.size());
+    }
+
+    private List<ChargeCrossReferenceResponse.CategoryBreakdown> buildCategoryBreakdown(List<InspectionExpense> charges) {
+        Map<String, BigDecimal> grouped = charges.stream()
+                .collect(Collectors.groupingBy(
+                        e -> e.category != null ? e.category : "Uncategorized",
+                        Collectors.reducing(BigDecimal.ZERO,
+                                e -> e.amount != null ? e.amount : BigDecimal.ZERO,
+                                BigDecimal::add)
+                ));
+        return grouped.entrySet().stream()
+                .map(entry -> new ChargeCrossReferenceResponse.CategoryBreakdown(entry.getKey(), entry.getValue()))
+                .toList();
     }
 }
