@@ -31,7 +31,7 @@ export interface CatalogPort {
 
 export interface BulkImportRequest {
   country: string;
-  ports: { code: string; name: string }[];
+  ports: { code: string; name: string; description?: string }[];
 }
 
 export interface BulkImportResponse {

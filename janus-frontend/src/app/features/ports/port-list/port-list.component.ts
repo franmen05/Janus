@@ -48,7 +48,7 @@ import { LoadPortsModalComponent } from '../load-ports-modal/load-ports-modal.co
                 <td class="fw-bold">{{ port.code }}</td>
                 <td>{{ port.name }}</td>
                 <td>{{ port.country ?? '-' }}</td>
-                <td class="d-none d-md-table-cell">{{ port.description ?? '-' }}</td>
+                <td class="d-none d-md-table-cell text-truncate" style="max-width: 300px;" [title]="port.description ?? ''">{{ port.description ?? '-' }}</td>
                 <td class="d-none d-md-table-cell">{{ port.address ?? '-' }}</td>
                 <td>
                   @if (authService.hasRole(['ADMIN'])) {

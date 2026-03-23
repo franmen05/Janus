@@ -186,7 +186,7 @@ export class LoadPortsModalComponent implements OnInit {
 
     const ports = this.catalogPorts()
       .filter(p => codes.has(p.code))
-      .map(p => ({ code: p.code, name: p.name }));
+      .map(p => ({ code: p.code, name: p.name, description: p.description ?? undefined }));
 
     this.importing.set(true);
     this.portService.bulkImport({ country: this.selectedCountry(), ports }).subscribe({

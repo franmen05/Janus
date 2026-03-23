@@ -9,5 +9,5 @@ public record BulkImportPortsRequest(
         @NotBlank String country,
         @NotEmpty List<@Valid PortEntry> ports
 ) {
-    public record PortEntry(@NotBlank String code, @NotBlank String name) {}
+    public record PortEntry(@NotBlank String code, @NotBlank String name, String description) {}
 }

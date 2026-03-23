@@ -85,6 +85,7 @@ public class PortService {
                 var port = new Port();
                 port.code = entry.code();
                 port.name = entry.name();
+                port.description = entry.description();
                 port.country = request.country();
                 portRepository.persist(port);
                 imported++;
