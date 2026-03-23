@@ -137,10 +137,10 @@ public class DataSeeder {
     }
 
     private void seedPorts() {
-        createPort("HNSPS", "Puerto Cortés", "Principal puerto de Honduras", "HN");
-        createPort("HNTGU", "Toncontín", "Aeropuerto Toncontín, Tegucigalpa", "HN");
-        createPort("HNSAP", "Ramón Villeda Morales", "Aeropuerto de San Pedro Sula", "HN");
+        createPort("HNPCR", "Puerto Cortés", "Principal puerto comercial de Honduras", "HN");
         createPort("HNLCE", "La Ceiba", "Puerto de La Ceiba", "HN");
+        createPort("HNRTB", "Roatán", "Puerto de Roatán, Islas de la Bahía", "HN");
+        createPort("HNTEA", "Tela", "Puerto de Tela", "HN");
     }
 
     private void createPort(String code, String name, String description, String country) {
