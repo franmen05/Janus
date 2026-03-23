@@ -164,7 +164,15 @@
     "DESCRIPTION": "Description",
     "ADDRESS": "Address",
     "SEARCH": "Search by code or name...",
-    "NO_PORTS": "No ports found"
+    "NO_PORTS": "No ports found",
+    "COUNTRY": "Country",
+    "LOAD_PORTS": "Load Ports",
+    "SELECT_COUNTRY": "Country",
+    "SELECT_COUNTRY_PLACEHOLDER": "Select a country...",
+    "ALREADY_LOADED": "Already loaded",
+    "SELECTED_FOR_IMPORT": "ports selected for import",
+    "IMPORT_SELECTED": "Import Selected",
+    "IMPORT_SUCCESS": "Successfully imported {{imported}} ports ({{skipped}} already existed)"
   },
   "CLIENT_TYPES": {
     "COMPANY": "Company",

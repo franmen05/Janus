@@ -1,0 +1,472 @@
+{
+  "countries": [
+    {
+      "code": "HN",
+      "name": "Honduras",
+      "nameEs": "Honduras",
+      "ports": [
+        { "code": "HNSPS", "name": "Puerto Cortés" },
+        { "code": "HNTGU", "name": "Toncontín" },
+        { "code": "HNSAP", "name": "Ramón Villeda Morales" },
+        { "code": "HNLCE", "name": "La Ceiba" },
+        { "code": "HNRTB", "name": "Roatán" },
+        { "code": "HNTEA", "name": "Tela" },
+        { "code": "HNHNN", "name": "Henecán" }
+      ]
+    },
+    {
+      "code": "GT",
+      "name": "Guatemala",
+      "nameEs": "Guatemala",
+      "ports": [
+        { "code": "GTGUA", "name": "Ciudad de Guatemala" },
+        { "code": "GTPRQ", "name": "Puerto Quetzal" },
+        { "code": "GTSTC", "name": "Santo Tomás de Castilla" },
+        { "code": "GTPBR", "name": "Puerto Barrios" },
+        { "code": "GTCHR", "name": "Champerico" }
+      ]
+    },
+    {
+      "code": "SV",
+      "name": "El Salvador",
+      "nameEs": "El Salvador",
+      "ports": [
+        { "code": "SVAQJ", "name": "Acajutla" },
+        { "code": "SVSAL", "name": "San Salvador" },
+        { "code": "SVLUN", "name": "La Unión" },
+        { "code": "SVILP", "name": "Ilopango" }
+      ]
+    },
+    {
+      "code": "CR",
+      "name": "Costa Rica",
+      "nameEs": "Costa Rica",
+      "ports": [
+        { "code": "CRSJO", "name": "San José" },
+        { "code": "CRLIO", "name": "Puerto Limón" },
+        { "code": "CRPMZ", "name": "Puerto Caldera" },
+        { "code": "CRGLF", "name": "Golfito" },
+        { "code": "CRPAS", "name": "Puntarenas" }
+      ]
+    },
+    {
+      "code": "PA",
+      "name": "Panama",
+      "nameEs": "Panamá",
+      "ports": [
+        { "code": "PABLB", "name": "Balboa" },
+        { "code": "PACTB", "name": "Cristóbal" },
+        { "code": "PAMIT", "name": "Manzanillo International Terminal" },
+        { "code": "PAPTY", "name": "Panamá City" },
+        { "code": "PACFZ", "name": "Colón Free Zone" },
+        { "code": "PABOC", "name": "Bocas del Toro" },
+        { "code": "PAPVE", "name": "Puerto de Vacamonte" }
+      ]
+    },
+    {
+      "code": "NI",
+      "name": "Nicaragua",
+      "nameEs": "Nicaragua",
+      "ports": [
+        { "code": "NIMGA", "name": "Managua" },
+        { "code": "NICIO", "name": "Corinto" },
+        { "code": "NIBEF", "name": "Bluefields" },
+        { "code": "NIPSC", "name": "Puerto Sandino" },
+        { "code": "NISJS", "name": "San Juan del Sur" }
+      ]
+    },
+    {
+      "code": "BZ",
+      "name": "Belize",
+      "nameEs": "Belice",
+      "ports": [
+        { "code": "BZBZE", "name": "Belize City" },
+        { "code": "BZBGK", "name": "Big Creek" },
+        { "code": "BZCMT", "name": "Commerce Bight" }
+      ]
+    },
+    {
+      "code": "DO",
+      "name": "Dominican Republic",
+      "nameEs": "República Dominicana",
+      "ports": [
+        { "code": "DOSDQ", "name": "Santo Domingo" },
+        { "code": "DOHAV", "name": "Haina" },
+        { "code": "DOCAU", "name": "Caucedo" },
+        { "code": "DOPOP", "name": "Puerto Plata" },
+        { "code": "DOBRE", "name": "Boca Chica" },
+        { "code": "DOSPM", "name": "San Pedro de Macorís" }
+      ]
+    },
+    {
+      "code": "CU",
+      "name": "Cuba",
+      "nameEs": "Cuba",
+      "ports": [
+        { "code": "CUHAV", "name": "La Habana" },
+        { "code": "CUSCU", "name": "Santiago de Cuba" },
+        { "code": "CUCFG", "name": "Cienfuegos" },
+        { "code": "CUMAR", "name": "Mariel" },
+        { "code": "CUMAT", "name": "Matanzas" }
+      ]
+    },
+    {
+      "code": "JM",
+      "name": "Jamaica",
+      "nameEs": "Jamaica",
+      "ports": [
+        { "code": "JMKIN", "name": "Kingston" },
+        { "code": "JMMOB", "name": "Montego Bay" },
+        { "code": "JMPKE", "name": "Port Kaiser" },
+        { "code": "JMOCH", "name": "Ocho Rios" }
+      ]
+    },
+    {
+      "code": "TT",
+      "name": "Trinidad and Tobago",
+      "nameEs": "Trinidad y Tobago",
+      "ports": [
+        { "code": "TTPOS", "name": "Port of Spain" },
+        { "code": "TTPTP", "name": "Point Lisas" },
+        { "code": "TTTOB", "name": "Scarborough" },
+        { "code": "TTPLP", "name": "Pointe-a-Pierre" }
+      ]
+    },
+    {
+      "code": "PR",
+      "name": "Puerto Rico",
+      "nameEs": "Puerto Rico",
+      "ports": [
+        { "code": "PRSJU", "name": "San Juan" },
+        { "code": "PRPSE", "name": "Ponce" },
+        { "code": "PRMAZ", "name": "Mayagüez" },
+        { "code": "PRFAJ", "name": "Fajardo" }
+      ]
+    },
+    {
+      "code": "US",
+      "name": "United States",
+      "nameEs": "Estados Unidos",
+      "ports": [
+        { "code": "USLAX", "name": "Los Angeles" },
+        { "code": "USLGB", "name": "Long Beach" },
+        { "code": "USHOU", "name": "Houston" },
+        { "code": "USMIA", "name": "Miami" },
+        { "code": "USNYC", "name": "New York / New Jersey" },
+        { "code": "USSAV", "name": "Savannah" },
+        { "code": "USSEA", "name": "Seattle" },
+        { "code": "USTIW", "name": "Tacoma" },
+        { "code": "USBAL", "name": "Baltimore" },
+        { "code": "USCHS", "name": "Charleston" },
+        { "code": "USORF", "name": "Norfolk" },
+        { "code": "USJAX", "name": "Jacksonville" },
+        { "code": "USOAK", "name": "Oakland" },
+        { "code": "USNOR", "name": "New Orleans" },
+        { "code": "USPHL", "name": "Philadelphia" }
+      ]
+    },
+    {
+      "code": "MX",
+      "name": "Mexico",
+      "nameEs": "México",
+      "ports": [
+        { "code": "MXVER", "name": "Veracruz" },
+        { "code": "MXMZL", "name": "Manzanillo" },
+        { "code": "MXLZC", "name": "Lázaro Cárdenas" },
+        { "code": "MXATM", "name": "Altamira" },
+        { "code": "MXMEX", "name": "Ciudad de México" },
+        { "code": "MXESE", "name": "Ensenada" },
+        { "code": "MXPRO", "name": "Progreso" },
+        { "code": "MXTAM", "name": "Tampico" },
+        { "code": "MXCOA", "name": "Coatzacoalcos" },
+        { "code": "MXSAL", "name": "Salina Cruz" }
+      ]
+    },
+    {
+      "code": "CA",
+      "name": "Canada",
+      "nameEs": "Canadá",
+      "ports": [
+        { "code": "CAVAN", "name": "Vancouver" },
+        { "code": "CAMTR", "name": "Montreal" },
+        { "code": "CAHAL", "name": "Halifax" },
+        { "code": "CATOR", "name": "Toronto" },
+        { "code": "CAPRR", "name": "Prince Rupert" },
+        { "code": "CASJB", "name": "Saint John" },
+        { "code": "CAHAM", "name": "Hamilton" },
+        { "code": "CAQUE", "name": "Québec" }
+      ]
+    },
+    {
+      "code": "CO",
+      "name": "Colombia",
+      "nameEs": "Colombia",
+      "ports": [
+        { "code": "COCTG", "name": "Cartagena" },
+        { "code": "COBUN", "name": "Buenaventura" },
+        { "code": "COBAQ", "name": "Barranquilla" },
+        { "code": "COSMR", "name": "Santa Marta" },
+        { "code": "COBOG", "name": "Bogotá" },
+        { "code": "COTRB", "name": "Turbo" }
+      ]
+    },
+    {
+      "code": "VE",
+      "name": "Venezuela",
+      "nameEs": "Venezuela",
+      "ports": [
+        { "code": "VELAG", "name": "La Guaira" },
+        { "code": "VEPBL", "name": "Puerto Cabello" },
+        { "code": "VEMAR", "name": "Maracaibo" },
+        { "code": "VEGUQ", "name": "Guanta" },
+        { "code": "VECCS", "name": "Caracas" }
+      ]
+    },
+    {
+      "code": "EC",
+      "name": "Ecuador",
+      "nameEs": "Ecuador",
+      "ports": [
+        { "code": "ECGYE", "name": "Guayaquil" },
+        { "code": "ECESM", "name": "Esmeraldas" },
+        { "code": "ECMEC", "name": "Manta" },
+        { "code": "ECUIO", "name": "Quito" },
+        { "code": "ECBOL", "name": "Bolívar" }
+      ]
+    },
+    {
+      "code": "PE",
+      "name": "Peru",
+      "nameEs": "Perú",
+      "ports": [
+        { "code": "PECLL", "name": "Callao" },
+        { "code": "PEPAI", "name": "Paita" },
+        { "code": "PELIM", "name": "Lima" },
+        { "code": "PEILO", "name": "Ilo" },
+        { "code": "PEPIS", "name": "Pisco" },
+        { "code": "PECHM", "name": "Chimbote" }
+      ]
+    },
+    {
+      "code": "BR",
+      "name": "Brazil",
+      "nameEs": "Brasil",
+      "ports": [
+        { "code": "BRSSZ", "name": "Santos" },
+        { "code": "BRPNG", "name": "Paranaguá" },
+        { "code": "BRRIG", "name": "Rio Grande" },
+        { "code": "BRRIO", "name": "Río de Janeiro" },
+        { "code": "BRITJ", "name": "Itajaí" },
+        { "code": "BRSSA", "name": "Salvador" },
+        { "code": "BRSUA", "name": "Suape" },
+        { "code": "BRFOR", "name": "Fortaleza" },
+        { "code": "BRMAN", "name": "Manaos" },
+        { "code": "BRSPB", "name": "São Paulo" },
+        { "code": "BRVIT", "name": "Vitória" },
+        { "code": "BRBEL", "name": "Belém" }
+      ]
+    },
+    {
+      "code": "CL",
+      "name": "Chile",
+      "nameEs": "Chile",
+      "ports": [
+        { "code": "CLVAP", "name": "Valparaíso" },
+        { "code": "CLSAI", "name": "San Antonio" },
+        { "code": "CLSCL", "name": "Santiago" },
+        { "code": "CLIQQ", "name": "Iquique" },
+        { "code": "CLARI", "name": "Arica" },
+        { "code": "CLCNL", "name": "Coronel" },
+        { "code": "CLTAL", "name": "Talcahuano" },
+        { "code": "CLPAG", "name": "Punta Arenas" }
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Argentina",
+      "nameEs": "Argentina",
+      "ports": [
+        { "code": "ARBUE", "name": "Buenos Aires" },
+        { "code": "ARROS", "name": "Rosario" },
+        { "code": "ARBHI", "name": "Bahía Blanca" },
+        { "code": "ARMDZ", "name": "Mendoza" },
+        { "code": "ARSLA", "name": "San Lorenzo" },
+        { "code": "ARMDQ", "name": "Mar del Plata" },
+        { "code": "ARUSM", "name": "Ushuaia" },
+        { "code": "ARQUE", "name": "Quequén" }
+      ]
+    },
+    {
+      "code": "UY",
+      "name": "Uruguay",
+      "nameEs": "Uruguay",
+      "ports": [
+        { "code": "UYMVD", "name": "Montevideo" },
+        { "code": "UYNVP", "name": "Nueva Palmira" },
+        { "code": "UYPDP", "name": "Punta del Este" },
+        { "code": "UYFBG", "name": "Fray Bentos" }
+      ]
+    },
+    {
+      "code": "ES",
+      "name": "Spain",
+      "nameEs": "España",
+      "ports": [
+        { "code": "ESBCN", "name": "Barcelona" },
+        { "code": "ESVLC", "name": "Valencia" },
+        { "code": "ESALG", "name": "Algeciras" },
+        { "code": "ESLPA", "name": "Las Palmas" },
+        { "code": "ESBIO", "name": "Bilbao" },
+        { "code": "ESMAD", "name": "Madrid" },
+        { "code": "ESVGO", "name": "Vigo" },
+        { "code": "ESTAR", "name": "Tarragona" }
+      ]
+    },
+    {
+      "code": "NL",
+      "name": "Netherlands",
+      "nameEs": "Países Bajos",
+      "ports": [
+        { "code": "NLRTM", "name": "Rotterdam" },
+        { "code": "NLAMS", "name": "Amsterdam" },
+        { "code": "NLVLI", "name": "Vlissingen" },
+        { "code": "NLMOE", "name": "Moerdijk" },
+        { "code": "NLTNZ", "name": "Terneuzen" }
+      ]
+    },
+    {
+      "code": "DE",
+      "name": "Germany",
+      "nameEs": "Alemania",
+      "ports": [
+        { "code": "DEHAM", "name": "Hamburg" },
+        { "code": "DEBRV", "name": "Bremerhaven" },
+        { "code": "DEWVN", "name": "Wilhelmshaven" },
+        { "code": "DELBC", "name": "Lübeck" },
+        { "code": "DEROS", "name": "Rostock" },
+        { "code": "DEFRA", "name": "Frankfurt" }
+      ]
+    },
+    {
+      "code": "BE",
+      "name": "Belgium",
+      "nameEs": "Bélgica",
+      "ports": [
+        { "code": "BEANR", "name": "Antwerp" },
+        { "code": "BEZEE", "name": "Zeebrugge" },
+        { "code": "BEGNE", "name": "Ghent" },
+        { "code": "BEBRU", "name": "Brussels" }
+      ]
+    },
+    {
+      "code": "IT",
+      "name": "Italy",
+      "nameEs": "Italia",
+      "ports": [
+        { "code": "ITGOA", "name": "Genoa" },
+        { "code": "ITGIT", "name": "Gioia Tauro" },
+        { "code": "ITLIV", "name": "Livorno" },
+        { "code": "ITNAP", "name": "Naples" },
+        { "code": "ITTRS", "name": "Trieste" },
+        { "code": "ITCVV", "name": "Civitavecchia" },
+        { "code": "ITVEN", "name": "Venice" }
+      ]
+    },
+    {
+      "code": "FR",
+      "name": "France",
+      "nameEs": "Francia",
+      "ports": [
+        { "code": "FRLEH", "name": "Le Havre" },
+        { "code": "FRMRS", "name": "Marseille" },
+        { "code": "FRDKK", "name": "Dunkerque" },
+        { "code": "FRNTE", "name": "Nantes" },
+        { "code": "FRPAR", "name": "Paris" },
+        { "code": "FRBOD", "name": "Bordeaux" }
+      ]
+    },
+    {
+      "code": "GB",
+      "name": "United Kingdom",
+      "nameEs": "Reino Unido",
+      "ports": [
+        { "code": "GBFXT", "name": "Felixstowe" },
+        { "code": "GBSOU", "name": "Southampton" },
+        { "code": "GBLON", "name": "London" },
+        { "code": "GBLIV", "name": "Liverpool" },
+        { "code": "GBIMM", "name": "Immingham" },
+        { "code": "GBGRG", "name": "Grangemouth" },
+        { "code": "GBTIL", "name": "Tilbury" }
+      ]
+    },
+    {
+      "code": "CN",
+      "name": "China",
+      "nameEs": "China",
+      "ports": [
+        { "code": "CNSHA", "name": "Shanghai" },
+        { "code": "CNSZX", "name": "Shenzhen" },
+        { "code": "CNNGB", "name": "Ningbo" },
+        { "code": "CNQIN", "name": "Qingdao" },
+        { "code": "CNTXG", "name": "Tianjin" },
+        { "code": "CNGZG", "name": "Guangzhou" },
+        { "code": "CNXMN", "name": "Xiamen" },
+        { "code": "CNDLC", "name": "Dalian" },
+        { "code": "CNHKG", "name": "Hong Kong" },
+        { "code": "CNLYG", "name": "Lianyungang" },
+        { "code": "CNFOC", "name": "Fuzhou" },
+        { "code": "CNZHU", "name": "Zhuhai" }
+      ]
+    },
+    {
+      "code": "JP",
+      "name": "Japan",
+      "nameEs": "Japón",
+      "ports": [
+        { "code": "JPTYO", "name": "Tokyo" },
+        { "code": "JPYOK", "name": "Yokohama" },
+        { "code": "JPNGO", "name": "Nagoya" },
+        { "code": "JPOSA", "name": "Osaka" },
+        { "code": "JPUKB", "name": "Kobe" },
+        { "code": "JPKIT", "name": "Kitakyushu" },
+        { "code": "JPSMZ", "name": "Shimizu" },
+        { "code": "JPHKT", "name": "Hakata" }
+      ]
+    },
+    {
+      "code": "KR",
+      "name": "South Korea",
+      "nameEs": "Corea del Sur",
+      "ports": [
+        { "code": "KRPUS", "name": "Busan" },
+        { "code": "KRINC", "name": "Incheon" },
+        { "code": "KRSEL", "name": "Seoul" },
+        { "code": "KRKAN", "name": "Gwangyang" },
+        { "code": "KRUSN", "name": "Ulsan" },
+        { "code": "KRPTK", "name": "Pyeongtaek" }
+      ]
+    },
+    {
+      "code": "SG",
+      "name": "Singapore",
+      "nameEs": "Singapur",
+      "ports": [
+        { "code": "SGSIN", "name": "Singapore" },
+        { "code": "SGJUR", "name": "Jurong" },
+        { "code": "SGPAS", "name": "Pasir Panjang" }
+      ]
+    },
+    {
+      "code": "TW",
+      "name": "Taiwan",
+      "nameEs": "Taiwán",
+      "ports": [
+        { "code": "TWKHH", "name": "Kaohsiung" },
+        { "code": "TWKEL", "name": "Keelung" },
+        { "code": "TWTPE", "name": "Taipei" },
+        { "code": "TWTXG", "name": "Taichung" },
+        { "code": "TWHUN", "name": "Hualien" }
+      ]
+    }
+  ]
+}

@@ -9,6 +9,7 @@ public record PortResponse(
         String name,
         String description,
         String address,
+        String country,
         LocalDateTime createdAt
 ) {
     public static PortResponse from(Port port) {
@@ -18,6 +19,7 @@ public record PortResponse(
                 port.name,
                 port.description,
                 port.address,
+                port.country,
                 port.createdAt
         );
     }

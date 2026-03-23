@@ -6,5 +6,6 @@ public record CreatePortRequest(
         @NotBlank String code,
         @NotBlank String name,
         String description,
-        String address
+        String address,
+        String country
 ) {}

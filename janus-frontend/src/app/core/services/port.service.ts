@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Port, CreatePortRequest } from '../models/port.model';
+import { Port, CreatePortRequest, CatalogCountry, CatalogPort, BulkImportRequest, BulkImportResponse } from '../models/port.model';
 
 @Injectable({ providedIn: 'root' })
 export class PortService {
@@ -23,5 +23,17 @@ export class PortService {
 
   update(id: number, request: CreatePortRequest): Observable<Port> {
     return this.http.put<Port>(`${this.apiUrl}/${id}`, request);
+  }
+
+  getCatalogCountries(): Observable<CatalogCountry[]> {
+    return this.http.get<CatalogCountry[]>(`${this.apiUrl}/catalog/countries`);
+  }
+
+  getCatalogPorts(countryCode: string): Observable<CatalogPort[]> {
+    return this.http.get<CatalogPort[]>(`${this.apiUrl}/catalog/countries/${countryCode}/ports`);
+  }
+
+  bulkImport(request: BulkImportRequest): Observable<BulkImportResponse> {
+    return this.http.post<BulkImportResponse>(`${this.apiUrl}/bulk-import`, request);
   }
 }

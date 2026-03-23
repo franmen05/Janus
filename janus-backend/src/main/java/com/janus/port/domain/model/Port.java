@@ -20,4 +20,7 @@ public class Port extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     public String address;
+
+    @Column(length = 2)
+    public String country;
 }
