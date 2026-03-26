@@ -5,14 +5,17 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PaymentService } from '../../../core/services/payment.service';
 import { InspectionService } from '../../../core/services/inspection.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ClientService } from '../../../core/services/client.service';
+import { Client } from '../../../core/models/client.model';
 import { Operation } from '../../../core/models/operation.model';
 import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/models/payment.model';
 import { ChargeCrossReference } from '../../../core/models/inspection.model';
+import { ChargesTableComponent } from '../../../shared/components/charges-table/charges-table.component';
 
 @Component({
   selector: 'app-payment-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, ChargesTableComponent],
   template: `
     <!-- Cross-Reference Section -->
     @if (crossReference()) {
@@ -106,6 +109,14 @@ import { ChargeCrossReference } from '../../../core/models/inspection.model';
         </div>
       </div>
     }
+
+    <!-- Charges Table -->
+    <app-charges-table class="mb-3 d-block"
+      [operationId]="operationId()"
+      [operation]="operation()"
+      [operationSummary]="operationSummary()"
+      [clients]="clients()"
+      (changed)="onChargesChanged()" />
 
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
@@ -373,6 +384,7 @@ export class PaymentPanelComponent implements OnInit {
   private paymentService = inject(PaymentService);
   private inspectionService = inject(InspectionService);
   private translate = inject(TranslateService);
+  private clientService = inject(ClientService);
   authService = inject(AuthService);
 
   // State
@@ -382,6 +394,21 @@ export class PaymentPanelComponent implements OnInit {
   sendingToBilling = signal(false);
   generating = signal(false);
   saving = signal(false);
+  clients = signal<Client[]>([]);
+
+  operationSummary = computed(() => {
+    const op = this.operation();
+    if (!op) return null;
+    return {
+      pieces: op.pieces,
+      grossWeight: op.grossWeight,
+      volumetricWeight: op.volumetricWeight,
+      volume: op.volume,
+      declaredValue: op.declaredValue,
+      clientName: op.clientName,
+      blNumber: op.blNumber
+    };
+  });
 
   allCategories = computed(() => {
     const cr = this.crossReference();
@@ -415,6 +442,7 @@ export class PaymentPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.clientService.getAll().subscribe(c => this.clients.set(c));
   }
 
   loadData(): void {
@@ -554,6 +582,22 @@ export class PaymentPanelComponent implements OnInit {
         this.handleError(err);
       }
     });
+  }
+
+  onChargesChanged(): void {
+    // Reload cross-reference
+    this.inspectionService.getCrossReference(this.operationId()).subscribe({
+      next: (cr) => this.crossReference.set(cr),
+      error: () => {}
+    });
+    // Regenerate liquidation if preliminary
+    if (this.liquidation()?.status === 'PRELIMINARY') {
+      this.paymentService.generateLiquidation(this.operationId(), this.agencyFee ?? undefined).subscribe({
+        next: (l) => this.liquidation.set(l),
+        error: () => {}
+      });
+    }
+    this.changed.emit();
   }
 
   getStatusBadgeClass(status: string): string {
