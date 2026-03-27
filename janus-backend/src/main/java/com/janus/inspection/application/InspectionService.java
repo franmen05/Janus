@@ -16,6 +16,9 @@ import com.janus.inspection.domain.repository.ExpenseCategoryConfigRepository;
 import com.janus.inspection.domain.repository.InspectionExpenseRepository;
 import com.janus.inspection.domain.repository.InspectionPhotoRepository;
 import com.janus.notification.application.NotificationService;
+import com.janus.payment.application.LiquidationService;
+import com.janus.payment.domain.model.Liquidation;
+import com.janus.payment.domain.model.LiquidationStatus;
 import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.application.OperationService;
 import com.janus.operation.domain.model.InspectionType;
@@ -72,6 +75,9 @@ public class InspectionService {
 
     @Inject
     NotificationService notificationService;
+
+    @Inject
+    LiquidationService liquidationService;
 
     @Inject
     Event<AuditEvent> auditEvent;
@@ -235,6 +241,8 @@ public class InspectionService {
 
         LOG.infof("Expense added for operation %d by %s: %s %s", operationId, username, expense.amount, expense.currency);
 
+        regeneratePreliminaryLiquidation(operationId, username);
+
         return expense;
     }
 
@@ -300,6 +308,8 @@ public class InspectionService {
                 "Expense updated: " + request.category() + " - " + expense.amount
         ));
 
+        regeneratePreliminaryLiquidation(operationId, username);
+
         return expense;
     }
 
@@ -326,6 +336,8 @@ public class InspectionService {
                 null, null,
                 "Expense deleted: " + expense.category + " - " + expense.amount
         ));
+
+        regeneratePreliminaryLiquidation(operationId, username);
     }
 
     public List<InspectionExpense> getExpenses(Long operationId, ChargeType chargeType) {
@@ -410,6 +422,13 @@ public class InspectionService {
                 pendingIncomeCharges.size(), operationId, username);
 
         return new SendToBillingResponse(pendingIncomeCharges.size());
+    }
+
+    private void regeneratePreliminaryLiquidation(Long operationId, String username) {
+        var existing = (Liquidation) Liquidation.find("operation.id = ?1", operationId).firstResult();
+        if (existing != null ) {
+            liquidationService.generateLiquidation(operationId, existing.totalAgencyServices, username);
+        }
     }
 
     private List<ChargeCrossReferenceResponse.CategoryBreakdown> buildCategoryBreakdown(List<InspectionExpense> charges) {
