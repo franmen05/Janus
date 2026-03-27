@@ -19,6 +19,16 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
   standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule, FileUploadComponent, StatusBadgeComponent, ChargesTableComponent],
   template: `
+    <!-- Charges section: visible when inspection type is set -->
+    @if (operation()?.inspectionType) {
+      <app-charges-table class="mb-3 d-block"
+        [operationId]="operationId()"
+        [operation]="operation()"
+        [operationSummary]="operationSummary()"
+        [clients]="clients()"
+        (changed)="onChargesChanged()" />
+    }
+
     <div class="card mt-3">
       <div class="card-header">
         <h6 class="mb-0">{{ 'INSPECTION.TYPE_LABEL' | translate }}</h6>
@@ -103,15 +113,6 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
           }
         }
 
-        <!-- Charges section: visible when inspection type is set -->
-        @if (operation()?.inspectionType) {
-          <app-charges-table class="mt-3 d-block"
-            [operationId]="operationId()"
-            [operation]="operation()"
-            [operationSummary]="operationSummary()"
-            [clients]="clients()"
-            (changed)="onChargesChanged()" />
-        }
       </div>
     </div>
   `

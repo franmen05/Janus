@@ -233,14 +233,17 @@ import { Client } from '../../../../core/models/client.model';
               <div class="form-check form-check-inline">
                 <input type="checkbox" class="form-check-input" formControlName="showOnDocuments" id="showOnDocuments">
                 <label class="form-check-label" for="showOnDocuments">{{ 'INSPECTION.SHOW_ON_DOCUMENTS' | translate }}</label>
+                <i class="bi bi-info-circle text-muted ms-1" style="cursor:pointer" [ngbTooltip]="'INSPECTION.SHOW_ON_DOCUMENTS_TOOLTIP' | translate" triggers="click:blur" placement="top"></i>
               </div>
               <div class="form-check form-check-inline">
                 <input type="checkbox" class="form-check-input" formControlName="updateRelated" id="updateRelated">
                 <label class="form-check-label" for="updateRelated">{{ 'INSPECTION.UPDATE_RELATED' | translate }}</label>
+                <i class="bi bi-info-circle text-muted ms-1" style="cursor:pointer" [ngbTooltip]="'INSPECTION.UPDATE_RELATED_TOOLTIP' | translate" triggers="click:blur" placement="top"></i>
               </div>
               <div class="form-check form-check-inline">
                 <input type="checkbox" class="form-check-input" formControlName="reimbursable" id="reimbursable">
                 <label class="form-check-label" for="reimbursable">{{ 'INSPECTION.REIMBURSABLE' | translate }}</label>
+                <i class="bi bi-info-circle text-muted ms-1" style="cursor:pointer" [ngbTooltip]="'INSPECTION.REIMBURSABLE_TOOLTIP' | translate" triggers="click:blur" placement="top"></i>
               </div>
             </div>
           </div>

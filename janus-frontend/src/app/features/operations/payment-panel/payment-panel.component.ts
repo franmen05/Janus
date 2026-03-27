@@ -17,6 +17,14 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
   standalone: true,
   imports: [CommonModule, FormsModule, TranslateModule, ChargesTableComponent],
   template: `
+    <!-- Charges Table -->
+    <app-charges-table class="mb-3 d-block"
+      [operationId]="operationId()"
+      [operation]="operation()"
+      [operationSummary]="operationSummary()"
+      [clients]="clients()"
+      (changed)="onChargesChanged()" />
+
     <!-- Cross-Reference Section -->
     @if (crossReference()) {
       <div class="card mb-3">
@@ -109,14 +117,6 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
         </div>
       </div>
     }
-
-    <!-- Charges Table -->
-    <app-charges-table class="mb-3 d-block"
-      [operationId]="operationId()"
-      [operation]="operation()"
-      [operationSummary]="operationSummary()"
-      [clients]="clients()"
-      (changed)="onChargesChanged()" />
 
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
