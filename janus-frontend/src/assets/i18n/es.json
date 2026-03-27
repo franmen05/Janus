@@ -553,7 +553,8 @@
     "INSPECTION_TYPE_MISSING": "El tipo de inspecci\u00f3n debe ser establecido antes de avanzar a Revisi\u00f3n de Valoraci\u00f3n",
     "INCOMPLETE_DOCS_FOR_PAYMENT": "La lista de verificaci\u00f3n documental debe estar completa (100%) antes de avanzar a Preparaci\u00f3n de Pago",
     "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "La lista de verificaci\u00f3n documental debe estar completa antes de avanzar a Preparaci\u00f3n de Pago",
-    "DECLARATION_NUMBER_MISSING": "La declaraci\u00f3n preliminar debe tener un n\u00famero de declaraci\u00f3n antes de avanzar a Presentado a Aduanas"
+    "DECLARATION_NUMBER_MISSING": "La declaraci\u00f3n preliminar debe tener un n\u00famero de declaraci\u00f3n antes de avanzar a Presentado a Aduanas",
+    "LIQUIDATION_PAID_FOR_CLOSING": "La liquidaci\u00f3n debe estar pagada antes de cerrar la operaci\u00f3n"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Tipo de Inspecci\u00f3n",

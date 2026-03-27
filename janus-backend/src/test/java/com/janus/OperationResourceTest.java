@@ -97,6 +97,48 @@ class OperationResourceTest {
                 .then().statusCode(200);
     }
 
+    private static void completeLiquidationLifecycle(Long operationId) {
+        // Generate liquidation
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"agencyServiceFee": 100.00}
+                        """)
+                .when().post("/api/operations/{opId}/liquidation", operationId)
+                .then().statusCode(201);
+
+        // Approve liquidation
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"comment": "Approved for test"}
+                        """)
+                .when().post("/api/operations/{opId}/liquidation/approve", operationId)
+                .then().statusCode(200);
+
+        // Make definitive
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"dgaPaymentCode": "DGA-TEST-001"}
+                        """)
+                .when().post("/api/operations/{opId}/liquidation/definitive", operationId)
+                .then().statusCode(200);
+
+        // Register payment
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"amount": 1000.00, "paymentMethod": "BANK_TRANSFER", "paymentDate": "2025-12-01", "dgaReference": "DGA-REF-001", "bankReference": "BANK-REF-001", "notes": "Test payment"}
+                        """)
+                .when().post("/api/operations/{opId}/liquidation/payment", operationId)
+                .then().statusCode(201);
+    }
+
     private static void registerFinalDeclarationAndCrossing(Long operationId) {
         given()
                 .auth().basic("admin", "admin123")
@@ -395,6 +437,9 @@ class OperationResourceTest {
             if ("CLOSED".equals(status)) {
                 uploadDocument(opId, "RECEPTION_RECEIPT");
             }
+            if ("IN_TRANSIT".equals(status)) {
+                completeLiquidationLifecycle(opId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
@@ -599,6 +644,9 @@ class OperationResourceTest {
                 "VALUATION_REVIEW", "PAYMENT_PREPARATION", "IN_TRANSIT"
         };
         for (var status : postTransitions) {
+            if ("IN_TRANSIT".equals(status)) {
+                completeLiquidationLifecycle(opId);
+            }
             given()
                     .auth().basic("admin", "admin123")
                     .contentType(ContentType.JSON)
