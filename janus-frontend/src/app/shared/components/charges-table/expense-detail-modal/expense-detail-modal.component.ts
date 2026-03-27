@@ -57,12 +57,12 @@ import { Client } from '../../../../core/models/client.model';
           }
 
           @if (expense!.billToType) {
-            <dt class="col-sm-4">{{ 'INSPECTION.BILL_TO' | translate }}</dt>
+            <dt class="col-sm-4">{{ (expense!.chargeType === 'EXPENSE' ? 'INSPECTION.RESPONSIBLE' : 'INSPECTION.BILL_TO') | translate }}</dt>
             <dd class="col-sm-8">{{ 'INSPECTION.BILL_TO_' + expense!.billToType | translate }}</dd>
           }
 
           @if (expense!.billToName) {
-            <dt class="col-sm-4">{{ 'INSPECTION.BILL_TO_NAME' | translate }}</dt>
+            <dt class="col-sm-4">{{ (expense!.chargeType === 'EXPENSE' ? 'INSPECTION.RESPONSIBLE_NAME' : 'INSPECTION.BILL_TO_NAME') | translate }}</dt>
             <dd class="col-sm-8">{{ expense!.billToName }}</dd>
           }
 
@@ -175,7 +175,7 @@ import { Client } from '../../../../core/models/client.model';
           <!-- Row 2: Bill To Type, Bill To Name, Invoice Number, Invoice Date, Reference -->
           <div class="row g-2 mb-3 align-items-end">
             <div class="col-md-2">
-              <label class="form-label">{{ 'INSPECTION.BILL_TO' | translate }}</label>
+              <label class="form-label">{{ (activeTab() === 'EXPENSE' ? 'INSPECTION.RESPONSIBLE' : 'INSPECTION.BILL_TO') | translate }}</label>
               <select class="form-select form-select-sm" formControlName="billToType">
                 <option value="">-</option>
                 <option value="COMPANY">{{ 'INSPECTION.BILL_TO_COMPANY' | translate }}</option>
@@ -184,7 +184,7 @@ import { Client } from '../../../../core/models/client.model';
               </select>
             </div>
             <div class="col-md-3">
-              <label class="form-label">{{ 'INSPECTION.BILL_TO_NAME' | translate }}</label>
+              <label class="form-label">{{ (activeTab() === 'EXPENSE' ? 'INSPECTION.RESPONSIBLE_NAME' : 'INSPECTION.BILL_TO_NAME') | translate }}</label>
               <input type="text" class="form-control form-control-sm"
                 formControlName="billToName"
                 [ngbTypeahead]="searchClient"

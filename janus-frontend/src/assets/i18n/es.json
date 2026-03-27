@@ -596,6 +596,7 @@
     "CATEGORY_OTHER": "Otro",
     "VIEW_EXPENSE": "Detalle de Gasto",
     "RESPONSIBLE": "Responsable",
+    "RESPONSIBLE_NAME": "Nombre del Responsable",
     "PAYMENT_STATUS": "Estado de Pago",
     "PAYMENT_PENDING": "Pendiente",
     "PAYMENT_PAID": "Pagado",

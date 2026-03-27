@@ -596,6 +596,7 @@
     "CATEGORY_OTHER": "Other",
     "VIEW_EXPENSE": "Expense Detail",
     "RESPONSIBLE": "Responsible",
+    "RESPONSIBLE_NAME": "Responsible Name",
     "PAYMENT_STATUS": "Payment Status",
     "PAYMENT_PENDING": "Pending",
     "PAYMENT_PAID": "Paid",
