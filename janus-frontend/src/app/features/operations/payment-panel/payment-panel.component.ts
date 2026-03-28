@@ -203,8 +203,8 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                   <tr>
                     <th class="border-0 text-muted small fw-semibold pb-2">{{ 'PAYMENT.CONCEPT' | translate }}</th>
                     <th class="border-0 text-muted small fw-semibold pb-2 d-none d-sm-table-cell">{{ 'PAYMENT.DESCRIPTION' | translate }}</th>
-                    <th class="border-0 text-end text-muted small fw-semibold pb-2">{{ 'PAYMENT.AMOUNT' | translate }}</th>
-                    <th class="border-0 text-muted small fw-semibold pb-2">{{ 'PAYMENT.TYPE' | translate }}</th>
+                    <th class="border-0 text-end text-muted small fw-semibold pb-2" style="white-space: nowrap">{{ 'PAYMENT.AMOUNT' | translate }}</th>
+                    <th class="border-0 text-muted small fw-semibold pb-2" style="white-space: nowrap">{{ 'PAYMENT.TYPE' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -212,13 +212,20 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                     <tr>
                       <td class="border-0 py-1">{{ 'PAYMENT.CONCEPT_' + line.concept | translate }}</td>
                       <td class="border-0 py-1 text-muted small d-none d-sm-table-cell">{{ line.description ?? '&mdash;' }}</td>
-                      <td class="border-0 py-1 text-end fw-medium">{{ line.amount | number:'1.2-2' }}</td>
-                      <td class="border-0 py-1">
-                        @if (line.reimbursable) {
-                          <span class="badge bg-info bg-opacity-10 text-info">{{ 'PAYMENT.REIMBURSABLE' | translate }}</span>
-                        } @else {
-                          <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ 'PAYMENT.OWN_SERVICE' | translate }}</span>
-                        }
+                      <td class="border-0 py-1 text-end fw-medium" style="white-space: nowrap" [ngClass]="line.chargeType === 'INCOME' ? 'text-success' : 'text-danger'">
+                        {{ line.amount | number:'1.2-2' }}
+                      </td>
+                      <td class="border-0 py-1" style="white-space: nowrap; vertical-align: middle">
+                        <div class="d-inline-flex align-items-center gap-1">
+                          @if (line.chargeType === 'INCOME') {
+                            <span class="badge text-center" style="background: rgba(25,135,84,0.1); color: var(--bs-success); font-size: 0.75em; padding: 0.35em 0.65em; line-height: 1; min-width: 5.5em">{{ 'PAYMENT.INCOME' | translate }}</span>
+                          } @else {
+                            <span class="badge text-center" style="background: rgba(220,53,69,0.1); color: var(--bs-danger); font-size: 0.75em; padding: 0.35em 0.65em; line-height: 1; min-width: 5.5em">{{ 'PAYMENT.EXPENSES' | translate }}</span>
+                          }
+                          @if (line.reimbursable) {
+                            <span class="badge" style="background: rgba(108,117,125,0.1); color: #6c757d; font-size: 0.75em; padding: 0.35em 0.65em; line-height: 1"><i class="bi bi-arrow-repeat me-1"></i>{{ 'PAYMENT.REIMBURSABLE' | translate }}</span>
+                          }
+                        </div>
                       </td>
                     </tr>
                   }

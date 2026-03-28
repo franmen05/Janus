@@ -251,7 +251,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
         </div>
       }
 
-      <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeTab">
+      <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeTab" (activeIdChange)="onTabChange($event)">
         <li [ngbNavItem]="'info'">
           <button ngbNavLink>{{ 'TABS.INFO' | translate }}</button>
           <ng-template ngbNavContent>
@@ -618,6 +618,15 @@ export class OperationDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  onTabChange(tabId: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: tabId },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
   }
 
   private setDefaultTab(status: string): void {

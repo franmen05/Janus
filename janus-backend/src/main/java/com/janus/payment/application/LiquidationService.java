@@ -4,6 +4,7 @@ import com.janus.declaration.domain.model.Declaration;
 import com.janus.declaration.domain.model.DeclarationType;
 import com.janus.declaration.domain.model.TariffLine;
 import com.janus.declaration.domain.service.PreliquidationService;
+import com.janus.inspection.domain.model.ChargeType;
 import com.janus.inspection.domain.model.InspectionExpense;
 import com.janus.operation.application.OperationService;
 import com.janus.payment.api.dto.RegisterPaymentRequest;
@@ -86,6 +87,7 @@ public class LiquidationService {
         taxLine.amount = preliqResult.totalTaxes();
         taxLine.lineOrder = lineOrder++;
         taxLine.reimbursable = false;
+        taxLine.chargeType = ChargeType.EXPENSE;
         liquidation.lines.add(taxLine);
 
         var totalCustomsTaxes = preliqResult.totalTaxes();
@@ -101,6 +103,7 @@ public class LiquidationService {
                 expenseLine.amount = expense.amount;
                 expenseLine.lineOrder = lineOrder++;
                 expenseLine.reimbursable = true;
+                expenseLine.chargeType = expense.chargeType;
                 liquidation.lines.add(expenseLine);
                 totalThirdParty = totalThirdParty.add(expense.amount);
             }
@@ -116,6 +119,7 @@ public class LiquidationService {
             agencyLine.amount = agencyServiceFee;
             agencyLine.lineOrder = lineOrder++;
             agencyLine.reimbursable = false;
+            agencyLine.chargeType = ChargeType.INCOME;
             liquidation.lines.add(agencyLine);
             totalAgencyServices = agencyServiceFee;
         }

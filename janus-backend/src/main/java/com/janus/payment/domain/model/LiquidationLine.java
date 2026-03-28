@@ -1,8 +1,11 @@
 package com.janus.payment.domain.model;
 
+import com.janus.inspection.domain.model.ChargeType;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -35,4 +38,8 @@ public class LiquidationLine extends PanacheEntity {
 
     @Column(nullable = false)
     public boolean reimbursable = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "charge_type")
+    public ChargeType chargeType = ChargeType.EXPENSE;
 }
