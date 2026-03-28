@@ -905,7 +905,10 @@
     "SENT_TO_BILLING_SUCCESS": "{{count}} ingresos enviados a facturaci\u00f3n",
     "BILLING_PROGRESS": "{{sent}} de {{total}} ingresos enviados a facturaci\u00f3n",
     "ALL_SENT_TO_BILLING": "Todos los ingresos enviados a facturaci\u00f3n",
-    "NO_CHARGES": "No hay cargos registrados"
+    "NO_CHARGES": "No hay cargos registrados",
+    "SUBTOTAL": "Subtotal",
+    "LIQUIDATION_SECTION": "Liquidación",
+    "PROFIT_PERCENT": "% Beneficio"
   },
   "EXCHANGE_RATES": {
     "TITLE": "Tasas de Cambio",

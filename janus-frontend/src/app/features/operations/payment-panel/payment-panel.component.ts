@@ -25,76 +25,121 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
       [clients]="clients()"
       (changed)="onChargesChanged()" />
 
-    <!-- Cross-Reference Section -->
-    @if (crossReference()) {
-      <div class="card mb-3">
-        <div class="card-header">
-          <h6 class="mb-0"><i class="bi bi-arrow-left-right me-2"></i>{{ 'PAYMENT.CROSS_REFERENCE_TITLE' | translate }}</h6>
-        </div>
-        <div class="card-body">
-          @if (crossReference()!.totalIncome === 0 && crossReference()!.totalExpenses === 0) {
-            <p class="text-muted text-center mb-0">{{ 'PAYMENT.NO_CHARGES' | translate }}</p>
-          } @else {
-            <!-- Summary cards -->
-            <div class="row g-3 mb-3">
-              <div class="col-md-4">
-                <div class="card border">
-                  <div class="card-body py-2 text-center">
-                    <small class="text-muted d-block">{{ 'PAYMENT.TOTAL_INCOME' | translate }}</small>
-                    <strong class="fs-6 text-success">{{ crossReference()!.totalIncome | number:'1.2-2' }}</strong>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="card border">
-                  <div class="card-body py-2 text-center">
-                    <small class="text-muted d-block">{{ 'PAYMENT.TOTAL_EXPENSES' | translate }}</small>
-                    <strong class="fs-6 text-danger">{{ crossReference()!.totalExpenses | number:'1.2-2' }}</strong>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="card border">
-                  <div class="card-body py-2 text-center">
-                    <small class="text-muted d-block">{{ 'PAYMENT.BALANCE' | translate }}</small>
-                    <strong class="fs-6" [ngClass]="{
-                      'text-success': crossReference()!.balance > 0,
-                      'text-danger': crossReference()!.balance < 0,
-                      'text-muted': crossReference()!.balance === 0
-                    }">{{ crossReference()!.balance | number:'1.2-2' }}</strong>
-                  </div>
-                </div>
+    <!-- Liquidation & Payment Card -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h6 class="mb-0"><i class="bi bi-cash-stack me-2"></i>{{ 'PAYMENT.TITLE' | translate }}</h6>
+        @if (liquidation()) {
+          <span class="badge" [ngClass]="getStatusBadgeClass(liquidation()!.status)">
+            {{ 'PAYMENT.STATUS_' + liquidation()!.status | translate }}
+          </span>
+        }
+      </div>
+
+      <!-- ═══ Summary Metrics ═══ -->
+      @if (crossReference() && (crossReference()!.totalIncome > 0 || crossReference()!.totalExpenses > 0)) {
+        <div class="px-3 pt-3">
+          <div class="row g-2 mb-0">
+            <div class="col-6 col-md-3">
+              <div class="rounded-3 p-2 text-center" style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color)">
+                <div class="text-muted small" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em">{{ 'PAYMENT.TOTAL_INCOME' | translate }}</div>
+                <div class="fw-bold text-success">{{ crossReference()!.totalIncome | number:'1.2-2' }}</div>
               </div>
             </div>
-
-            <!-- Breakdown table -->
-            @if (allCategories().length > 0) {
-              <div class="table-responsive mb-3">
-                <table class="table table-sm table-hover">
-                  <thead>
-                    <tr>
-                      <th>{{ 'PAYMENT.CATEGORY' | translate }}</th>
-                      <th class="text-end text-success">{{ 'PAYMENT.INCOME' | translate }}</th>
-                      <th class="text-end text-danger">{{ 'PAYMENT.EXPENSES' | translate }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (cat of allCategories(); track cat) {
-                      <tr>
-                        <td>{{ 'INSPECTION.CATEGORY_' + cat | translate }}</td>
-                        <td class="text-end">{{ getIncomeForCategory(cat) !== null ? (getIncomeForCategory(cat)! | number:'1.2-2') : '-' }}</td>
-                        <td class="text-end">{{ getExpenseForCategory(cat) !== null ? (getExpenseForCategory(cat)! | number:'1.2-2') : '-' }}</td>
-                      </tr>
-                    }
-                  </tbody>
-                </table>
+            <div class="col-6 col-md-3">
+              <div class="rounded-3 p-2 text-center" style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color)">
+                <div class="text-muted small" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em">{{ 'PAYMENT.TOTAL_EXPENSES' | translate }}</div>
+                <div class="fw-bold text-danger">{{ crossReference()!.totalExpenses | number:'1.2-2' }}</div>
               </div>
-            }
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="rounded-3 p-2 text-center" style="background: var(--bs-body-bg); border: 1px solid var(--bs-border-color)">
+                <div class="text-muted small" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em">{{ 'PAYMENT.BALANCE' | translate }}</div>
+                <div class="fw-bold" [ngClass]="{
+                  'text-success': crossReference()!.balance > 0,
+                  'text-danger': crossReference()!.balance < 0,
+                  'text-muted': crossReference()!.balance === 0
+                }">{{ crossReference()!.balance | number:'1.2-2' }}</div>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="rounded-3 p-2 text-center" [style.background]="getProfitBg()" [style.border]="'1px solid ' + getProfitBorderColor()">
+                <div class="small" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em" [style.color]="getProfitColor()">{{ 'PAYMENT.PROFIT_PERCENT' | translate }}</div>
+                <div class="fw-bold fs-6" [style.color]="getProfitColor()">{{ profitPercent() | number:'1.1-1' }}%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
 
-            <!-- Send to billing -->
-            @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-              <div class="d-flex align-items-center justify-content-between border-top pt-3">
-                <span class="text-muted">
+      <!-- ═══ Cross-Reference Section ═══ -->
+      @if (crossReference()) {
+        @if (crossReference()!.totalIncome === 0 && crossReference()!.totalExpenses === 0) {
+          <div class="px-3 pt-3 pb-2">
+            <p class="text-muted text-center mb-0">{{ 'PAYMENT.NO_CHARGES' | translate }}</p>
+          </div>
+        } @else {
+          <div class="px-3 pt-3 pb-2">
+            <div class="d-flex align-items-center mb-3">
+              <span class="text-uppercase small fw-semibold text-primary" style="letter-spacing: 0.05em">
+                <i class="bi bi-arrow-left-right me-1"></i>{{ 'PAYMENT.CROSS_REFERENCE_TITLE' | translate }}
+              </span>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th class="border-0 text-muted small fw-semibold pb-2">{{ 'PAYMENT.CATEGORY' | translate }}</th>
+                    <th class="border-0 text-end small fw-semibold pb-2" style="color: var(--bs-success)">{{ 'PAYMENT.INCOME' | translate }}</th>
+                    <th class="border-0 text-end small fw-semibold pb-2" style="color: var(--bs-danger)">{{ 'PAYMENT.EXPENSES' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (cat of allCategories(); track cat) {
+                    <tr>
+                      <td class="border-0 py-1">{{ 'INSPECTION.CATEGORY_' + cat | translate }}</td>
+                      <td class="border-0 py-1 text-end">
+                        @if (getIncomeForCategory(cat) !== null) {
+                          <span class="text-success fw-medium">{{ getIncomeForCategory(cat)! | number:'1.2-2' }}</span>
+                        } @else {
+                          <span class="text-muted">&mdash;</span>
+                        }
+                      </td>
+                      <td class="border-0 py-1 text-end">
+                        @if (getExpenseForCategory(cat) !== null) {
+                          <span class="text-danger fw-medium">{{ getExpenseForCategory(cat)! | number:'1.2-2' }}</span>
+                        } @else {
+                          <span class="text-muted">&mdash;</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td class="fw-bold border-top pt-2">Total</td>
+                    <td class="fw-bold border-top pt-2 text-end text-success">{{ crossReference()!.totalIncome | number:'1.2-2' }}</td>
+                    <td class="fw-bold border-top pt-2 text-end text-danger">{{ crossReference()!.totalExpenses | number:'1.2-2' }}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <!-- Balance indicator -->
+            <div class="d-flex align-items-center mt-3 mb-1">
+              <span class="text-muted small fw-semibold me-2">{{ 'PAYMENT.BALANCE' | translate }}:</span>
+              <span class="fw-bold fs-6" [ngClass]="{
+                'text-success': crossReference()!.balance > 0,
+                'text-danger': crossReference()!.balance < 0,
+                'text-muted': crossReference()!.balance === 0
+              }">{{ crossReference()!.balance | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <!-- Send to billing -->
+          @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+            <div class="px-3 pb-3">
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="text-muted small">
                   @if (crossReference()!.allIncomeSentToBilling) {
                     <i class="bi bi-check-circle-fill text-success me-1"></i>{{ 'PAYMENT.ALL_SENT_TO_BILLING' | translate }}
                   } @else {
@@ -112,24 +157,15 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                   }
                 </button>
               </div>
-            }
+            </div>
           }
-        </div>
-      </div>
-    }
-
-    <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <h6 class="mb-0"><i class="bi bi-cash-stack me-2"></i>{{ 'PAYMENT.TITLE' | translate }}</h6>
-        @if (liquidation()) {
-          <span class="badge" [ngClass]="getStatusBadgeClass(liquidation()!.status)">
-            {{ 'PAYMENT.STATUS_' + liquidation()!.status | translate }}
-          </span>
         }
-      </div>
-      <div class="card-body">
+        <hr class="my-0">
+      }
+
+      <!-- ═══ Liquidation Section ═══ -->
+      <div class="px-3 py-3">
         @if (!liquidation()) {
-          <!-- No liquidation yet -->
           <div class="text-center py-4">
             <p class="text-muted">{{ 'PAYMENT.NO_LIQUIDATION' | translate }}</p>
             @if (canEdit()) {
@@ -151,72 +187,50 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
               </button>
             }
           </div>
-        } @else {
-          <!-- Summary cards -->
-          <div class="row g-3 mb-4">
-            <div class="col-6 col-md-3">
-              <div class="card border">
-                <div class="card-body py-2 text-center">
-                  <small class="text-muted d-block">{{ 'PAYMENT.CUSTOMS_TAXES' | translate }}</small>
-                  <strong class="fs-6">{{ liquidation()!.totalCustomsTaxes | number:'1.2-2' }}</strong>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-3">
-              <div class="card border">
-                <div class="card-body py-2 text-center">
-                  <small class="text-muted d-block">{{ 'PAYMENT.THIRD_PARTY' | translate }}</small>
-                  <strong class="fs-6">{{ liquidation()!.totalThirdParty | number:'1.2-2' }}</strong>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-3">
-              <div class="card border">
-                <div class="card-body py-2 text-center">
-                  <small class="text-muted d-block">{{ 'PAYMENT.AGENCY_SERVICES' | translate }}</small>
-                  <strong class="fs-6">{{ liquidation()!.totalAgencyServices | number:'1.2-2' }}</strong>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 col-md-3">
-              <div class="card bg-primary text-white border-0">
-                <div class="card-body py-2 text-center">
-                  <small class="d-block" style="opacity:0.8">{{ 'PAYMENT.GRAND_TOTAL' | translate }}</small>
-                  <strong class="fs-5">{{ liquidation()!.grandTotal | number:'1.2-2' }}</strong>
-                </div>
-              </div>
-            </div>
+        }
+
+        @if (liquidation()) {
+          <div class="d-flex align-items-center mb-3">
+            <span class="text-uppercase small fw-semibold" style="letter-spacing: 0.05em">
+              <i class="bi bi-receipt me-1"></i>{{ 'PAYMENT.LIQUIDATION_SECTION' | translate }}
+            </span>
           </div>
 
-          <!-- Lines table -->
           @if (liquidation()!.lines.length > 0) {
-            <h6 class="mb-2">{{ 'PAYMENT.LINES_TITLE' | translate }}</h6>
             <div class="table-responsive mb-3">
-              <table class="table table-sm table-hover">
+              <table class="table table-sm align-middle mb-0">
                 <thead>
                   <tr>
-                    <th>{{ 'PAYMENT.CONCEPT' | translate }}</th>
-                    <th class="d-none d-sm-table-cell">{{ 'PAYMENT.DESCRIPTION' | translate }}</th>
-                    <th class="text-end">{{ 'PAYMENT.AMOUNT' | translate }}</th>
-                    <th>{{ 'PAYMENT.TYPE' | translate }}</th>
+                    <th class="border-0 text-muted small fw-semibold pb-2">{{ 'PAYMENT.CONCEPT' | translate }}</th>
+                    <th class="border-0 text-muted small fw-semibold pb-2 d-none d-sm-table-cell">{{ 'PAYMENT.DESCRIPTION' | translate }}</th>
+                    <th class="border-0 text-end text-muted small fw-semibold pb-2">{{ 'PAYMENT.AMOUNT' | translate }}</th>
+                    <th class="border-0 text-muted small fw-semibold pb-2">{{ 'PAYMENT.TYPE' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   @for (line of liquidation()!.lines; track line.id) {
                     <tr>
-                      <td>{{ 'PAYMENT.CONCEPT_' + line.concept | translate }}</td>
-                      <td class="d-none d-sm-table-cell">{{ line.description ?? '-' }}</td>
-                      <td class="text-end">{{ line.amount | number:'1.2-2' }}</td>
-                      <td>
+                      <td class="border-0 py-1">{{ 'PAYMENT.CONCEPT_' + line.concept | translate }}</td>
+                      <td class="border-0 py-1 text-muted small d-none d-sm-table-cell">{{ line.description ?? '&mdash;' }}</td>
+                      <td class="border-0 py-1 text-end fw-medium">{{ line.amount | number:'1.2-2' }}</td>
+                      <td class="border-0 py-1">
                         @if (line.reimbursable) {
-                          <span class="badge bg-info">{{ 'PAYMENT.REIMBURSABLE' | translate }}</span>
+                          <span class="badge bg-info bg-opacity-10 text-info">{{ 'PAYMENT.REIMBURSABLE' | translate }}</span>
                         } @else {
-                          <span class="badge bg-secondary">{{ 'PAYMENT.OWN_SERVICE' | translate }}</span>
+                          <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ 'PAYMENT.OWN_SERVICE' | translate }}</span>
                         }
                       </td>
                     </tr>
                   }
                 </tbody>
+                <tfoot>
+                  <tr style="background: linear-gradient(90deg, rgba(13,110,253,0.08), transparent)">
+                    <td class="fw-bold border-top pt-2 fs-6">{{ 'PAYMENT.GRAND_TOTAL' | translate }}</td>
+                    <td class="border-top d-none d-sm-table-cell"></td>
+                    <td class="fw-bold border-top pt-2 text-end fs-6">{{ liquidation()!.grandTotal | number:'1.2-2' }}</td>
+                    <td class="border-top"></td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           }
@@ -410,6 +424,12 @@ export class PaymentPanelComponent implements OnInit {
     };
   });
 
+  profitPercent = computed(() => {
+    const cr = this.crossReference();
+    if (!cr || cr.totalIncome === 0) return 0;
+    return (cr.balance / cr.totalIncome) * 100;
+  });
+
   allCategories = computed(() => {
     const cr = this.crossReference();
     if (!cr) return [];
@@ -598,6 +618,24 @@ export class PaymentPanelComponent implements OnInit {
       });
     }
     this.changed.emit();
+  }
+
+  getProfitColor(): string {
+    const p = this.profitPercent();
+    if (p >= 30) return '#0a6e2d';
+    if (p >= 15) return '#198754';
+    if (p >= 5) return '#e6a817';
+    if (p >= 0) return '#fd7e14';
+    return '#dc3545';
+  }
+
+  getProfitBg(): string {
+    const color = this.getProfitColor();
+    return `linear-gradient(135deg, ${color}14, ${color}08)`;
+  }
+
+  getProfitBorderColor(): string {
+    return this.getProfitColor() + '33';
   }
 
   getStatusBadgeClass(status: string): string {
