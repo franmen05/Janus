@@ -92,6 +92,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                     <th class="border-0 text-muted small fw-semibold pb-2">{{ 'PAYMENT.CATEGORY' | translate }}</th>
                     <th class="border-0 text-end small fw-semibold pb-2" style="color: var(--bs-success)">{{ 'PAYMENT.INCOME' | translate }}</th>
                     <th class="border-0 text-end small fw-semibold pb-2" style="color: var(--bs-danger)">{{ 'PAYMENT.EXPENSES' | translate }}</th>
+                    <th class="border-0 text-center text-muted small fw-semibold pb-2">{{ 'PAYMENT.REIMBURSABLE' | translate }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -112,6 +113,13 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                           <span class="text-muted">&mdash;</span>
                         }
                       </td>
+                      <td class="border-0 py-1 text-center">
+                        @if (isReimbursableCategory(cat)) {
+                          <span class="badge" style="background: rgba(108,117,125,0.1); color: #6c757d; font-size: 0.75em; padding: 0.35em 0.65em; line-height: 1"><i class="bi bi-arrow-repeat me-1"></i>{{ 'PAYMENT.REIMBURSABLE' | translate }}</span>
+                        } @else {
+                          <span class="text-muted">&mdash;</span>
+                        }
+                      </td>
                     </tr>
                   }
                 </tbody>
@@ -120,6 +128,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                     <td class="fw-bold border-top pt-2">Total</td>
                     <td class="fw-bold border-top pt-2 text-end text-success">{{ crossReference()!.totalIncome | number:'1.2-2' }}</td>
                     <td class="fw-bold border-top pt-2 text-end text-danger">{{ crossReference()!.totalExpenses | number:'1.2-2' }}</td>
+                    <td class="fw-bold border-top pt-2"></td>
                   </tr>
                 </tfoot>
               </table>
@@ -589,6 +598,15 @@ export class PaymentPanelComponent implements OnInit {
     if (!cr) return null;
     const found = cr.expenseByCategory.find(c => c.category === category);
     return found ? found.amount : null;
+  }
+
+  isReimbursableCategory(category: string): boolean {
+    const cr = this.crossReference();
+    if (!cr) return false;
+    const inIncome = cr.incomeByCategory.find(c => c.category === category);
+    if (inIncome?.reimbursable) return true;
+    const inExpense = cr.expenseByCategory.find(c => c.category === category);
+    return inExpense?.reimbursable ?? false;
   }
 
   sendToBilling(): void {

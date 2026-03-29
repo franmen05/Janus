@@ -59,6 +59,7 @@ export interface InspectionExpense {
 export interface CategoryBreakdown {
   category: string;
   amount: number;
+  reimbursable: boolean;
 }
 
 export interface ChargeCrossReference {
