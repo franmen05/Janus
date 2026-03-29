@@ -199,58 +199,6 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
         }
 
         @if (liquidation()) {
-          <div class="d-flex align-items-center mb-3">
-            <span class="text-uppercase small fw-semibold" style="letter-spacing: 0.05em">
-              <i class="bi bi-receipt me-1"></i>{{ 'PAYMENT.LIQUIDATION_SECTION' | translate }}
-            </span>
-          </div>
-
-          @if (liquidation()!.lines.length > 0) {
-            <div class="table-responsive mb-3">
-              <table class="table table-sm align-middle mb-0">
-                <thead>
-                  <tr>
-                    <th class="border-0 text-muted small fw-semibold pb-2">{{ 'PAYMENT.CONCEPT' | translate }}</th>
-                    <th class="border-0 text-muted small fw-semibold pb-2 d-none d-sm-table-cell">{{ 'PAYMENT.DESCRIPTION' | translate }}</th>
-                    <th class="border-0 text-end text-muted small fw-semibold pb-2" style="white-space: nowrap">{{ 'PAYMENT.AMOUNT' | translate }}</th>
-                    <th class="border-0 text-muted small fw-semibold pb-2" style="white-space: nowrap">{{ 'PAYMENT.TYPE' | translate }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (line of liquidation()!.lines; track line.id) {
-                    <tr>
-                      <td class="border-0 py-1">{{ 'PAYMENT.CONCEPT_' + line.concept | translate }}</td>
-                      <td class="border-0 py-1 text-muted small d-none d-sm-table-cell">{{ line.description ?? '&mdash;' }}</td>
-                      <td class="border-0 py-1 text-end fw-medium" style="white-space: nowrap" [ngClass]="line.chargeType === 'INCOME' ? 'text-success' : 'text-danger'">
-                        {{ line.amount | number:'1.2-2' }}
-                      </td>
-                      <td class="border-0 py-1" style="white-space: nowrap; vertical-align: middle">
-                        <div class="d-inline-flex align-items-center gap-1">
-                          @if (line.chargeType === 'INCOME') {
-                            <span class="badge text-center" style="background: rgba(25,135,84,0.1); color: var(--bs-success); font-size: 0.75em; padding: 0.35em 0.65em; line-height: 1; min-width: 5.5em">{{ 'PAYMENT.INCOME' | translate }}</span>
-                          } @else {
-                            <span class="badge text-center" style="background: rgba(220,53,69,0.1); color: var(--bs-danger); font-size: 0.75em; padding: 0.35em 0.65em; line-height: 1; min-width: 5.5em">{{ 'PAYMENT.EXPENSES' | translate }}</span>
-                          }
-                          @if (line.reimbursable) {
-                            <span class="badge" style="background: rgba(108,117,125,0.1); color: #6c757d; font-size: 0.75em; padding: 0.35em 0.65em; line-height: 1"><i class="bi bi-arrow-repeat me-1"></i>{{ 'PAYMENT.REIMBURSABLE' | translate }}</span>
-                          }
-                        </div>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-                <tfoot>
-                  <tr style="background: linear-gradient(90deg, rgba(13,110,253,0.08), transparent)">
-                    <td class="fw-bold border-top pt-2 fs-6">{{ 'PAYMENT.GRAND_TOTAL' | translate }}</td>
-                    <td class="border-top d-none d-sm-table-cell"></td>
-                    <td class="fw-bold border-top pt-2 text-end fs-6">{{ liquidation()!.grandTotal | number:'1.2-2' }}</td>
-                    <td class="border-top"></td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          }
-
           <!-- DGA Payment Code -->
           @if (liquidation()!.dgaPaymentCode) {
             <div class="mb-3">
