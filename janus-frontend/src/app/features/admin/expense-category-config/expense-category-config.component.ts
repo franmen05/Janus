@@ -76,6 +76,7 @@ import { ExpenseCategoryConfig, CreateExpenseCategoryRequest, UpdateExpenseCateg
           <table class="table table-hover mb-0">
             <thead class="table-light">
               <tr>
+                <th>ID</th>
                 <th>{{ 'EXPENSE_CONFIG.NAME' | translate }}</th>
                 <th>{{ 'EXPENSE_CONFIG.LABEL_ES' | translate }}</th>
                 <th>{{ 'EXPENSE_CONFIG.LABEL_EN' | translate }}</th>
@@ -87,6 +88,7 @@ import { ExpenseCategoryConfig, CreateExpenseCategoryRequest, UpdateExpenseCateg
             <tbody>
               @for (cat of categories(); track cat.id) {
                 <tr>
+                  <td class="text-muted small">{{ cat.id }}</td>
                   <td><code>{{ cat.name }}</code></td>
                   <td>
                     @if (editingId() === cat.id) {
