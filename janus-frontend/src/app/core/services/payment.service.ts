@@ -32,8 +32,8 @@ export class PaymentService {
     return this.http.post<Liquidation>(`${this.apiUrl}/api/operations/${operationId}/liquidation/approve`, body);
   }
 
-  makeLiquidationDefinitive(operationId: number, dgaPaymentCode: string): Observable<Liquidation> {
-    return this.http.post<Liquidation>(`${this.apiUrl}/api/operations/${operationId}/liquidation/definitive`, { dgaPaymentCode });
+  makeLiquidationDefinitive(operationId: number): Observable<Liquidation> {
+    return this.http.post<Liquidation>(`${this.apiUrl}/api/operations/${operationId}/liquidation/definitive`, {});
   }
 
   registerPayment(operationId: number, request: RegisterPaymentRequest): Observable<Payment> {

@@ -209,13 +209,6 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
         }
 
         @if (liquidation()) {
-          <!-- DGA Payment Code -->
-          @if (liquidation()!.dgaPaymentCode) {
-            <div class="mb-3">
-              <strong>{{ 'PAYMENT.DGA_PAYMENT_CODE' | translate }}:</strong>
-              <span class="ms-2">{{ liquidation()!.dgaPaymentCode }}</span>
-            </div>
-          }
 
           <!-- Approval info -->
           @if (liquidation()!.approvedBy) {
@@ -247,26 +240,12 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
             }
 
             @if (liquidation()!.status === 'APPROVED' && canEdit()) {
-              <div class="card border-primary mt-2">
-                <div class="card-body">
-                  <h6>{{ 'PAYMENT.MAKE_DEFINITIVE' | translate }}</h6>
-                  <div class="row g-2 align-items-end">
-                    <div class="col-md-6">
-                      <label class="form-label">{{ 'PAYMENT.DGA_PAYMENT_CODE' | translate }} <span class="text-danger">*</span></label>
-                      <input type="text" class="form-control form-control-sm" [(ngModel)]="dgaPaymentCode"
-                             [placeholder]="'PAYMENT.DGA_PAYMENT_CODE_PLACEHOLDER' | translate">
-                    </div>
-                    <div class="col-md-6">
-                      <button class="btn btn-primary btn-sm" (click)="makeDefinitive()" [disabled]="!dgaPaymentCode || saving()">
-                        @if (saving()) {
-                          <span class="spinner-border spinner-border-sm me-1"></span>
-                        }
-                        {{ 'PAYMENT.MAKE_DEFINITIVE' | translate }}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <button class="btn btn-primary btn-sm" (click)="makeDefinitive()" [disabled]="saving()">
+                @if (saving()) {
+                  <span class="spinner-border spinner-border-sm me-1"></span>
+                }
+                {{ 'PAYMENT.MAKE_DEFINITIVE' | translate }}
+              </button>
             }
 
             @if (liquidation()!.status === 'DEFINITIVE' && canEdit()) {
@@ -416,9 +395,6 @@ export class PaymentPanelComponent implements OnInit {
   // Generate form
   agencyFee: number | null = null;
 
-  // Make definitive form
-  dgaPaymentCode = '';
-
   // Payment form
   paymentAmount: number | null = null;
   paymentMethod = '';
@@ -503,13 +479,11 @@ export class PaymentPanelComponent implements OnInit {
   }
 
   makeDefinitive(): void {
-    if (!this.dgaPaymentCode) return;
     this.saving.set(true);
-    this.paymentService.makeLiquidationDefinitive(this.operationId(), this.dgaPaymentCode).subscribe({
+    this.paymentService.makeLiquidationDefinitive(this.operationId()).subscribe({
       next: (l) => {
         this.liquidation.set(l);
         this.saving.set(false);
-        this.dgaPaymentCode = '';
         this.changed.emit();
       },
       error: (err) => {

@@ -172,7 +172,7 @@ public class LiquidationService {
     }
 
     @Transactional
-    public Liquidation makeLiquidationDefinitive(Long operationId, String dgaPaymentCode, String username) {
+    public Liquidation makeLiquidationDefinitive(Long operationId, String username) {
         Liquidation liquidation = Liquidation.find("operation.id = ?1", operationId).firstResult();
 
         if (liquidation == null) {
@@ -186,10 +186,9 @@ public class LiquidationService {
         }
 
         liquidation.status = LiquidationStatus.DEFINITIVE;
-        liquidation.dgaPaymentCode = dgaPaymentCode;
 
-        LOG.infof("Liquidation made definitive for operation %d by %s, DGA code: %s",
-                operationId, username, dgaPaymentCode);
+        LOG.infof("Liquidation made definitive for operation %d by %s",
+                operationId, username);
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.STATUS_CHANGE, "Liquidation", liquidation.id, operationId,
