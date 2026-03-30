@@ -10,11 +10,12 @@ import { InspectionExpense, ChargeType } from '../../../core/models/inspection.m
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
 import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-detail-modal.component';
+import { LoadingIndicatorComponent } from '../loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-charges-table',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, LoadingIndicatorComponent],
   template: `
     @if (canViewExpenses()) {
     <div class="card">
@@ -27,6 +28,9 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
         }
       </div>
       <div class="card-body">
+      @if (loading()) {
+        <app-loading-indicator size="sm" />
+      } @else {
       <!-- Tabs -->
       <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
@@ -53,7 +57,7 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
                 <th class="text-end d-none d-md-table-cell">{{ 'INSPECTION.RATE' | translate }}</th>
                 <th class="text-end">{{ 'INSPECTION.EXPENSE_AMOUNT' | translate }}</th>
                 <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_CURRENCY' | translate }}</th>
-                <th class="d-none d-md-table-cell">{{ 'INSPECTION.BILL_TO' | translate }}</th>
+                <th class="d-none d-md-table-cell">{{ (activeChargeTab() === 'EXPENSE' ? 'INSPECTION.RESPONSIBLE' : 'INSPECTION.BILL_TO') | translate }}</th>
                 <th class="d-none d-lg-table-cell">{{ 'INSPECTION.PAYMENT_TYPE' | translate }}</th>
                 <th class="d-none d-md-table-cell">{{ 'INSPECTION.PAYMENT_STATUS' | translate }}</th>
                 <th>{{ 'COMMON.ACTIONS' | translate }}</th>
@@ -105,6 +109,7 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
       } @else {
         <p class="text-muted">{{ 'INSPECTION.NO_EXPENSES' | translate }}</p>
       }
+      }
       </div>
     </div>
     }
@@ -131,6 +136,7 @@ export class ChargesTableComponent implements OnInit {
   private modalService = inject(NgbModal);
   authService = inject(AuthService);
 
+  loading = signal(true);
   allExpenses = signal<InspectionExpense[]>([]);
   expensesTotal = signal<number>(0);
   incomeTotal = signal<number>(0);
@@ -161,12 +167,14 @@ export class ChargesTableComponent implements OnInit {
         this.expensesTotal.set(summary.total);
         this.incomeTotal.set(summary.incomeTotal);
         this.expenseTotal.set(summary.expenseTotal);
+        this.loading.set(false);
       },
       error: () => {
         this.allExpenses.set([]);
         this.expensesTotal.set(0);
         this.incomeTotal.set(0);
         this.expenseTotal.set(0);
+        this.loading.set(false);
       }
     });
   }
@@ -178,6 +186,7 @@ export class ChargesTableComponent implements OnInit {
     ref.componentInstance.canEdit = true;
     ref.componentInstance.clients = this.clients();
     ref.componentInstance.operationSummary = this.operationSummary();
+    ref.componentInstance.defaultChargeType = this.activeChargeTab();
     ref.componentInstance.initForm();
     ref.closed.subscribe((result) => {
       if (result === 'created' || result === 'created-continue') {

@@ -6,21 +6,24 @@ import { DeclarationService } from '../../../core/services/declaration.service';
 import { CrossingResult, CrossingStatus } from '../../../core/models/declaration.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-crossing-result',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, StatusBadgeComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, StatusBadgeComponent, LoadingIndicatorComponent],
   template: `
     <div class="card mt-3">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h6 class="mb-0">{{ 'CROSSING.TITLE' | translate }}</h6>
-        @if (authService.hasRole(['ADMIN', 'AGENT']) && !crossing()) {
+        @if (authService.hasRole(['ADMIN', 'AGENT']) && !crossing() && !loading()) {
           <button class="btn btn-sm btn-primary" (click)="executeCrossing()">{{ 'CROSSING.EXECUTE' | translate }}</button>
         }
       </div>
       <div class="card-body">
-        @if (crossing()) {
+        @if (loading()) {
+          <app-loading-indicator size="sm" />
+        } @else if (crossing()) {
           <div class="mb-2">
             <strong>{{ 'CROSSING.STATUS' | translate }}:</strong>
             <app-status-badge [status]="crossing()!.status" />
@@ -82,6 +85,7 @@ export class CrossingResultComponent implements OnInit {
   private declarationService = inject(DeclarationService);
   authService = inject(AuthService);
   crossing = signal<CrossingResult | null>(null);
+  loading = signal(true);
   resolved = output<CrossingResult>();
   resolveComment = '';
   discrepancyTotals = computed(() => {
@@ -96,7 +100,13 @@ export class CrossingResultComponent implements OnInit {
   ngOnInit(): void { this.loadCrossing(); }
 
   loadCrossing(): void {
-    this.declarationService.getCrossing(this.operationId()).subscribe(c => this.crossing.set(c));
+    this.declarationService.getCrossing(this.operationId()).subscribe({
+      next: (c) => {
+        this.crossing.set(c);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false)
+    });
   }
 
   executeCrossing(): void {

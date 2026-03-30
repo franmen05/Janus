@@ -11,6 +11,7 @@ export interface LiquidationLine {
   amount: number;
   lineOrder: number;
   reimbursable: boolean;
+  chargeType: string;
 }
 
 export interface Liquidation {

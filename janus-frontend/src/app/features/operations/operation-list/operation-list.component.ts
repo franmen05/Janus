@@ -8,11 +8,12 @@ import { Operation, OperationStatus } from '../../../core/models/operation.model
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-operation-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe, LoadingIndicatorComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'OPERATIONS.TITLE' | translate }}</h2>
@@ -20,50 +21,55 @@ import { AuthService } from '../../../core/services/auth.service';
         <a routerLink="/operations/new" class="btn btn-primary">{{ 'OPERATIONS.NEW' | translate }}</a>
       }
     </div>
-    <div class="card mb-3">
-      <div class="card-body">
-        <div class="row g-3">
-          <div class="col-md-4">
-            <select class="form-select" [(ngModel)]="filterStatus" (ngModelChange)="loadOperations()">
-              <option value="">{{ 'OPERATIONS.ALL_STATUSES' | translate }}</option>
-              @for (s of statuses; track s) { <option [value]="s">{{ s | statusLabel }}</option> }
-            </select>
+    @if (loading()) {
+      <app-loading-indicator />
+    } @else {
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <select class="form-select" [(ngModel)]="filterStatus" (ngModelChange)="loadOperations()">
+                <option value="">{{ 'OPERATIONS.ALL_STATUSES' | translate }}</option>
+                @for (s of statuses; track s) { <option [value]="s">{{ s | statusLabel }}</option> }
+              </select>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-body p-0">
-        <div class="table-responsive">
-        <table class="table table-hover mb-0">
-          <thead class="table-light">
-            <tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.OPERATION_CATEGORY' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'OPERATIONS.AGENT' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr>
-          </thead>
-          <tbody>
-            @for (op of operations(); track op.id) {
-              <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
-                <td class="fw-bold">{{ op.referenceNumber }}</td>
-                <td>{{ op.clientName }}</td>
-                <td class="d-none d-md-table-cell">{{ op.transportMode | statusLabel }}</td>
-                <td class="d-none d-md-table-cell">{{ op.operationCategory | statusLabel }}</td>
-                <td><app-status-badge [status]="op.status" /></td>
-                <td class="d-none d-lg-table-cell">{{ op.assignedAgentName ?? '-' }}</td>
-                <td class="d-none d-sm-table-cell">{{ op.createdAt | date:'shortDate' }}</td>
-              </tr>
-            }
-            @if (operations().length === 0) {
-              <tr><td colspan="7" class="text-center text-muted py-4">{{ 'OPERATIONS.NO_OPERATIONS' | translate }}</td></tr>
-            }
-          </tbody>
-        </table>
+      <div class="card">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.OPERATION_CATEGORY' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'OPERATIONS.AGENT' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr>
+            </thead>
+            <tbody>
+              @for (op of operations(); track op.id) {
+                <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
+                  <td class="fw-bold">{{ op.referenceNumber }}</td>
+                  <td>{{ op.clientName }}</td>
+                  <td class="d-none d-md-table-cell">{{ op.transportMode | statusLabel }}</td>
+                  <td class="d-none d-md-table-cell">{{ op.operationCategory | statusLabel }}</td>
+                  <td><app-status-badge [status]="op.status" /></td>
+                  <td class="d-none d-lg-table-cell">{{ op.assignedAgentName ?? '-' }}</td>
+                  <td class="d-none d-sm-table-cell">{{ op.createdAt | date:'shortDate' }}</td>
+                </tr>
+              }
+              @if (operations().length === 0) {
+                <tr><td colspan="7" class="text-center text-muted py-4">{{ 'OPERATIONS.NO_OPERATIONS' | translate }}</td></tr>
+              }
+            </tbody>
+          </table>
+          </div>
         </div>
       </div>
-    </div>
+    }
   `
 })
 export class OperationListComponent implements OnInit {
   private operationService = inject(OperationService);
   authService = inject(AuthService);
+  loading = signal(true);
   operations = signal<Operation[]>([]);
   filterStatus = '';
   statuses = Object.values(OperationStatus);
@@ -71,6 +77,9 @@ export class OperationListComponent implements OnInit {
   ngOnInit(): void { this.loadOperations(); }
 
   loadOperations(): void {
-    this.operationService.getAll(this.filterStatus || undefined).subscribe(ops => this.operations.set(ops));
+    this.operationService.getAll(this.filterStatus || undefined).subscribe(ops => {
+      this.operations.set(ops);
+      this.loading.set(false);
+    });
   }
 }

@@ -13,15 +13,18 @@ import { Alert } from '../../core/models/alert.model';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 import { StatusLabelPipe } from '../../shared/pipes/status-label.pipe';
 import { AlertMessagePipe } from '../../shared/pipes/alert-message.pipe';
+import { LoadingIndicatorComponent } from '../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe, AlertMessagePipe],
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe, AlertMessagePipe, LoadingIndicatorComponent],
   template: `
     <h2 class="mb-4">{{ 'DASHBOARD.TITLE' | translate }}</h2>
 
-    @if (authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {
+    @if (loading()) {
+      <app-loading-indicator />
+    } @else if (authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {
       <!-- Filter bar -->
       <div class="card mb-3">
         <div class="card-body py-2">
@@ -238,6 +241,7 @@ export class DashboardComponent implements OnInit {
   private alertService = inject(AlertService);
   authService = inject(AuthService);
 
+  loading = signal(true);
   recentOperations = signal<Operation[]>([]);
   metrics = signal<DashboardMetrics | null>(null);
   activeCount = signal(0);
@@ -263,6 +267,7 @@ export class DashboardComponent implements OnInit {
       this.recentOperations.set(ops.slice(0, 10));
       this.activeCount.set(ops.filter(o => o.status !== OperationStatus.CLOSED && o.status !== OperationStatus.CANCELLED && o.status !== OperationStatus.DRAFT).length);
       this.closedCount.set(ops.filter(o => o.status === OperationStatus.CLOSED).length);
+      this.loading.set(false);
     });
 
     if (this.authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {

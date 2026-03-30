@@ -295,6 +295,7 @@ export class ExpenseDetailModalComponent implements OnInit {
     blNumber?: string | null;
   } | null = null;
   clients: Client[] = [];
+  defaultChargeType: ChargeType = 'EXPENSE';
 
   readonly unitOptions = [
     'CONTAINERS', 'HOURS', 'DAYS', 'KG', 'M3', 'PALLETS', 'PIECES', 'TONS', 'FLAT'
@@ -391,6 +392,9 @@ export class ExpenseDetailModalComponent implements OnInit {
     const chargeTab = tab as ChargeType;
     this.activeTab.set(chargeTab);
     this.editForm.controls.chargeType.setValue(chargeTab);
+    if (this.isAddMode) {
+      this.editForm.controls.reimbursable.setValue(chargeTab === 'INCOME');
+    }
   }
 
   initForm(): void {
@@ -422,12 +426,13 @@ export class ExpenseDetailModalComponent implements OnInit {
     } else {
       // Add mode: start with empty form in editing state
       this.editForm.reset({
-        chargeType: 'EXPENSE', category: '', currency: 'USD', paymentStatus: 'PENDING',
-        quantity: 1, showOnDocuments: true, updateRelated: false, reimbursable: true,
+        chargeType: this.defaultChargeType, category: '', currency: 'USD', paymentStatus: 'PENDING',
+        quantity: 1, showOnDocuments: true, updateRelated: false, reimbursable: this.defaultChargeType === 'INCOME',
         description: '', units: '', rate: null, amount: null, paymentType: '',
         expenseDate: '', billToType: '', billToName: '', invoiceNumber: '',
         invoiceDate: '', referenceNumber: '', notes: ''
       });
+      this.activeTab.set(this.defaultChargeType);
       // Auto-fill reference with BL number
       if (this.operationSummary?.blNumber) {
         this.editForm.controls.referenceNumber.setValue(this.operationSummary.blNumber);

@@ -906,7 +906,10 @@
     "SENT_TO_BILLING_SUCCESS": "{{count}} income charges sent to billing",
     "BILLING_PROGRESS": "{{sent}} of {{total}} income charges sent to billing",
     "ALL_SENT_TO_BILLING": "All income sent to billing",
-    "NO_CHARGES": "No charges registered"
+    "NO_CHARGES": "No charges registered",
+    "SUBTOTAL": "Subtotal",
+    "LIQUIDATION_SECTION": "Liquidation",
+    "PROFIT_PERCENT": "Profit %"
   },
   "EXCHANGE_RATES": {
     "TITLE": "Exchange Rates",

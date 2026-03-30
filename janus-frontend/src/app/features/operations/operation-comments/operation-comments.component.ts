@@ -5,12 +5,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommentService } from '../../../core/services/comment.service';
 import { Comment } from '../../../core/models/comment.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-operation-comments',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, LoadingIndicatorComponent],
   template: `
+    @if (loading()) {
+      <app-loading-indicator size="sm" />
+    } @else {
     @if (authService.hasRole(['ADMIN', 'AGENT'])) {
       <div class="card mb-3">
         <div class="card-body">
@@ -45,6 +49,7 @@ import { AuthService } from '../../../core/services/auth.service';
     } @else {
       <p class="text-muted">{{ 'COMMENTS.NO_COMMENTS' | translate }}</p>
     }
+    }
   `
 })
 export class OperationCommentsComponent implements OnInit {
@@ -53,6 +58,7 @@ export class OperationCommentsComponent implements OnInit {
   private commentService = inject(CommentService);
   authService = inject(AuthService);
   comments = signal<Comment[]>([]);
+  loading = signal(true);
   newComment = '';
   internalFlag = false;
 
@@ -63,7 +69,10 @@ export class OperationCommentsComponent implements OnInit {
   }
 
   loadComments(): void {
-    this.commentService.getComments(this.operationId()).subscribe(c => this.comments.set(c));
+    this.commentService.getComments(this.operationId()).subscribe(c => {
+      this.comments.set(c);
+      this.loading.set(false);
+    });
   }
 
   addComment(): void {

@@ -8,11 +8,12 @@ import { PortService } from '../../../core/services/port.service';
 import { Port } from '../../../core/models/port.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadPortsModalComponent } from '../load-ports-modal/load-ports-modal.component';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-port-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'PORTS.TITLE' | translate }}</h2>
@@ -23,6 +24,9 @@ import { LoadPortsModalComponent } from '../load-ports-modal/load-ports-modal.co
         </div>
       }
     </div>
+    @if (loading()) {
+      <app-loading-indicator />
+    } @else {
     <div class="card">
       <div class="card-header">
         <input type="text" class="form-control"
@@ -64,12 +68,14 @@ import { LoadPortsModalComponent } from '../load-ports-modal/load-ports-modal.co
         </table>
       </div>
     </div>
+    }
   `
 })
 export class PortListComponent implements OnInit {
   private portService = inject(PortService);
   private modalService = inject(NgbModal);
   authService = inject(AuthService);
+  loading = signal(true);
   ports = signal<Port[]>([]);
   searchTerm = signal('');
   filteredPorts = computed(() => {
@@ -88,7 +94,10 @@ export class PortListComponent implements OnInit {
   }
 
   private loadPorts(): void {
-    this.portService.getAll().subscribe(ports => this.ports.set(ports));
+    this.portService.getAll().subscribe(ports => {
+      this.ports.set(ports);
+      this.loading.set(false);
+    });
   }
 
   openLoadPortsModal(): void {

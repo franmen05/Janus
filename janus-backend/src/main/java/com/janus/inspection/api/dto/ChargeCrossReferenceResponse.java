@@ -13,5 +13,5 @@ public record ChargeCrossReferenceResponse(
     long totalIncomeCount,
     boolean allIncomeSentToBilling
 ) {
-    public record CategoryBreakdown(String category, BigDecimal amount) {}
+    public record CategoryBreakdown(String category, BigDecimal amount, boolean reimbursable, List<String> descriptions) {}
 }

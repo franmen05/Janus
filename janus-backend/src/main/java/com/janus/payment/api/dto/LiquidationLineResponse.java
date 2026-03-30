@@ -11,7 +11,8 @@ public record LiquidationLineResponse(
         BigDecimal rate,
         BigDecimal amount,
         int lineOrder,
-        boolean reimbursable
+        boolean reimbursable,
+        String chargeType
 ) {
     public static LiquidationLineResponse from(LiquidationLine l) {
         return new LiquidationLineResponse(
@@ -22,7 +23,8 @@ public record LiquidationLineResponse(
                 l.rate,
                 l.amount,
                 l.lineOrder,
-                l.reimbursable
+                l.reimbursable,
+                l.chargeType != null ? l.chargeType.name() : null
         );
     }
 }

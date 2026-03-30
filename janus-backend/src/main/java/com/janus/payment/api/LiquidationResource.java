@@ -83,11 +83,10 @@ public class LiquidationResource {
     @RolesAllowed({"ADMIN", "AGENT"})
     @Transactional
     public Response makeLiquidationDefinitive(@PathParam("operationId") Long operationId,
-                                               @Valid MakeDefinitiveRequest request,
                                                @Context SecurityContext sec) {
         var username = sec.getUserPrincipal().getName();
         var liquidation = liquidationService.makeLiquidationDefinitive(
-                operationId, request.dgaPaymentCode(), username);
+                operationId, username);
         return Response.ok(LiquidationResponse.from(liquidation)).build();
     }
 

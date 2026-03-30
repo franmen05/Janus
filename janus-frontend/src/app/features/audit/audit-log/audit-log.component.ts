@@ -6,13 +6,17 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AuditService } from '../../../core/services/audit.service';
 import { AuditLog } from '../../../core/models/audit.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-audit-log',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, StatusBadgeComponent, RouterModule],
+  imports: [CommonModule, FormsModule, TranslateModule, StatusBadgeComponent, RouterModule, LoadingIndicatorComponent],
   template: `
     <h2 class="mb-4">{{ 'AUDIT.TITLE' | translate }}</h2>
+    @if (loading()) {
+      <app-loading-indicator />
+    } @else {
     <div class="card mb-3">
       <div class="card-body">
         <div class="row g-3">
@@ -65,10 +69,12 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
         </table>
       </div>
     </div>
+    }
   `
 })
 export class AuditLogComponent implements OnInit {
   private auditService = inject(AuditService);
+  loading = signal(true);
   logs = signal<AuditLog[]>([]);
   filterUsername = '';
   filterFrom = '';
@@ -90,7 +96,10 @@ export class AuditLogComponent implements OnInit {
   ngOnInit(): void { this.loadLogs(); }
 
   loadLogs(): void {
-    this.auditService.getAll(this.filterUsername || undefined, this.filterFrom || undefined, this.filterTo || undefined).subscribe(logs => this.logs.set(logs));
+    this.auditService.getAll(this.filterUsername || undefined, this.filterFrom || undefined, this.filterTo || undefined).subscribe(logs => {
+      this.logs.set(logs);
+      this.loading.set(false);
+    });
   }
 
   toggleSort(column: 'createdAt' | 'username'): void {

@@ -7,12 +7,16 @@ import { Declaration, DeclarationType } from '../../../core/models/declaration.m
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-declaration-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent],
+  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, LoadingIndicatorComponent],
   template: `
+    @if (loading()) {
+      <app-loading-indicator size="sm" />
+    } @else {
     @if (authService.hasRole(['ADMIN', 'AGENT']) && !isTerminalStatus()) {
       <div class="mb-3 d-flex flex-wrap gap-2">
         @if (!canRegisterFinal() && !hasPreliminary()) {
@@ -67,6 +71,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
     } @else {
       <p class="text-muted">{{ 'DECLARATIONS.NO_DECLARATIONS' | translate }}</p>
     }
+    }
   `
 })
 export class DeclarationListComponent implements OnInit {
@@ -79,6 +84,7 @@ export class DeclarationListComponent implements OnInit {
   private toastService = inject(ToastService);
   authService = inject(AuthService);
   declarations = signal<Declaration[]>([]);
+  loading = signal(true);
 
   private static readonly FINAL_ALLOWED_STATUSES = [
     'VALUATION_REVIEW', 'SUBMITTED_TO_CUSTOMS'
@@ -121,7 +127,10 @@ export class DeclarationListComponent implements OnInit {
   ngOnInit(): void { this.loadDeclarations(); }
 
   loadDeclarations(): void {
-    this.declarationService.getDeclarations(this.operationId()).subscribe(d => this.declarations.set(d));
+    this.declarationService.getDeclarations(this.operationId()).subscribe(d => {
+      this.declarations.set(d);
+      this.loading.set(false);
+    });
   }
 
   openForm(type: string): void {

@@ -432,15 +432,31 @@ public class InspectionService {
     }
 
     private List<ChargeCrossReferenceResponse.CategoryBreakdown> buildCategoryBreakdown(List<InspectionExpense> charges) {
-        Map<String, BigDecimal> grouped = charges.stream()
+        Map<String, BigDecimal> amountByCategory = charges.stream()
                 .collect(Collectors.groupingBy(
                         e -> e.category != null ? e.category : "Uncategorized",
                         Collectors.reducing(BigDecimal.ZERO,
                                 e -> e.amount != null ? e.amount : BigDecimal.ZERO,
                                 BigDecimal::add)
                 ));
-        return grouped.entrySet().stream()
-                .map(entry -> new ChargeCrossReferenceResponse.CategoryBreakdown(entry.getKey(), entry.getValue()))
+        Map<String, Boolean> reimbursableByCategory = charges.stream()
+                .collect(Collectors.groupingBy(
+                        e -> e.category != null ? e.category : "Uncategorized",
+                        Collectors.reducing(false, e -> e.reimbursable, (a, b) -> a || b)
+                ));
+        Map<String, List<String>> descriptionsByCategory = charges.stream()
+                .collect(Collectors.groupingBy(
+                        e -> e.category != null ? e.category : "Uncategorized",
+                        Collectors.mapping(
+                                e -> e.description != null ? e.description : "",
+                                Collectors.filtering(d -> !d.isEmpty(), Collectors.toList())
+                        )
+                ));
+        return amountByCategory.entrySet().stream()
+                .map(entry -> new ChargeCrossReferenceResponse.CategoryBreakdown(
+                        entry.getKey(), entry.getValue(),
+                        reimbursableByCategory.getOrDefault(entry.getKey(), false),
+                        descriptionsByCategory.getOrDefault(entry.getKey(), List.of())))
                 .toList();
     }
 }

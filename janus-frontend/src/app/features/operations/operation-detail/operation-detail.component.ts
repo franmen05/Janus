@@ -27,6 +27,7 @@ import { OperationAlertsComponent } from '../../alerts/operation-alerts/operatio
 import { InspectionPanelComponent } from '../inspection-panel/inspection-panel.component';
 import { ValuationPanelComponent } from '../valuation-panel/valuation-panel.component';
 import { PaymentPanelComponent } from '../payment-panel/payment-panel.component';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 const PRE_REVIEW_STATUSES = ['DRAFT', 'DOCUMENTATION_COMPLETE'];
 const REVIEW_STATUSES = ['IN_REVIEW', 'PENDING_CORRECTION', 'PRELIQUIDATION_REVIEW', 'ANALYST_ASSIGNED', 'SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW'];
 const INSPECTION_VISIBLE_STATUSES = ['SUBMITTED_TO_CUSTOMS', 'VALUATION_REVIEW', 'PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED'];
@@ -44,9 +45,13 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
     OperationStatusComponent, DocumentListComponent, StatusLabelPipe,
     OperationCommentsComponent,
     DeclarationListComponent, CrossingResultComponent, OperationAlertsComponent,
-    InspectionPanelComponent, ValuationPanelComponent, PaymentPanelComponent, FileUploadComponent
+    InspectionPanelComponent, ValuationPanelComponent, PaymentPanelComponent, FileUploadComponent,
+    LoadingIndicatorComponent
   ],
   template: `
+    @if (!operation()) {
+      <app-loading-indicator />
+    }
     @if (operation()) {
       <app-operation-alerts [operationId]="operation()!.id" />
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
@@ -251,7 +256,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
         </div>
       }
 
-      <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeTab">
+      <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeTab" (activeIdChange)="onTabChange($event)">
         <li [ngbNavItem]="'info'">
           <button ngbNavLink>{{ 'TABS.INFO' | translate }}</button>
           <ng-template ngbNavContent>
@@ -618,6 +623,15 @@ export class OperationDetailComponent implements OnInit {
         }
       });
     }
+  }
+
+  onTabChange(tabId: string): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: tabId },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
   }
 
   private setDefaultTab(status: string): void {

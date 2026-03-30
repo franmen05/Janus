@@ -6,11 +6,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ClientService } from '../../../core/services/client.service';
 import { Client } from '../../../core/models/client.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'CLIENTS.TITLE' | translate }}</h2>
@@ -18,6 +19,9 @@ import { AuthService } from '../../../core/services/auth.service';
         <a routerLink="/clients/new" class="btn btn-primary">{{ 'CLIENTS.NEW' | translate }}</a>
       }
     </div>
+    @if (loading()) {
+      <app-loading-indicator />
+    } @else {
     <div class="card">
       <div class="card-header">
         <input type="text" class="form-control"
@@ -56,11 +60,13 @@ import { AuthService } from '../../../core/services/auth.service';
         </table>
       </div>
     </div>
+    }
   `
 })
 export class ClientListComponent implements OnInit {
   private clientService = inject(ClientService);
   authService = inject(AuthService);
+  loading = signal(true);
   clients = signal<Client[]>([]);
   searchTerm = signal('');
   filteredClients = computed(() => {
@@ -73,6 +79,9 @@ export class ClientListComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.clientService.getAll().subscribe(clients => this.clients.set(clients));
+    this.clientService.getAll().subscribe(clients => {
+      this.clients.set(clients);
+      this.loading.set(false);
+    });
   }
 }
