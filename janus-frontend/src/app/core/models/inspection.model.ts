@@ -60,6 +60,7 @@ export interface CategoryBreakdown {
   category: string;
   amount: number;
   reimbursable: boolean;
+  descriptions: string[];
 }
 
 export interface ChargeCrossReference {

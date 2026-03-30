@@ -444,10 +444,19 @@ public class InspectionService {
                         e -> e.category != null ? e.category : "Uncategorized",
                         Collectors.reducing(false, e -> e.reimbursable, (a, b) -> a || b)
                 ));
+        Map<String, List<String>> descriptionsByCategory = charges.stream()
+                .collect(Collectors.groupingBy(
+                        e -> e.category != null ? e.category : "Uncategorized",
+                        Collectors.mapping(
+                                e -> e.description != null ? e.description : "",
+                                Collectors.filtering(d -> !d.isEmpty(), Collectors.toList())
+                        )
+                ));
         return amountByCategory.entrySet().stream()
                 .map(entry -> new ChargeCrossReferenceResponse.CategoryBreakdown(
                         entry.getKey(), entry.getValue(),
-                        reimbursableByCategory.getOrDefault(entry.getKey(), false)))
+                        reimbursableByCategory.getOrDefault(entry.getKey(), false),
+                        descriptionsByCategory.getOrDefault(entry.getKey(), List.of())))
                 .toList();
     }
 }

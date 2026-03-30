@@ -392,6 +392,9 @@ export class ExpenseDetailModalComponent implements OnInit {
     const chargeTab = tab as ChargeType;
     this.activeTab.set(chargeTab);
     this.editForm.controls.chargeType.setValue(chargeTab);
+    if (this.isAddMode) {
+      this.editForm.controls.reimbursable.setValue(chargeTab === 'INCOME');
+    }
   }
 
   initForm(): void {
@@ -424,7 +427,7 @@ export class ExpenseDetailModalComponent implements OnInit {
       // Add mode: start with empty form in editing state
       this.editForm.reset({
         chargeType: this.defaultChargeType, category: '', currency: 'USD', paymentStatus: 'PENDING',
-        quantity: 1, showOnDocuments: true, updateRelated: false, reimbursable: true,
+        quantity: 1, showOnDocuments: true, updateRelated: false, reimbursable: this.defaultChargeType === 'INCOME',
         description: '', units: '', rate: null, amount: null, paymentType: '',
         expenseDate: '', billToType: '', billToName: '', invoiceNumber: '',
         invoiceDate: '', referenceNumber: '', notes: ''

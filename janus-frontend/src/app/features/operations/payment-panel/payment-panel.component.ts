@@ -90,6 +90,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                 <thead>
                   <tr>
                     <th class="border-0 text-muted small fw-semibold pb-2">{{ 'PAYMENT.CATEGORY' | translate }}</th>
+                    <th class="border-0 text-muted small fw-semibold pb-2 d-none d-sm-table-cell">{{ 'PAYMENT.DESCRIPTION' | translate }}</th>
                     <th class="border-0 text-end small fw-semibold pb-2" style="color: var(--bs-success)">{{ 'PAYMENT.INCOME' | translate }}</th>
                     <th class="border-0 text-end small fw-semibold pb-2" style="color: var(--bs-danger)">{{ 'PAYMENT.EXPENSES' | translate }}</th>
                     <th class="border-0 text-center text-muted small fw-semibold pb-2">{{ 'PAYMENT.REIMBURSABLE' | translate }}</th>
@@ -99,6 +100,14 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                   @for (cat of allCategories(); track cat) {
                     <tr>
                       <td class="border-0 py-1">{{ 'INSPECTION.CATEGORY_' + cat | translate }}</td>
+                      <td class="border-0 py-1 text-muted small d-none d-sm-table-cell">
+                        @for (desc of getDescriptionsForCategory(cat); track $index) {
+                          {{ desc }}@if (!$last) {, }
+                        }
+                        @if (getDescriptionsForCategory(cat).length === 0) {
+                          &mdash;
+                        }
+                      </td>
                       <td class="border-0 py-1 text-end">
                         @if (getIncomeForCategory(cat) !== null) {
                           <span class="text-success fw-medium">{{ getIncomeForCategory(cat)! | number:'1.2-2' }}</span>
@@ -126,6 +135,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
                 <tfoot>
                   <tr>
                     <td class="fw-bold border-top pt-2">Total</td>
+                    <td class="border-top d-none d-sm-table-cell"></td>
                     <td class="fw-bold border-top pt-2 text-end text-success">{{ crossReference()!.totalIncome | number:'1.2-2' }}</td>
                     <td class="fw-bold border-top pt-2 text-end text-danger">{{ crossReference()!.totalExpenses | number:'1.2-2' }}</td>
                     <td class="fw-bold border-top pt-2"></td>
@@ -546,6 +556,15 @@ export class PaymentPanelComponent implements OnInit {
     if (!cr) return null;
     const found = cr.expenseByCategory.find(c => c.category === category);
     return found ? found.amount : null;
+  }
+
+  getDescriptionsForCategory(category: string): string[] {
+    const cr = this.crossReference();
+    if (!cr) return [];
+    const descs = new Set<string>();
+    cr.incomeByCategory.filter(c => c.category === category).forEach(c => c.descriptions.forEach(d => descs.add(d)));
+    cr.expenseByCategory.filter(c => c.category === category).forEach(c => c.descriptions.forEach(d => descs.add(d)));
+    return Array.from(descs);
   }
 
   isReimbursableCategory(category: string): boolean {
