@@ -10,13 +10,14 @@ import { Client } from '../../../core/models/client.model';
 import { Operation } from '../../../core/models/operation.model';
 import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/models/payment.model';
 import { ChargeCrossReference } from '../../../core/models/inspection.model';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChargesTableComponent } from '../../../shared/components/charges-table/charges-table.component';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-payment-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, ChargesTableComponent, LoadingIndicatorComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, NgbTooltipModule, ChargesTableComponent, LoadingIndicatorComponent],
   template: `
     @if (loading()) {
       <app-loading-indicator size="sm" />
@@ -88,6 +89,11 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
               <span class="text-uppercase small fw-semibold text-primary" style="letter-spacing: 0.05em">
                 <i class="bi bi-arrow-left-right me-1"></i>{{ 'PAYMENT.CROSS_REFERENCE_TITLE' | translate }}
               </span>
+              <i class="bi bi-info-circle text-muted ms-2"
+                 style="cursor:pointer"
+                 [ngbTooltip]="'PAYMENT.CROSS_REFERENCE_INFO' | translate"
+                 triggers="click:blur"
+                 placement="top"></i>
             </div>
             <div class="table-responsive">
               <table class="table table-sm align-middle mb-0">
@@ -188,6 +194,16 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
 
       <!-- ═══ Liquidation Section ═══ -->
       <div class="px-3 py-3">
+        <div class="d-flex align-items-center mb-3">
+          <span class="text-uppercase small fw-semibold text-primary" style="letter-spacing: 0.05em">
+            <i class="bi bi-receipt me-1"></i>{{ 'PAYMENT.LIQUIDATION_SECTION' | translate }}
+          </span>
+          <i class="bi bi-info-circle text-muted ms-2"
+             style="cursor:pointer"
+             [ngbTooltip]="'PAYMENT.LIQUIDATION_INFO' | translate"
+             triggers="click:blur"
+             placement="top"></i>
+        </div>
         @if (!liquidation()) {
           <div class="text-center py-4">
             <p class="text-muted">{{ 'PAYMENT.NO_LIQUIDATION' | translate }}</p>

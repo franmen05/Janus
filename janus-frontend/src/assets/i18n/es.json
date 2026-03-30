@@ -909,7 +909,9 @@
     "NO_CHARGES": "No hay cargos registrados",
     "SUBTOTAL": "Subtotal",
     "LIQUIDATION_SECTION": "Liquidación",
-    "PROFIT_PERCENT": "% Beneficio"
+    "PROFIT_PERCENT": "% Beneficio",
+    "CROSS_REFERENCE_INFO": "Muestra una comparación en tiempo real de todos los cargos de ingresos vs gastos registrados para esta operación, independientemente de si se ha generado una liquidación.",
+    "LIQUIDATION_INFO": "La liquidación solo incluye los gastos marcados como rembolsable."
   },
   "EXCHANGE_RATES": {
     "TITLE": "Tasas de Cambio",

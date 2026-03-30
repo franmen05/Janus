@@ -909,7 +909,9 @@
     "NO_CHARGES": "No charges registered",
     "SUBTOTAL": "Subtotal",
     "LIQUIDATION_SECTION": "Liquidation",
-    "PROFIT_PERCENT": "Profit %"
+    "PROFIT_PERCENT": "Profit %",
+    "CROSS_REFERENCE_INFO": "Shows a real-time comparison of all registered income vs expense charges for this operation, regardless of whether a liquidation has been generated.",
+    "LIQUIDATION_INFO": "The liquidation only includes charges marked as reimbursable."
   },
   "EXCHANGE_RATES": {
     "TITLE": "Exchange Rates",
