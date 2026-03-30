@@ -192,7 +192,7 @@ public class LiquidationService {
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.STATUS_CHANGE, "Liquidation", liquidation.id, operationId,
-                null, null, "Liquidation made definitive, DGA code: " + dgaPaymentCode
+                null, null, "Liquidation made definitive"
         ));
 
         return liquidation;

@@ -4,16 +4,20 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user.model';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, LoadingIndicatorComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'USERS.TITLE' | translate }}</h2>
       <a routerLink="/users/new" class="btn btn-primary">{{ 'USERS.NEW' | translate }}</a>
     </div>
+    @if (loading()) {
+      <app-loading-indicator />
+    } @else {
     <div class="card">
       <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
@@ -53,10 +57,12 @@ import { User } from '../../../core/models/user.model';
         </table>
       </div>
     </div>
+    }
   `
 })
 export class UserListComponent implements OnInit {
   private userService = inject(UserService);
+  loading = signal(true);
   users = signal<User[]>([]);
 
   ngOnInit(): void {
@@ -68,6 +74,9 @@ export class UserListComponent implements OnInit {
   }
 
   private loadUsers(): void {
-    this.userService.getAll().subscribe(users => this.users.set(users));
+    this.userService.getAll().subscribe(users => {
+      this.users.set(users);
+      this.loading.set(false);
+    });
   }
 }

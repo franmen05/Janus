@@ -11,12 +11,16 @@ import { Operation } from '../../../core/models/operation.model';
 import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/models/payment.model';
 import { ChargeCrossReference } from '../../../core/models/inspection.model';
 import { ChargesTableComponent } from '../../../shared/components/charges-table/charges-table.component';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-payment-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, ChargesTableComponent],
+  imports: [CommonModule, FormsModule, TranslateModule, ChargesTableComponent, LoadingIndicatorComponent],
   template: `
+    @if (loading()) {
+      <app-loading-indicator size="sm" />
+    } @else {
     <!-- Charges Table -->
     <app-charges-table class="mb-3 d-block"
       [operationId]="operationId()"
@@ -341,6 +345,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
         }
       </div>
     </div>
+    }
   `
 })
 export class PaymentPanelComponent implements OnInit {
@@ -355,6 +360,7 @@ export class PaymentPanelComponent implements OnInit {
   authService = inject(AuthService);
 
   // State
+  loading = signal(true);
   liquidation = signal<Liquidation | null>(null);
   payment = signal<Payment | null>(null);
   crossReference = signal<ChargeCrossReference | null>(null);
@@ -417,11 +423,15 @@ export class PaymentPanelComponent implements OnInit {
 
   loadData(): void {
     const id = this.operationId();
-    this.paymentService.getLiquidation(id).subscribe(l => {
-      this.liquidation.set(l);
-      if (l?.status === 'PAID') {
-        this.paymentService.getPayment(id).subscribe(p => this.payment.set(p));
-      }
+    this.paymentService.getLiquidation(id).subscribe({
+      next: (l) => {
+        this.liquidation.set(l);
+        this.loading.set(false);
+        if (l?.status === 'PAID') {
+          this.paymentService.getPayment(id).subscribe(p => this.payment.set(p));
+        }
+      },
+      error: () => this.loading.set(false)
     });
     this.inspectionService.getCrossReference(id).subscribe({
       next: (cr) => this.crossReference.set(cr),

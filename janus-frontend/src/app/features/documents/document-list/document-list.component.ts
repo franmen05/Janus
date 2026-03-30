@@ -5,6 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DocumentService } from '../../../core/services/document.service';
 import { Document } from '../../../core/models/document.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 import { FileSizePipe } from '../../../shared/pipes/file-size.pipe';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
@@ -13,8 +14,11 @@ import { ToastService } from '../../../core/services/toast.service';
 @Component({
   selector: 'app-document-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, FileSizePipe, StatusLabelPipe],
+  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, FileSizePipe, StatusLabelPipe, LoadingIndicatorComponent],
   template: `
+    @if (loading()) {
+      <app-loading-indicator size="sm" />
+    } @else {
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
       <h5 class="mb-0">{{ 'DOCUMENTS.TITLE' | translate }}</h5>
       @if (authService.hasRole(['ADMIN', 'AGENT'])) {
@@ -61,6 +65,7 @@ import { ToastService } from '../../../core/services/toast.service';
         </table>
       </div>
     </div>
+    }
   `
 })
 export class DocumentListComponent implements OnInit {
@@ -72,6 +77,7 @@ export class DocumentListComponent implements OnInit {
   @Input() operationId!: number;
   @Input() operationStatus?: string;
   documents = signal<Document[]>([]);
+  loading = signal(true);
 
   ngOnInit(): void {
     this.loadDocuments();
@@ -79,7 +85,10 @@ export class DocumentListComponent implements OnInit {
 
   loadDocuments(): void {
     const includeDeleted = this.authService.hasRole(['ADMIN']);
-    this.documentService.getByOperation(this.operationId, includeDeleted).subscribe(docs => this.documents.set(docs));
+    this.documentService.getByOperation(this.operationId, includeDeleted).subscribe(docs => {
+      this.documents.set(docs);
+      this.loading.set(false);
+    });
   }
 
   download(doc: Document): void {

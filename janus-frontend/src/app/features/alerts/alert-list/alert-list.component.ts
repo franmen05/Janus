@@ -6,14 +6,18 @@ import { AlertService } from '../../../core/services/alert.service';
 import { Alert } from '../../../core/models/alert.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { AlertMessagePipe } from '../../../shared/pipes/alert-message.pipe';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
 @Component({
   selector: 'app-alert-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, AlertMessagePipe],
+  imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, AlertMessagePipe, LoadingIndicatorComponent],
   template: `
     <h2 class="mb-4">{{ 'ALERTS.TITLE' | translate }}</h2>
 
+    @if (loading()) {
+      <app-loading-indicator />
+    } @else {
     <div class="card">
       <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
@@ -53,10 +57,12 @@ import { AlertMessagePipe } from '../../../shared/pipes/alert-message.pipe';
         </table>
       </div>
     </div>
+    }
   `
 })
 export class AlertListComponent implements OnInit {
   private alertService = inject(AlertService);
+  loading = signal(true);
   alerts = signal<Alert[]>([]);
 
   ngOnInit(): void {
@@ -64,7 +70,10 @@ export class AlertListComponent implements OnInit {
   }
 
   loadAlerts(): void {
-    this.alertService.getActiveAlerts().subscribe(a => this.alerts.set(a));
+    this.alertService.getActiveAlerts().subscribe(a => {
+      this.alerts.set(a);
+      this.loading.set(false);
+    });
   }
 
   acknowledge(alert: Alert): void {
