@@ -153,15 +153,6 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                 </tfoot>
               </table>
             </div>
-            <!-- Balance indicator -->
-            <div class="d-flex align-items-center mt-3 mb-1">
-              <span class="text-muted small fw-semibold me-2">{{ 'PAYMENT.BALANCE' | translate }}:</span>
-              <span class="fw-bold fs-6" [ngClass]="{
-                'text-success': crossReference()!.balance > 0,
-                'text-danger': crossReference()!.balance < 0,
-                'text-muted': crossReference()!.balance === 0
-              }">{{ crossReference()!.balance | number:'1.2-2' }}</span>
-            </div>
           </div>
 
           <!-- Send to billing -->
