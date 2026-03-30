@@ -53,7 +53,7 @@ import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-deta
                 <th class="text-end d-none d-md-table-cell">{{ 'INSPECTION.RATE' | translate }}</th>
                 <th class="text-end">{{ 'INSPECTION.EXPENSE_AMOUNT' | translate }}</th>
                 <th class="d-none d-md-table-cell">{{ 'INSPECTION.EXPENSE_CURRENCY' | translate }}</th>
-                <th class="d-none d-md-table-cell">{{ 'INSPECTION.BILL_TO' | translate }}</th>
+                <th class="d-none d-md-table-cell">{{ (activeChargeTab() === 'EXPENSE' ? 'INSPECTION.RESPONSIBLE' : 'INSPECTION.BILL_TO') | translate }}</th>
                 <th class="d-none d-lg-table-cell">{{ 'INSPECTION.PAYMENT_TYPE' | translate }}</th>
                 <th class="d-none d-md-table-cell">{{ 'INSPECTION.PAYMENT_STATUS' | translate }}</th>
                 <th>{{ 'COMMON.ACTIONS' | translate }}</th>
@@ -178,6 +178,7 @@ export class ChargesTableComponent implements OnInit {
     ref.componentInstance.canEdit = true;
     ref.componentInstance.clients = this.clients();
     ref.componentInstance.operationSummary = this.operationSummary();
+    ref.componentInstance.defaultChargeType = this.activeChargeTab();
     ref.componentInstance.initForm();
     ref.closed.subscribe((result) => {
       if (result === 'created' || result === 'created-continue') {
