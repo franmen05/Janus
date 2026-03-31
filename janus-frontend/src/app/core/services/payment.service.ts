@@ -47,4 +47,8 @@ export class PaymentService {
       catchError(() => of(null))
     );
   }
+
+  getLiquidationConfig(operationId: number): Observable<{ approvalRequired: boolean }> {
+    return this.http.get<{ approvalRequired: boolean }>(`${this.apiUrl}/api/operations/${operationId}/liquidation/config`);
+  }
 }

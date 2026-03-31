@@ -251,9 +251,18 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           <div class="mt-3">
             @if (liquidation()!.status === 'PRELIMINARY' && canEdit()) {
               <div class="d-flex gap-2 flex-wrap">
-                <button class="btn btn-success btn-sm" (click)="approve()" [disabled]="!authService.hasRole(['ADMIN'])">
-                  <i class="bi bi-check-circle me-1"></i>{{ 'PAYMENT.APPROVE' | translate }}
-                </button>
+                @if (approvalRequired()) {
+                  <button class="btn btn-success btn-sm" (click)="approve()" [disabled]="!authService.hasRole(['ADMIN'])">
+                    <i class="bi bi-check-circle me-1"></i>{{ 'PAYMENT.APPROVE' | translate }}
+                  </button>
+                } @else {
+                  <button class="btn btn-primary btn-sm" (click)="makeDefinitive()" [disabled]="saving()">
+                    @if (saving()) {
+                      <span class="spinner-border spinner-border-sm me-1"></span>
+                    }
+                    {{ 'PAYMENT.MAKE_DEFINITIVE' | translate }}
+                  </button>
+                }
                 <button class="btn btn-outline-secondary btn-sm" (click)="regenerate()" [disabled]="generating()">
                   @if (generating()) {
                     <span class="spinner-border spinner-border-sm me-1"></span>
@@ -402,6 +411,7 @@ export class PaymentPanelComponent implements OnInit {
   generating = signal(false);
   saving = signal(false);
   clients = signal<Client[]>([]);
+  approvalRequired = signal(true); // default: approval required
 
   operationSummary = computed(() => {
     const op = this.operation();
@@ -469,6 +479,10 @@ export class PaymentPanelComponent implements OnInit {
     this.inspectionService.getCrossReference(id).subscribe({
       next: (cr) => this.crossReference.set(cr),
       error: () => this.crossReference.set(null)
+    });
+    this.paymentService.getLiquidationConfig(id).subscribe({
+      next: (config) => this.approvalRequired.set(config.approvalRequired),
+      error: () => this.approvalRequired.set(true) // default to required on error
     });
   }
 
