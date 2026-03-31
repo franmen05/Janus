@@ -69,6 +69,8 @@ public class DataSeeder {
             seedComplianceRuleConfigs();
             LOG.info("Compliance rule config seeding complete.");
         }
+        ensureComplianceRuleExists("LIQUIDATION_APPROVAL_REQUIRED", "enabled", "true",
+                "Requires ADMIN approval before liquidation can be made definitive");
         if (documentTypeConfigRepository.count() == 0) {
             LOG.info("Seeding document type configs...");
             seedDocumentTypeConfigs();
@@ -161,6 +163,13 @@ public class DataSeeder {
         config.paramValue = paramValue;
         config.description = description;
         complianceRuleConfigRepository.persist(config);
+    }
+
+    private void ensureComplianceRuleExists(String ruleCode, String paramKey, String paramValue, String description) {
+        if (complianceRuleConfigRepository.findByRuleCodeAndKey(ruleCode, paramKey).isEmpty()) {
+            LOG.infof("Seeding missing compliance rule: %s/%s", ruleCode, paramKey);
+            createConfig(ruleCode, paramKey, paramValue, description);
+        }
     }
 
     private void seedDocumentTypeConfigs() {
