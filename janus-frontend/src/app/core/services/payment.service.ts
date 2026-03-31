@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Liquidation, Payment, RegisterPaymentRequest } from '../models/payment.model';
 
@@ -19,7 +19,8 @@ export class PaymentService {
   }
 
   getLiquidation(operationId: number): Observable<Liquidation | null> {
-    return this.http.get<Liquidation>(`${this.apiUrl}/api/operations/${operationId}/liquidation`).pipe(
+    return this.http.get<Liquidation>(`${this.apiUrl}/api/operations/${operationId}/liquidation`, { observe: 'response' }).pipe(
+      map(response => response.status === 204 ? null : response.body),
       catchError(() => of(null))
     );
   }
@@ -41,7 +42,8 @@ export class PaymentService {
   }
 
   getPayment(operationId: number): Observable<Payment | null> {
-    return this.http.get<Payment>(`${this.apiUrl}/api/operations/${operationId}/liquidation/payment`).pipe(
+    return this.http.get<Payment>(`${this.apiUrl}/api/operations/${operationId}/liquidation/payment`, { observe: 'response' }).pipe(
+      map(response => response.status === 204 ? null : response.body),
       catchError(() => of(null))
     );
   }

@@ -69,9 +69,9 @@ export interface ChargeCrossReference {
   balance: number;
   incomeByCategory: CategoryBreakdown[];
   expenseByCategory: CategoryBreakdown[];
-  incomeSentToBillingCount: number;
-  totalIncomeCount: number;
-  allIncomeSentToBilling: boolean;
+  reimbursableSentToBillingCount: number;
+  totalReimbursableCount: number;
+  allReimbursableSentToBilling: boolean;
 }
 
 export interface ExpenseSummary {

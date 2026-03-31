@@ -2,8 +2,6 @@ package com.janus.payment.application;
 
 import com.janus.declaration.domain.model.Declaration;
 import com.janus.declaration.domain.model.DeclarationType;
-import com.janus.declaration.domain.model.TariffLine;
-import com.janus.declaration.domain.service.PreliquidationService;
 import com.janus.inspection.domain.model.ChargeType;
 import com.janus.inspection.domain.model.InspectionExpense;
 import com.janus.operation.application.OperationService;
@@ -33,9 +31,6 @@ public class LiquidationService {
     OperationService operationService;
 
     @Inject
-    PreliquidationService preliquidationService;
-
-    @Inject
     Event<AuditEvent> auditEvent;
 
     @Transactional
@@ -62,10 +57,6 @@ public class LiquidationService {
             existing.delete();
         }
 
-        // Calculate taxes from the declaration
-        List<TariffLine> tariffLines = TariffLine.list("declaration.id = ?1", finalDeclaration.id);
-        var preliqResult = preliquidationService.calculate(finalDeclaration, tariffLines);
-
         // Fetch reimbursable inspection expenses
         List<InspectionExpense> expenses = InspectionExpense.list(
                 "operation.id = ?1 and active = true", operationId);
@@ -77,20 +68,6 @@ public class LiquidationService {
         liquidation.status = LiquidationStatus.PRELIMINARY;
 
         int lineOrder = 1;
-
-        // Add customs tax line
-        var taxLine = new LiquidationLine();
-        taxLine.liquidation = liquidation;
-        taxLine.concept = "CUSTOMS_TAXES";
-        taxLine.description = "Total customs taxes (duty, ITBIS, selective, surcharge, admin fees)";
-        taxLine.baseAmount = preliqResult.taxableBase();
-        taxLine.amount = preliqResult.totalTaxes();
-        taxLine.lineOrder = lineOrder++;
-        taxLine.reimbursable = false;
-        taxLine.chargeType = ChargeType.EXPENSE;
-        liquidation.lines.add(taxLine);
-
-        var totalCustomsTaxes = preliqResult.totalTaxes();
 
         // Add third-party expense lines
         var totalThirdParty = BigDecimal.ZERO;
@@ -124,10 +101,10 @@ public class LiquidationService {
             totalAgencyServices = agencyServiceFee;
         }
 
-        liquidation.totalCustomsTaxes = totalCustomsTaxes;
+        liquidation.totalCustomsTaxes = BigDecimal.ZERO;
         liquidation.totalThirdParty = totalThirdParty;
         liquidation.totalAgencyServices = totalAgencyServices;
-        liquidation.grandTotal = totalCustomsTaxes.add(totalThirdParty).add(totalAgencyServices);
+        liquidation.grandTotal = totalThirdParty.add(totalAgencyServices);
 
         liquidation.persist();
 

@@ -52,6 +52,11 @@ public class InspectionExpenseRepository implements PanacheRepository<Inspection
                 operationId, ChargeType.INCOME, billingStatus);
     }
 
+    public List<InspectionExpense> findActiveReimbursableWithBillingStatus(Long operationId, BillingStatus billingStatus) {
+        return list("operation.id = ?1 and active = true and reimbursable = true and billingStatus = ?2",
+                operationId, billingStatus);
+    }
+
     public long countActiveByChargeType(Long operationId, ChargeType chargeType) {
         return count("operation.id = ?1 and active = true and chargeType = ?2", operationId, chargeType);
     }

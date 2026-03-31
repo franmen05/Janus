@@ -42,7 +42,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
       </div>
 
       <!-- ═══ Summary Metrics ═══ -->
-      @if (crossReference() && (crossReference()!.totalIncome > 0 || crossReference()!.totalExpenses > 0)) {
+      @if (liquidation() && crossReference() && (crossReference()!.totalIncome > 0 || crossReference()!.totalExpenses > 0)) {
         <div class="px-3 pt-3">
           <div class="row g-2 mb-0">
             <div class="col-6 col-md-3">
@@ -78,14 +78,14 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
       }
 
       <!-- ═══ Cross-Reference Section ═══ -->
-      @if (crossReference()) {
+      @if (liquidation() && crossReference()) {
         @if (crossReference()!.totalIncome === 0 && crossReference()!.totalExpenses === 0) {
           <div class="px-3 pt-3 pb-2">
             <p class="text-muted text-center mb-0">{{ 'PAYMENT.NO_CHARGES' | translate }}</p>
           </div>
         } @else {
           <div class="px-3 pt-3 pb-2">
-            <div class="d-flex align-items-center mb-3">
+            <div class="d-flex align-items-center mb-3" style="cursor: pointer" (click)="crossReferenceExpanded.set(!crossReferenceExpanded())">
               <span class="text-uppercase small fw-semibold text-primary" style="letter-spacing: 0.05em">
                 <i class="bi bi-arrow-left-right me-1"></i>{{ 'PAYMENT.CROSS_REFERENCE_TITLE' | translate }}
               </span>
@@ -94,7 +94,9 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                  [ngbTooltip]="'PAYMENT.CROSS_REFERENCE_INFO' | translate"
                  triggers="click:blur"
                  placement="top"></i>
+              <i class="ms-auto bi" [ngClass]="crossReferenceExpanded() ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
             </div>
+            @if (crossReferenceExpanded()) {
             <div class="table-responsive">
               <table class="table table-sm align-middle mb-0">
                 <thead>
@@ -153,32 +155,8 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                 </tfoot>
               </table>
             </div>
+            }
           </div>
-
-          <!-- Send to billing -->
-          @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-            <div class="px-3 pb-3">
-              <div class="d-flex align-items-center justify-content-between">
-                <span class="text-muted small">
-                  @if (crossReference()!.allIncomeSentToBilling) {
-                    <i class="bi bi-check-circle-fill text-success me-1"></i>{{ 'PAYMENT.ALL_SENT_TO_BILLING' | translate }}
-                  } @else {
-                    {{ 'PAYMENT.BILLING_PROGRESS' | translate:{ sent: crossReference()!.incomeSentToBillingCount, total: crossReference()!.totalIncomeCount } }}
-                  }
-                </span>
-                <button class="btn btn-outline-primary btn-sm"
-                        (click)="sendToBilling()"
-                        [disabled]="crossReference()!.allIncomeSentToBilling || crossReference()!.totalIncomeCount === 0 || sendingToBilling()">
-                  @if (sendingToBilling()) {
-                    <span class="spinner-border spinner-border-sm me-1"></span>
-                    {{ 'PAYMENT.SENDING_TO_BILLING' | translate }}
-                  } @else {
-                    <i class="bi bi-send me-1"></i>{{ 'PAYMENT.SEND_TO_BILLING' | translate }}
-                  }
-                </button>
-              </div>
-            </div>
-          }
         }
         <hr class="my-0">
       }
@@ -199,16 +177,6 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           <div class="text-center py-4">
             <p class="text-muted">{{ 'PAYMENT.NO_LIQUIDATION' | translate }}</p>
             @if (canEdit()) {
-              <div class="row justify-content-center mb-3">
-                <div class="col-md-4">
-                  <label class="form-label">{{ 'PAYMENT.AGENCY_FEE' | translate }}</label>
-                  <div class="input-group input-group-sm">
-                    <span class="input-group-text">$</span>
-                    <input type="number" class="form-control" [(ngModel)]="agencyFee"
-                           [placeholder]="'PAYMENT.AGENCY_FEE_PLACEHOLDER' | translate" step="0.01">
-                  </div>
-                </div>
-              </div>
               <button class="btn btn-primary" (click)="generate()" [disabled]="generating()">
                 @if (generating()) {
                   <span class="spinner-border spinner-border-sm me-1"></span>
@@ -220,6 +188,51 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
         }
 
         @if (liquidation()) {
+
+          <!-- Liquidation lines table -->
+          @if (liquidation()!.lines.length > 0) {
+            <div class="table-responsive mb-3">
+              <table class="table table-sm align-middle mb-0">
+                <thead>
+                  <tr class="table-light">
+                    <th>{{ 'PAYMENT.CONCEPT' | translate }}</th>
+                    <th>{{ 'PAYMENT.DESCRIPTION' | translate }}</th>
+                    <th class="text-end">{{ 'PAYMENT.AMOUNT' | translate }}</th>
+                    <th class="text-center">{{ 'PAYMENT.TYPE' | translate }}</th>
+                    <th class="text-center">{{ 'PAYMENT.REIMBURSABLE' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (line of liquidation()!.lines; track line.id) {
+                    <tr>
+                      <td>{{ 'PAYMENT.CONCEPT_' + line.concept | translate }}</td>
+                      <td class="text-muted small">{{ line.description || '-' }}</td>
+                      <td class="text-end fw-semibold">{{ line.amount | number:'1.2-2' }}</td>
+                      <td class="text-center">
+                        <span class="badge" [ngClass]="line.chargeType === 'INCOME' ? 'bg-success' : 'bg-danger'">
+                          {{ line.chargeType === 'INCOME' ? ('PAYMENT.INCOME' | translate) : ('PAYMENT.EXPENSES' | translate) }}
+                        </span>
+                      </td>
+                      <td class="text-center">
+                        @if (line.reimbursable) {
+                          <i class="bi bi-check-circle-fill text-success"></i>
+                        } @else {
+                          <i class="bi bi-dash text-muted"></i>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td class="fw-bold border-top pt-2" colspan="2">{{ 'PAYMENT.GRAND_TOTAL' | translate }}</td>
+                    <td class="fw-bold border-top pt-2 text-end">{{ liquidation()!.grandTotal | number:'1.2-2' }}</td>
+                    <td class="border-top" colspan="2"></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          }
 
           <!-- Approval info -->
           @if (liquidation()!.approvedBy) {
@@ -260,6 +273,27 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
             }
 
             @if (liquidation()!.status === 'DEFINITIVE' && canEdit()) {
+              @if (authService.hasRole(['ADMIN', 'AGENT']) && crossReference()) {
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <span class="text-muted small">
+                    @if (crossReference()!.allReimbursableSentToBilling) {
+                      <i class="bi bi-check-circle-fill text-success me-1"></i>{{ 'PAYMENT.ALL_SENT_TO_BILLING' | translate }}
+                    } @else {
+                      {{ 'PAYMENT.BILLING_PROGRESS' | translate:{ sent: crossReference()!.reimbursableSentToBillingCount, total: crossReference()!.totalReimbursableCount } }}
+                    }
+                  </span>
+                  <button class="btn btn-outline-primary btn-sm"
+                          (click)="sendToBilling()"
+                          [disabled]="crossReference()!.allReimbursableSentToBilling || crossReference()!.totalReimbursableCount === 0 || sendingToBilling()">
+                    @if (sendingToBilling()) {
+                      <span class="spinner-border spinner-border-sm me-1"></span>
+                      {{ 'PAYMENT.SENDING_TO_BILLING' | translate }}
+                    } @else {
+                      <i class="bi bi-send me-1"></i>{{ 'PAYMENT.SEND_TO_BILLING' | translate }}
+                    }
+                  </button>
+                </div>
+              }
               <div class="card border-success mt-2">
                 <div class="card-body">
                   <h6>{{ 'PAYMENT.REGISTER_PAYMENT' | translate }}</h6>
@@ -284,10 +318,6 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                     <div class="col-md-4">
                       <label class="form-label">{{ 'PAYMENT.PAYMENT_DATE' | translate }} <span class="text-danger">*</span></label>
                       <input type="date" class="form-control form-control-sm" [(ngModel)]="paymentDate">
-                    </div>
-                    <div class="col-md-4">
-                      <label class="form-label">{{ 'PAYMENT.DGA_REFERENCE' | translate }}</label>
-                      <input type="text" class="form-control form-control-sm" [(ngModel)]="paymentDgaRef">
                     </div>
                     <div class="col-md-4">
                       <label class="form-label">{{ 'PAYMENT.BANK_REFERENCE' | translate }}</label>
@@ -328,10 +358,6 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                     </div>
                     <div class="col-md-6">
                       <dl>
-                        @if (payment()!.dgaReference) {
-                          <dt>{{ 'PAYMENT.DGA_REFERENCE' | translate }}</dt>
-                          <dd>{{ payment()!.dgaReference }}</dd>
-                        }
                         @if (payment()!.bankReference) {
                           <dt>{{ 'PAYMENT.BANK_REFERENCE' | translate }}</dt>
                           <dd>{{ payment()!.bankReference }}</dd>
@@ -371,6 +397,7 @@ export class PaymentPanelComponent implements OnInit {
   liquidation = signal<Liquidation | null>(null);
   payment = signal<Payment | null>(null);
   crossReference = signal<ChargeCrossReference | null>(null);
+  crossReferenceExpanded = signal(false);
   sendingToBilling = signal(false);
   generating = signal(false);
   saving = signal(false);
@@ -412,7 +439,6 @@ export class PaymentPanelComponent implements OnInit {
   paymentAmount: number | null = null;
   paymentMethod = '';
   paymentDate = '';
-  paymentDgaRef = '';
   paymentBankRef = '';
   paymentNotes = '';
 
@@ -517,7 +543,6 @@ export class PaymentPanelComponent implements OnInit {
       amount: this.paymentAmount,
       paymentMethod: this.paymentMethod,
       paymentDate: this.paymentDate,
-      dgaReference: this.paymentDgaRef || undefined,
       bankReference: this.paymentBankRef || undefined,
       notes: this.paymentNotes || undefined
     };
@@ -568,6 +593,8 @@ export class PaymentPanelComponent implements OnInit {
   }
 
   sendToBilling(): void {
+    const msg = this.translate.instant('PAYMENT.SEND_TO_BILLING_CONFIRM');
+    if (!confirm(msg)) return;
     this.sendingToBilling.set(true);
     this.inspectionService.sendAllIncomeToBilling(this.operationId()).subscribe({
       next: (result) => {

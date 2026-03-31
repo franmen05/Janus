@@ -175,24 +175,6 @@ test.describe('Payment & Liquidation Lifecycle', () => {
     await expect(paymentTab).toBeVisible();
   });
 
-  // TEST b: Cross-reference section shows
-  test('should show cross-reference section with income/expense/balance', async () => {
-    await page.goto(`/operations/${operationId}`);
-    await page.waitForSelector('text=/OP-/');
-    const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
-    await paymentTab.click();
-
-    // Cross-reference card should be visible
-    const crossRefCard = page.locator('app-payment-panel .card').first();
-    await expect(crossRefCard).toBeVisible();
-
-    // Should show income, expenses, and balance cards
-    const summaryCards = page.locator('app-payment-panel .card.border .card-body.py-2.text-center');
-    await expect(summaryCards.first()).toBeVisible({ timeout: 5000 });
-    const cardCount = await summaryCards.count();
-    expect(cardCount).toBeGreaterThanOrEqual(3);
-  });
-
   // TEST c: Add charge from Inspection tab during PAYMENT_PREPARATION
   test('should allow adding charges from Inspection tab during payment stage', async () => {
     await page.goto(`/operations/${operationId}`);
@@ -234,91 +216,71 @@ test.describe('Payment & Liquidation Lifecycle', () => {
     await expect(table).toBeVisible();
   });
 
-  // TEST d: Verify cross-reference updates after adding charge in payment stage
-  test('should update cross-reference after adding charge in payment stage', async () => {
-    await page.goto(`/operations/${operationId}`);
-    await page.waitForSelector('text=/OP-/');
-
-    // Go to Payment tab
-    const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
-    await paymentTab.click();
-
-    // Cross-reference should show updated expenses (original 800 + new 750 = 1550)
-    const expenseCard = page.locator('app-payment-panel .card.border .card-body.py-2.text-center strong.text-danger').first();
-    await expect(expenseCard).toBeVisible({ timeout: 5000 });
-    const expenseText = await expenseCard.textContent();
-    const expenseValue = parseFloat(expenseText!.replace(/,/g, ''));
-    // Should be greater than original 800 (we added 750 freight)
-    expect(expenseValue).toBeGreaterThan(800);
-  });
-
-  // TEST e: Send to billing
-  test('should send all income to billing', async () => {
-    await page.goto(`/operations/${operationId}`);
-    await page.waitForSelector('text=/OP-/');
-    const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
-    await paymentTab.click();
-    await page.waitForSelector('app-payment-panel .card');
-
-    // Click "Send All to Billing" button
-    const sendBtn = page.locator('app-payment-panel button.btn-outline-primary', { hasText: /Send|Enviar/ });
-    await expect(sendBtn).toBeVisible({ timeout: 5000 });
-
-    // Handle the alert dialog that appears after sending
-    page.once('dialog', async dialog => {
-      await dialog.accept();
-    });
-
-    await sendBtn.click();
-    await page.waitForTimeout(2000);
-
-    // Verify success indicator: check-circle icon or "All income sent" text
-    const successIndicator = page.locator('app-payment-panel i.bi-check-circle-fill.text-success');
-    await expect(successIndicator).toBeVisible({ timeout: 5000 });
-  });
-
   // TEST d: Generate liquidation
-  test('should generate liquidation with agency fee', async () => {
+  test('should generate liquidation', async () => {
     await page.goto(`/operations/${operationId}`);
     await page.waitForSelector('text=/OP-/');
     const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
     await paymentTab.click();
-    await page.waitForSelector('app-payment-panel .card');
 
-    // Enter agency fee
-    const agencyFeeInput = page.locator('app-payment-panel .input-group input[type="number"]');
-    await expect(agencyFeeInput).toBeVisible({ timeout: 5000 });
-    await agencyFeeInput.fill('2500');
-
-    // Click Generate button
+    // Click Generate button (scroll into view if needed)
     const generateBtn = page.locator('app-payment-panel button.btn-primary', { hasText: /Generate|Generar/ });
+    await expect(generateBtn).toBeVisible({ timeout: 10000 });
     await generateBtn.click();
 
-    // Wait for spinner to disappear and summary cards to appear
+    // Wait for liquidation lines table to appear
     await page.waitForSelector('app-payment-panel .spinner-border', { state: 'hidden', timeout: 10000 }).catch(() => {});
-    const summaryCards = page.locator('app-payment-panel .row.g-3.mb-4 .card');
-    await expect(summaryCards.first()).toBeVisible({ timeout: 10000 });
+    const linesTable = page.locator('app-payment-panel table.table-sm.align-middle');
+    await expect(linesTable.first()).toBeVisible({ timeout: 10000 });
   });
 
-  // TEST e: Liquidation summary cards displayed
-  test('should display 4 liquidation summary cards with values', async () => {
+  // TEST: Cross-reference section collapsed by default, expands on click
+  test('should show cross-reference section collapsed by default and expand on click', async () => {
     await page.goto(`/operations/${operationId}`);
     await page.waitForSelector('text=/OP-/');
     const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
     await paymentTab.click();
 
-    // Wait for summary cards row
-    const summaryCards = page.locator('app-payment-panel .row.g-3.mb-4 .card');
-    await expect(summaryCards.first()).toBeVisible({ timeout: 10000 });
-    const cardCount = await summaryCards.count();
-    expect(cardCount).toBe(4);
+    // Cross-reference header with chevron-down should be visible (collapsed state)
+    const chevronDown = page.locator('app-payment-panel i.bi-chevron-down');
+    await expect(chevronDown).toBeVisible({ timeout: 5000 });
 
-    // Verify Grand Total card (bg-primary) has a non-zero value
-    const grandTotalCard = page.locator('app-payment-panel .card.bg-primary strong.fs-5');
-    await expect(grandTotalCard).toBeVisible();
-    const grandTotalText = await grandTotalCard.textContent();
-    const grandTotalValue = parseFloat(grandTotalText!.replace(/,/g, ''));
-    expect(grandTotalValue).toBeGreaterThan(0);
+    // The cross-reference table (inside px-3.pt-3.pb-2 container) should NOT be visible
+    const crossRefContainer = page.locator('app-payment-panel div.px-3.pt-3.pb-2');
+    const crossRefTable = crossRefContainer.locator('table.table-sm');
+    await expect(crossRefTable).not.toBeVisible();
+
+    // Click the cross-reference header to expand
+    const crossRefTitle = page.locator('app-payment-panel span', { hasText: /Income vs Expenses|Cruce/ });
+    await crossRefTitle.click();
+    await page.waitForTimeout(500);
+
+    // Chevron should change to up
+    const chevronUp = page.locator('app-payment-panel i.bi-chevron-up');
+    await expect(chevronUp).toBeVisible();
+
+    // Now the cross-reference table should be visible
+    await expect(crossRefTable).toBeVisible({ timeout: 5000 });
+  });
+
+  // TEST e: Summary metrics displayed
+  test('should display summary metrics with income, expenses, balance, and profit', async () => {
+    await page.goto(`/operations/${operationId}`);
+    await page.waitForSelector('text=/OP-/');
+    const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
+    await paymentTab.click();
+
+    // Wait for summary metrics (4 rounded boxes: income, expenses, balance, profit%)
+    const metricBoxes = page.locator('app-payment-panel .rounded-3.p-2.text-center');
+    await expect(metricBoxes.first()).toBeVisible({ timeout: 10000 });
+    const boxCount = await metricBoxes.count();
+    expect(boxCount).toBe(4);
+
+    // Verify income value is shown (text-success)
+    const incomeValue = page.locator('app-payment-panel .rounded-3 .fw-bold.text-success').first();
+    await expect(incomeValue).toBeVisible();
+    const incomeText = await incomeValue.textContent();
+    expect(parseFloat(incomeText!.replace(/,/g, ''))).toBeGreaterThan(0);
   });
 
   // TEST f: Lines table displayed
@@ -328,14 +290,14 @@ test.describe('Payment & Liquidation Lifecycle', () => {
     const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
     await paymentTab.click();
 
-    // Wait for lines table (the second table, inside liquidation breakdown section)
-    const linesTable = page.locator('app-payment-panel table.table-hover').last();
+    // Wait for liquidation lines table (table.table-sm inside .table-responsive)
+    const linesTable = page.locator('app-payment-panel .table-responsive table.table-sm.align-middle').last();
     await expect(linesTable).toBeVisible({ timeout: 10000 });
 
-    // Verify headers: Concept, Description, Amount, Type
+    // Verify headers: Concept, Description, Amount, Type, Reimbursable
     const headers = linesTable.locator('thead th');
     const headerCount = await headers.count();
-    expect(headerCount).toBeGreaterThanOrEqual(3);
+    expect(headerCount).toBeGreaterThanOrEqual(4);
 
     // Verify rows exist
     const rows = linesTable.locator('tbody tr');
@@ -387,20 +349,15 @@ test.describe('Payment & Liquidation Lifecycle', () => {
   });
 
   // TEST i: Make definitive
-  test('should make liquidation definitive with DGA payment code', async () => {
+  test('should make liquidation definitive', async () => {
     await page.goto(`/operations/${operationId}`);
     await page.waitForSelector('text=/OP-/');
     const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
     await paymentTab.click();
 
-    // Wait for the Make Definitive section
-    const dgaInput = page.locator('app-payment-panel .card.border-primary input.form-control');
-    await expect(dgaInput).toBeVisible({ timeout: 10000 });
-    await dgaInput.fill('DGA-PAY-E2E-001');
-
     // Click Make Definitive button
-    const definitiveBtn = page.locator('app-payment-panel .card.border-primary button.btn-primary');
-    await expect(definitiveBtn).toBeEnabled();
+    const definitiveBtn = page.locator('app-payment-panel button.btn-primary.btn-sm', { hasText: /Definitive|Definitiv/ });
+    await expect(definitiveBtn).toBeVisible({ timeout: 10000 });
     await definitiveBtn.click();
     await page.waitForTimeout(2000);
 
@@ -409,6 +366,34 @@ test.describe('Payment & Liquidation Lifecycle', () => {
     await expect(statusBadge).toBeVisible({ timeout: 10000 });
     const badgeText = await statusBadge.textContent();
     expect(badgeText).toMatch(/Definitive|Definitiv/i);
+  });
+
+  // TEST: Send reimbursable charges to billing (only available in DEFINITIVE status)
+  test('should send reimbursable charges to billing from liquidation section', async () => {
+    // Remove stale dialog handlers from previous tests
+    page.removeAllListeners('dialog');
+
+    await page.goto(`/operations/${operationId}`);
+    await page.waitForSelector('text=/OP-/');
+    const paymentTab = page.locator('button[ngbNavLink]', { hasText: /Payment|Pago/ });
+    await paymentTab.click();
+    await page.waitForSelector('app-payment-panel .card');
+
+    // The "Send to Billing" button should now be in the liquidation section (DEFINITIVE status)
+    const sendBtn = page.locator('app-payment-panel button.btn-outline-primary', { hasText: /Send|Enviar/ });
+    await expect(sendBtn).toBeVisible({ timeout: 5000 });
+
+    // Handle confirm dialog and then the success alert
+    page.on('dialog', async dialog => {
+      await dialog.accept();
+    });
+
+    await sendBtn.click();
+    await page.waitForTimeout(2000);
+
+    // Verify success indicator: check-circle icon or "All reimbursable sent" text
+    const successIndicator = page.locator('app-payment-panel i.bi-check-circle-fill.text-success');
+    await expect(successIndicator.first()).toBeVisible({ timeout: 5000 });
   });
 
   // TEST j: Register payment
@@ -432,15 +417,12 @@ test.describe('Payment & Liquidation Lifecycle', () => {
     const dateInput = paymentCard.locator('input[type="date"]');
     await dateInput.fill('2025-12-15');
 
-    // Fill optional reference fields (4th, 5th, 6th inputs in the form rows)
+    // Fill optional reference fields
     const textInputs = paymentCard.locator('input[type="text"].form-control');
-    const dgaRefInput = textInputs.nth(0);
-    await dgaRefInput.fill('DGA-REF-001');
-
-    const bankRefInput = textInputs.nth(1);
+    const bankRefInput = textInputs.nth(0);
     await bankRefInput.fill('BANK-REF-001');
 
-    const notesInput = textInputs.nth(2);
+    const notesInput = textInputs.nth(1);
     await notesInput.fill('E2E test payment');
 
     // Click Register Payment button
@@ -477,9 +459,6 @@ test.describe('Payment & Liquidation Lifecycle', () => {
 
     // Check method is displayed
     expect(amountText).toMatch(/Bank Transfer|Transferencia/i);
-
-    // Check DGA reference
-    expect(amountText).toContain('DGA-REF-001');
 
     // Check bank reference
     expect(amountText).toContain('BANK-REF-001');

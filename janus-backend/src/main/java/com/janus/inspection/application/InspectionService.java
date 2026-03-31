@@ -386,42 +386,45 @@ public class InspectionService {
         var incomeByCategory = buildCategoryBreakdown(incomeCharges);
         var expenseByCategory = buildCategoryBreakdown(expenseCharges);
 
-        long totalIncomeCount = incomeCharges.size();
-        long incomeSentToBillingCount = incomeCharges.stream()
+        long totalReimbursableCount = allActive.stream()
+                .filter(e -> e.reimbursable)
+                .count();
+        long reimbursableSentToBillingCount = allActive.stream()
+                .filter(e -> e.reimbursable)
                 .filter(e -> e.billingStatus != BillingStatus.NONE)
                 .count();
-        boolean allIncomeSentToBilling = totalIncomeCount > 0 && incomeSentToBillingCount == totalIncomeCount;
+        boolean allReimbursableSentToBilling = totalReimbursableCount > 0 && reimbursableSentToBillingCount == totalReimbursableCount;
 
         return new ChargeCrossReferenceResponse(
                 totalIncome, totalExpenses, balance,
                 incomeByCategory, expenseByCategory,
-                incomeSentToBillingCount, totalIncomeCount, allIncomeSentToBilling
+                reimbursableSentToBillingCount, totalReimbursableCount, allReimbursableSentToBilling
         );
     }
 
     @Transactional
-    public SendToBillingResponse sendAllIncomeToBilling(Long operationId, String username) {
+    public SendToBillingResponse sendReimbursableToBilling(Long operationId, String username) {
         operationService.findById(operationId);
 
-        var pendingIncomeCharges = inspectionExpenseRepository
-                .findActiveIncomeWithBillingStatus(operationId, BillingStatus.NONE);
+        var pendingReimbursableCharges = inspectionExpenseRepository
+                .findActiveReimbursableWithBillingStatus(operationId, BillingStatus.NONE);
 
-        for (var charge : pendingIncomeCharges) {
+        for (var charge : pendingReimbursableCharges) {
             charge.billingStatus = BillingStatus.SENT_TO_BILLING;
         }
 
-        if (!pendingIncomeCharges.isEmpty()) {
+        if (!pendingReimbursableCharges.isEmpty()) {
             auditEvent.fire(new AuditEvent(
                     username, AuditAction.UPDATE, "InspectionExpense", null, operationId,
                     null, null,
-                    "Sent " + pendingIncomeCharges.size() + " income charges to billing"
+                    "Sent " + pendingReimbursableCharges.size() + " reimbursable charges to billing"
             ));
         }
 
-        LOG.infof("Sent %d income charges to billing for operation %d by %s",
-                pendingIncomeCharges.size(), operationId, username);
+        LOG.infof("Sent %d reimbursable charges to billing for operation %d by %s",
+                pendingReimbursableCharges.size(), operationId, username);
 
-        return new SendToBillingResponse(pendingIncomeCharges.size());
+        return new SendToBillingResponse(pendingReimbursableCharges.size());
     }
 
     private void regeneratePreliminaryLiquidation(Long operationId, String username) {

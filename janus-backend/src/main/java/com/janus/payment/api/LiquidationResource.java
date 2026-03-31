@@ -60,7 +60,7 @@ public class LiquidationResource {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         var liquidation = liquidationService.getLiquidation(operationId);
         if (liquidation == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.noContent().build();
         }
         return Response.ok(LiquidationResponse.from(liquidation)).build();
     }
@@ -112,7 +112,7 @@ public class LiquidationResource {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
         var payment = liquidationService.getPayment(operationId);
         if (payment == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.noContent().build();
         }
         return Response.ok(PaymentResponse.from(payment)).build();
     }

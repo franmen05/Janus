@@ -192,6 +192,6 @@ public class InspectionResource {
     @RolesAllowed({"ADMIN", "AGENT"})
     public SendToBillingResponse sendToBilling(@PathParam("operationId") Long operationId,
                                                 @Context SecurityContext sec) {
-        return inspectionService.sendAllIncomeToBilling(operationId, sec.getUserPrincipal().getName());
+        return inspectionService.sendReimbursableToBilling(operationId, sec.getUserPrincipal().getName());
     }
 }

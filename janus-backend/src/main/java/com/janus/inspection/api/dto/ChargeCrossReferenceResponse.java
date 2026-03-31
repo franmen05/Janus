@@ -9,9 +9,9 @@ public record ChargeCrossReferenceResponse(
     BigDecimal balance,
     List<CategoryBreakdown> incomeByCategory,
     List<CategoryBreakdown> expenseByCategory,
-    long incomeSentToBillingCount,
-    long totalIncomeCount,
-    boolean allIncomeSentToBilling
+    long reimbursableSentToBillingCount,
+    long totalReimbursableCount,
+    boolean allReimbursableSentToBilling
 ) {
     public record CategoryBreakdown(String category, BigDecimal amount, boolean reimbursable, List<String> descriptions) {}
 }
