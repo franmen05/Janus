@@ -135,6 +135,7 @@ public class DataSeeder {
         createConfig("LOCAL_CHARGES_VALIDATED", "enabled", "true", "Enable local charges validated rule");
         createConfig("RECEPTION_RECEIPT_REQUIRED", "enabled", "true", "Enable reception receipt required rule for closing operations");
         createConfig("LIQUIDATION_PAID_FOR_CLOSING", "enabled", "true", "Enable liquidation paid check before closing operation");
+        createConfig("LIQUIDATION_APPROVAL_REQUIRED", "enabled", "true", "Requires ADMIN approval before liquidation can be made definitive");
     }
 
     private void seedPorts() {

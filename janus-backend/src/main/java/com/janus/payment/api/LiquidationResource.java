@@ -8,6 +8,7 @@ import com.janus.payment.api.dto.MakeDefinitiveRequest;
 import com.janus.payment.api.dto.PaymentResponse;
 import com.janus.payment.api.dto.RegisterPaymentRequest;
 import com.janus.payment.application.LiquidationService;
+import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
 import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -37,6 +38,9 @@ public class LiquidationResource {
 
     @Inject
     SecurityHelper securityHelper;
+
+    @Inject
+    ComplianceRuleConfigRepository complianceRuleConfigRepository;
 
     @POST
     @RolesAllowed({"ADMIN", "AGENT"})
@@ -115,5 +119,13 @@ public class LiquidationResource {
             return Response.noContent().build();
         }
         return Response.ok(PaymentResponse.from(payment)).build();
+    }
+
+    @GET
+    @Path("/config")
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    public Response getLiquidationConfig() {
+        boolean approvalRequired = complianceRuleConfigRepository.isRuleEnabled("LIQUIDATION_APPROVAL_REQUIRED");
+        return Response.ok(java.util.Map.of("approvalRequired", approvalRequired)).build();
     }
 }

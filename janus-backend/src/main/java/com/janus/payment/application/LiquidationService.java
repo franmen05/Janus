@@ -12,6 +12,7 @@ import com.janus.payment.domain.model.LiquidationStatus;
 import com.janus.payment.domain.model.Payment;
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
+import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
@@ -32,6 +33,9 @@ public class LiquidationService {
 
     @Inject
     Event<AuditEvent> auditEvent;
+
+    @Inject
+    ComplianceRuleConfigRepository complianceRuleConfigRepository;
 
     @Transactional
     public Liquidation generateLiquidation(Long operationId, BigDecimal agencyServiceFee, String username) {
@@ -157,9 +161,17 @@ public class LiquidationService {
                     "No liquidation found for this operation");
         }
 
-        if (liquidation.status != LiquidationStatus.APPROVED) {
-            throw new BusinessException("LIQUIDATION_NOT_APPROVED",
-                    "Only APPROVED liquidations can be made definitive");
+        boolean approvalRequired = complianceRuleConfigRepository.isRuleEnabled("LIQUIDATION_APPROVAL_REQUIRED");
+        if (approvalRequired) {
+            if (liquidation.status != LiquidationStatus.APPROVED) {
+                throw new BusinessException("LIQUIDATION_NOT_APPROVED",
+                        "Only APPROVED liquidations can be made definitive");
+            }
+        } else {
+            if (liquidation.status != LiquidationStatus.PRELIMINARY && liquidation.status != LiquidationStatus.APPROVED) {
+                throw new BusinessException("LIQUIDATION_NOT_PRELIMINARY",
+                        "Liquidation must be PRELIMINARY or APPROVED to be made definitive");
+            }
         }
 
         liquidation.status = LiquidationStatus.DEFINITIVE;
