@@ -54,7 +54,14 @@
     "OPS_CLOSED": "Closed",
     "CLOSE_RATE": "Close Rate",
     "COUNT": "Count",
-    "ACTIVE_ALERTS": "Active Alerts"
+    "ACTIVE_ALERTS": "Active Alerts",
+    "SUBTITLE": "Operations overview and analytics",
+    "CHART_OPS_BY_STATUS": "Operations by Status",
+    "CHART_AVG_TIME": "Average Time per Stage",
+    "CHART_PRODUCTIVITY": "Agent Productivity",
+    "CHART_STATUS_DIST": "Status Distribution",
+    "CHART_STATUS_DIST_SUB": "Active operations breakdown",
+    "HANDLED": "Handled"
   },
   "OPERATIONS": {
     "TITLE": "Operations",

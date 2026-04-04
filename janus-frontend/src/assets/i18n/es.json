@@ -54,7 +54,14 @@
     "OPS_CLOSED": "Cerradas",
     "CLOSE_RATE": "Tasa de Cierre",
     "COUNT": "Cantidad",
-    "ACTIVE_ALERTS": "Alertas Activas"
+    "ACTIVE_ALERTS": "Alertas Activas",
+    "SUBTITLE": "Resumen de operaciones y análisis",
+    "CHART_OPS_BY_STATUS": "Operaciones por Estado",
+    "CHART_AVG_TIME": "Tiempo Promedio por Etapa",
+    "CHART_PRODUCTIVITY": "Productividad por Agente",
+    "CHART_STATUS_DIST": "Distribución por Estado",
+    "CHART_STATUS_DIST_SUB": "Desglose de operaciones activas",
+    "HANDLED": "Gestionadas"
   },
   "OPERATIONS": {
     "TITLE": "Operaciones",
