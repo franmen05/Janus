@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
@@ -68,13 +68,20 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
 })
 export class OperationListComponent implements OnInit {
   private operationService = inject(OperationService);
+  private route = inject(ActivatedRoute);
   authService = inject(AuthService);
   loading = signal(true);
   operations = signal<Operation[]>([]);
   filterStatus = '';
   statuses = Object.values(OperationStatus);
 
-  ngOnInit(): void { this.loadOperations(); }
+  ngOnInit(): void {
+    const statusParam = this.route.snapshot.queryParamMap.get('status');
+    if (statusParam) {
+      this.filterStatus = statusParam;
+    }
+    this.loadOperations();
+  }
 
   loadOperations(): void {
     this.operationService.getAll(this.filterStatus || undefined).subscribe(ops => {

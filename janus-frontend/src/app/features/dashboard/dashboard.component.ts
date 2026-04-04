@@ -1,10 +1,10 @@
 import { Component, inject, OnInit, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartData, ChartOptions } from 'chart.js';
+import { ChartConfiguration, ChartData, ChartEvent, ChartOptions } from 'chart.js';
 import { OperationService } from '../../core/services/operation.service';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { AlertService } from '../../core/services/alert.service';
@@ -157,6 +157,10 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
       background-color: rgba(245, 158, 11, 0.05);
     }
 
+    .data-card .table tbody tr:hover {
+      background-color: rgba(99, 102, 241, 0.06);
+    }
+
     .chart-container {
       position: relative;
       width: 100%;
@@ -304,7 +308,9 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
                 <thead class="table-light"><tr><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'DASHBOARD.COUNT' | translate }}</th></tr></thead>
                 <tbody>
                   @for (entry of statusEntries(); track entry[0]) {
-                    <tr><td><app-status-badge [status]="entry[0]" /></td><td class="mono">{{ entry[1] }}</td></tr>
+                    <tr style="cursor: pointer;" (click)="navigateToOperations(entry[0])">
+                      <td><app-status-badge [status]="entry[0]" /></td><td class="mono">{{ entry[1] }}</td>
+                    </tr>
                   }
                 </tbody>
               </table>
@@ -343,6 +349,7 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
                   <canvas baseChart
                     [data]="polarData()"
                     [options]="polarOptions()"
+                    (chartClick)="onPolarChartClick($event)"
                     type="polarArea">
                   </canvas>
                 </div>
@@ -458,6 +465,7 @@ export class DashboardComponent implements OnInit {
   private alertService = inject(AlertService);
   private themeService = inject(ThemeService);
   private translateService = inject(TranslateService);
+  private router = inject(Router);
   authService = inject(AuthService);
 
   loading = signal(true);
@@ -484,6 +492,8 @@ export class DashboardComponent implements OnInit {
   filterAgent = '';
   transportModes = Object.values(TransportMode);
   operationCategories = Object.values(OperationCategory);
+
+  private polarStatusKeys: string[] = [];
 
   // Status color mapping for the doughnut chart
   private statusColorMap: Record<string, string> = {
@@ -586,8 +596,10 @@ export class DashboardComponent implements OnInit {
     const entries = Object.entries(m.operationsByStatus).filter(([, count]) => (count as number) > 0) as [string, number][];
     if (!entries.length) {
       this.polarData.set({ labels: [], datasets: [] });
+      this.polarStatusKeys = [];
       return;
     }
+    this.polarStatusKeys = entries.map(([status]) => status);
     const labels = entries.map(([status]) => {
       const key = `STATUS_SHORT.${status}`;
       const translated = this.translateService.instant(key);
@@ -612,6 +624,12 @@ export class DashboardComponent implements OnInit {
     this.polarOptions.set({
       responsive: true,
       maintainAspectRatio: false,
+      onHover: (event: any, elements: any[]) => {
+        const target = event.native?.target as HTMLElement;
+        if (target) {
+          target.style.cursor = elements.length > 0 ? 'pointer' : 'default';
+        }
+      },
       animation: {
         animateRotate: true,
         animateScale: true,
@@ -799,6 +817,20 @@ export class DashboardComponent implements OnInit {
     const m = this.metrics();
     if (m) {
       this.buildCharts(m);
+    }
+  }
+
+  navigateToOperations(status: string): void {
+    this.router.navigate(['/operations'], { queryParams: { status } });
+  }
+
+  onPolarChartClick(event: { event?: ChartEvent; active?: any[] }): void {
+    if (event.active && event.active.length > 0) {
+      const index = event.active[0].index;
+      const status = this.polarStatusKeys[index];
+      if (status) {
+        this.navigateToOperations(status);
+      }
     }
   }
 
