@@ -49,7 +49,8 @@ public class InspectionService {
     private static final Set<OperationStatus> ALLOWED_STATUSES = Set.of(
             OperationStatus.SUBMITTED_TO_CUSTOMS,
             OperationStatus.VALUATION_REVIEW,
-            OperationStatus.PAYMENT_PREPARATION
+            OperationStatus.PAYMENT_PREPARATION,
+            OperationStatus.IN_TRANSIT
     );
 
     @Inject
@@ -91,7 +92,7 @@ public class InspectionService {
 
         if (!ALLOWED_STATUSES.contains(operation.status)) {
             throw new BusinessException(
-                    "Inspection type can only be set when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW or PAYMENT_PREPARATION status");
+                    "Inspection type can only be set when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW, PAYMENT_PREPARATION or IN_TRANSIT status");
         }
 
         operation.inspectionType = inspectionType;
@@ -130,7 +131,7 @@ public class InspectionService {
 
         if (!ALLOWED_STATUSES.contains(operation.status)) {
             throw new BusinessException(
-                    "Photos can only be uploaded when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW or PAYMENT_PREPARATION status");
+                    "Photos can only be uploaded when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW, PAYMENT_PREPARATION or IN_TRANSIT status");
         }
 
         documentValidationService.validateFile(mimeType, fileSize);
@@ -188,7 +189,7 @@ public class InspectionService {
 
         if (!ALLOWED_STATUSES.contains(operation.status)) {
             throw new BusinessException(
-                    "Expenses can only be added when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW or PAYMENT_PREPARATION status");
+                    "Expenses can only be added when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW, PAYMENT_PREPARATION or IN_TRANSIT status");
         }
 
         var categoryConfig = expenseCategoryConfigRepository.findByName(request.category())
@@ -252,7 +253,7 @@ public class InspectionService {
 
         if (!ALLOWED_STATUSES.contains(operation.status)) {
             throw new BusinessException(
-                    "Expenses can only be updated when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW or PAYMENT_PREPARATION status");
+                    "Expenses can only be updated when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW, PAYMENT_PREPARATION or IN_TRANSIT status");
         }
 
         var expense = inspectionExpenseRepository.findByIdOptional(expenseId)
@@ -319,7 +320,7 @@ public class InspectionService {
 
         if (!ALLOWED_STATUSES.contains(operation.status)) {
             throw new BusinessException(
-                    "Expenses can only be deleted when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW or PAYMENT_PREPARATION status");
+                    "Expenses can only be deleted when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW, PAYMENT_PREPARATION or IN_TRANSIT status");
         }
 
         var expense = inspectionExpenseRepository.findByIdOptional(expenseId)
