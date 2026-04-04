@@ -259,7 +259,7 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
 
       <!-- KPI cards -->
       <div class="row mb-4 g-3">
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3" (click)="navigateToOperations('active')" style="cursor: pointer;">
           <div class="kpi-card kpi-card--indigo">
             <div class="d-flex align-items-center mb-2">
               <span class="kpi-dot"></span>
@@ -268,7 +268,7 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
             <div class="kpi-value">{{ activeCount() }}</div>
           </div>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3" (click)="navigateToOperations('overdue')" style="cursor: pointer;">
           <div class="kpi-card kpi-card--red">
             <div class="d-flex align-items-center mb-2">
               <span class="kpi-dot"></span>
@@ -286,7 +286,7 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
             <div class="kpi-value">{{ (metrics()?.rejectionRate ?? 0) | number:'1.1-1' }}%</div>
           </div>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3" (click)="navigateToOperations('CLOSED')" style="cursor: pointer;">
           <div class="kpi-card kpi-card--green">
             <div class="d-flex align-items-center mb-2">
               <span class="kpi-dot"></span>
@@ -413,7 +413,7 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
     } @else {
       <!-- Simple view for CLIENT/CARRIER -->
       <div class="row mb-4 g-3">
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3" (click)="navigateToOperations('active')" style="cursor: pointer;">
           <div class="kpi-card kpi-card--indigo">
             <div class="d-flex align-items-center mb-2">
               <span class="kpi-dot"></span>
@@ -422,7 +422,7 @@ import { LoadingIndicatorComponent } from '../../shared/components/loading-indic
             <div class="kpi-value">{{ activeCount() }}</div>
           </div>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3" (click)="navigateToOperations('CLOSED')" style="cursor: pointer;">
           <div class="kpi-card kpi-card--green">
             <div class="d-flex align-items-center mb-2">
               <span class="kpi-dot"></span>
@@ -820,8 +820,12 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  navigateToOperations(status: string): void {
-    this.router.navigate(['/operations'], { queryParams: { status } });
+  navigateToOperations(filterOrStatus: string): void {
+    if (filterOrStatus === 'active' || filterOrStatus === 'overdue') {
+      this.router.navigate(['/operations'], { queryParams: { filter: filterOrStatus } });
+    } else {
+      this.router.navigate(['/operations'], { queryParams: { status: filterOrStatus } });
+    }
   }
 
   onPolarChartClick(event: { event?: ChartEvent; active?: any[] }): void {
