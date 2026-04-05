@@ -31,7 +31,7 @@ public class ExpenseCategoryResource {
     ExpenseCategoryConfigService service;
 
     @GET
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     @Transactional
     public List<ExpenseCategoryResponse> listActive() {
         return service.listActive().stream()

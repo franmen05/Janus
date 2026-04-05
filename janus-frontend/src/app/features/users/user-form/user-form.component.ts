@@ -45,14 +45,18 @@ import { Customer } from '../../../core/models/customer.model';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'USERS.ROLE' | translate }} <span class="text-danger">*</span></label>
-              <select class="form-select" formControlName="role">
-                @for (r of roles; track r) {
-                  <option [value]="r">{{ 'ROLES.' + r | translate }}</option>
+              <label class="form-label">{{ 'USERS.ROLES' | translate }} <span class="text-danger">*</span></label>
+              <div class="d-flex flex-wrap gap-2">
+                @for (r of availableRoles; track r) {
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" [id]="'role-' + r"
+                      [checked]="isRoleSelected(r)" (change)="toggleRole(r)">
+                    <label class="form-check-label" [for]="'role-' + r">{{ 'ROLES.' + r | translate }}</label>
+                  </div>
                 }
-              </select>
+              </div>
             </div>
-            @if (form.get('role')?.value === 'CUSTOMER') {
+            @if (isRoleSelected('CUSTOMER')) {
               <div class="col-md-6">
                 <label class="form-label">{{ 'USERS.CUSTOMER' | translate }}</label>
                 <div class="input-group">
@@ -94,7 +98,7 @@ export class UserFormComponent implements OnInit {
 
   isEdit = signal(false);
   userId: number | null = null;
-  roles = Object.values(Role);
+  availableRoles = Object.values(Role);
   customers = signal<Customer[]>([]);
   selectedCustomer = signal<Customer | null>(null);
   selectedCustomerDisplay = signal('');
@@ -104,7 +108,7 @@ export class UserFormComponent implements OnInit {
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     fullName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    role: new FormControl('AGENT', { nonNullable: true, validators: [Validators.required] }),
+    roles: new FormControl<string[]>(['AGENT'], { nonNullable: true, validators: [Validators.required] }),
     customerId: new FormControl<number | null>(null)
   });
 
@@ -135,6 +139,19 @@ export class UserFormComponent implements OnInit {
     this.form.get('customerId')!.setValue(customer.id);
   }
 
+  isRoleSelected(role: string): boolean {
+    return this.form.get('roles')!.value.includes(role);
+  }
+
+  toggleRole(role: string): void {
+    const current = this.form.get('roles')!.value as string[];
+    if (current.includes(role)) {
+      this.form.get('roles')!.setValue(current.filter(r => r !== role));
+    } else {
+      this.form.get('roles')!.setValue([...current, role]);
+    }
+  }
+
   clearCustomer(): void {
     this.selectedCustomer.set(null);
     this.selectedCustomerDisplay.set('');
@@ -156,7 +173,7 @@ export class UserFormComponent implements OnInit {
             username: u.username,
             fullName: u.fullName,
             email: u.email,
-            role: u.role,
+            roles: u.roles,
             customerId: u.customerId
           });
           if (u.customerId) {
@@ -178,7 +195,7 @@ export class UserFormComponent implements OnInit {
       this.userService.update(this.userId!, {
         fullName: val.fullName,
         email: val.email,
-        role: val.role as Role,
+        roles: val.roles as Role[],
         customerId: val.customerId,
         active: true,
         password: val.password || null
@@ -189,7 +206,7 @@ export class UserFormComponent implements OnInit {
         password: val.password,
         fullName: val.fullName,
         email: val.email,
-        role: val.role as Role,
+        roles: val.roles as Role[],
         customerId: val.customerId
       }).subscribe(() => this.router.navigate(['/users']));
     }

@@ -35,14 +35,14 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
                   <i class="bi bi-box-seam me-2"></i>{{ 'NAV.OPERATIONS' | translate }}
                 </a>
               </li>
-              @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+              @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                 <li class="nav-item d-lg-none">
                   <a class="nav-link" routerLink="/customers" routerLinkActive="active" (click)="closeMenu()">
                     <i class="bi bi-people me-2"></i>{{ 'NAV.CUSTOMERS' | translate }}
                   </a>
                 </li>
               }
-              @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+              @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                 <li class="nav-item d-lg-none">
                   <a class="nav-link" routerLink="/alerts" routerLinkActive="active" (click)="closeMenu()">
                     <i class="bi bi-bell me-2"></i>{{ 'NAV.ALERTS' | translate }}
@@ -99,7 +99,7 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
                 <span class="nav-link text-light">
                   <i class="bi bi-person-circle me-2"></i>
                   {{ authService.user()?.fullName }}
-                  <span class="badge bg-primary bg-opacity-25 text-primary-emphasis ms-1">{{ authService.user()?.role }}</span>
+                  @for (r of authService.user()?.roles ?? []; track r) { <span class="badge bg-primary bg-opacity-25 text-primary-emphasis ms-1">{{ 'ROLES.' + r | translate }}</span> }
                 </span>
               </li>
               <li class="d-lg-none nav-item">

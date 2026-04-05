@@ -18,7 +18,7 @@ export class AuthService {
 
   isAuthenticated = computed(() => this.currentUser() !== null);
   user = computed(() => this.currentUser());
-  role = computed(() => this.currentUser()?.role ?? null);
+  roles = computed(() => this.currentUser()?.roles ?? []);
 
   constructor(private http: HttpClient, private router: Router) {
     this.restoreSession();
@@ -57,8 +57,8 @@ export class AuthService {
   }
 
   hasRole(roles: string[]): boolean {
-    const userRole = this.role();
-    return userRole !== null && roles.includes(userRole);
+    const userRoles = this.roles();
+    return userRoles.length > 0 && userRoles.some(r => roles.includes(r));
   }
 
   private restoreSession(): void {

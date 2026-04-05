@@ -22,7 +22,7 @@ import java.util.List;
 @Path("/api/customers")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed({"SUPERVISOR","ADMIN", "AGENT"})
+@RolesAllowed({"ADMIN", "AGENT"})
 public class CustomerResource {
 
     @Inject

@@ -21,7 +21,7 @@ import { ToastService } from '../../../core/services/toast.service';
     } @else {
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
       <h5 class="mb-0">{{ 'DOCUMENTS.TITLE' | translate }}</h5>
-      @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+      @if (authService.hasRole(['ADMIN', 'AGENT'])) {
         <a [routerLink]="['/operations', operationId, 'documents', 'upload']" class="btn btn-sm btn-primary">{{ 'DOCUMENTS.UPLOAD' | translate }}</a>
       }
     </div>
@@ -51,7 +51,7 @@ import { ToastService } from '../../../core/services/toast.service';
                       <button class="btn btn-outline-info" (click)="printDoc(doc)">{{ 'ACTIONS.PRINT' | translate }}</button>
                       <a [routerLink]="['/operations', operationId, 'documents', doc.id, 'versions']" class="btn btn-outline-secondary">{{ 'ACTIONS.VERSIONS' | translate }}</a>
                     }
-                    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && doc.active && operationStatus !== 'CLOSED' && operationStatus !== 'CANCELLED') {
+                    @if (authService.hasRole(['ADMIN', 'AGENT']) && doc.active && operationStatus !== 'CLOSED' && operationStatus !== 'CANCELLED') {
                       <button class="btn btn-outline-danger" (click)="deleteDoc(doc)">{{ 'ACTIONS.DELETE' | translate }}</button>
                     }
                   </div>

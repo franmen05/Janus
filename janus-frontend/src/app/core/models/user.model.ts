@@ -12,7 +12,7 @@ export interface User {
   username: string;
   fullName: string;
   email: string;
-  role: string;
+  roles: string[];
   active: boolean;
   customerId: number | null;
   createdAt: string;
@@ -23,14 +23,14 @@ export interface CreateUserRequest {
   password: string;
   fullName: string;
   email: string;
-  role: Role;
+  roles: Role[];
   customerId: number | null;
 }
 
 export interface UpdateUserRequest {
   fullName: string;
   email: string;
-  role: Role;
+  roles: Role[];
   customerId: number | null;
   active: boolean;
   password: string | null;

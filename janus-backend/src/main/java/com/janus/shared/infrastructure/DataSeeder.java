@@ -17,6 +17,8 @@ import com.janus.compliance.domain.repository.ComplianceRuleConfigRepository;
 import com.janus.user.domain.model.Role;
 import com.janus.user.domain.model.User;
 import com.janus.user.domain.repository.UserRepository;
+import java.util.Set;
+import java.util.stream.Collectors;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -112,11 +114,12 @@ public class DataSeeder {
         var firstCustomer = customerRepository.find("ORDER BY id").firstResult();
         Long firstCustomerId = firstCustomer != null ? firstCustomer.id : null;
 
-        createUser("admin", "admin123", "System Administrator", "admin@janus.com", Role.ADMIN, null);
-        createUser("agent", "agent123", "Customs Agent", "agent@janus.com", Role.AGENT, null);
-        createUser("accounting", "acc123", "Accounting User", "accounting@janus.com", Role.ACCOUNTING, null);
-        createUser("client", "client123", "Demo Client User", "client@demo.com", Role.CUSTOMER, firstCustomerId);
-        createUser("carrier", "carrier123", "Demo Carrier", "carrier@demo.com", Role.CARRIER, null);
+        createUser("admin", "admin123", "System Administrator", "admin@janus.com", Set.of(Role.ADMIN), null);
+        createUser("supervisor", "super123", "Supervisor Agent", "supervisor@janus.com", Set.of(Role.AGENT, Role.SUPERVISOR), null);
+        createUser("agent", "agent123", "Customs Agent", "agent@janus.com", Set.of(Role.AGENT), null);
+        createUser("accounting", "acc123", "Accounting User", "accounting@janus.com", Set.of(Role.ACCOUNTING), null);
+        createUser("client", "client123", "Demo Client User", "client@demo.com", Set.of(Role.CUSTOMER), firstCustomerId);
+        createUser("carrier", "carrier123", "Demo Carrier", "carrier@demo.com", Set.of(Role.CARRIER), null);
     }
 
     private void seedComplianceRuleConfigs() {
@@ -217,13 +220,13 @@ public class DataSeeder {
     }
 
     private void createUser(String username, String password, String fullName,
-                             String email, Role role, Long customerId) {
+                             String email, Set<Role> roles, Long customerId) {
         var user = new User();
         user.username = username;
         user.password = BcryptUtil.bcryptHash(password);
         user.fullName = fullName;
         user.email = email;
-        user.role = role.name();
+        user.roles = roles.stream().map(Role::name).collect(Collectors.toSet());
         user.customerId = customerId;
         userRepository.persist(user);
     }

@@ -5,10 +5,9 @@ import io.quarkus.security.jpa.Password;
 import io.quarkus.security.jpa.Roles;
 import io.quarkus.security.jpa.UserDefinition;
 import io.quarkus.security.jpa.Username;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -30,8 +29,10 @@ public class User extends BaseEntity {
     public String email;
 
     @Roles
-    @Column(nullable = false)
-    public String role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    public Set<String> roles = new HashSet<>();
 
     @Column(nullable = false)
     public boolean active = true;
@@ -40,11 +41,22 @@ public class User extends BaseEntity {
     public Long customerId;
 
     @Transient
-    public Role getRoleEnum() {
-        return Role.valueOf(role);
+    public Set<Role> getRoleEnums() {
+        var result = new HashSet<Role>();
+        for (var r : roles) {
+            result.add(Role.valueOf(r));
+        }
+        return result;
     }
 
-    public void setRoleEnum(Role roleEnum) {
-        this.role = roleEnum.name();
+    public void setRoleEnums(Set<Role> roleEnums) {
+        this.roles = new HashSet<>();
+        for (var r : roleEnums) {
+            this.roles.add(r.name());
+        }
+    }
+
+    public boolean hasRole(String roleName) {
+        return roles.contains(roleName);
     }
 }

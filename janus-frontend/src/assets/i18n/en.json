@@ -746,7 +746,8 @@
     "ACTIVE": "Active",
     "INACTIVE": "Inactive",
     "NO_USERS": "No users found",
-    "CUSTOMER_SEARCH_PLACEHOLDER": "Search by name, tax ID, or email..."
+    "CUSTOMER_SEARCH_PLACEHOLDER": "Search by name, tax ID, or email...",
+    "ROLES": "Roles"
   },
   "ROLES": {
     "ADMIN": "Administrator",

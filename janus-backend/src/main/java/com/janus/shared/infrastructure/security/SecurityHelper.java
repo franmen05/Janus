@@ -20,7 +20,7 @@ public class SecurityHelper {
      */
     public Long getCustomerIdFilter(SecurityContext sec) {
         var user = getUser(sec);
-        if ("CUSTOMER".equals(user.role)) {
+        if (user.hasRole("CUSTOMER")) {
             return user.customerId;
         }
         return null;
@@ -32,7 +32,7 @@ public class SecurityHelper {
      */
     public void enforceCustomerAccess(SecurityContext sec, Operation operation) {
         var user = getUser(sec);
-        if ("CUSTOMER".equals(user.role)) {
+        if (user.hasRole("CUSTOMER")) {
             if (user.customerId == null || operation.customer == null
                     || !user.customerId.equals(operation.customer.id)) {
                 throw new ForbiddenException("Access denied: operation does not belong to your customer");

@@ -26,7 +26,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
               <th>{{ 'USERS.USERNAME' | translate }}</th>
               <th>{{ 'USERS.FULL_NAME' | translate }}</th>
               <th class="d-none d-md-table-cell">{{ 'USERS.EMAIL' | translate }}</th>
-              <th>{{ 'USERS.ROLE' | translate }}</th>
+              <th>{{ 'USERS.ROLES' | translate }}</th>
               <th>{{ 'COMMON.STATUS' | translate }}</th>
               <th>{{ 'COMMON.ACTIONS' | translate }}</th>
             </tr>
@@ -37,7 +37,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                 <td class="fw-bold">{{ user.username }}</td>
                 <td>{{ user.fullName }}</td>
                 <td class="d-none d-md-table-cell">{{ user.email }}</td>
-                <td><span class="badge bg-info text-dark">{{ 'ROLES.' + user.role | translate }}</span></td>
+                <td>@for (r of user.roles; track r) { <span class="badge bg-info text-dark me-1">{{ 'ROLES.' + r | translate }}</span> }</td>
                 <td>
                   <span class="badge" [class]="user.active ? 'bg-success' : 'bg-secondary'">
                     {{ (user.active ? 'USERS.ACTIVE' : 'USERS.INACTIVE') | translate }}

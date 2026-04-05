@@ -129,7 +129,7 @@ import { DocumentListComponent } from '../../documents/document-list/document-li
                     }
                   } @else {
                     <span class="badge bg-secondary mb-2">{{ 'STATUS.PENDING' | translate }}</span>
-                    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+                    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                       <div class="mt-auto pt-2">
                         <button class="btn btn-success btn-sm w-100" (click)="approveTechnical()">{{ 'preliquidation.approveTechnical' | translate }}</button>
                       </div>
@@ -183,7 +183,7 @@ import { DocumentListComponent } from '../../documents/document-list/document-li
                     }
                   } @else {
                     <span class="badge bg-secondary mb-2">-</span>
-                    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+                    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                       <div class="mt-auto pt-2">
                         <button class="btn btn-outline-danger btn-sm w-100" (click)="reject()">{{ 'preliquidation.reject' | translate }}</button>
                       </div>

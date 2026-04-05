@@ -41,7 +41,7 @@ public class PortResource {
     PortRepository portRepository;
 
     @GET
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public List<PortResponse> list() {
         return portService.listAll().stream()
                 .map(PortResponse::from)
@@ -50,7 +50,7 @@ public class PortResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public PortResponse getById(@PathParam("id") Long id) {
         return PortResponse.from(portService.findById(id));
     }

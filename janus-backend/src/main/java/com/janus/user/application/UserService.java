@@ -6,6 +6,7 @@ import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.NotFoundException;
 import com.janus.user.api.dto.CreateUserRequest;
 import com.janus.user.api.dto.UpdateUserRequest;
+import com.janus.user.domain.model.Role;
 import com.janus.user.domain.model.User;
 import com.janus.user.domain.repository.UserRepository;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -14,6 +15,7 @@ import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class UserService {
@@ -49,7 +51,7 @@ public class UserService {
         user.password = BcryptUtil.bcryptHash(request.password());
         user.fullName = request.fullName();
         user.email = request.email();
-        user.role = request.role().name();
+        user.roles = request.roles().stream().map(Role::name).collect(Collectors.toSet());
         user.customerId = request.customerId();
         userRepository.persist(user);
         auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "User", user.id, null, null, null,
@@ -62,7 +64,7 @@ public class UserService {
         var user = findById(id);
         user.fullName = request.fullName();
         user.email = request.email();
-        user.role = request.role().name();
+        user.roles = request.roles().stream().map(Role::name).collect(Collectors.toSet());
         user.customerId = request.customerId();
         user.active = request.active();
         if (request.password() != null && !request.password().isBlank()) {

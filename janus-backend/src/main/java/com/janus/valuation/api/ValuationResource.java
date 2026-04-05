@@ -37,7 +37,7 @@ public class ValuationResource {
 
     @GET
     @Path("/checklist")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     public ValuationChecklistResponse getChecklist(@PathParam("operationId") Long operationId) {
         return valuationService.getChecklist(operationId);
     }
@@ -46,7 +46,7 @@ public class ValuationResource {
 
     @GET
     @Path("/permits")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     @Transactional
     public List<ExternalPermitResponse> getPermits(@PathParam("operationId") Long operationId) {
         return valuationService.getPermits(operationId).stream()
@@ -56,7 +56,7 @@ public class ValuationResource {
 
     @POST
     @Path("/permits")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response createPermit(@PathParam("operationId") Long operationId,
                                   @Valid ExternalPermitRequest request,
                                   @Context SecurityContext sec) {
@@ -68,7 +68,7 @@ public class ValuationResource {
 
     @PUT
     @Path("/permits/{permitId}")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public ExternalPermitResponse updatePermit(@PathParam("operationId") Long operationId,
                                                 @PathParam("permitId") Long permitId,
                                                 @Valid ExternalPermitRequest request,
@@ -79,7 +79,7 @@ public class ValuationResource {
 
     @DELETE
     @Path("/permits/{permitId}")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response deletePermit(@PathParam("operationId") Long operationId,
                                   @PathParam("permitId") Long permitId,
                                   @Context SecurityContext sec) {
@@ -91,7 +91,7 @@ public class ValuationResource {
 
     @POST
     @Path("/finalize")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response finalizeValuation(@PathParam("operationId") Long operationId,
                                        @Context SecurityContext sec) {
         valuationService.finalizeValuation(operationId, sec.getUserPrincipal().getName());
@@ -102,7 +102,7 @@ public class ValuationResource {
 
     @POST
     @Path("/validate-local-charges")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public OperationResponse validateLocalCharges(@PathParam("operationId") Long operationId,
                                                    @Context SecurityContext sec) {
         var op = valuationService.toggleLocalChargesValidated(operationId, true, sec.getUserPrincipal().getName());
@@ -111,7 +111,7 @@ public class ValuationResource {
 
     @PATCH
     @Path("/local-charges-validated")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public OperationResponse toggleLocalChargesValidated(@PathParam("operationId") Long operationId,
                                                           @Valid LocalChargesValidatedRequest body,
                                                           @Context SecurityContext sec) {
