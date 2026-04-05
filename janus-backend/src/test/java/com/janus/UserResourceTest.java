@@ -67,7 +67,7 @@ class UserResourceTest {
                 .then()
                 .statusCode(200)
                 .body("username", is("admin"))
-                .body("role", is("ADMIN"))
+                .body("roles", org.hamcrest.Matchers.hasItem("ADMIN"))
                 .body("fullName", is("System Administrator"));
     }
 
@@ -80,7 +80,7 @@ class UserResourceTest {
                 .then()
                 .statusCode(200)
                 .body("username", is("agent"))
-                .body("role", is("AGENT"));
+                .body("roles", org.hamcrest.Matchers.hasItem("AGENT"));
     }
 
     @Test
@@ -92,7 +92,7 @@ class UserResourceTest {
                 .then()
                 .statusCode(200)
                 .body("username", is("accounting"))
-                .body("role", is("ACCOUNTING"));
+                .body("roles", org.hamcrest.Matchers.hasItem("ACCOUNTING"));
     }
 
     @Test
@@ -104,7 +104,7 @@ class UserResourceTest {
                 .then()
                 .statusCode(200)
                 .body("username", is("client"))
-                .body("role", is("CUSTOMER"))
+                .body("roles", org.hamcrest.Matchers.hasItem("CUSTOMER"))
                 .body("customerId", notNullValue());
     }
 
@@ -117,7 +117,7 @@ class UserResourceTest {
                 .then()
                 .statusCode(200)
                 .body("username", is("carrier"))
-                .body("role", is("CARRIER"));
+                .body("roles", org.hamcrest.Matchers.hasItem("CARRIER"));
     }
 
     // ---- CRUD tests ----
@@ -145,7 +145,7 @@ class UserResourceTest {
                             "password": "newpass123",
                             "fullName": "New Test User",
                             "email": "newuser@janus.com",
-                            "role": "AGENT"
+                            "roles": ["AGENT"]
                         }
                         """)
                 .when().post("/api/users")
@@ -153,7 +153,7 @@ class UserResourceTest {
                 .statusCode(201)
                 .body("id", notNullValue())
                 .body("username", is("newuser"))
-                .body("role", is("AGENT"));
+                .body("roles", org.hamcrest.Matchers.hasItem("AGENT"));
     }
 
     @Test
@@ -168,7 +168,7 @@ class UserResourceTest {
                             "password": "pass123",
                             "fullName": "Blocked User",
                             "email": "blocked@janus.com",
-                            "role": "AGENT"
+                            "roles": ["AGENT"]
                         }
                         """)
                 .when().post("/api/users")
