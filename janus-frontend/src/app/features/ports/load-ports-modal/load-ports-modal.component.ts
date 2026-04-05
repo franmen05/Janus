@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -12,7 +12,7 @@ import { CatalogCountry, CatalogPort } from '../../../core/models/port.model';
 @Component({
   selector: 'app-load-ports-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [FormsModule, TranslateModule],
   template: `
     <div class="modal-header">
       <h5 class="modal-title">{{ 'PORTS.LOAD_PORTS' | translate }}</h5>

@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '../../../core/services/alert.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -10,7 +10,7 @@ import { AlertMessagePipe } from '../../../shared/pipes/alert-message.pipe';
 @Component({
   selector: 'app-operation-alerts',
   standalone: true,
-  imports: [CommonModule, TranslateModule, StatusLabelPipe, AlertMessagePipe],
+  imports: [TranslateModule, StatusLabelPipe, AlertMessagePipe],
   template: `
     @for (alert of activeAlerts(); track alert.id) {
       <div class="alert alert-warning d-flex justify-content-between align-items-center mb-2">

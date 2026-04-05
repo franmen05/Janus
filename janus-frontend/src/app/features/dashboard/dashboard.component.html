@@ -1,0 +1,248 @@
+<!-- Page header -->
+<div class="dashboard-header d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h4 class="fw-semibold mb-1">{{ 'DASHBOARD.TITLE' | translate }}</h4>
+    <p class="text-muted small mb-0">{{ 'DASHBOARD.SUBTITLE' | translate }}</p>
+  </div>
+</div>
+
+@if (loading()) {
+  <app-loading-indicator />
+} @else if (authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {
+  <!-- Filter bar -->
+  <div class="card card-filter mb-4">
+    <div class="card-body py-2">
+      <div class="row g-2 align-items-end">
+        <div class="col-6 col-md-2">
+          <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_FROM' | translate }}</label>
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="filterFrom">
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_TO' | translate }}</label>
+          <input type="date" class="form-control form-control-sm" [(ngModel)]="filterTo">
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_TRANSPORT' | translate }}</label>
+          <select class="form-select form-select-sm" [(ngModel)]="filterTransport">
+            <option value="">{{ 'DASHBOARD.FILTER_ALL' | translate }}</option>
+            @for (t of transportModes; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
+          </select>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_CATEGORY' | translate }}</label>
+          <select class="form-select form-select-sm" [(ngModel)]="filterCategory">
+            <option value="">{{ 'DASHBOARD.FILTER_ALL' | translate }}</option>
+            @for (t of operationCategories; track t) { <option [value]="t">{{ t | statusLabel }}</option> }
+          </select>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label form-label-sm mb-0">{{ 'DASHBOARD.FILTER_AGENT' | translate }}</label>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="filterAgent">
+        </div>
+        <div class="col-6 col-md-2">
+          <button class="btn btn-sm btn-primary w-100" (click)="applyFilters()">{{ 'DASHBOARD.FILTER_APPLY' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI cards -->
+  <div class="row mb-4 g-3">
+    <div class="col-6 col-md-3" (click)="navigateToOperations('active')" style="cursor: pointer;">
+      <div class="kpi-card kpi-card--indigo">
+        <div class="d-flex align-items-center mb-2">
+          <span class="kpi-dot"></span>
+          <span class="kpi-label">{{ 'DASHBOARD.ACTIVE' | translate }}</span>
+        </div>
+        <div class="kpi-value">{{ activeCount() }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" (click)="navigateToOperations('overdue')" style="cursor: pointer;">
+      <div class="kpi-card kpi-card--red">
+        <div class="d-flex align-items-center mb-2">
+          <span class="kpi-dot"></span>
+          <span class="kpi-label">{{ 'DASHBOARD.OVERDUE' | translate }}</span>
+        </div>
+        <div class="kpi-value">{{ metrics()?.overdueCount ?? 0 }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="kpi-card kpi-card--amber">
+        <div class="d-flex align-items-center mb-2">
+          <span class="kpi-dot"></span>
+          <span class="kpi-label">{{ 'DASHBOARD.REJECTION_RATE' | translate }}</span>
+        </div>
+        <div class="kpi-value">{{ (metrics()?.rejectionRate ?? 0) | number:'1.1-1' }}%</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" (click)="navigateToOperations('CLOSED')" style="cursor: pointer;">
+      <div class="kpi-card kpi-card--green">
+        <div class="d-flex align-items-center mb-2">
+          <span class="kpi-dot"></span>
+          <span class="kpi-label">{{ 'DASHBOARD.CLOSED' | translate }}</span>
+        </div>
+        <div class="kpi-value">{{ closedCount() }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: Status table + Bar chart -->
+  <div class="row mb-4 g-3">
+    <!-- Operations by Status - Table -->
+    <div class="col-12 col-md-5">
+      <div class="card data-card h-100">
+        <div class="card-header"><h6 class="mb-0">{{ 'DASHBOARD.OPS_BY_STATUS' | translate }}</h6></div>
+        <div class="card-body p-0 table-responsive">
+          <table class="table table-sm mb-0">
+            <thead class="table-light"><tr><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'DASHBOARD.COUNT' | translate }}</th></tr></thead>
+            <tbody>
+              @for (entry of statusEntries(); track entry[0]) {
+                <tr style="cursor: pointer;" (click)="navigateToOperations(entry[0])">
+                  <td><app-status-badge [status]="entry[0]" /></td><td class="mono">{{ entry[1] }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- Average Time per Stage + Status Distribution -->
+    <div class="col-12 col-md-7 d-flex flex-column gap-3">
+      <div class="card data-card">
+        <div class="card-header"><h6 class="mb-0">{{ 'DASHBOARD.CHART_AVG_TIME' | translate }}</h6></div>
+        <div class="card-body">
+          @if (timeBarData().labels?.length) {
+            <div class="bar-chart-container">
+              <canvas baseChart
+                      [data]="timeBarData()"
+                      [options]="timeBarOptions()"
+                      type="bar">
+              </canvas>
+            </div>
+          }
+        </div>
+      </div>
+      @if (polarData().labels?.length) {
+        <div class="card data-card">
+          <div class="card-header">
+            <div class="polar-header">
+              <div class="polar-header-icon"><i class="bi bi-pie-chart-fill"></i></div>
+              <div class="polar-header-text">
+                <h6>{{ 'DASHBOARD.CHART_STATUS_DIST' | translate }}</h6>
+                <small>{{ 'DASHBOARD.CHART_STATUS_DIST_SUB' | translate }}</small>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="polar-chart-container">
+              <canvas baseChart
+                      [data]="polarData()"
+                      [options]="polarOptions()"
+                      (chartClick)="onPolarChartClick($event)"
+                      type="polarArea">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Row 3: Productivity -->
+  @if (metrics()?.productivityByAgent?.length) {
+    <div class="row mb-4 g-3">
+      <div class="col-12 col-md-7">
+        <div class="card data-card h-100">
+          <div class="card-header"><h6 class="mb-0">{{ 'DASHBOARD.CHART_PRODUCTIVITY' | translate }}</h6></div>
+          <div class="card-body">
+            <div class="productivity-chart-container">
+              <canvas baseChart
+                      [data]="productivityData()"
+                      [options]="productivityOptions()"
+                      type="bar">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Row 3: Alerts -->
+  <div class="row mb-4 g-3">
+    <!-- Active Alerts -->
+    @if (activeAlerts().length > 0) {
+      <div class="col-12 ">
+        <div class="card alert-card h-100">
+          <div class="card-header d-flex flex-wrap gap-2 justify-content-between align-items-center">
+            <h6 class="mb-0">{{ 'DASHBOARD.ACTIVE_ALERTS' | translate }} ({{ activeAlerts().length }})</h6>
+            <a routerLink="/alerts" class="btn btn-sm btn-outline-warning">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
+          </div>
+          <div class="card-body p-0 table-responsive">
+            <table class="table table-sm mb-0">
+              <thead>
+              <tr><th>{{ 'ALERTS.OPERATION' | translate }}</th><th>{{ 'ALERTS.TYPE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'ALERTS.MESSAGE' | translate }}</th><th>{{ 'ALERTS.CREATED' | translate }}</th></tr>
+              </thead>
+              <tbody>
+                @for (alert of activeAlerts().slice(0, 5); track alert.id) {
+                  <tr>
+                    <td><a [routerLink]="['/operations', alert.operationId]">{{ alert.operationRef }}</a></td>
+                    <td><span class="badge" [class]="alert.alertType === 'DEADLINE_APPROACHING' ? 'bg-danger' : 'bg-warning text-dark'">{{ alert.alertType | statusLabel }}</span></td>
+                    <td class="d-none d-md-table-cell">{{ alert | alertMessage }}</td>
+                    <td class="mono">{{ alert.createdAt | date:'short' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+} @else {
+  <!-- Simple view for CLIENT/CARRIER -->
+  <div class="row mb-4 g-3">
+    <div class="col-6 col-md-3" (click)="navigateToOperations('active')" style="cursor: pointer;">
+      <div class="kpi-card kpi-card--indigo">
+        <div class="d-flex align-items-center mb-2">
+          <span class="kpi-dot"></span>
+          <span class="kpi-label">{{ 'DASHBOARD.ACTIVE' | translate }}</span>
+        </div>
+        <div class="kpi-value">{{ activeCount() }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3" (click)="navigateToOperations('CLOSED')" style="cursor: pointer;">
+      <div class="kpi-card kpi-card--green">
+        <div class="d-flex align-items-center mb-2">
+          <span class="kpi-dot"></span>
+          <span class="kpi-label">{{ 'DASHBOARD.CLOSED' | translate }}</span>
+        </div>
+        <div class="kpi-value">{{ closedCount() }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="card data-card">
+    <div class="card-header d-flex flex-wrap gap-2 justify-content-between align-items-center">
+      <h6 class="mb-0">{{ 'DASHBOARD.RECENT_OPERATIONS' | translate }}</h6>
+      <a routerLink="/operations" class="btn btn-sm btn-outline-primary">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
+    </div>
+    <div class="card-body p-0 table-responsive">
+      <table class="table table-hover mb-0">
+        <thead><tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr></thead>
+        <tbody>
+          @for (op of recentOperations(); track op.id) {
+            <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
+              <td>{{ op.referenceNumber }}</td>
+              <td>{{ op.clientName }}</td>
+              <td><app-status-badge [status]="op.status" /></td>
+              <td class="d-none d-sm-table-cell mono">{{ op.createdAt | date:'shortDate' }}</td>
+            </tr>
+          }
+          @if (recentOperations().length === 0) {
+            <tr><td colspan="4" class="text-center text-muted py-3">{{ 'DASHBOARD.NO_OPERATIONS' | translate }}</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+}

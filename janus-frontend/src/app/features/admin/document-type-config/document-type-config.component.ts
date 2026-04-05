@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DocumentService } from '../../../core/services/document.service';
 import { DocumentTypeConfig } from '../../../core/models/document.model';
@@ -8,7 +8,7 @@ import { ToastService } from '../../../core/services/toast.service';
 @Component({
   selector: 'app-document-type-config',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [TranslateModule],
   template: `
     <h2 class="mb-4">{{ 'DOCUMENT_TYPES_CONFIG.TITLE' | translate }}</h2>
 

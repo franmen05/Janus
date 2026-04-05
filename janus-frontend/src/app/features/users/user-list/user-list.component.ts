@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserService } from '../../../core/services/user.service';
@@ -9,7 +9,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, LoadingIndicatorComponent],
+  imports: [RouterModule, TranslateModule, LoadingIndicatorComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'USERS.TITLE' | translate }}</h2>

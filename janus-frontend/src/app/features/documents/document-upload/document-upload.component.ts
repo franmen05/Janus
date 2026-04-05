@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -18,7 +18,7 @@ interface FileEntry {
 @Component({
   selector: 'app-document-upload',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, FileUploadComponent],
+  imports: [FormsModule, TranslateModule, FileUploadComponent],
   template: `
     <h2 class="mb-4">{{ 'DOCUMENTS.UPLOAD_TITLE' | translate }}</h2>
     <div class="card">

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -8,7 +8,7 @@ import { PortService } from '../../../core/services/port.service';
 @Component({
   selector: 'app-port-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [ReactiveFormsModule, TranslateModule],
   template: `
     <h2 class="mb-4">{{ (isEdit() ? 'PORTS.EDIT_TITLE' : 'PORTS.NEW_TITLE') | translate }}</h2>
     <div class="card">

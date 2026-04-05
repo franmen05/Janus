@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbDropdownModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
@@ -10,7 +10,7 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, NgbDropdownModule, NgbCollapseModule],
+  imports: [RouterModule, TranslateModule, NgbDropdownModule, NgbCollapseModule],
   template: `
     <nav class="navbar navbar-expand-lg navbar-dark navbar-janus">
       <div class="container-fluid">

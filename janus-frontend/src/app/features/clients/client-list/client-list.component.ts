@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,7 +11,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent],
+  imports: [RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'CLIENTS.TITLE' | translate }}</h2>

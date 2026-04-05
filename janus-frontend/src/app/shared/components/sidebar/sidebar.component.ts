@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
@@ -9,7 +9,7 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, NgbCollapseModule, AlertBadgeComponent],
+  imports: [RouterModule, TranslateModule, NgbCollapseModule, AlertBadgeComponent],
   template: `
     <nav class="sidebar d-flex flex-column">
       <div class="sidebar-nav flex-grow-1 px-2 pt-3">

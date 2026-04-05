@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -17,7 +17,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 @Component({
   selector: 'app-operation-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule, NgbTypeaheadModule, StatusLabelPipe, RouterModule],
+  imports: [ReactiveFormsModule, TranslateModule, NgbTypeaheadModule, StatusLabelPipe, RouterModule],
   template: `
     <h2 class="mb-4">{{ (isEdit() ? 'OPERATIONS.EDIT_TITLE' : 'OPERATIONS.NEW_TITLE') | translate }}</h2>
     <div class="card">

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
@@ -8,7 +8,7 @@ import { DeclarationService } from '../../../core/services/declaration.service';
 @Component({
   selector: 'app-tariff-line-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
+  imports: [ReactiveFormsModule, TranslateModule],
   template: `
     <div class="modal-header">
       <h5 class="modal-title">{{ 'DECLARATIONS.ADD_TARIFF_LINE' | translate }}</h5>

@@ -1,15 +1,15 @@
 import { Component, input, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TimelineService } from '../../../core/services/timeline.service';
-import { TimelineEventResponse, TimelineEventType } from '../../../core/models/timeline.model';
+import {  TimelineEventType } from '../../../core/models/timeline.model';
 import { TimelineComponent, TimelineEvent } from '../../../shared/components/timeline/timeline.component';
 
 @Component({
   selector: 'app-operation-timeline',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, TimelineComponent],
+  imports: [FormsModule, TranslateModule, TimelineComponent],
   template: `
     <div class="mb-3">
       <select class="form-select form-select-sm w-auto" [(ngModel)]="selectedType" (ngModelChange)="loadTimeline()">

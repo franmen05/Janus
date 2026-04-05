@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ComplianceRuleConfigService } from '../../../core/services/compliance-rule-config.service';
@@ -8,7 +8,7 @@ import { ComplianceRuleConfig } from '../../../core/models/compliance-rule-confi
 @Component({
   selector: 'app-compliance-config',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [FormsModule, TranslateModule],
   template: `
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2>{{ 'COMPLIANCE_CONFIG.TITLE' | translate }}</h2>

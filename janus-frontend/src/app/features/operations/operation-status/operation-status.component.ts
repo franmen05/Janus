@@ -1,5 +1,5 @@
 import { Component, input, output, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -17,7 +17,7 @@ import { OperationTimelineComponent } from '../operation-timeline/operation-time
 @Component({
   selector: 'app-operation-status',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbNavModule, TranslateModule, TimelineComponent, StatusLabelPipe, OperationTimelineComponent],
+  imports: [FormsModule, NgbNavModule, TranslateModule, TimelineComponent, StatusLabelPipe, OperationTimelineComponent],
   template: `
     @if (authService.hasRole(['ADMIN', 'AGENT'])) {
       <div class="card mb-3">
