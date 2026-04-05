@@ -2,105 +2,159 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapseModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../core/services/auth.service';
+import { SidebarService } from '../../../core/services/sidebar.service';
 import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterModule, TranslateModule, NgbCollapseModule, AlertBadgeComponent],
+  imports: [RouterModule, TranslateModule, NgbCollapseModule, NgbTooltipModule, AlertBadgeComponent],
   template: `
-    <nav class="sidebar d-flex flex-column">
-      <div class="sidebar-nav flex-grow-1 px-2 pt-3">
-        <div class="nav-section-label px-3">{{ 'NAV.SECTION_MAIN' | translate }}</div>
+    <nav class="sidebar d-flex flex-column" [class.collapsed]="sidebarService.collapsed()">
+      <div class="sidebar-nav flex-grow-1 pt-3" [class.px-2]="!sidebarService.collapsed()" [class.px-1]="sidebarService.collapsed()">
+        @if (!sidebarService.collapsed()) {
+          <div class="nav-section-label px-3">{{ 'NAV.SECTION_MAIN' | translate }}</div>
+        }
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+            <a class="nav-link" routerLink="/dashboard" routerLinkActive="active"
+               [ngbTooltip]="sidebarService.collapsed() ? ('NAV.DASHBOARD' | translate) : null"
+               placement="end" container="body">
               <i class="bi bi-speedometer2"></i>
-              <span>{{ 'NAV.DASHBOARD' | translate }}</span>
+              @if (!sidebarService.collapsed()) {
+                <span>{{ 'NAV.DASHBOARD' | translate }}</span>
+              }
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/operations" routerLinkActive="active">
+            <a class="nav-link" routerLink="/operations" routerLinkActive="active"
+               [ngbTooltip]="sidebarService.collapsed() ? ('NAV.OPERATIONS' | translate) : null"
+               placement="end" container="body">
               <i class="bi bi-box-seam"></i>
-              <span>{{ 'NAV.OPERATIONS' | translate }}</span>
+              @if (!sidebarService.collapsed()) {
+                <span>{{ 'NAV.OPERATIONS' | translate }}</span>
+              }
             </a>
           </li>
           @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
             <li class="nav-item">
-              <a class="nav-link" routerLink="/customers" routerLinkActive="active">
+              <a class="nav-link" routerLink="/customers" routerLinkActive="active"
+                 [ngbTooltip]="sidebarService.collapsed() ? ('NAV.CUSTOMERS' | translate) : null"
+                 placement="end" container="body">
                 <i class="bi bi-people"></i>
-                <span>{{ 'NAV.CUSTOMERS' | translate }}</span>
+                @if (!sidebarService.collapsed()) {
+                  <span>{{ 'NAV.CUSTOMERS' | translate }}</span>
+                }
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link d-flex align-items-center" routerLink="/alerts" routerLinkActive="active">
+              <a class="nav-link d-flex align-items-center" routerLink="/alerts" routerLinkActive="active"
+                 [ngbTooltip]="sidebarService.collapsed() ? ('NAV.ALERTS' | translate) : null"
+                 placement="end" container="body">
                 <i class="bi bi-bell"></i>
-                <span class="flex-grow-1">{{ 'NAV.ALERTS' | translate }}</span>
-                <app-alert-badge />
+                @if (!sidebarService.collapsed()) {
+                  <span class="flex-grow-1">{{ 'NAV.ALERTS' | translate }}</span>
+                  <app-alert-badge />
+                }
               </a>
             </li>
           }
         </ul>
 
         @if (authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
-          <div class="nav-section-label px-3 mt-3">{{ 'NAV.SECTION_ADMIN' | translate }}</div>
+          @if (!sidebarService.collapsed()) {
+            <div class="nav-section-label px-3 mt-3">{{ 'NAV.SECTION_ADMIN' | translate }}</div>
+          } @else {
+            <hr class="border-secondary mx-2 my-2 opacity-25">
+          }
 
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link" routerLink="/audit" routerLinkActive="active">
+              <a class="nav-link" routerLink="/audit" routerLinkActive="active"
+                 [ngbTooltip]="sidebarService.collapsed() ? ('NAV.AUDIT_LOG' | translate) : null"
+                 placement="end" container="body">
                 <i class="bi bi-journal-text"></i>
-                <span>{{ 'NAV.AUDIT_LOG' | translate }}</span>
+                @if (!sidebarService.collapsed()) {
+                  <span>{{ 'NAV.AUDIT_LOG' | translate }}</span>
+                }
               </a>
             </li>
           </ul>
         }
 
         @if (authService.hasRole(['ADMIN'])) {
-          <!-- Configuration Section -->
           <div class="nav-group">
-            <button class="btn btn-link nav-group-toggle w-100 text-start d-flex align-items-center px-3 py-2"
-                    (click)="configCollapsed.set(!configCollapsed())">
-              <i class="bi me-2" [class.bi-chevron-down]="!configCollapsed()" [class.bi-chevron-right]="configCollapsed()"></i>
-              <span>{{ 'NAV.SECTION_CONFIG' | translate }}</span>
-            </button>
-            <div [ngbCollapse]="configCollapsed()">
-              <ul class="nav flex-column nav-group-children">
+            @if (sidebarService.collapsed()) {
+              <hr class="border-secondary mx-2 my-2 opacity-25">
+            } @else {
+              <button class="btn btn-link nav-group-toggle w-100 text-start d-flex align-items-center px-3 py-2"
+                      (click)="configCollapsed.set(!configCollapsed())">
+                <i class="bi me-2" [class.bi-chevron-down]="!configCollapsed()" [class.bi-chevron-right]="configCollapsed()"></i>
+                <span>{{ 'NAV.SECTION_CONFIG' | translate }}</span>
+              </button>
+            }
+            <div [ngbCollapse]="sidebarService.collapsed() ? false : configCollapsed()">
+              <ul class="nav flex-column" [class.nav-group-children]="!sidebarService.collapsed()">
                 <li class="nav-item">
-                  <a class="nav-link" routerLink="/users" routerLinkActive="active">
+                  <a class="nav-link" routerLink="/users" routerLinkActive="active"
+                     [ngbTooltip]="sidebarService.collapsed() ? ('NAV.USERS' | translate) : null"
+                     placement="end" container="body">
                     <i class="bi bi-person-gear"></i>
-                    <span>{{ 'NAV.USERS' | translate }}</span>
+                    @if (!sidebarService.collapsed()) {
+                      <span>{{ 'NAV.USERS' | translate }}</span>
+                    }
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" routerLink="/ports" routerLinkActive="active">
+                  <a class="nav-link" routerLink="/ports" routerLinkActive="active"
+                     [ngbTooltip]="sidebarService.collapsed() ? ('NAV.PORTS' | translate) : null"
+                     placement="end" container="body">
                     <i class="bi bi-geo-alt"></i>
-                    <span>{{ 'NAV.PORTS' | translate }}</span>
+                    @if (!sidebarService.collapsed()) {
+                      <span>{{ 'NAV.PORTS' | translate }}</span>
+                    }
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" routerLink="/exchange-rates" routerLinkActive="active">
+                  <a class="nav-link" routerLink="/exchange-rates" routerLinkActive="active"
+                     [ngbTooltip]="sidebarService.collapsed() ? ('NAV.EXCHANGE_RATES' | translate) : null"
+                     placement="end" container="body">
                     <i class="bi bi-currency-exchange"></i>
-                    <span>{{ 'NAV.EXCHANGE_RATES' | translate }}</span>
+                    @if (!sidebarService.collapsed()) {
+                      <span>{{ 'NAV.EXCHANGE_RATES' | translate }}</span>
+                    }
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" routerLink="/compliance-config" routerLinkActive="active">
+                  <a class="nav-link" routerLink="/compliance-config" routerLinkActive="active"
+                     [ngbTooltip]="sidebarService.collapsed() ? ('NAV.COMPLIANCE_CONFIG' | translate) : null"
+                     placement="end" container="body">
                     <i class="bi bi-shield-check"></i>
-                    <span>{{ 'NAV.COMPLIANCE_CONFIG' | translate }}</span>
+                    @if (!sidebarService.collapsed()) {
+                      <span>{{ 'NAV.COMPLIANCE_CONFIG' | translate }}</span>
+                    }
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" routerLink="/admin/document-types" routerLinkActive="active">
+                  <a class="nav-link" routerLink="/admin/document-types" routerLinkActive="active"
+                     [ngbTooltip]="sidebarService.collapsed() ? ('NAV.DOCUMENT_TYPES_CONFIG' | translate) : null"
+                     placement="end" container="body">
                     <i class="bi bi-file-earmark-ruled"></i>
-                    <span>{{ 'NAV.DOCUMENT_TYPES_CONFIG' | translate }}</span>
+                    @if (!sidebarService.collapsed()) {
+                      <span>{{ 'NAV.DOCUMENT_TYPES_CONFIG' | translate }}</span>
+                    }
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" routerLink="/admin/expense-categories" routerLinkActive="active">
+                  <a class="nav-link" routerLink="/admin/expense-categories" routerLinkActive="active"
+                     [ngbTooltip]="sidebarService.collapsed() ? ('NAV.EXPENSE_CATEGORIES' | translate) : null"
+                     placement="end" container="body">
                     <i class="bi bi-tag"></i>
-                    <span>{{ 'NAV.EXPENSE_CATEGORIES' | translate }}</span>
+                    @if (!sidebarService.collapsed()) {
+                      <span>{{ 'NAV.EXPENSE_CATEGORIES' | translate }}</span>
+                    }
                   </a>
                 </li>
               </ul>
@@ -109,19 +163,47 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
         }
       </div>
 
-      <div class="sidebar-footer px-3 py-3 border-top border-secondary">
-        <div class="d-flex align-items-center mb-2">
-          <div class="user-avatar me-2">
-            <i class="bi bi-person-circle"></i>
-          </div>
-          <div class="overflow-hidden">
-            <div class="text-white text-truncate small fw-medium">{{ authService.user()?.fullName }}</div>
-            <span class="badge bg-primary bg-opacity-25 text-white small">{{ authService.user()?.role }}</span>
-          </div>
-        </div>
-        <button type="button" class="btn btn-outline-secondary btn-sm w-100" (click)="onLogout()">
-          <i class="bi bi-box-arrow-right me-1"></i>{{ 'NAV.LOGOUT' | translate }}
+      <!-- Toggle button -->
+      <div class="sidebar-toggle" [class.px-2]="!sidebarService.collapsed()" [class.px-1]="sidebarService.collapsed()">
+        <button class="btn toggle-btn w-100 d-flex align-items-center"
+                [class.justify-content-center]="sidebarService.collapsed()"
+                (click)="sidebarService.toggle()"
+                [ngbTooltip]="sidebarService.collapsed() ? ('NAV.EXPAND_SIDEBAR' | translate) : null"
+                placement="end" container="body">
+          <i class="bi" [class.bi-layout-sidebar-inset]="!sidebarService.collapsed()" [class.bi-layout-sidebar]="sidebarService.collapsed()"></i>
+          @if (!sidebarService.collapsed()) {
+            <span class="ms-2">{{ 'NAV.COLLAPSE_SIDEBAR' | translate }}</span>
+          }
         </button>
+      </div>
+
+      <!-- Footer -->
+      <div class="sidebar-footer py-3 border-top border-secondary"
+           [class.px-3]="!sidebarService.collapsed()" [class.px-2]="sidebarService.collapsed()">
+        @if (sidebarService.collapsed()) {
+          <div class="text-center mb-2"
+               [ngbTooltip]="authService.user()?.fullName ?? ''"
+               placement="end" container="body">
+            <i class="bi bi-person-circle" style="font-size: 1.5rem; color: rgba(255,255,255,0.4);"></i>
+          </div>
+          <button type="button" class="btn btn-outline-secondary btn-sm w-100" (click)="onLogout()"
+                  [ngbTooltip]="'NAV.LOGOUT' | translate" placement="end" container="body">
+            <i class="bi bi-box-arrow-right"></i>
+          </button>
+        } @else {
+          <div class="d-flex align-items-center mb-2">
+            <div class="user-avatar me-2">
+              <i class="bi bi-person-circle"></i>
+            </div>
+            <div class="overflow-hidden">
+              <div class="text-white text-truncate small fw-medium">{{ authService.user()?.fullName }}</div>
+              <span class="badge bg-primary bg-opacity-25 text-white small">{{ authService.user()?.role }}</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-secondary btn-sm w-100" (click)="onLogout()">
+            <i class="bi bi-box-arrow-right me-1"></i>{{ 'NAV.LOGOUT' | translate }}
+          </button>
+        }
       </div>
     </nav>
   `,
@@ -141,10 +223,46 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
     .nav-group-children .nav-link {
       padding-left: 2.2rem;
     }
+
+    /* Collapsed sidebar: center icons */
+    :host-context(.sidebar-collapsed) .nav-link {
+      justify-content: center;
+      padding: 0.6rem 0.5rem;
+      border-left-color: transparent !important;
+    }
+    :host-context(.sidebar-collapsed) .nav-link.active {
+      border-left-color: transparent;
+      border-radius: 8px;
+    }
+    :host-context(.sidebar-collapsed) .nav-link i {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    /* Toggle button */
+    .sidebar-toggle {
+      padding-bottom: 0.25rem;
+    }
+    .toggle-btn {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.8rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      border: none;
+      transition: all 0.2s ease;
+    }
+    .toggle-btn:hover {
+      color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .toggle-btn i {
+      font-size: 1rem;
+    }
   `]
 })
 export class SidebarComponent implements OnInit {
   authService = inject(AuthService);
+  sidebarService = inject(SidebarService);
   private router = inject(Router);
 
   configCollapsed = signal(true);

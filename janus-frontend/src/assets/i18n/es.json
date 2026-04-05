@@ -19,7 +19,9 @@
     "SECTION_MAIN": "Principal",
     "SECTION_ADMIN": "Administraci\u00f3n",
     "DOCUMENT_TYPES_CONFIG": "Tipos de Documento",
-    "EXPENSE_CATEGORIES": "Categor\u00edas de Gastos"
+    "EXPENSE_CATEGORIES": "Categor\u00edas de Gastos",
+    "COLLAPSE_SIDEBAR": "Contraer",
+    "EXPAND_SIDEBAR": "Expandir"
   },
   "LOGIN": {
     "USERNAME": "Usuario",

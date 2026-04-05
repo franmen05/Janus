@@ -19,7 +19,9 @@
     "SECTION_MAIN": "Main",
     "SECTION_ADMIN": "Administration",
     "DOCUMENT_TYPES_CONFIG": "Document Types",
-    "EXPENSE_CATEGORIES": "Expense Categories"
+    "EXPENSE_CATEGORIES": "Expense Categories",
+    "COLLAPSE_SIDEBAR": "Collapse",
+    "EXPAND_SIDEBAR": "Expand"
   },
   "LOGIN": {
     "USERNAME": "Username",

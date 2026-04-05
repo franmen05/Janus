@@ -379,8 +379,10 @@ input[type="datetime-local"] {
   top: 56px;
   max-height: calc(100vh - 56px);
   overflow-y: auto;
+  overflow-x: hidden;
   background: linear-gradient(180deg, #0c0e14 0%, #0a0c12 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
+  transition: width 0.25s ease;
 }
 
 .sidebar-brand {
