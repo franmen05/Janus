@@ -868,6 +868,7 @@
     "APPROVE": "Aprobar Liquidaci\u00f3n",
     "APPROVE_CONFIRM": "\u00bfEst\u00e1 seguro que desea aprobar esta liquidaci\u00f3n?",
     "MAKE_DEFINITIVE": "Hacer Definitiva",
+    "MAKE_DEFINITIVE_CONFIRM": "¿Está seguro que desea hacer definitiva esta liquidación? Una vez definitiva, no podrá ser modificada.",
     "DGA_PAYMENT_CODE": "C\u00f3digo de Pago DGA",
     "DGA_PAYMENT_CODE_PLACEHOLDER": "Ingrese c\u00f3digo de referencia de pago DGA",
     "REGISTER_PAYMENT": "Registrar Pago",

@@ -281,8 +281,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
               </button>
             }
 
-            @if (liquidation()!.status === 'DEFINITIVE' && canEdit()) {
-              @if (authService.hasRole(['ADMIN', 'AGENT']) && crossReference()) {
+            @if (canEdit() && authService.hasRole(['ADMIN', 'AGENT']) && crossReference()) {
                 <div class="d-flex align-items-center justify-content-between mb-3">
                   <span class="text-muted small">
                     @if (crossReference()!.allReimbursableSentToBilling) {
@@ -302,7 +301,9 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                     }
                   </button>
                 </div>
-              }
+            }
+
+            @if (liquidation()!.status === 'DEFINITIVE' && canEdit()) {
               <div class="card border-success mt-2">
                 <div class="card-body">
                   <h6>{{ 'PAYMENT.REGISTER_PAYMENT' | translate }}</h6>
@@ -536,6 +537,8 @@ export class PaymentPanelComponent implements OnInit {
   }
 
   makeDefinitive(): void {
+    const msg = this.translate.instant('PAYMENT.MAKE_DEFINITIVE_CONFIRM');
+    if (!confirm(msg)) return;
     this.saving.set(true);
     this.paymentService.makeLiquidationDefinitive(this.operationId()).subscribe({
       next: (l) => {

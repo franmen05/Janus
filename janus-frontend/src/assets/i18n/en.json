@@ -868,6 +868,7 @@
     "APPROVE": "Approve Liquidation",
     "APPROVE_CONFIRM": "Are you sure you want to approve this liquidation?",
     "MAKE_DEFINITIVE": "Make Definitive",
+    "MAKE_DEFINITIVE_CONFIRM": "Are you sure you want to make this liquidation definitive? Once definitive, it can no longer be modified.",
     "DGA_PAYMENT_CODE": "DGA Payment Code",
     "DGA_PAYMENT_CODE_PLACEHOLDER": "Enter DGA payment reference code",
     "REGISTER_PAYMENT": "Register Payment",
