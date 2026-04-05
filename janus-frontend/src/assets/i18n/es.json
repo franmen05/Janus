@@ -161,7 +161,13 @@
     "OPERATIONS": "Operaciones",
     "SEARCH": "Buscar por nombre o RNC...",
     "TYPE": "Tipo",
-    "SELECT_TYPE": "Seleccionar tipo..."
+    "SELECT_TYPE": "Seleccionar tipo...",
+    "BUSINESS_NAME": "Razón Social",
+    "REPRESENTATIVE": "Representante",
+    "DOCUMENT_TYPE": "Tipo de Documento",
+    "SELECT_DOCUMENT_TYPE": "Seleccionar tipo de documento...",
+    "ALTERNATE_PHONE": "Teléfono Alterno",
+    "COUNTRY": "País"
   },
   "PORTS": {
     "TITLE": "Puertos",
@@ -187,6 +193,11 @@
     "COMPANY": "Empresa",
     "CONSIGNEE": "Consignatario",
     "INDIVIDUAL": "Particular"
+  },
+  "ID_DOCUMENT_TYPES": {
+    "RNC": "RNC",
+    "CEDULA": "Cédula",
+    "PASSPORT": "Pasaporte"
   },
   "AUDIT": {
     "TITLE": "Registro de Auditor\u00eda",

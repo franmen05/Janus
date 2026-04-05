@@ -47,7 +47,7 @@ public class DocumentResource {
     SecurityHelper securityHelper;
 
     @GET
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     @Transactional
     public List<DocumentResponse> list(@PathParam("operationId") Long operationId,
                                        @QueryParam("includeDeleted") @DefaultValue("false") boolean includeDeleted,
@@ -69,7 +69,7 @@ public class DocumentResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     @Transactional
     public DocumentResponse getById(@PathParam("operationId") Long operationId,
                                      @PathParam("id") Long id,
@@ -80,7 +80,7 @@ public class DocumentResource {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @RolesAllowed({"ADMIN", "AGENT", "CARRIER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "CARRIER"})
     public Response upload(@PathParam("operationId") Long operationId,
                            @RestForm("file") FileUpload file,
                            @RestForm("documentType") DocumentType documentType,
@@ -121,7 +121,7 @@ public class DocumentResource {
     @GET
     @Path("/{id}/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public Response downloadLatest(@PathParam("operationId") Long operationId,
                                     @PathParam("id") Long id,
                                     @Context SecurityContext sec) {
@@ -145,7 +145,7 @@ public class DocumentResource {
 
     @GET
     @Path("/{id}/versions")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public List<DocumentVersionResponse> getVersions(@PathParam("operationId") Long operationId,
                                                       @PathParam("id") Long id,
                                                       @Context SecurityContext sec) {
@@ -159,7 +159,7 @@ public class DocumentResource {
     @GET
     @Path("/{id}/versions/{versionNumber}/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public Response downloadVersion(@PathParam("operationId") Long operationId,
                                      @PathParam("id") Long id,
                                      @PathParam("versionNumber") int versionNumber,
@@ -180,7 +180,7 @@ public class DocumentResource {
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT"})
     public Response softDelete(@PathParam("id") Long id, @Context SecurityContext sec) {
         documentService.softDelete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
@@ -188,7 +188,7 @@ public class DocumentResource {
 
     @GET
     @Path("/completeness")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public CompletenessResponse getCompleteness(@PathParam("operationId") Long operationId,
                                                  @Context SecurityContext sec) {
         securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));

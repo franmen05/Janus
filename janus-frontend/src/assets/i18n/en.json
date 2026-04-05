@@ -161,7 +161,13 @@
     "OPERATIONS": "Operations",
     "SEARCH": "Search by name or Tax ID...",
     "TYPE": "Type",
-    "SELECT_TYPE": "Select type..."
+    "SELECT_TYPE": "Select type...",
+    "BUSINESS_NAME": "Business Name",
+    "REPRESENTATIVE": "Representative",
+    "DOCUMENT_TYPE": "Document Type",
+    "SELECT_DOCUMENT_TYPE": "Select document type...",
+    "ALTERNATE_PHONE": "Alternate Phone",
+    "COUNTRY": "Country"
   },
   "PORTS": {
     "TITLE": "Ports",
@@ -187,6 +193,11 @@
     "COMPANY": "Company",
     "CONSIGNEE": "Consignee",
     "INDIVIDUAL": "Individual"
+  },
+  "ID_DOCUMENT_TYPES": {
+    "RNC": "RNC",
+    "CEDULA": "ID Card (Cédula)",
+    "PASSPORT": "Passport"
   },
   "AUDIT": {
     "TITLE": "Audit Log",
