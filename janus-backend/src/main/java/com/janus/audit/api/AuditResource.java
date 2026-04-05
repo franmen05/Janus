@@ -32,7 +32,7 @@ public class AuditResource {
     OperationService operationService;
 
     @GET
-    @RolesAllowed("SUPERVISOR","ADMIN")
+    @RolesAllowed({"SUPERVISOR","ADMIN"})
     public List<AuditLogResponse> list(@QueryParam("username") String username,
                                        @QueryParam("from") String from,
                                        @QueryParam("to") String to) {
