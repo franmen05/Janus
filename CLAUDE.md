@@ -231,6 +231,34 @@ When infra changes affect app configuration:
    - angular.json / build.gradle for build changes
 ```
 
+### Protocol F: Functional Testing (Mandatory)
+
+**Every plan must include a "Functional Testing" section.** When running functional tests (E2E/Playwright), always test all affected areas — not just the feature directly changed.
+
+```
+1. IMPACT ANALYSIS → after defining the implementation steps, identify:
+   - Directly modified features/pages/flows
+   - Indirectly affected areas (shared services, navigation, permissions,
+     data that flows between features, components that consume changed APIs)
+
+2. TEST MAP → in the plan, add a section:
+   ## Functional Testing
+   | Change | Affected Areas | Tests to Run |
+   |--------|---------------|--------------|
+   | [what changed] | [what else could break] | [specific tests] |
+
+3. EXECUTION → after implementation, run functional tests for ALL listed areas:
+   - Direct: tests for the modified feature
+   - Indirect: tests for every area in the "Affected Areas" column
+   - Regression: if a shared service/component was modified, test all consumers
+
+4. REPORT → do not mark the task as complete until all affected-area tests pass
+```
+
+**Trigger obligatorio:** Siempre que se agregue o quite un componente de una pantalla (tabla, botón, modal, formulario, sección, etc.), se DEBEN ejecutar pruebas funcionales de esa pantalla completa — no solo del componente añadido/eliminado. Agregar o quitar componentes puede romper layout, navegación, o interacciones existentes.
+
+**Applies to:** All protocols (A, B, C, D, E). The functional testing section is required in every plan that involves implementation.
+
 ---
 
 ## Skill Routing
