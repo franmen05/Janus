@@ -6,7 +6,7 @@
   "NAV": {
     "DASHBOARD": "Panel",
     "OPERATIONS": "Operaciones",
-    "CLIENTS": "Clientes",
+    "CUSTOMERS": "Clientes",
     "AUDIT_LOG": "Registro de Auditor\u00eda",
     "ALERTS": "Alertas",
     "USERS": "Usuarios",
@@ -19,7 +19,9 @@
     "SECTION_MAIN": "Principal",
     "SECTION_ADMIN": "Administraci\u00f3n",
     "DOCUMENT_TYPES_CONFIG": "Tipos de Documento",
-    "EXPENSE_CATEGORIES": "Categor\u00edas de Gastos"
+    "EXPENSE_CATEGORIES": "Categor\u00edas de Gastos",
+    "COLLAPSE_SIDEBAR": "Contraer",
+    "EXPAND_SIDEBAR": "Expandir"
   },
   "LOGIN": {
     "USERNAME": "Usuario",
@@ -71,8 +73,8 @@
     "ALL_STATUSES": "Todos los Estados",
     "NO_OPERATIONS": "No se encontraron operaciones",
     "REFERENCE": "Referencia",
-    "CLIENT": "Cliente",
-    "SELECT_CLIENT": "Seleccionar cliente...",
+    "CUSTOMER": "Cliente",
+    "SELECT_CUSTOMER": "Seleccionar cliente...",
     "TRANSPORT_MODE": "Modo de Transporte",
     "OPERATION_CATEGORY": "Categor\u00eda de Operaci\u00f3n",
     "BL_NUMBER": "BL Madre (MBL)",
@@ -105,8 +107,8 @@
     "SELECT_BL_AVAILABILITY": "Seleccione disponibilidad BL...",
     "BL_AVAILABILITY_REQUIRED": "La disponibilidad del BL es requerida",
     "BL_NOT_AVAILABLE_WARNING": "El BL no est\u00e1 disponible. Esto debe resolverse antes de la valoraci\u00f3n.",
-    "CLIENT_SEARCH_PLACEHOLDER": "Buscar cliente por nombre, RNC o correo...",
-    "CREATE_CLIENT": "Crear nuevo cliente",
+    "CUSTOMER_SEARCH_PLACEHOLDER": "Buscar cliente por nombre, RNC o correo...",
+    "CREATE_CUSTOMER": "Crear nuevo cliente",
     "OPERATION_TYPE": "Tipo de Operaci\u00f3n",
     "SELECT_OPERATION_TYPE": "Seleccione tipo de operaci\u00f3n",
     "OPERATION_TYPE_REQUIRED": "El tipo de operaci\u00f3n es requerido",
@@ -144,7 +146,7 @@
     "RENAME_FILE": "Renombrar",
     "UPLOADING_FILE": "Subiendo archivo {{current}} de {{total}}..."
   },
-  "CLIENTS": {
+  "CUSTOMERS": {
     "TITLE": "Clientes",
     "NEW": "Nuevo Cliente",
     "EDIT_TITLE": "Editar Cliente",
@@ -159,7 +161,13 @@
     "OPERATIONS": "Operaciones",
     "SEARCH": "Buscar por nombre o RNC...",
     "TYPE": "Tipo",
-    "SELECT_TYPE": "Seleccionar tipo..."
+    "SELECT_TYPE": "Seleccionar tipo...",
+    "BUSINESS_NAME": "Razón Social",
+    "REPRESENTATIVE": "Representante",
+    "DOCUMENT_TYPE": "Tipo de Documento",
+    "SELECT_DOCUMENT_TYPE": "Seleccionar tipo de documento...",
+    "ALTERNATE_PHONE": "Teléfono Alterno",
+    "COUNTRY": "País"
   },
   "PORTS": {
     "TITLE": "Puertos",
@@ -181,10 +189,15 @@
     "IMPORT_SELECTED": "Importar Seleccionados",
     "IMPORT_SUCCESS": "Se importaron {{imported}} puertos ({{skipped}} ya exist\u00edan)"
   },
-  "CLIENT_TYPES": {
+  "CUSTOMER_TYPES": {
     "COMPANY": "Empresa",
     "CONSIGNEE": "Consignatario",
     "INDIVIDUAL": "Particular"
+  },
+  "ID_DOCUMENT_TYPES": {
+    "RNC": "RNC",
+    "CEDULA": "Cédula",
+    "PASSPORT": "Pasaporte"
   },
   "AUDIT": {
     "TITLE": "Registro de Auditor\u00eda",
@@ -729,17 +742,17 @@
     "PASSWORD_HINT": "Dejar en blanco para mantener la contrase\u00f1a actual",
     "EMAIL": "Correo Electr\u00f3nico",
     "ROLE": "Rol",
-    "CLIENT": "Cliente",
+    "CUSTOMER": "Cliente",
     "ACTIVE": "Activo",
     "INACTIVE": "Inactivo",
     "NO_USERS": "No se encontraron usuarios",
-    "CLIENT_SEARCH_PLACEHOLDER": "Buscar por nombre, RNC o correo..."
+    "CUSTOMER_SEARCH_PLACEHOLDER": "Buscar por nombre, RNC o correo..."
   },
   "ROLES": {
     "ADMIN": "Administrador",
     "AGENT": "Agente",
     "ACCOUNTING": "Contabilidad",
-    "CLIENT": "Cliente",
+    "CUSTOMER": "Cliente",
     "CARRIER": "Transportista",
     "SUPERVISOR": "Supervisor"
   },

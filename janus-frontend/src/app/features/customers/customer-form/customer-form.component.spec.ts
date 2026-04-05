@@ -3,29 +3,29 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
-import { ClientFormComponent } from './client-form.component';
-import { ClientService } from '../../../core/services/client.service';
-import { ClientType } from '../../../core/models/client.model';
+import { CustomerFormComponent } from './customer-form.component';
+import { CustomerService } from '../../../core/services/customer.service';
+import { CustomerType } from '../../../core/models/customer.model';
 
-describe('ClientFormComponent', () => {
-  let component: ClientFormComponent;
-  let fixture: ComponentFixture<ClientFormComponent>;
-  let clientServiceSpy: jasmine.SpyObj<ClientService>;
+describe('CustomerFormComponent', () => {
+  let component: CustomerFormComponent;
+  let fixture: ComponentFixture<CustomerFormComponent>;
+  let customerServiceSpy: jasmine.SpyObj<CustomerService>;
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    clientServiceSpy = jasmine.createSpyObj('ClientService', ['create', 'update', 'getById']);
-    clientServiceSpy.create.and.returnValue(of({
-      id: 10, name: 'New Client', taxId: '999', email: 'new@test.com',
-      phone: null, address: null, clientType: ClientType.COMPANY, active: true, createdAt: '2024-01-01'
+    customerServiceSpy = jasmine.createSpyObj('CustomerService', ['create', 'update', 'getById']);
+    customerServiceSpy.create.and.returnValue(of({
+      id: 10, name: 'New Customer', taxId: '999', email: 'new@test.com',
+      phone: null, address: null, customerType: CustomerType.COMPANY, active: true, createdAt: '2024-01-01'
     }));
 
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [ClientFormComponent, ReactiveFormsModule, TranslateModule.forRoot()],
+      imports: [CustomerFormComponent, ReactiveFormsModule, TranslateModule.forRoot()],
       providers: [
-        { provide: ClientService, useValue: clientServiceSpy },
+        { provide: CustomerService, useValue: customerServiceSpy },
         { provide: Router, useValue: routerSpy },
         {
           provide: ActivatedRoute,
@@ -36,7 +36,7 @@ describe('ClientFormComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ClientFormComponent);
+    fixture = TestBed.createComponent(CustomerFormComponent);
     component = fixture.componentInstance;
   });
 
@@ -60,10 +60,10 @@ describe('ClientFormComponent', () => {
     expect(component.form.invalid).toBeTrue();
 
     component.form.patchValue({
-      name: 'Test Client',
+      name: 'Test Customer',
       taxId: '123-456',
       email: 'test@example.com',
-      clientType: 'COMPANY'
+      customerType: 'COMPANY'
     });
     expect(component.form.valid).toBeTrue();
   });
@@ -71,24 +71,24 @@ describe('ClientFormComponent', () => {
   it('should call create service on submit', () => {
     fixture.detectChanges();
     component.form.patchValue({
-      name: 'New Client',
+      name: 'New Customer',
       taxId: '999',
       email: 'new@test.com',
-      clientType: 'COMPANY',
+      customerType: 'COMPANY',
       phone: '',
       address: ''
     });
 
     component.onSubmit();
 
-    expect(clientServiceSpy.create).toHaveBeenCalledWith({
-      name: 'New Client',
+    expect(customerServiceSpy.create).toHaveBeenCalledWith({
+      name: 'New Customer',
       taxId: '999',
       email: 'new@test.com',
-      clientType: ClientType.COMPANY,
+      customerType: CustomerType.COMPANY,
       phone: '',
       address: ''
     });
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/clients']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/customers']);
   });
 });

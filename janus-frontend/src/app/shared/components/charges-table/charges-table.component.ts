@@ -4,7 +4,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InspectionService } from '../../../core/services/inspection.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { Client } from '../../../core/models/client.model';
+import { Customer } from '../../../core/models/customer.model';
 import { Operation } from '../../../core/models/operation.model';
 import { InspectionExpense, ChargeType } from '../../../core/models/inspection.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -124,10 +124,10 @@ export class ChargesTableComponent implements OnInit {
     volumetricWeight?: number | null;
     volume?: number | null;
     declaredValue?: number | null;
-    clientName?: string | null;
+    customerName?: string | null;
     blNumber?: string | null;
   } | null>(null);
-  clients = input<Client[]>([]);
+  customers = input<Customer[]>([]);
   liquidationStatus = input<string | null>(null);
   changed = output<void>();
 
@@ -187,7 +187,7 @@ export class ChargesTableComponent implements OnInit {
     ref.componentInstance.expense = null;
     ref.componentInstance.operationId = this.operationId();
     ref.componentInstance.canEdit = true;
-    ref.componentInstance.clients = this.clients();
+    ref.componentInstance.customers = this.customers();
     ref.componentInstance.operationSummary = this.operationSummary();
     ref.componentInstance.defaultChargeType = this.activeChargeTab();
     ref.componentInstance.initForm();
@@ -207,7 +207,7 @@ export class ChargesTableComponent implements OnInit {
     ref.componentInstance.expense = expense;
     ref.componentInstance.operationId = this.operationId();
     ref.componentInstance.canEdit = this.canManageExpenses();
-    ref.componentInstance.clients = this.clients();
+    ref.componentInstance.customers = this.customers();
     ref.componentInstance.operationSummary = this.operationSummary();
     ref.componentInstance.initForm();
     ref.closed.subscribe((result) => {

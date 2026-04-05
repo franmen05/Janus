@@ -3,7 +3,7 @@ export enum Role {
   SUPERVISOR = 'SUPERVISOR',
   AGENT = 'AGENT',
   ACCOUNTING = 'ACCOUNTING',
-  CLIENT = 'CLIENT',
+  CUSTOMER = 'CUSTOMER',
   CARRIER = 'CARRIER'
 }
 
@@ -14,7 +14,7 @@ export interface User {
   email: string;
   role: string;
   active: boolean;
-  clientId: number | null;
+  customerId: number | null;
   createdAt: string;
 }
 
@@ -24,14 +24,14 @@ export interface CreateUserRequest {
   fullName: string;
   email: string;
   role: Role;
-  clientId: number | null;
+  customerId: number | null;
 }
 
 export interface UpdateUserRequest {
   fullName: string;
   email: string;
   role: Role;
-  clientId: number | null;
+  customerId: number | null;
   active: boolean;
   password: string | null;
 }

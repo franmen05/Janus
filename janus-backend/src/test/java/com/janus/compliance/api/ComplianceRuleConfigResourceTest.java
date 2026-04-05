@@ -42,7 +42,7 @@ class ComplianceRuleConfigResourceTest {
 
     @Test
     @Order(3)
-    void testClientCannotAccessConfig() {
+    void testCustomerCannotAccessConfig() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/compliance/config")
@@ -267,7 +267,7 @@ class ComplianceRuleConfigResourceTest {
 
     @Test
     @Order(51)
-    void testClientCannotDeleteConfig() {
+    void testCustomerCannotDeleteConfig() {
         given()
                 .auth().basic("client", "client123")
                 .when().delete("/api/compliance/config/1")

@@ -125,7 +125,7 @@ class ValuationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
+                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
                          "blNumber": "BL-VAL-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL",
                          "incoterm": "FOB", "arrivalPortId": 1}
                         """)
@@ -208,7 +208,7 @@ class ValuationResourceTest {
 
     @Test
     @Order(12)
-    void testClientCannotGetChecklist() {
+    void testCustomerCannotGetChecklist() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/operations/{id}/valuation/checklist", operationId)
@@ -250,7 +250,7 @@ class ValuationResourceTest {
 
     @Test
     @Order(22)
-    void testClientCannotToggleLocalCharges() {
+    void testCustomerCannotToggleLocalCharges() {
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
@@ -332,7 +332,7 @@ class ValuationResourceTest {
 
     @Test
     @Order(35)
-    void testClientCannotCreatePermit() {
+    void testCustomerCannotCreatePermit() {
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
@@ -428,7 +428,7 @@ class ValuationResourceTest {
 
     @Test
     @Order(52)
-    void testClientCannotFinalizeValuation() {
+    void testCustomerCannotFinalizeValuation() {
         // Create a new operation at VALUATION_REVIEW for this test
         var opId = createOperationAtValuationReview();
 

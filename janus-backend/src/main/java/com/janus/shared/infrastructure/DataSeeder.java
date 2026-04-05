@@ -1,8 +1,8 @@
 package com.janus.shared.infrastructure;
 
-import com.janus.client.domain.model.Client;
-import com.janus.client.domain.model.ClientType;
-import com.janus.client.domain.repository.ClientRepository;
+import com.janus.customer.domain.model.Customer;
+import com.janus.customer.domain.model.CustomerType;
+import com.janus.customer.domain.repository.CustomerRepository;
 import com.janus.document.domain.model.DocumentType;
 import com.janus.document.domain.model.DocumentTypeConfig;
 import com.janus.document.domain.repository.DocumentTypeConfigRepository;
@@ -34,7 +34,7 @@ public class DataSeeder {
     UserRepository userRepository;
 
     @Inject
-    ClientRepository clientRepository;
+    CustomerRepository customerRepository;
 
     @Inject
     ComplianceRuleConfigRepository complianceRuleConfigRepository;
@@ -60,7 +60,7 @@ public class DataSeeder {
         }
         if (userRepository.count() == 0) {
             LOG.info("Seeding initial data...");
-            seedClients();
+            seedCustomers();
             seedUsers();
             LOG.info("Data seeding complete.");
         }
@@ -88,35 +88,34 @@ public class DataSeeder {
         }
     }
 
-    private void seedClients() {
-        var client1 = new Client();
-        client1.name = "Demo Import Corp";
-        client1.taxId = "RTN-0801-1990-00001";
-        client1.email = "info@demoimport.com";
-        client1.phone = "+504-2222-3333";
-        client1.address = "San Pedro Sula, Honduras";
-        client1.clientType = ClientType.COMPANY;
-        clientRepository.persist(client1);
+    private void seedCustomers() {
+        var customer1 = new Customer();
+        customer1.name = "Demo Import Corp";
+        customer1.taxId = "RTN-0801-1990-00001";
+        customer1.email = "info@demoimport.com";
+        customer1.phone = "+504-2222-3333";
+        customer1.address = "San Pedro Sula, Honduras";
+        customer1.customerType = CustomerType.COMPANY;
+        customerRepository.persist(customer1);
 
-        var client2 = new Client();
-        client2.name = "Global Trade S.A.";
-        client2.taxId = "RTN-0501-2005-00042";
-        client2.email = "contact@globaltrade.hn";
-        client2.phone = "+504-2555-6666";
-        client2.address = "Tegucigalpa, Honduras";
-        client2.clientType = ClientType.COMPANY;
-        clientRepository.persist(client2);
+        var customer2 = new Customer();
+        customer2.name = "Global Trade S.A.";
+        customer2.taxId = "RTN-0501-2005-00042";
+        customer2.email = "contact@globaltrade.hn";
+        customer2.phone = "+504-2555-6666";
+        customer2.address = "Tegucigalpa, Honduras";
+        customer2.customerType = CustomerType.COMPANY;
+        customerRepository.persist(customer2);
     }
 
     private void seedUsers() {
-        var firstClient = clientRepository.find("ORDER BY id").firstResult();
-        Long firstClientId = firstClient != null ? firstClient.id : null;
+        var firstCustomer = customerRepository.find("ORDER BY id").firstResult();
+        Long firstCustomerId = firstCustomer != null ? firstCustomer.id : null;
 
         createUser("admin", "admin123", "System Administrator", "admin@janus.com", Role.ADMIN, null);
-        createUser("supervisor", "super123", "Supervisor User", "supervisor@janus.com", Role.SUPERVISOR, null);
         createUser("agent", "agent123", "Customs Agent", "agent@janus.com", Role.AGENT, null);
         createUser("accounting", "acc123", "Accounting User", "accounting@janus.com", Role.ACCOUNTING, null);
-        createUser("client", "client123", "Demo Client User", "client@demo.com", Role.CLIENT, firstClientId);
+        createUser("client", "client123", "Demo Client User", "client@demo.com", Role.CUSTOMER, firstCustomerId);
         createUser("carrier", "carrier123", "Demo Carrier", "carrier@demo.com", Role.CARRIER, null);
     }
 
@@ -218,14 +217,14 @@ public class DataSeeder {
     }
 
     private void createUser(String username, String password, String fullName,
-                             String email, Role role, Long clientId) {
+                             String email, Role role, Long customerId) {
         var user = new User();
         user.username = username;
         user.password = BcryptUtil.bcryptHash(password);
         user.fullName = fullName;
         user.email = email;
         user.role = role.name();
-        user.clientId = clientId;
+        user.customerId = customerId;
         userRepository.persist(user);
     }
 }

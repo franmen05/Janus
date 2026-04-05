@@ -57,7 +57,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
         <div>
           <h2 class="mb-0 fs-4 fs-md-2">{{ operation()!.referenceNumber }}</h2>
-          <small class="text-muted">{{ operation()!.clientName }}</small>
+          <small class="text-muted">{{ operation()!.customerName }}</small>
         </div>
         <div class="d-flex gap-2 align-items-center flex-wrap">
           <app-status-badge [status]="operation()!.status" />
@@ -118,7 +118,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
               </div>
               <div class="col-md-9">
                 <p class="text-muted mb-2">{{ getReviewDescription() }}</p>
-                @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) || (authService.hasRole(['CLIENT']) && (operation()!.status === 'PRELIQUIDATION_REVIEW' || operation()!.status === 'VALUATION_REVIEW'))) {
+                @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) || (authService.hasRole(['CUSTOMER']) && (operation()!.status === 'PRELIQUIDATION_REVIEW' || operation()!.status === 'VALUATION_REVIEW'))) {
                   <div class="d-flex gap-2 flex-wrap">
                     @switch (operation()!.status) {
                       @case ('IN_REVIEW') {
@@ -175,7 +175,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                                     @if (preliminaryDeclaration.finalApprovedBy) {
                                       <small class="text-success">{{ 'review.approvedBy' | translate }}: {{ preliminaryDeclaration.finalApprovedBy }}</small>
                                     } @else if (preliminaryDeclaration.technicalApprovedBy) {
-                                      @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'CLIENT'])) {
+                                      @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'CUSTOMER'])) {
                                         <div class="mt-auto pt-1">
                                           <button class="btn btn-sm btn-success w-100" (click)="approveFinal()">{{ 'preliquidation.approveFinal' | translate }}</button>
                                         </div>
@@ -362,7 +362,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
             <div class="mt-3"><app-operation-comments [operationId]="operation()!.id" /></div>
           </ng-template>
         </li>
-        @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING', 'CLIENT'])) {
+        @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING', 'CUSTOMER'])) {
           <li [ngbNavItem]="'declarations'">
             <button ngbNavLink>{{ 'TABS.DECLARATIONS' | translate }}</button>
             <ng-template ngbNavContent>

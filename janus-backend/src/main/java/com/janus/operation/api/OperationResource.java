@@ -45,15 +45,15 @@ public class OperationResource {
 
     @GET
     @Transactional
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public List<OperationResponse> list(
             @QueryParam("status") OperationStatus status,
-            @QueryParam("clientId") Long clientId,
+            @QueryParam("customerId") Long customerId,
             @Context SecurityContext sec) {
-        var clientIdFilter = securityHelper.getClientIdFilter(sec);
-        if (clientIdFilter != null) {
-            // CLIENT users can only see their own operations
-            return operationService.findByClientId(clientIdFilter).stream()
+        var customerIdFilter = securityHelper.getCustomerIdFilter(sec);
+        if (customerIdFilter != null) {
+            // CUSTOMER users can only see their own operations
+            return operationService.findByCustomerId(customerIdFilter).stream()
                     .map(OperationResponse::from)
                     .toList();
         }
@@ -62,8 +62,8 @@ public class OperationResource {
             return operationService.findByStatus(status).stream()
                     .map(OperationResponse::from)
                     .toList();
-        } else if (clientId != null) {
-            return operationService.findByClientId(clientId).stream()
+        } else if (customerId != null) {
+            return operationService.findByCustomerId(customerId).stream()
                     .map(OperationResponse::from)
                     .toList();
         } else {
@@ -76,16 +76,16 @@ public class OperationResource {
     @GET
     @Path("/{id}")
     @Transactional
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT", "CARRIER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER", "CARRIER"})
     public OperationResponse getById(@PathParam("id") Long id, @Context SecurityContext sec) {
         var op = operationService.findById(id);
-        securityHelper.enforceClientAccess(sec, op);
+        securityHelper.enforceCustomerAccess(sec, op);
         return OperationResponse.from(op);
     }
 
     @POST
     @Transactional
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response create(@Valid CreateOperationRequest request, @Context SecurityContext sec) {
         var op = operationService.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
@@ -96,7 +96,7 @@ public class OperationResource {
     @PUT
     @Path("/{id}")
     @Transactional
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT"})
     public OperationResponse update(@PathParam("id") Long id, @Valid CreateOperationRequest request,
                                      @Context SecurityContext sec) {
         return OperationResponse.from(operationService.update(id, request, sec.getUserPrincipal().getName()));
@@ -104,7 +104,7 @@ public class OperationResource {
 
     @POST
     @Path("/{id}/change-status")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "CARRIER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "CARRIER"})
     public Response changeStatus(@PathParam("id") Long id,
                                   @Valid ChangeStatusRequest request,
                                   @Context SecurityContext sec) {
@@ -123,7 +123,7 @@ public class OperationResource {
     @PATCH
     @Path("/{id}/bl-availability")
     @Transactional
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT"})
     public OperationResponse updateBlAvailability(@PathParam("id") Long id,
                                                    @Valid com.janus.operation.api.dto.BlOriginalAvailableRequest body,
                                                    @Context SecurityContext sec) {
@@ -135,7 +135,7 @@ public class OperationResource {
     @GET
     @Path("/{id}/allowed-transitions")
     @Transactional
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "CARRIER"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "CARRIER"})
     public Set<OperationStatus> getAllowedTransitions(@PathParam("id") Long id) {
         var op = operationService.findById(id);
         return statusTransitionService.getAllowedTransitions(op.status);
@@ -144,9 +144,9 @@ public class OperationResource {
     @GET
     @Path("/{id}/history")
     @Transactional
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public List<StatusHistoryResponse> getHistory(@PathParam("id") Long id, @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(id));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(id));
         return operationService.getHistory(id).stream()
                 .map(StatusHistoryResponse::from)
                 .toList();

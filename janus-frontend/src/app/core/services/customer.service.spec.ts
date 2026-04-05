@@ -1,24 +1,24 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
-import { ClientService } from './client.service';
+import { CustomerService } from './customer.service';
 import { environment } from '../../../environments/environment';
-import { Client, ClientType, CreateClientRequest } from '../models/client.model';
+import { Customer, CustomerType, CreateCustomerRequest } from '../models/customer.model';
 
-describe('ClientService', () => {
-  let service: ClientService;
+describe('CustomerService', () => {
+  let service: CustomerService;
   let httpMock: HttpTestingController;
 
-  const apiUrl = `${environment.apiUrl}/api/clients`;
+  const apiUrl = `${environment.apiUrl}/api/customers`;
 
-  const mockClient: Client = {
+  const mockCustomer: Customer = {
     id: 1,
-    name: 'Test Client',
+    name: 'Test Customer',
     taxId: 'TAX-001',
-    email: 'client@test.com',
+    email: 'customer@test.com',
     phone: '+1234567890',
     address: '123 Main St',
-    clientType: ClientType.COMPANY,
+    customerType: CustomerType.COMPANY,
     active: true,
     createdAt: '2024-01-01T00:00:00'
   };
@@ -31,7 +31,7 @@ describe('ClientService', () => {
       ]
     }).compileComponents();
 
-    service = TestBed.inject(ClientService);
+    service = TestBed.inject(CustomerService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -44,68 +44,68 @@ describe('ClientService', () => {
   });
 
   describe('getAll', () => {
-    it('should call GET /api/clients', () => {
-      service.getAll().subscribe(clients => {
-        expect(clients).toEqual([mockClient]);
+    it('should call GET /api/customers', () => {
+      service.getAll().subscribe(customers => {
+        expect(customers).toEqual([mockCustomer]);
       });
 
       const req = httpMock.expectOne(apiUrl);
       expect(req.request.method).toBe('GET');
-      req.flush([mockClient]);
+      req.flush([mockCustomer]);
     });
   });
 
   describe('getById', () => {
-    it('should call GET /api/clients/{id}', () => {
-      service.getById(1).subscribe(client => {
-        expect(client).toEqual(mockClient);
+    it('should call GET /api/customers/{id}', () => {
+      service.getById(1).subscribe(customer => {
+        expect(customer).toEqual(mockCustomer);
       });
 
       const req = httpMock.expectOne(`${apiUrl}/1`);
       expect(req.request.method).toBe('GET');
-      req.flush(mockClient);
+      req.flush(mockCustomer);
     });
   });
 
   describe('create', () => {
-    it('should call POST /api/clients', () => {
-      const request: CreateClientRequest = {
-        name: 'New Client',
+    it('should call POST /api/customers', () => {
+      const request: CreateCustomerRequest = {
+        name: 'New Customer',
         taxId: 'TAX-002',
         email: 'new@test.com',
-        clientType: ClientType.COMPANY,
+        customerType: CustomerType.COMPANY,
         phone: '+9876543210',
         address: '456 Oak Ave'
       };
 
-      service.create(request).subscribe(client => {
-        expect(client).toEqual(mockClient);
+      service.create(request).subscribe(customer => {
+        expect(customer).toEqual(mockCustomer);
       });
 
       const req = httpMock.expectOne(apiUrl);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(request);
-      req.flush(mockClient);
+      req.flush(mockCustomer);
     });
   });
 
   describe('update', () => {
-    it('should call PUT /api/clients/{id}', () => {
-      const request: CreateClientRequest = {
-        name: 'Updated Client',
+    it('should call PUT /api/customers/{id}', () => {
+      const request: CreateCustomerRequest = {
+        name: 'Updated Customer',
         taxId: 'TAX-001',
         email: 'updated@test.com',
-        clientType: ClientType.CONSIGNEE
+        customerType: CustomerType.CONSIGNEE
       };
 
-      service.update(1, request).subscribe(client => {
-        expect(client).toEqual(mockClient);
+      service.update(1, request).subscribe(customer => {
+        expect(customer).toEqual(mockCustomer);
       });
 
       const req = httpMock.expectOne(`${apiUrl}/1`);
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(request);
-      req.flush(mockClient);
+      req.flush(mockCustomer);
     });
   });
 });

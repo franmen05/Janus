@@ -52,11 +52,11 @@ describe('SidebarComponent', () => {
     expect(hrefs).toContain('/operations');
   });
 
-  it('should show clients link for ADMIN role', () => {
+  it('should show customers link for ADMIN role', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const links = compiled.querySelectorAll('.nav-link');
     const hrefs = Array.from(links).map(l => l.getAttribute('href'));
-    expect(hrefs).toContain('/clients');
+    expect(hrefs).toContain('/customers');
   });
 
   it('should show alerts link for ADMIN role', () => {

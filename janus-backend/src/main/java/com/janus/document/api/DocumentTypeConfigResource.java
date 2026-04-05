@@ -25,7 +25,7 @@ public class DocumentTypeConfigResource {
     DocumentTypeConfigRepository documentTypeConfigRepository;
 
     @GET
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public List<DocumentTypeConfigResponse> list() {
         return documentTypeConfigRepository.listAll().stream()
                 .map(config -> new DocumentTypeConfigResponse(config.code, config.allowMultiple))

@@ -1,14 +1,14 @@
-package com.janus.client.domain.repository;
+package com.janus.customer.domain.repository;
 
-import com.janus.client.domain.model.Client;
+import com.janus.customer.domain.model.Customer;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.util.Optional;
 
 @ApplicationScoped
-public class ClientRepository implements PanacheRepository<Client> {
+public class CustomerRepository implements PanacheRepository<Customer> {
 
-    public Optional<Client> findByTaxId(String taxId) {
+    public Optional<Customer> findByTaxId(String taxId) {
         return find("taxId", taxId).firstResultOptional();
     }
 }

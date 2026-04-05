@@ -14,8 +14,8 @@ public class OperationRepository implements PanacheRepository<Operation> {
         return list("status", status);
     }
 
-    public List<Operation> findByClientId(Long clientId) {
-        return list("client.id", clientId);
+    public List<Operation> findByCustomerId(Long customerId) {
+        return list("customer.id", customerId);
     }
 
     public long countByStatus(OperationStatus status) {

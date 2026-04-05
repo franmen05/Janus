@@ -23,7 +23,7 @@ describe('OperationDetailComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   const mockOperation: Operation = {
-    id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
+    id: 1, referenceNumber: 'OP-001', customerId: 1, customerName: 'Customer A',
     operationType: OperationType.IMPORT, transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
     status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
     blNumber: 'BL-001', containerNumber: 'CONT-001', estimatedArrival: '2024-02-01T10:00:00', blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,

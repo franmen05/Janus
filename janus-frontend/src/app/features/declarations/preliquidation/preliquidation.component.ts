@@ -156,7 +156,7 @@ import { DocumentListComponent } from '../../documents/document-list/document-li
                     }
                   } @else {
                     <span class="badge bg-secondary mb-2">{{ 'STATUS.PENDING' | translate }}</span>
-                    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'CLIENT']) && declaration()!.technicalApprovedBy && !declaration()!.finalApprovedBy) {
+                    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'CUSTOMER']) && declaration()!.technicalApprovedBy && !declaration()!.finalApprovedBy) {
                       <div class="mt-auto pt-2">
                         <button class="btn btn-success btn-sm w-100" (click)="approveFinal()">{{ 'preliquidation.approveFinal' | translate }}</button>
                       </div>

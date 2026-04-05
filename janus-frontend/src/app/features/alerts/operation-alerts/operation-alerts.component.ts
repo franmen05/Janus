@@ -35,7 +35,7 @@ export class OperationAlertsComponent implements OnInit {
   }
 
   loadAlerts(): void {
-    if (this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING', 'CLIENT'])) {
+    if (this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING', 'CUSTOMER'])) {
       this.alertService.getByOperation(this.operationId()).subscribe(alerts => {
         this.activeAlerts.set(alerts.filter(a => a.status === 'ACTIVE'));
       });

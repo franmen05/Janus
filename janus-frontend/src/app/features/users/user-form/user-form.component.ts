@@ -7,9 +7,9 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { UserService } from '../../../core/services/user.service';
-import { ClientService } from '../../../core/services/client.service';
+import { CustomerService } from '../../../core/services/customer.service';
 import { Role } from '../../../core/models/user.model';
-import { Client } from '../../../core/models/client.model';
+import { Customer } from '../../../core/models/customer.model';
 
 @Component({
   selector: 'app-user-form',
@@ -52,24 +52,24 @@ import { Client } from '../../../core/models/client.model';
                 }
               </select>
             </div>
-            @if (form.get('role')?.value === 'CLIENT') {
+            @if (form.get('role')?.value === 'CUSTOMER') {
               <div class="col-md-6">
-                <label class="form-label">{{ 'USERS.CLIENT' | translate }}</label>
+                <label class="form-label">{{ 'USERS.CUSTOMER' | translate }}</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-search"></i></span>
                   <input type="text" class="form-control"
-                    [ngbTypeahead]="searchClient"
-                    [resultFormatter]="clientResultFormatter"
-                    [inputFormatter]="clientInputFormatter"
-                    (selectItem)="onClientSelected($event)"
-                    [value]="selectedClientDisplay()"
-                    placeholder="{{ 'USERS.CLIENT_SEARCH_PLACEHOLDER' | translate }}" />
+                    [ngbTypeahead]="searchCustomer"
+                    [resultFormatter]="customerResultFormatter"
+                    [inputFormatter]="customerInputFormatter"
+                    (selectItem)="onCustomerSelected($event)"
+                    [value]="selectedCustomerDisplay()"
+                    placeholder="{{ 'USERS.CUSTOMER_SEARCH_PLACEHOLDER' | translate }}" />
                 </div>
-                @if (selectedClient()) {
+                @if (selectedCustomer()) {
                   <div class="mt-1 d-flex align-items-center gap-2">
-                    <span class="badge bg-primary">{{ selectedClient()!.name }}</span>
-                    <small class="text-muted">{{ selectedClient()!.taxId }}</small>
-                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearClient()">
+                    <span class="badge bg-primary">{{ selectedCustomer()!.name }}</span>
+                    <small class="text-muted">{{ selectedCustomer()!.taxId }}</small>
+                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearCustomer()">
                       <i class="bi bi-x-circle"></i>
                     </button>
                   </div>
@@ -88,16 +88,16 @@ import { Client } from '../../../core/models/client.model';
 })
 export class UserFormComponent implements OnInit {
   private userService = inject(UserService);
-  private clientService = inject(ClientService);
+  private customerService = inject(CustomerService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
   isEdit = signal(false);
   userId: number | null = null;
   roles = Object.values(Role);
-  clients = signal<Client[]>([]);
-  selectedClient = signal<Client | null>(null);
-  selectedClientDisplay = signal('');
+  customers = signal<Customer[]>([]);
+  selectedCustomer = signal<Customer | null>(null);
+  selectedCustomerDisplay = signal('');
 
   form = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -105,17 +105,17 @@ export class UserFormComponent implements OnInit {
     fullName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
     role: new FormControl('AGENT', { nonNullable: true, validators: [Validators.required] }),
-    clientId: new FormControl<number | null>(null)
+    customerId: new FormControl<number | null>(null)
   });
 
-  searchClient: OperatorFunction<string, Client[]> = (text$: Observable<string>) =>
+  searchCustomer: OperatorFunction<string, Customer[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       map(term => {
-        if (term.length < 1) return this.clients().filter(c => c.active).slice(0, 10);
+        if (term.length < 1) return this.customers().filter(c => c.active).slice(0, 10);
         const lower = term.toLowerCase();
-        return this.clients().filter(c => c.active &&
+        return this.customers().filter(c => c.active &&
           (c.name.toLowerCase().includes(lower) ||
            c.taxId?.toLowerCase().includes(lower) ||
            c.email?.toLowerCase().includes(lower))
@@ -123,27 +123,27 @@ export class UserFormComponent implements OnInit {
       })
     );
 
-  clientResultFormatter = (client: Client) =>
-    `${client.name}  —  ${client.taxId || ''}  ${client.email ? '· ' + client.email : ''}`;
+  customerResultFormatter = (customer: Customer) =>
+    `${customer.name}  —  ${customer.taxId || ''}  ${customer.email ? '· ' + customer.email : ''}`;
 
-  clientInputFormatter = (client: Client) => client.name;
+  customerInputFormatter = (customer: Customer) => customer.name;
 
-  onClientSelected(event: any): void {
-    const client = event.item as Client;
-    this.selectedClient.set(client);
-    this.selectedClientDisplay.set(client.name);
-    this.form.get('clientId')!.setValue(client.id);
+  onCustomerSelected(event: any): void {
+    const customer = event.item as Customer;
+    this.selectedCustomer.set(customer);
+    this.selectedCustomerDisplay.set(customer.name);
+    this.form.get('customerId')!.setValue(customer.id);
   }
 
-  clearClient(): void {
-    this.selectedClient.set(null);
-    this.selectedClientDisplay.set('');
-    this.form.get('clientId')!.setValue(null);
+  clearCustomer(): void {
+    this.selectedCustomer.set(null);
+    this.selectedCustomerDisplay.set('');
+    this.form.get('customerId')!.setValue(null);
   }
 
   ngOnInit(): void {
-    this.clientService.getAll().subscribe(clients => {
-      this.clients.set(clients);
+    this.customerService.getAll().subscribe(customers => {
+      this.customers.set(customers);
 
       const id = this.route.snapshot.paramMap.get('id');
       if (id) {
@@ -157,13 +157,13 @@ export class UserFormComponent implements OnInit {
             fullName: u.fullName,
             email: u.email,
             role: u.role,
-            clientId: u.clientId
+            customerId: u.customerId
           });
-          if (u.clientId) {
-            const client = clients.find(c => c.id === u.clientId);
-            if (client) {
-              this.selectedClient.set(client);
-              this.selectedClientDisplay.set(client.name);
+          if (u.customerId) {
+            const customer = customers.find(c => c.id === u.customerId);
+            if (customer) {
+              this.selectedCustomer.set(customer);
+              this.selectedCustomerDisplay.set(customer.name);
             }
           }
         });
@@ -179,7 +179,7 @@ export class UserFormComponent implements OnInit {
         fullName: val.fullName,
         email: val.email,
         role: val.role as Role,
-        clientId: val.clientId,
+        customerId: val.customerId,
         active: true,
         password: val.password || null
       }).subscribe(() => this.router.navigate(['/users']));
@@ -190,7 +190,7 @@ export class UserFormComponent implements OnInit {
         fullName: val.fullName,
         email: val.email,
         role: val.role as Role,
-        clientId: val.clientId
+        customerId: val.customerId
       }).subscribe(() => this.router.navigate(['/users']));
     }
   }

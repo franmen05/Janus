@@ -284,7 +284,7 @@ public class ValuationService {
         ));
 
         // Force lazy init for DTO mapping
-        if (operation.client != null) { var ignored = operation.client.name; }
+        if (operation.customer != null) { var ignored = operation.customer.name; }
         if (operation.assignedAgent != null) { var ignored = operation.assignedAgent.fullName; }
         if (operation.arrivalPort != null) { var ignored = operation.arrivalPort.code; }
 

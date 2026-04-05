@@ -200,7 +200,7 @@
     }
   </div>
 } @else {
-  <!-- Simple view for CLIENT/CARRIER -->
+  <!-- Simple view for CUSTOMER/CARRIER -->
   <div class="row mb-4 g-3">
     <div class="col-6 col-md-3" (click)="navigateToOperations('active')" style="cursor: pointer;">
       <div class="kpi-card kpi-card--indigo">
@@ -228,12 +228,12 @@
     </div>
     <div class="card-body p-0 table-responsive">
       <table class="table table-hover mb-0">
-        <thead><tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CLIENT' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr></thead>
+        <thead><tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CUSTOMER' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr></thead>
         <tbody>
           @for (op of recentOperations(); track op.id) {
             <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
               <td>{{ op.referenceNumber }}</td>
-              <td>{{ op.clientName }}</td>
+              <td>{{ op.customerName }}</td>
               <td><app-status-badge [status]="op.status" /></td>
               <td class="d-none d-sm-table-cell mono">{{ op.createdAt | date:'shortDate' }}</td>
             </tr>

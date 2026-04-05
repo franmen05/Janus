@@ -71,24 +71,24 @@ export const routes: Routes = [
       {
         path: 'operations/:operationId/documents/:documentId/versions',
         loadComponent: () => import('./features/documents/document-versions/document-versions.component').then(m => m.DocumentVersionsComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING', 'CLIENT'] },
+        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING', 'CUSTOMER'] },
         canActivate: [roleGuard]
       },
       {
-        path: 'clients',
-        loadComponent: () => import('./features/clients/client-list/client-list.component').then(m => m.ClientListComponent),
+        path: 'customers',
+        loadComponent: () => import('./features/customers/customer-list/customer-list.component').then(m => m.CustomerListComponent),
         data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
-        path: 'clients/new',
-        loadComponent: () => import('./features/clients/client-form/client-form.component').then(m => m.ClientFormComponent),
+        path: 'customers/new',
+        loadComponent: () => import('./features/customers/customer-form/customer-form.component').then(m => m.CustomerFormComponent),
         data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
-        path: 'clients/:id/edit',
-        loadComponent: () => import('./features/clients/client-form/client-form.component').then(m => m.ClientFormComponent),
+        path: 'customers/:id/edit',
+        loadComponent: () => import('./features/customers/customer-form/customer-form.component').then(m => m.CustomerFormComponent),
         data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
         canActivate: [roleGuard]
       },

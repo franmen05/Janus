@@ -35,7 +35,7 @@ public class CommentResource {
     SecurityHelper securityHelper;
 
     @POST
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT"})
     public Response addComment(@PathParam("operationId") Long operationId,
                                 @Valid CreateCommentRequest request,
                                 @Context SecurityContext sec) {
@@ -47,12 +47,12 @@ public class CommentResource {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR","AGENT", "ACCOUNTING", "CUSTOMER"})
     public List<CommentResponse> list(@PathParam("operationId") Long operationId,
                                        @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
-        // Filter internal comments for CLIENT and ACCOUNTING roles
-        boolean filterInternal = sec.isUserInRole("CLIENT") || sec.isUserInRole("ACCOUNTING");
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
+        // Filter internal comments for CUSTOMER and ACCOUNTING roles
+        boolean filterInternal = sec.isUserInRole("CUSTOMER") || sec.isUserInRole("ACCOUNTING");
         return commentService.getComments(operationId, filterInternal).stream()
                 .map(CommentResponse::from)
                 .toList();

@@ -16,35 +16,35 @@ public class SecurityHelper {
     UserRepository userRepository;
 
     /**
-     * Returns the clientId for a CLIENT user, or null for non-CLIENT roles.
+     * Returns the customerId for a CUSTOMER user, or null for non-CUSTOMER roles.
      */
-    public Long getClientIdFilter(SecurityContext sec) {
+    public Long getCustomerIdFilter(SecurityContext sec) {
         var user = getUser(sec);
-        if ("CLIENT".equals(user.role)) {
-            return user.clientId;
+        if ("CUSTOMER".equals(user.role)) {
+            return user.customerId;
         }
         return null;
     }
 
     /**
-     * Throws ForbiddenException if a CLIENT user tries to access an operation
-     * that doesn't belong to their client.
+     * Throws ForbiddenException if a CUSTOMER user tries to access an operation
+     * that doesn't belong to their customer.
      */
-    public void enforceClientAccess(SecurityContext sec, Operation operation) {
+    public void enforceCustomerAccess(SecurityContext sec, Operation operation) {
         var user = getUser(sec);
-        if ("CLIENT".equals(user.role)) {
-            if (user.clientId == null || operation.client == null
-                    || !user.clientId.equals(operation.client.id)) {
-                throw new ForbiddenException("Access denied: operation does not belong to your client");
+        if ("CUSTOMER".equals(user.role)) {
+            if (user.customerId == null || operation.customer == null
+                    || !user.customerId.equals(operation.customer.id)) {
+                throw new ForbiddenException("Access denied: operation does not belong to your customer");
             }
         }
     }
 
     /**
-     * Returns true if the current user has the CLIENT role.
+     * Returns true if the current user has the CUSTOMER role.
      */
-    public boolean isClient(SecurityContext sec) {
-        return sec.isUserInRole("CLIENT");
+    public boolean isCustomer(SecurityContext sec) {
+        return sec.isUserInRole("CUSTOMER");
     }
 
     private User getUser(SecurityContext sec) {

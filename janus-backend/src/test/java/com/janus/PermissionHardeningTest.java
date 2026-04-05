@@ -18,55 +18,55 @@ import static org.hamcrest.Matchers.hasKey;
 class PermissionHardeningTest {
 
     private static Long operationId;
-    private static Long otherClientOperationId;
+    private static Long otherCustomerOperationId;
 
     @Test
     @Order(1)
     void testSetupOperations() {
-        // Create an operation with client 1 (the "client" user's client)
+        // Create an operation with customer 1 (the "client" user's customer)
         operationId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
-        // Create an operation with client 2 (NOT the "client" user's client)
-        otherClientOperationId = given()
+        // Create an operation with customer 2 (NOT the "client" user's customer)
+        otherCustomerOperationId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 2, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_3", "containerNumber": "CONT-002", "blNumber": "BL-TEST-002", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"customerId": 2, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_3", "containerNumber": "CONT-002", "blNumber": "BL-TEST-002", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
     }
 
-    // --- CLIENT DATA ISOLATION ---
+    // --- CUSTOMER DATA ISOLATION ---
 
     @Test
     @Order(2)
-    void testClientSeesOnlyOwnOperations() {
+    void testCustomerSeesOnlyOwnOperations() {
         var ops = given()
                 .auth().basic("client", "client123")
                 .when().get("/api/operations")
                 .then().statusCode(200)
                 .body("size()", greaterThanOrEqualTo(1))
-                .extract().jsonPath().getList("clientId", Long.class);
+                .extract().jsonPath().getList("customerId", Long.class);
 
-        // All returned operations should belong to client 1
+        // All returned operations should belong to customer 1
         for (Long cid : ops) {
-            assert cid == 1L : "CLIENT sees operations from another client: " + cid;
+            assert cid == 1L : "CUSTOMER sees operations from another customer: " + cid;
         }
     }
 
     @Test
     @Order(3)
-    void testClientCanAccessOwnOperation() {
+    void testCustomerCanAccessOwnOperation() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/operations/{id}", operationId)
@@ -76,65 +76,65 @@ class PermissionHardeningTest {
 
     @Test
     @Order(4)
-    void testClientCannotAccessOtherClientOperation() {
+    void testCustomerCannotAccessOtherCustomerOperation() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}", otherClientOperationId)
+                .when().get("/api/operations/{id}", otherCustomerOperationId)
                 .then().statusCode(403)
-                .body("error", is("Access denied: operation does not belong to your client"));
+                .body("error", is("Access denied: operation does not belong to your customer"));
     }
 
     @Test
     @Order(5)
-    void testClientCannotAccessOtherClientHistory() {
+    void testCustomerCannotAccessOtherCustomerHistory() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/history", otherClientOperationId)
+                .when().get("/api/operations/{id}/history", otherCustomerOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(6)
-    void testClientCannotAccessOtherClientDocuments() {
+    void testCustomerCannotAccessOtherCustomerDocuments() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/documents", otherClientOperationId)
+                .when().get("/api/operations/{id}/documents", otherCustomerOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(7)
-    void testClientCannotAccessOtherClientComments() {
+    void testCustomerCannotAccessOtherCustomerComments() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/comments", otherClientOperationId)
+                .when().get("/api/operations/{id}/comments", otherCustomerOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(8)
-    void testClientCannotAccessOtherClientTimeline() {
+    void testCustomerCannotAccessOtherCustomerTimeline() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/timeline", otherClientOperationId)
+                .when().get("/api/operations/{id}/timeline", otherCustomerOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(9)
-    void testClientCannotAccessOtherClientCompleteness() {
+    void testCustomerCannotAccessOtherCustomerCompleteness() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/documents/completeness", otherClientOperationId)
+                .when().get("/api/operations/{id}/documents/completeness", otherCustomerOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(10)
-    void testClientCannotAccessOtherClientCrossing() {
+    void testCustomerCannotAccessOtherCustomerCrossing() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/declarations/crossing", otherClientOperationId)
+                .when().get("/api/operations/{id}/declarations/crossing", otherCustomerOperationId)
                 .then().statusCode(403);
     }
 
@@ -203,7 +203,7 @@ class PermissionHardeningTest {
                 .auth().basic("accounting", "acc123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(403);
@@ -242,16 +242,16 @@ class PermissionHardeningTest {
                 .then().statusCode(403);
     }
 
-    // --- CLIENT CANNOT MODIFY ---
+    // --- CUSTOMER CANNOT MODIFY ---
 
     @Test
     @Order(21)
-    void testClientCannotCreateOperations() {
+    void testCustomerCannotCreateOperations() {
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(403);
@@ -259,7 +259,7 @@ class PermissionHardeningTest {
 
     @Test
     @Order(22)
-    void testClientCannotUploadDocuments() {
+    void testCustomerCannotUploadDocuments() {
         given()
                 .auth().preemptive().basic("client", "client123")
                 .multiPart("file", "test.pdf", new byte[]{1, 2, 3}, "application/pdf")
@@ -270,7 +270,7 @@ class PermissionHardeningTest {
 
     @Test
     @Order(23)
-    void testClientCannotAddComments() {
+    void testCustomerCannotAddComments() {
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
@@ -283,7 +283,7 @@ class PermissionHardeningTest {
 
     @Test
     @Order(24)
-    void testClientCannotAccessAlerts() {
+    void testCustomerCannotAccessAlerts() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/alerts")
@@ -297,7 +297,7 @@ class PermissionHardeningTest {
     void testForbiddenResponseIsJson() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}", otherClientOperationId)
+                .when().get("/api/operations/{id}", otherCustomerOperationId)
                 .then()
                 .statusCode(403)
                 .contentType(ContentType.JSON)

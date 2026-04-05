@@ -18,8 +18,8 @@ describe('OperationService', () => {
   const mockOperation: Operation = {
     id: 1,
     referenceNumber: 'OP-2024-0001',
-    clientId: 1,
-    clientName: 'Test Client',
+    customerId: 1,
+    customerName: 'Test Customer',
     operationType: OperationType.IMPORT,
     transportMode: TransportMode.MARITIME,
     operationCategory: OperationCategory.CATEGORY_1,
@@ -75,25 +75,25 @@ describe('OperationService', () => {
 
       const req = httpMock.expectOne(r => r.url === apiUrl);
       expect(req.request.params.get('status')).toBe('DRAFT');
-      expect(req.request.params.has('clientId')).toBeFalse();
+      expect(req.request.params.has('customerId')).toBeFalse();
       req.flush([]);
     });
 
-    it('should pass clientId param when provided', () => {
+    it('should pass customerId param when provided', () => {
       service.getAll(undefined, 5).subscribe();
 
       const req = httpMock.expectOne(r => r.url === apiUrl);
-      expect(req.request.params.get('clientId')).toBe('5');
+      expect(req.request.params.get('customerId')).toBe('5');
       expect(req.request.params.has('status')).toBeFalse();
       req.flush([]);
     });
 
-    it('should pass both status and clientId params when provided', () => {
+    it('should pass both status and customerId params when provided', () => {
       service.getAll('CLOSED', 3).subscribe();
 
       const req = httpMock.expectOne(r => r.url === apiUrl);
       expect(req.request.params.get('status')).toBe('CLOSED');
-      expect(req.request.params.get('clientId')).toBe('3');
+      expect(req.request.params.get('customerId')).toBe('3');
       req.flush([]);
     });
   });
@@ -113,7 +113,7 @@ describe('OperationService', () => {
   describe('create', () => {
     it('should call POST /api/operations', () => {
       const request: CreateOperationRequest = {
-        clientId: 1,
+        customerId: 1,
         operationType: OperationType.IMPORT,
         transportMode: TransportMode.MARITIME,
         operationCategory: OperationCategory.CATEGORY_1,
@@ -135,7 +135,7 @@ describe('OperationService', () => {
   describe('update', () => {
     it('should call PUT /api/operations/{id}', () => {
       const request: CreateOperationRequest = {
-        clientId: 1,
+        customerId: 1,
         operationType: OperationType.EXPORT,
         transportMode: TransportMode.AIR,
         operationCategory: OperationCategory.CATEGORY_2,

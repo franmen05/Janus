@@ -64,7 +64,7 @@ public class AlertCheckerScheduler {
                             + inactivityHours + " hours");
             if (alert != null) {
                 notificationService.send(
-                        op.id, op.client.email,
+                        op.id, op.customer.email,
                         "Inactivity Alert - " + op.referenceNumber,
                         "Operation " + op.referenceNumber + " has been inactive for over "
                                 + inactivityHours + " hours."
@@ -84,7 +84,7 @@ public class AlertCheckerScheduler {
                             + arrivalDateApproachingHours + " hours)");
             if (alert != null) {
                 notificationService.send(
-                        op.id, op.client.email,
+                        op.id, op.customer.email,
                         "Arrival Date Approaching - " + op.referenceNumber,
                         "Operation " + op.referenceNumber + " arrival date is approaching."
                 );
@@ -141,9 +141,9 @@ public class AlertCheckerScheduler {
                     + "\",\"deadline\":\"" + deadline.format(isoFormatter) + "\"}";
 
             var alert = alertService.createAlert(op, AlertType.DECLARATION_DEADLINE, message, messageParams);
-            if (alert != null && op.client != null && op.client.email != null) {
+            if (alert != null && op.customer != null && op.customer.email != null) {
                 notificationService.send(
-                        op.id, op.client.email,
+                        op.id, op.customer.email,
                         "Declaration Deadline - " + op.referenceNumber,
                         message
                 );

@@ -7,9 +7,9 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { OperatorFunction, Observable, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
-import { ClientService } from '../../../core/services/client.service';
+import { CustomerService } from '../../../core/services/customer.service';
 import { PortService } from '../../../core/services/port.service';
-import { Client } from '../../../core/models/client.model';
+import { Customer } from '../../../core/models/customer.model';
 import { Port } from '../../../core/models/port.model';
 import { TransportMode, OperationType, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
@@ -25,32 +25,32 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.CLIENT' | translate }} <span class="text-danger">*</span></label>
+              <label class="form-label">{{ 'OPERATIONS.CUSTOMER' | translate }} <span class="text-danger">*</span></label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control"
-                  [ngbTypeahead]="searchClient"
-                  [resultFormatter]="clientResultFormatter"
-                  [inputFormatter]="clientInputFormatter"
-                  (selectItem)="onClientSelected($event)"
-                  [value]="selectedClientDisplay()"
-                  [disabled]="clientLocked()"
-                  placeholder="{{ 'OPERATIONS.CLIENT_SEARCH_PLACEHOLDER' | translate }}" />
+                  [ngbTypeahead]="searchCustomer"
+                  [resultFormatter]="customerResultFormatter"
+                  [inputFormatter]="customerInputFormatter"
+                  (selectItem)="onCustomerSelected($event)"
+                  [value]="selectedCustomerDisplay()"
+                  [disabled]="customerLocked()"
+                  placeholder="{{ 'OPERATIONS.CUSTOMER_SEARCH_PLACEHOLDER' | translate }}" />
               </div>
-              @if (selectedClient()) {
+              @if (selectedCustomer()) {
                 <div class="mt-1 d-flex align-items-center gap-2">
-                  <span class="badge bg-primary">{{ selectedClient()!.name }}</span>
-                  <small class="text-muted">{{ selectedClient()!.taxId }}</small>
-                  @if (!clientLocked()) {
-                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearClient()">
+                  <span class="badge bg-primary">{{ selectedCustomer()!.name }}</span>
+                  <small class="text-muted">{{ selectedCustomer()!.taxId }}</small>
+                  @if (!customerLocked()) {
+                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearCustomer()">
                       <i class="bi bi-x-circle"></i>
                     </button>
                   }
                 </div>
               } @else {
                 <div class="mt-1">
-                  <a routerLink="/clients/new" class="small text-decoration-none">
-                    <i class="bi bi-plus-circle me-1"></i>{{ 'OPERATIONS.CREATE_CLIENT' | translate }}
+                  <a routerLink="/customers/new" class="small text-decoration-none">
+                    <i class="bi bi-plus-circle me-1"></i>{{ 'OPERATIONS.CREATE_CUSTOMER' | translate }}
                   </a>
                 </div>
               }
@@ -199,18 +199,18 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 })
 export class OperationFormComponent implements OnInit {
   private operationService = inject(OperationService);
-  private clientService = inject(ClientService);
+  private customerService = inject(CustomerService);
   private portService = inject(PortService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  clients = signal<Client[]>([]);
+  customers = signal<Customer[]>([]);
   ports = signal<Port[]>([]);
   isEdit = signal(false);
   operationId: number | null = null;
-  selectedClient = signal<Client | null>(null);
-  selectedClientDisplay = signal('');
-  clientLocked = signal(false);
+  selectedCustomer = signal<Customer | null>(null);
+  selectedCustomerDisplay = signal('');
+  customerLocked = signal(false);
   transportModes = Object.values(TransportMode);
   cargoTypes = Object.values(CargoType);
   operationCategories = Object.values(OperationCategory);
@@ -223,7 +223,7 @@ export class OperationFormComponent implements OnInit {
   ]);
 
   form = new FormGroup({
-    clientId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    customerId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     operationType: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     transportMode: new FormControl(TransportMode.MARITIME, { nonNullable: true, validators: [Validators.required] }),
     cargoType: new FormControl(CargoType.FCL, { nonNullable: true }),
@@ -240,14 +240,14 @@ export class OperationFormComponent implements OnInit {
     arrivalPortId: new FormControl('', { nonNullable: true, validators: [Validators.required] })
   });
 
-  searchClient: OperatorFunction<string, Client[]> = (text$: Observable<string>) =>
+  searchCustomer: OperatorFunction<string, Customer[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       map(term => {
-        if (term.length < 1) return this.clients().filter(c => c.active).slice(0, 10);
+        if (term.length < 1) return this.customers().filter(c => c.active).slice(0, 10);
         const lower = term.toLowerCase();
-        return this.clients().filter(c => c.active &&
+        return this.customers().filter(c => c.active &&
           (c.name.toLowerCase().includes(lower) ||
            c.taxId?.toLowerCase().includes(lower) ||
            c.email?.toLowerCase().includes(lower))
@@ -255,22 +255,22 @@ export class OperationFormComponent implements OnInit {
       })
     );
 
-  clientResultFormatter = (client: Client) =>
-    `${client.name}  —  ${client.taxId || ''}  ${client.email ? '· ' + client.email : ''}`;
+  customerResultFormatter = (customer: Customer) =>
+    `${customer.name}  —  ${customer.taxId || ''}  ${customer.email ? '· ' + customer.email : ''}`;
 
-  clientInputFormatter = (client: Client) => client.name;
+  customerInputFormatter = (customer: Customer) => customer.name;
 
-  onClientSelected(event: any): void {
-    const client = event.item as Client;
-    this.selectedClient.set(client);
-    this.selectedClientDisplay.set(client.name);
-    this.form.get('clientId')!.setValue(client.id.toString());
+  onCustomerSelected(event: any): void {
+    const customer = event.item as Customer;
+    this.selectedCustomer.set(customer);
+    this.selectedCustomerDisplay.set(customer.name);
+    this.form.get('customerId')!.setValue(customer.id.toString());
   }
 
-  clearClient(): void {
-    this.selectedClient.set(null);
-    this.selectedClientDisplay.set('');
-    this.form.get('clientId')!.setValue('');
+  clearCustomer(): void {
+    this.selectedCustomer.set(null);
+    this.selectedCustomerDisplay.set('');
+    this.form.get('customerId')!.setValue('');
   }
 
   ngOnInit(): void {
@@ -296,18 +296,18 @@ export class OperationFormComponent implements OnInit {
       this.operationId = +id;
       // Use forkJoin to ensure both clients and operation are loaded before client lookup
       forkJoin({
-        clients: this.clientService.getAll(),
+        customers: this.customerService.getAll(),
         operation: this.operationService.getById(+id),
         ports: this.portService.getAll()
-      }).subscribe(({ clients, operation: op, ports }) => {
-        this.clients.set(clients);
+      }).subscribe(({ customers, operation: op, ports }) => {
+        this.customers.set(customers);
         this.ports.set(ports);
         if (op.status === 'CLOSED' || op.status === 'CANCELLED') {
           this.router.navigate(['/operations', op.id]);
           return;
         }
         this.form.patchValue({
-          clientId: op.clientId?.toString() ?? '',
+          customerId: op.customerId?.toString() ?? '',
           operationType: op.operationType ?? '',
           transportMode: op.transportMode,
           cargoType: op.cargoType ?? CargoType.FCL,
@@ -327,27 +327,27 @@ export class OperationFormComponent implements OnInit {
         if (this.blAvailabilityLockedStatuses.has(op.status)) {
           this.form.get('blAvailability')!.disable();
         }
-        if (op.clientId) {
-          const client = clients.find(c => c.id === op.clientId);
-          if (client) {
-            this.selectedClient.set(client);
-            this.selectedClientDisplay.set(client.name);
+        if (op.customerId) {
+          const customer = customers.find(c => c.id === op.customerId);
+          if (customer) {
+            this.selectedCustomer.set(customer);
+            this.selectedCustomerDisplay.set(customer.name);
           }
         }
       });
     } else {
       // Not editing: just load clients for the typeahead and ports
       this.portService.getAll().subscribe(ports => this.ports.set(ports));
-      this.clientService.getAll().subscribe(clients => {
-        this.clients.set(clients);
-        const clientIdParam = this.route.snapshot.queryParamMap.get('clientId');
-        if (clientIdParam) {
-          const client = clients.find(c => c.id === +clientIdParam);
-          if (client) {
-            this.selectedClient.set(client);
-            this.selectedClientDisplay.set(client.name);
-            this.form.get('clientId')!.setValue(clientIdParam);
-            this.clientLocked.set(true);
+      this.customerService.getAll().subscribe(customers => {
+        this.customers.set(customers);
+        const customerIdParam = this.route.snapshot.queryParamMap.get('customerId');
+        if (customerIdParam) {
+          const customer = customers.find(c => c.id === +customerIdParam);
+          if (customer) {
+            this.selectedCustomer.set(customer);
+            this.selectedCustomerDisplay.set(customer.name);
+            this.form.get('customerId')!.setValue(customerIdParam);
+            this.customerLocked.set(true);
           }
         }
       });
@@ -386,7 +386,7 @@ export class OperationFormComponent implements OnInit {
     if (this.form.invalid) return;
     const val = this.form.getRawValue();
     const request = {
-      clientId: +val.clientId,
+      customerId: +val.customerId,
       operationType: val.operationType as OperationType,
       transportMode: val.transportMode,
       cargoType: val.transportMode === TransportMode.MARITIME ? val.cargoType as CargoType : undefined,

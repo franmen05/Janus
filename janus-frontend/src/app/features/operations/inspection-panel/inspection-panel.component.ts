@@ -5,8 +5,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InspectionService } from '../../../core/services/inspection.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { ClientService } from '../../../core/services/client.service';
-import { Client } from '../../../core/models/client.model';
+import { CustomerService } from '../../../core/services/customer.service';
+import { Customer } from '../../../core/models/customer.model';
 import { Operation, InspectionType } from '../../../core/models/operation.model';
 import { InspectionPhoto, SetInspectionTypeRequest } from '../../../core/models/inspection.model';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
@@ -25,7 +25,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
         [operationId]="operationId()"
         [operation]="operation()"
         [operationSummary]="operationSummary()"
-        [clients]="clients()"
+        [customers]="customers()"
         (changed)="onChargesChanged()" />
     }
 
@@ -125,7 +125,7 @@ export class InspectionPanelComponent implements OnInit {
   private inspectionService = inject(InspectionService);
   private translate = inject(TranslateService);
   private toastService = inject(ToastService);
-  private clientService = inject(ClientService);
+  private customerService = inject(CustomerService);
   authService = inject(AuthService);
 
   photos = signal<InspectionPhoto[]>([]);
@@ -133,7 +133,7 @@ export class InspectionPanelComponent implements OnInit {
   selectedFile: File | null = null;
   caption = '';
 
-  clients = signal<Client[]>([]);
+  customers = signal<Customer[]>([]);
 
   operationSummary = computed(() => {
     const op = this.operation();
@@ -144,7 +144,7 @@ export class InspectionPanelComponent implements OnInit {
       volumetricWeight: op.volumetricWeight,
       volume: op.volume,
       declaredValue: op.declaredValue,
-      clientName: op.clientName,
+      customerName: op.customerName,
       blNumber: op.blNumber
     };
   });
@@ -153,7 +153,7 @@ export class InspectionPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPhotos();
-    this.clientService.getAll().subscribe(c => this.clients.set(c));
+    this.customerService.getAll().subscribe(c => this.customers.set(c));
   }
 
   canSetType(): boolean {

@@ -138,7 +138,7 @@ class InspectionResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
+                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
                          "blNumber": "BL-INSP-TEST", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
@@ -206,7 +206,7 @@ class InspectionResourceTest {
 
     @Test
     @Order(11)
-    void testClientCannotSetInspectionType() {
+    void testCustomerCannotSetInspectionType() {
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
@@ -290,7 +290,7 @@ class InspectionResourceTest {
 
     @Test
     @Order(25)
-    void testClientCannotAddExpense() {
+    void testCustomerCannotAddExpense() {
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
@@ -333,7 +333,7 @@ class InspectionResourceTest {
 
     @Test
     @Order(32)
-    void testClientCanListPhotos() {
+    void testCustomerCanListPhotos() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/operations/{id}/inspection/photos", operationId)
@@ -343,7 +343,7 @@ class InspectionResourceTest {
 
     @Test
     @Order(33)
-    void testClientCannotUploadPhoto() {
+    void testCustomerCannotUploadPhoto() {
         given()
                 .auth().basic("client", "client123")
                 .multiPart("file", createTempImage(), "image/jpeg")
@@ -373,7 +373,7 @@ class InspectionResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
+                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
                          "blNumber": "BL-INSP-DRAFT", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")

@@ -5,8 +5,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { PaymentService } from '../../../core/services/payment.service';
 import { InspectionService } from '../../../core/services/inspection.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ClientService } from '../../../core/services/client.service';
-import { Client } from '../../../core/models/client.model';
+import { CustomerService } from '../../../core/services/customer.service';
+import { Customer } from '../../../core/models/customer.model';
 import { Operation } from '../../../core/models/operation.model';
 import { Liquidation, Payment, RegisterPaymentRequest } from '../../../core/models/payment.model';
 import { ChargeCrossReference } from '../../../core/models/inspection.model';
@@ -27,7 +27,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
       [operationId]="operationId()"
       [operation]="operation()"
       [operationSummary]="operationSummary()"
-      [clients]="clients()"
+      [customers]="customers()"
       [liquidationStatus]="liquidation()?.status ?? null"
       (changed)="onChargesChanged()" />
 
@@ -400,7 +400,7 @@ export class PaymentPanelComponent implements OnInit {
   private paymentService = inject(PaymentService);
   private inspectionService = inject(InspectionService);
   private translate = inject(TranslateService);
-  private clientService = inject(ClientService);
+  private customerService = inject(CustomerService);
   authService = inject(AuthService);
 
   // State
@@ -412,7 +412,7 @@ export class PaymentPanelComponent implements OnInit {
   sendingToBilling = signal(false);
   generating = signal(false);
   saving = signal(false);
-  clients = signal<Client[]>([]);
+  customers = signal<Customer[]>([]);
   approvalRequired = signal(true); // default: approval required
 
   operationSummary = computed(() => {
@@ -424,7 +424,7 @@ export class PaymentPanelComponent implements OnInit {
       volumetricWeight: op.volumetricWeight,
       volume: op.volume,
       declaredValue: op.declaredValue,
-      clientName: op.clientName,
+      customerName: op.customerName,
       blNumber: op.blNumber
     };
   });
@@ -463,7 +463,7 @@ export class PaymentPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.clientService.getAll().subscribe(c => this.clients.set(c));
+    this.customerService.getAll().subscribe(c => this.customers.set(c));
   }
 
   loadData(): void {

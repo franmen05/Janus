@@ -1,4 +1,4 @@
-package com.janus.client.domain.model;
+package com.janus.customer.domain.model;
 
 import com.janus.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
@@ -8,15 +8,15 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "clients")
-public class Client extends BaseEntity {
+@Table(name = "customers")
+public class Customer extends BaseEntity {
 
     @Column(nullable = false)
     public String name;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    public ClientType clientType;
+    public CustomerType customerType;
 
     @Column(name = "tax_id", nullable = false, unique = true)
     public String taxId;
@@ -27,6 +27,17 @@ public class Client extends BaseEntity {
     public String phone;
 
     public String address;
+
+    public String businessName;
+
+    public String representative;
+
+    @Enumerated(EnumType.STRING)
+    public DocumentType documentType;
+
+    public String alternatePhone;
+
+    public String country;
 
     @Column(nullable = false)
     public boolean active = true;

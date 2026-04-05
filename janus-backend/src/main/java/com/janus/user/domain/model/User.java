@@ -36,8 +36,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     public boolean active = true;
 
-    @Column(name = "client_id")
-    public Long clientId;
+    @Column(name = "customer_id")
+    public Long customerId;
 
     @Transient
     public Role getRoleEnum() {

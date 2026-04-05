@@ -260,7 +260,7 @@ public class DeclarationService {
         } else {
             crossingResult.status = CrossingStatus.DISCREPANCY;
             notificationService.send(
-                    operationId, operation.client.email,
+                    operationId, operation.customer.email,
                     "Crossing Discrepancy Detected - " + operation.referenceNumber,
                     "Discrepancies were found between preliminary and final declarations for operation "
                             + operation.referenceNumber + ". Please review."
@@ -457,9 +457,9 @@ public class DeclarationService {
                     username, null);
         }
 
-        // Notify client
-        if (operation.client != null && operation.client.email != null) {
-            notificationService.send(operationId, operation.client.email,
+        // Notify customer
+        if (operation.customer != null && operation.customer.email != null) {
+            notificationService.send(operationId, operation.customer.email,
                     "Declaration Submitted to DGA - " + operation.referenceNumber,
                     "The declaration for operation " + operation.referenceNumber
                             + " has been submitted to DGA. Please log in to the Janus platform for more details.");
@@ -546,8 +546,8 @@ public class DeclarationService {
 
         var approvalUrl = frontendUrl + "/operations/" + operationId + "?action=approve-final";
 
-        if (operation.client != null && operation.client.email != null) {
-            notificationService.send(operationId, operation.client.email,
+        if (operation.customer != null && operation.customer.email != null) {
+            notificationService.send(operationId, operation.customer.email,
                     "Approval Required - " + operation.referenceNumber,
                     "Please review and approve the final declaration for operation "
                             + operation.referenceNumber + ". Click here to approve: " + approvalUrl);
