@@ -23,7 +23,7 @@ public class DashboardResource {
 
     @GET
     @Path("/metrics")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     public DashboardMetrics getMetrics(
             @QueryParam("from") LocalDate from,
             @QueryParam("to") LocalDate to,

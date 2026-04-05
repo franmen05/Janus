@@ -48,7 +48,7 @@ public class AuditResource {
 
     @GET
     @Path("/operations/{operationId}")
-    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT", "CUSTOMER"})
+    @RolesAllowed({"ADMIN", "AGENT", "CUSTOMER"})
     public List<AuditLogResponse> getByOperation(@PathParam("operationId") Long operationId,
                                                   @Context SecurityContext sec) {
         securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));

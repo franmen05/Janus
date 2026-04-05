@@ -51,14 +51,14 @@ public class ExchangeRateResource {
 
     @GET
     @Path("/current")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     public ExchangeRateResponse getCurrent() {
         return ExchangeRateResponse.from(exchangeRateService.getActiveRate());
     }
 
     @GET
     @Path("/for-date")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public ExchangeRateResponse getForDate(@QueryParam("date") LocalDate date) {
         return ExchangeRateResponse.from(exchangeRateService.getRateForDate(date));
     }

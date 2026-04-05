@@ -35,7 +35,7 @@ public class CommentResource {
     SecurityHelper securityHelper;
 
     @POST
-    @RolesAllowed({"SUPERVISOR","ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response addComment(@PathParam("operationId") Long operationId,
                                 @Valid CreateCommentRequest request,
                                 @Context SecurityContext sec) {
@@ -47,7 +47,7 @@ public class CommentResource {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "SUPERVISOR","AGENT", "ACCOUNTING", "CUSTOMER"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public List<CommentResponse> list(@PathParam("operationId") Long operationId,
                                        @Context SecurityContext sec) {
         securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
