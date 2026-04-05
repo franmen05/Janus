@@ -25,7 +25,7 @@ export const routes: Routes = [
       {
         path: 'operations/new',
         loadComponent: () => import('./features/operations/operation-form/operation-form.component').then(m => m.OperationFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
@@ -35,61 +35,61 @@ export const routes: Routes = [
       {
         path: 'operations/:id/edit',
         loadComponent: () => import('./features/operations/operation-form/operation-form.component').then(m => m.OperationFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
         path: 'operations/:operationId/declarations/new',
         loadComponent: () => import('./features/declarations/declaration-form/declaration-form.component').then(m => m.DeclarationFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
         path: 'operations/:operationId/declarations/:declarationId/edit',
         loadComponent: () => import('./features/declarations/declaration-form/declaration-form.component').then(m => m.DeclarationFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
         path: 'operations/:operationId/declarations/:declarationId',
         loadComponent: () => import('./features/declarations/declaration-detail/declaration-detail.component').then(m => m.DeclarationDetailComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING'] },
+        data: { roles: ['ADMIN', 'AGENT', 'ACCOUNTING'] },
         canActivate: [roleGuard]
       },
       {
         path: 'operations/:operationId/declarations/:declarationId/preliquidation',
         loadComponent: () => import('./features/declarations/preliquidation/preliquidation.component').then(m => m.PreliquidationComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING'] },
+        data: { roles: ['ADMIN', 'AGENT', 'ACCOUNTING'] },
         canActivate: [roleGuard]
       },
       {
         path: 'operations/:id/documents/upload',
         loadComponent: () => import('./features/documents/document-upload/document-upload.component').then(m => m.DocumentUploadComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
         path: 'operations/:operationId/documents/:documentId/versions',
         loadComponent: () => import('./features/documents/document-versions/document-versions.component').then(m => m.DocumentVersionsComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING', 'CUSTOMER'] },
+        data: { roles: ['ADMIN', 'AGENT', 'ACCOUNTING', 'CUSTOMER'] },
         canActivate: [roleGuard]
       },
       {
         path: 'customers',
         loadComponent: () => import('./features/customers/customer-list/customer-list.component').then(m => m.CustomerListComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
         path: 'customers/new',
         loadComponent: () => import('./features/customers/customer-form/customer-form.component').then(m => m.CustomerFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
         path: 'customers/:id/edit',
         loadComponent: () => import('./features/customers/customer-form/customer-form.component').then(m => m.CustomerFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
@@ -131,7 +131,7 @@ export const routes: Routes = [
       {
         path: 'alerts',
         loadComponent: () => import('./features/alerts/alert-list/alert-list.component').then(m => m.AlertListComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR', 'AGENT'] },
+        data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {

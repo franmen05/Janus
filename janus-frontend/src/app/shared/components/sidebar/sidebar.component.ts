@@ -38,7 +38,7 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
               }
             </a>
           </li>
-          @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+          @if (authService.hasRole(['ADMIN', 'AGENT'])) {
             <li class="nav-item">
               <a class="nav-link" routerLink="/customers" routerLinkActive="active"
                  [ngbTooltip]="sidebarService.collapsed() ? ('NAV.CUSTOMERS' | translate) : null"
@@ -197,7 +197,7 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
             </div>
             <div class="overflow-hidden">
               <div class="text-white text-truncate small fw-medium">{{ authService.user()?.fullName }}</div>
-              <span class="badge bg-primary bg-opacity-25 text-white small">{{ authService.user()?.role }}</span>
+              @for (r of authService.user()?.roles ?? []; track r) { <span class="badge bg-primary bg-opacity-25 text-white small">{{ 'ROLES.' + r | translate }}</span> }
             </div>
           </div>
           <button type="button" class="btn btn-outline-secondary btn-sm w-100" (click)="onLogout()">

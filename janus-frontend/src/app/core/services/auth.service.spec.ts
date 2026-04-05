@@ -13,7 +13,18 @@ const mockUser: User = {
   username: 'admin',
   fullName: 'Admin User',
   email: 'admin@test.com',
-  role: 'ADMIN',
+  roles: ['ADMIN'],
+  active: true,
+  customerId: null,
+  createdAt: '2024-01-01T00:00:00'
+};
+
+const mockMultiRoleUser: User = {
+  id: 2,
+  username: 'supervisor',
+  fullName: 'Supervisor User',
+  email: 'supervisor@test.com',
+  roles: ['SUPERVISOR', 'AGENT'],
   active: true,
   customerId: null,
   createdAt: '2024-01-01T00:00:00'
@@ -79,7 +90,7 @@ describe('AuthService', () => {
 
       expect(service.isAuthenticated()).toBeTrue();
       expect(service.user()).toEqual(mockUser);
-      expect(service.role()).toBe('ADMIN');
+      expect(service.roles()).toEqual(['ADMIN']);
       expect(router.navigate).toHaveBeenCalledWith(['/dashboard']);
       expect(localStorage.getItem('janus_credentials')).toBe(btoa('admin:password'));
       expect(localStorage.getItem('janus_user')).toBe(JSON.stringify(mockUser));
@@ -152,6 +163,26 @@ describe('AuthService', () => {
 
     it('should return false when no user is logged in', () => {
       expect(service.hasRole(['ADMIN'])).toBeFalse();
+    });
+
+    it('should match any of the user roles against required roles', () => {
+      service.login('supervisor', 'password');
+      const req = httpMock.expectOne(`${environment.apiUrl}/api/users/me`);
+      req.flush(mockMultiRoleUser);
+
+      expect(service.hasRole(['SUPERVISOR'])).toBeTrue();
+      expect(service.hasRole(['AGENT'])).toBeTrue();
+      expect(service.hasRole(['ADMIN', 'AGENT'])).toBeTrue();
+      expect(service.hasRole(['ADMIN'])).toBeFalse();
+      expect(service.hasRole(['CUSTOMER'])).toBeFalse();
+    });
+
+    it('should return all roles via roles computed', () => {
+      service.login('supervisor', 'password');
+      const req = httpMock.expectOne(`${environment.apiUrl}/api/users/me`);
+      req.flush(mockMultiRoleUser);
+
+      expect(service.roles()).toEqual(['SUPERVISOR', 'AGENT']);
     });
   });
 });

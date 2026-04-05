@@ -10,13 +10,13 @@ describe('NavbarComponent', () => {
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
 
-  const mockUser = { fullName: 'Admin User', role: 'ADMIN', username: 'admin' };
+  const mockUser = { fullName: 'Admin User', roles: ['ADMIN'], username: 'admin' };
   const isAuthenticatedSignal = signal(false);
 
   const mockAuthService = {
     isAuthenticated: computed(() => isAuthenticatedSignal()),
     user: computed(() => isAuthenticatedSignal() ? mockUser : null),
-    role: computed(() => isAuthenticatedSignal() ? mockUser.role : null),
+    roles: computed(() => isAuthenticatedSignal() ? mockUser.roles : []),
     logout: jasmine.createSpy('logout'),
     hasRole: jasmine.createSpy('hasRole').and.returnValue(true)
   };

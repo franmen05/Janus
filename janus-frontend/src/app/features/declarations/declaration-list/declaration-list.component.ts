@@ -17,7 +17,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
     @if (loading()) {
       <app-loading-indicator size="sm" />
     } @else {
-    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && !isTerminalStatus()) {
+    @if (authService.hasRole(['ADMIN', 'AGENT']) && !isTerminalStatus()) {
       <div class="mb-3 d-flex flex-wrap gap-2">
         @if (!canRegisterFinal() && !hasPreliminary()) {
           <button class="btn btn-sm btn-outline-primary" (click)="openForm('PRELIMINARY')">{{ 'DECLARATIONS.REGISTER_PRELIMINARY' | translate }}</button>
@@ -53,7 +53,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                 <td>
                   <div class="d-flex gap-1 flex-wrap">
                     <a [routerLink]="['/operations', operationId(), 'declarations', decl.id]" class="btn btn-sm btn-outline-secondary">{{ (canEditDeclaration(decl) ? 'ACTIONS.EDIT' : 'ACTIONS.VIEW') | translate }}</a>
-                    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+                    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                       @if (!decl.declarationNumber) {
                         <button class="btn btn-sm btn-outline-info" (click)="registerDua(decl)">{{ 'DECLARATIONS.REGISTER_DUA' | translate }}</button>
                       }

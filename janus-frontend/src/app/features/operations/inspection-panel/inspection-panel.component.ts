@@ -93,7 +93,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
           }
 
           <!-- Photo upload: only ADMIN/AGENT -->
-          @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+          @if (authService.hasRole(['ADMIN', 'AGENT'])) {
             <div class="border rounded p-3 mt-3">
               <h6>{{ 'INSPECTION.UPLOAD_PHOTO' | translate }}</h6>
               <div class="mb-2">
@@ -159,7 +159,7 @@ export class InspectionPanelComponent implements OnInit {
   canSetType(): boolean {
     const op = this.operation();
     if (!op) return false;
-    if (!this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) return false;
+    if (!this.authService.hasRole(['ADMIN', 'AGENT'])) return false;
     return op.status === 'SUBMITTED_TO_CUSTOMS' || op.status === 'VALUATION_REVIEW' || op.status === 'PAYMENT_PREPARATION';
   }
 

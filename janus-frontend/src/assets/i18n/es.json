@@ -746,7 +746,8 @@
     "ACTIVE": "Activo",
     "INACTIVE": "Inactivo",
     "NO_USERS": "No se encontraron usuarios",
-    "CUSTOMER_SEARCH_PLACEHOLDER": "Buscar por nombre, RNC o correo..."
+    "CUSTOMER_SEARCH_PLACEHOLDER": "Buscar por nombre, RNC o correo...",
+    "ROLES": "Roles"
   },
   "ROLES": {
     "ADMIN": "Administrador",

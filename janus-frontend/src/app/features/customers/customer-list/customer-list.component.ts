@@ -15,7 +15,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'CUSTOMERS.TITLE' | translate }}</h2>
-      @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+      @if (authService.hasRole(['ADMIN', 'AGENT'])) {
         <a routerLink="/customers/new" class="btn btn-primary">{{ 'CUSTOMERS.NEW' | translate }}</a>
       }
     </div>
@@ -45,10 +45,10 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                 <td class="d-none d-lg-table-cell">{{ customer.phone ?? '-' }}</td>
                 <td><span class="badge" [class]="customer.active ? 'bg-success' : 'bg-secondary'">{{ (customer.active ? 'CUSTOMERS.ACTIVE' : 'CUSTOMERS.INACTIVE') | translate }}</span></td>
                 <td>
-                  @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+                  @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                     <a [routerLink]="['/customers', customer.id, 'edit']" class="btn btn-sm btn-outline-primary me-1">{{ 'ACTIONS.EDIT' | translate }}</a>
                   }
-                  @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
+                  @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                     <a [routerLink]="['/operations/new']" [queryParams]="{ customerId: customer.id }"
                        class="btn btn-sm btn-outline-success">
                       {{ 'CUSTOMERS.OPERATIONS' | translate }}
