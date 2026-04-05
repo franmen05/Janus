@@ -56,7 +56,7 @@ public class FinalApprovalRequiredRule implements ComplianceRule {
         if (!hasFinalApproval) {
             errors.add(new ValidationResult.ValidationError(
                     "MISSING_FINAL_APPROVAL",
-                    "Final (ADMIN) approval is required before submitting to customs"
+                    "Final (ADMIN/SUPERVISOR) approval is required before submitting to customs"
             ));
         }
 

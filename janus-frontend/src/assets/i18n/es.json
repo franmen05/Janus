@@ -740,7 +740,8 @@
     "AGENT": "Agente",
     "ACCOUNTING": "Contabilidad",
     "CLIENT": "Cliente",
-    "CARRIER": "Transportista"
+    "CARRIER": "Transportista",
+    "SUPERVISOR": "Supervisor"
   },
   "COMPLIANCE_CONFIG": {
     "TITLE": "Configuraci\u00f3n de Reglas de Cumplimiento",

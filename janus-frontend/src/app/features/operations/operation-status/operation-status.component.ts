@@ -19,7 +19,7 @@ import { OperationTimelineComponent } from '../operation-timeline/operation-time
   standalone: true,
   imports: [FormsModule, NgbNavModule, TranslateModule, TimelineComponent, StatusLabelPipe, OperationTimelineComponent],
   template: `
-    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
       <div class="card mb-3">
         <div class="card-header">{{ 'STATUS_CHANGE.TITLE' | translate }}</div>
         <div class="card-body">

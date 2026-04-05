@@ -740,7 +740,8 @@
     "AGENT": "Agent",
     "ACCOUNTING": "Accounting",
     "CLIENT": "Client",
-    "CARRIER": "Carrier"
+    "CARRIER": "Carrier",
+    "SUPERVISOR": "Supervisor"
   },
   "COMPLIANCE_CONFIG": {
     "TITLE": "Compliance Rules Configuration",

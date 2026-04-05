@@ -98,7 +98,7 @@ export class DashboardComponent implements OnInit {
       this.loading.set(false);
     });
 
-    if (this.authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {
+    if (this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING'])) {
       this.loadMetrics();
       this.alertService.getActiveAlerts().subscribe(alerts => this.activeAlerts.set(alerts));
     }

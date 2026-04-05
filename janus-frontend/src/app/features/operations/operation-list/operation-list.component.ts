@@ -17,7 +17,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'OPERATIONS.TITLE' | translate }}</h2>
-      @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+      @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
         <a routerLink="/operations/new" class="btn btn-primary">{{ 'OPERATIONS.NEW' | translate }}</a>
       }
     </div>

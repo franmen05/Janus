@@ -27,7 +27,7 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
               <span>{{ 'NAV.OPERATIONS' | translate }}</span>
             </a>
           </li>
-          @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+          @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
             <li class="nav-item">
               <a class="nav-link" routerLink="/clients" routerLinkActive="active">
                 <i class="bi bi-people"></i>
@@ -44,7 +44,7 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
           }
         </ul>
 
-        @if (authService.hasRole(['ADMIN'])) {
+        @if (authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
           <div class="nav-section-label px-3 mt-3">{{ 'NAV.SECTION_ADMIN' | translate }}</div>
 
           <ul class="nav flex-column">
@@ -55,7 +55,9 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
               </a>
             </li>
           </ul>
+        }
 
+        @if (authService.hasRole(['ADMIN'])) {
           <!-- Configuration Section -->
           <div class="nav-group">
             <button class="btn btn-link nav-group-toggle w-100 text-start d-flex align-items-center px-3 py-2"

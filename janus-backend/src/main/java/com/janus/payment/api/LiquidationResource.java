@@ -43,7 +43,7 @@ public class LiquidationResource {
     ComplianceRuleConfigRepository complianceRuleConfigRepository;
 
     @POST
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     @Transactional
     public Response generateLiquidation(@PathParam("operationId") Long operationId,
                                          GenerateLiquidationRequest request,
@@ -57,7 +57,7 @@ public class LiquidationResource {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
     @Transactional
     public Response getLiquidation(@PathParam("operationId") Long operationId,
                                     @Context SecurityContext sec) {
@@ -71,7 +71,7 @@ public class LiquidationResource {
 
     @POST
     @Path("/approve")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR"})
     @Transactional
     public Response approveLiquidation(@PathParam("operationId") Long operationId,
                                         ApprovalRequest request,
@@ -84,7 +84,7 @@ public class LiquidationResource {
 
     @POST
     @Path("/definitive")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     @Transactional
     public Response makeLiquidationDefinitive(@PathParam("operationId") Long operationId,
                                                @Context SecurityContext sec) {
@@ -96,7 +96,7 @@ public class LiquidationResource {
 
     @POST
     @Path("/payment")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public Response registerPayment(@PathParam("operationId") Long operationId,
                                      @Valid RegisterPaymentRequest request,
                                      @Context SecurityContext sec) {
@@ -109,7 +109,7 @@ public class LiquidationResource {
 
     @GET
     @Path("/payment")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
     @Transactional
     public Response getPayment(@PathParam("operationId") Long operationId,
                                 @Context SecurityContext sec) {
@@ -123,7 +123,7 @@ public class LiquidationResource {
 
     @GET
     @Path("/config")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
     public Response getLiquidationConfig() {
         boolean approvalRequired = complianceRuleConfigRepository.isRuleEnabled("LIQUIDATION_APPROVAL_REQUIRED");
         return Response.ok(java.util.Map.of("approvalRequired", approvalRequired)).build();

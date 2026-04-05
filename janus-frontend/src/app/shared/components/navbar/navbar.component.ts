@@ -35,26 +35,28 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
                   <i class="bi bi-box-seam me-2"></i>{{ 'NAV.OPERATIONS' | translate }}
                 </a>
               </li>
-              @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+              @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
                 <li class="nav-item d-lg-none">
                   <a class="nav-link" routerLink="/clients" routerLinkActive="active" (click)="closeMenu()">
                     <i class="bi bi-people me-2"></i>{{ 'NAV.CLIENTS' | translate }}
                   </a>
                 </li>
               }
-              @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+              @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
                 <li class="nav-item d-lg-none">
                   <a class="nav-link" routerLink="/alerts" routerLinkActive="active" (click)="closeMenu()">
                     <i class="bi bi-bell me-2"></i>{{ 'NAV.ALERTS' | translate }}
                   </a>
                 </li>
               }
-              @if (authService.hasRole(['ADMIN'])) {
+              @if (authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
                 <li class="nav-item d-lg-none">
                   <a class="nav-link" routerLink="/audit" routerLinkActive="active" (click)="closeMenu()">
                     <i class="bi bi-journal-text me-2"></i>{{ 'NAV.AUDIT_LOG' | translate }}
                   </a>
                 </li>
+              }
+              @if (authService.hasRole(['ADMIN'])) {
                 <li class="d-lg-none"><hr class="dropdown-divider border-secondary"></li>
                 <li class="d-lg-none">
                   <span class="nav-link text-muted small fw-semibold text-uppercase">

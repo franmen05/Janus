@@ -154,13 +154,13 @@ export class ChargesTableComponent implements OnInit {
   }
 
   canViewExpenses(): boolean {
-    return this.authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING']);
+    return this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING']);
   }
 
   canManageExpenses(): boolean {
     const status = this.liquidationStatus();
     if (status === 'DEFINITIVE' || status === 'PAID') return false;
-    return this.authService.hasRole(['ADMIN', 'AGENT']);
+    return this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']);
   }
 
   loadExpenses(): void {

@@ -25,7 +25,7 @@ public class ComplianceResource {
 
     @GET
     @Path("/validate")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public ValidationResult dryRun(@PathParam("operationId") Long operationId,
                                     @QueryParam("targetStatus") OperationStatus targetStatus) {
         var operation = operationService.findById(operationId);

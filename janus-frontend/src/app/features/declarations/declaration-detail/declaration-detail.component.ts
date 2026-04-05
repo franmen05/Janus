@@ -65,7 +65,7 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
             </div>
           </div>
           @if (declaration()!.notes) { <p><strong>{{ 'DECLARATIONS.NOTES' | translate }}:</strong> {{ declaration()!.notes }}</p> }
-          @if (authService.hasRole(['ADMIN', 'AGENT']) && canEdit()) {
+          @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && canEdit()) {
             <a [routerLink]="['/operations', declaration()!.operationId, 'declarations', declaration()!.id, 'edit']" class="btn btn-sm btn-outline-primary mt-2">{{ 'ACTIONS.EDIT' | translate }}</a>
           }
         </div>
@@ -73,7 +73,7 @@ import { TariffLineFormComponent } from '../tariff-line-form/tariff-line-form.co
 
       <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-2">
         <h5>{{ 'DECLARATIONS.TARIFF_LINES' | translate }}</h5>
-        @if (authService.hasRole(['ADMIN', 'AGENT']) && canEdit()) {
+        @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && canEdit()) {
           <button class="btn btn-sm btn-outline-primary" (click)="openTariffLineForm()">{{ 'DECLARATIONS.ADD_TARIFF_LINE' | translate }}</button>
         }
       </div>

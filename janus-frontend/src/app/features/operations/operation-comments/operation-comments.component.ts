@@ -15,7 +15,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
     @if (loading()) {
       <app-loading-indicator size="sm" />
     } @else {
-    @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+    @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
       <div class="card mb-3">
         <div class="card-body">
           <textarea class="form-control mb-2" rows="3" [placeholder]="'COMMENTS.PLACEHOLDER' | translate" [(ngModel)]="newComment"></textarea>
@@ -65,7 +65,7 @@ export class OperationCommentsComponent implements OnInit {
   ngOnInit(): void { this.loadComments(); }
 
   canToggleInternal(): boolean {
-    return this.authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING']);
+    return this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING']);
   }
 
   loadComments(): void {

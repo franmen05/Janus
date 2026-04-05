@@ -16,7 +16,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
     <div class="card mt-3">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h6 class="mb-0">{{ 'CROSSING.TITLE' | translate }}</h6>
-        @if (authService.hasRole(['ADMIN', 'AGENT']) && !crossing() && !loading()) {
+        @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && !crossing() && !loading()) {
           <button class="btn btn-sm btn-primary" (click)="executeCrossing()">{{ 'CROSSING.EXECUTE' | translate }}</button>
         }
       </div>
@@ -66,7 +66,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
               </tfoot>
             </table>
           }
-          @if (crossing()!.status === 'DISCREPANCY' && authService.hasRole(['ADMIN', 'AGENT'])) {
+          @if (crossing()!.status === 'DISCREPANCY' && authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
             <div class="mt-3">
               <textarea class="form-control mb-2" rows="3" [placeholder]="'CROSSING.RESOLVE_PLACEHOLDER' | translate" [(ngModel)]="resolveComment"></textarea>
               <button class="btn btn-warning" (click)="resolveCrossing()" [disabled]="!resolveComment.trim()">{{ 'CROSSING.RESOLVE' | translate }}</button>

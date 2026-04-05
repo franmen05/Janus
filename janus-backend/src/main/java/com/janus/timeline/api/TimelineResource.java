@@ -31,7 +31,7 @@ public class TimelineResource {
     SecurityHelper securityHelper;
 
     @GET
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
     public List<TimelineEventResponse> getTimeline(
             @PathParam("operationId") Long operationId,
             @QueryParam("type") TimelineEventType type,

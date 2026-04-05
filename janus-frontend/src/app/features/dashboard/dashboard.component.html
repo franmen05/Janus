@@ -8,7 +8,7 @@
 
 @if (loading()) {
   <app-loading-indicator />
-} @else if (authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING'])) {
+} @else if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING'])) {
   <!-- Filter bar -->
   <div class="card card-filter mb-4">
     <div class="card-body py-2">

@@ -255,14 +255,14 @@ export class ValuationPanelComponent implements OnInit {
   canEdit = computed(() => {
     const op = this.operation();
     if (!op) return false;
-    return this.authService.hasRole(['ADMIN', 'AGENT']) &&
+    return this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) &&
       (op.status === 'VALUATION_REVIEW' || op.status === 'PENDING_EXTERNAL_APPROVAL');
   });
 
   canFinalize = computed(() => {
     const op = this.operation();
     if (!op) return false;
-    return this.authService.hasRole(['ADMIN', 'AGENT']) && op.status === 'VALUATION_REVIEW';
+    return this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && op.status === 'VALUATION_REVIEW';
   });
 
   ngOnInit(): void {

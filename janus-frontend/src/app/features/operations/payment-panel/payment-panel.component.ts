@@ -253,7 +253,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
             @if (liquidation()!.status === 'PRELIMINARY' && canEdit()) {
               <div class="d-flex gap-2 flex-wrap">
                 @if (approvalRequired()) {
-                  <button class="btn btn-success btn-sm" (click)="approve()" [disabled]="!authService.hasRole(['ADMIN'])">
+                  <button class="btn btn-success btn-sm" (click)="approve()" [disabled]="!authService.hasRole(['ADMIN', 'SUPERVISOR'])">
                     <i class="bi bi-check-circle me-1"></i>{{ 'PAYMENT.APPROVE' | translate }}
                   </button>
                 } @else {
@@ -282,7 +282,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
               </button>
             }
 
-            @if (canEdit() && authService.hasRole(['ADMIN', 'AGENT']) && crossReference()) {
+            @if (canEdit() && authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && crossReference()) {
                 <div class="d-flex align-items-center justify-content-between mb-3">
                   <span class="text-muted small">
                     @if (crossReference()!.allReimbursableSentToBilling) {
@@ -457,7 +457,7 @@ export class PaymentPanelComponent implements OnInit {
   canEdit = computed(() => {
     const op = this.operation();
     if (!op) return false;
-    return this.authService.hasRole(['ADMIN', 'AGENT']) &&
+    return this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) &&
       ['PAYMENT_PREPARATION', 'IN_TRANSIT'].includes(op.status);
   });
 

@@ -28,7 +28,7 @@ public class ClientResource {
     ClientService clientService;
 
     @GET
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public List<ClientResponse> list() {
         return clientService.listAll().stream()
                 .map(ClientResponse::from)
@@ -37,13 +37,13 @@ public class ClientResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public ClientResponse getById(@PathParam("id") Long id) {
         return ClientResponse.from(clientService.findById(id));
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public Response create(@Valid CreateClientRequest request, @Context SecurityContext sec) {
         var client = clientService.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
@@ -53,7 +53,7 @@ public class ClientResource {
 
     @PUT
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public ClientResponse update(@PathParam("id") Long id, @Valid CreateClientRequest request, @Context SecurityContext sec) {
         return ClientResponse.from(clientService.update(id, request, sec.getUserPrincipal().getName()));
     }

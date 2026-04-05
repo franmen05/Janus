@@ -113,6 +113,7 @@ public class DataSeeder {
         Long firstClientId = firstClient != null ? firstClient.id : null;
 
         createUser("admin", "admin123", "System Administrator", "admin@janus.com", Role.ADMIN, null);
+        createUser("supervisor", "super123", "Supervisor User", "supervisor@janus.com", Role.SUPERVISOR, null);
         createUser("agent", "agent123", "Customs Agent", "agent@janus.com", Role.AGENT, null);
         createUser("accounting", "acc123", "Accounting User", "accounting@janus.com", Role.ACCOUNTING, null);
         createUser("client", "client123", "Demo Client User", "client@demo.com", Role.CLIENT, firstClientId);

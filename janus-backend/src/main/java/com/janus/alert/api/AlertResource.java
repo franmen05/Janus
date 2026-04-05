@@ -37,7 +37,7 @@ public class AlertResource {
     AlertCheckerScheduler alertCheckerScheduler;
 
     @GET
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public List<AlertResponse> getActiveAlerts() {
         return alertService.getActiveAlerts().stream()
                 .map(AlertResponse::from)
@@ -46,7 +46,7 @@ public class AlertResource {
 
     @GET
     @Path("/operations/{operationId}")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
     public List<AlertResponse> getByOperation(@PathParam("operationId") Long operationId,
                                                @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
@@ -65,7 +65,7 @@ public class AlertResource {
 
     @POST
     @Path("/{id}/acknowledge")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     @Transactional
     public AlertResponse acknowledge(@PathParam("id") Long id, @Context SecurityContext sec) {
         return AlertResponse.from(alertService.acknowledge(id, sec.getUserPrincipal().getName()));

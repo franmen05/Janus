@@ -1,5 +1,6 @@
 export enum Role {
   ADMIN = 'ADMIN',
+  SUPERVISOR = 'SUPERVISOR',
   AGENT = 'AGENT',
   ACCOUNTING = 'ACCOUNTING',
   CLIENT = 'CLIENT',

@@ -46,7 +46,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/preliminary")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public Response registerPreliminary(@PathParam("operationId") Long operationId,
                                          @Valid CreateDeclarationRequest request,
                                          @Context SecurityContext sec) {
@@ -57,7 +57,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/final")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public Response registerFinal(@PathParam("operationId") Long operationId,
                                    @Valid CreateDeclarationRequest request,
                                    @Context SecurityContext sec) {
@@ -67,7 +67,7 @@ public class DeclarationResource {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
     public List<DeclarationResponse> list(@PathParam("operationId") Long operationId,
                                            @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
@@ -78,7 +78,7 @@ public class DeclarationResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
     public DeclarationResponse getById(@PathParam("operationId") Long operationId,
                                         @PathParam("id") Long id,
                                         @Context SecurityContext sec) {
@@ -88,7 +88,7 @@ public class DeclarationResource {
 
     @PUT
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public DeclarationResponse update(@PathParam("operationId") Long operationId,
                                        @PathParam("id") Long declarationId,
                                        @Valid CreateDeclarationRequest request,
@@ -100,7 +100,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/tariff-lines")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public Response addTariffLine(@PathParam("operationId") Long operationId,
                                    @PathParam("id") Long declarationId,
                                    @Valid CreateTariffLineRequest request,
@@ -113,7 +113,7 @@ public class DeclarationResource {
 
     @GET
     @Path("/{id}/tariff-lines")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING"})
     public List<TariffLineResponse> getTariffLines(@PathParam("operationId") Long operationId,
                                                     @PathParam("id") Long declarationId) {
         return declarationService.getTariffLines(operationId, declarationId).stream()
@@ -123,7 +123,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/crossing/execute")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public Response executeCrossing(@PathParam("operationId") Long operationId,
                                      @Context SecurityContext sec) {
         var result = declarationService.executeCrossing(operationId, sec.getUserPrincipal().getName());
@@ -137,7 +137,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/crossing/resolve")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public CrossingResultResponse resolveCrossing(@PathParam("operationId") Long operationId,
                                                    @Valid ResolveCrossingRequest request,
                                                    @Context SecurityContext sec) {
@@ -151,7 +151,7 @@ public class DeclarationResource {
 
     @GET
     @Path("/crossing")
-    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
     public Response getCrossing(@PathParam("operationId") Long operationId,
                                  @Context SecurityContext sec) {
         securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
@@ -184,7 +184,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/generate-preliquidation")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public DeclarationResponse generatePreliquidation(@PathParam("operationId") Long operationId,
                                                        @PathParam("id") Long declarationId,
                                                        @Context SecurityContext sec) {
@@ -195,7 +195,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/approve-technical")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public DeclarationResponse approveTechnical(@PathParam("operationId") Long operationId,
                                                  @PathParam("id") Long declarationId,
                                                  ApprovalRequest request,
@@ -208,7 +208,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/approve-final")
-    @RolesAllowed({"ADMIN", "CLIENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "CLIENT"})
     public DeclarationResponse approveFinal(@PathParam("operationId") Long operationId,
                                              @PathParam("id") Long declarationId,
                                              ApprovalRequest request,
@@ -222,7 +222,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/reject")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public DeclarationResponse reject(@PathParam("operationId") Long operationId,
                                        @PathParam("id") Long declarationId,
                                        ApprovalRequest request,
@@ -235,7 +235,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/send-approval-link")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public Response sendApprovalLink(@PathParam("operationId") Long operationId,
                                       @PathParam("id") Long declarationId,
                                       @Context SecurityContext sec) {
@@ -245,7 +245,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/register-dua")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public DeclarationResponse registerDua(@PathParam("operationId") Long operationId,
                                             @PathParam("id") Long declarationId,
                                             @Valid RegisterDuaRequest request,
@@ -257,7 +257,7 @@ public class DeclarationResource {
 
     @POST
     @Path("/{id}/submit-to-dga")
-    @RolesAllowed({"ADMIN", "AGENT"})
+    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
     public DeclarationResponse submitToDga(@PathParam("operationId") Long operationId,
                                             @PathParam("id") Long declarationId,
                                             @Context SecurityContext sec) {

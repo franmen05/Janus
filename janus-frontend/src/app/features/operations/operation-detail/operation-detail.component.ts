@@ -61,16 +61,16 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
         </div>
         <div class="d-flex gap-2 align-items-center flex-wrap">
           <app-status-badge [status]="operation()!.status" />
-          @if (authService.hasRole(['ADMIN', 'AGENT']) && operation()!.status !== 'CLOSED' && operation()!.status !== 'CANCELLED') {
+          @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && operation()!.status !== 'CLOSED' && operation()!.status !== 'CANCELLED') {
             <a [routerLink]="['/operations', operation()!.id, 'edit']" class="btn btn-sm btn-outline-primary">{{ 'ACTIONS.EDIT' | translate }}</a>
           }
-          @if (authService.hasRole(['ADMIN', 'AGENT']) && operation()!.status === 'DRAFT') {
+          @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && operation()!.status === 'DRAFT') {
             <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete()">{{ 'ACTIONS.DELETE' | translate }}</button>
           }
         </div>
       </div>
 
-      <app-progress-bar [status]="operation()!.status" [interactive]="authService.hasRole(['ADMIN', 'AGENT'])" (stepClicked)="onProgressStepClick($event)" class="mb-4 d-block" />
+      <app-progress-bar [status]="operation()!.status" [interactive]="authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])" (stepClicked)="onProgressStepClick($event)" class="mb-4 d-block" />
       @if (statusChangeErrors().length > 0) {
         <div class="alert alert-danger alert-dismissible mb-3">
           <button type="button" class="btn-close" (click)="statusChangeErrors.set([])"></button>
@@ -83,7 +83,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
         </div>
       }
 
-      @if (isPreReviewStatus() && authService.hasRole(['ADMIN', 'AGENT'])) {
+      @if (isPreReviewStatus() && authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
         <div class="card mb-3 border-primary">
           <div class="card-header bg-primary bg-opacity-10">
             <h6 class="mb-0">{{ 'review.advancePanel' | translate }}</h6>
@@ -118,7 +118,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
               </div>
               <div class="col-md-9">
                 <p class="text-muted mb-2">{{ getReviewDescription() }}</p>
-                @if (authService.hasRole(['ADMIN', 'AGENT']) || (authService.hasRole(['CLIENT']) && (operation()!.status === 'PRELIQUIDATION_REVIEW' || operation()!.status === 'VALUATION_REVIEW'))) {
+                @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) || (authService.hasRole(['CLIENT']) && (operation()!.status === 'PRELIQUIDATION_REVIEW' || operation()!.status === 'VALUATION_REVIEW'))) {
                   <div class="d-flex gap-2 flex-wrap">
                     @switch (operation()!.status) {
                       @case ('IN_REVIEW') {
@@ -175,7 +175,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                                     @if (preliminaryDeclaration.finalApprovedBy) {
                                       <small class="text-success">{{ 'review.approvedBy' | translate }}: {{ preliminaryDeclaration.finalApprovedBy }}</small>
                                     } @else if (preliminaryDeclaration.technicalApprovedBy) {
-                                      @if (authService.hasRole(['ADMIN', 'CLIENT'])) {
+                                      @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'CLIENT'])) {
                                         <div class="mt-auto pt-1">
                                           <button class="btn btn-sm btn-success w-100" (click)="approveFinal()">{{ 'preliquidation.approveFinal' | translate }}</button>
                                         </div>
@@ -214,7 +214,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                               <a [routerLink]="['/operations', operation()!.id, 'declarations', preliminaryDeclaration.id, 'preliquidation']" class="btn btn-sm btn-outline-info">
                                 <i class="bi bi-file-earmark-text me-1"></i>{{ 'preliquidation.title' | translate }}
                               </a>
-                              @if (preliminaryDeclaration.technicalApprovedBy && authService.hasRole(['ADMIN', 'AGENT'])) {
+                              @if (preliminaryDeclaration.technicalApprovedBy && authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
                                 <button class="btn btn-sm btn-outline-secondary" (click)="copyApprovalLink()">
                                   <i class="bi bi-clipboard me-1"></i>{{ 'approval.copyLink' | translate }}
                                 </button>
@@ -310,7 +310,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                         <span class="badge" [ngClass]="operation()!.blAvailability === 'ORIGINAL' ? 'bg-success' : operation()!.blAvailability === 'ENDORSED' ? 'bg-info' : 'bg-warning text-dark'">
                           {{ 'BL_AVAILABILITY.' + operation()!.blAvailability | translate }}
                         </span>
-                        @if (authService.hasRole(['ADMIN', 'AGENT']) && !['PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED', 'CANCELLED'].includes(operation()!.status)) {
+                        @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT']) && !['PENDING_EXTERNAL_APPROVAL', 'PAYMENT_PREPARATION', 'IN_TRANSIT', 'CLOSED', 'CANCELLED'].includes(operation()!.status)) {
                           <select class="form-select form-select-sm d-inline-block w-auto"
                                   [value]="operation()!.blAvailability"
                                   (change)="updateBlAvailability($event)">
@@ -362,7 +362,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
             <div class="mt-3"><app-operation-comments [operationId]="operation()!.id" /></div>
           </ng-template>
         </li>
-        @if (authService.hasRole(['ADMIN', 'AGENT', 'ACCOUNTING', 'CLIENT'])) {
+        @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'ACCOUNTING', 'CLIENT'])) {
           <li [ngbNavItem]="'declarations'">
             <button ngbNavLink>{{ 'TABS.DECLARATIONS' | translate }}</button>
             <ng-template ngbNavContent>
@@ -471,7 +471,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
             </div>
           </ng-template>
         </li>
-        @if (authService.hasRole(['ADMIN'])) {
+        @if (authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
         <li [ngbNavItem]="'audit'">
           <button ngbNavLink>{{ 'TABS.AUDIT' | translate }}</button>
           <ng-template ngbNavContent>
@@ -580,7 +580,7 @@ export class OperationDetailComponent implements OnInit {
 
   isReceptionVisible = computed(() => {
     const op = this.operation();
-    return op !== null && RECEPTION_VISIBLE_STATUSES.includes(op.status) && this.authService.hasRole(['ADMIN', 'AGENT', 'CARRIER']);
+    return op !== null && RECEPTION_VISIBLE_STATUSES.includes(op.status) && this.authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT', 'CARRIER']);
   });
 
   receptionDocuments = computed(() => {
@@ -648,7 +648,7 @@ export class OperationDetailComponent implements OnInit {
       this.setDefaultTab(op.status);
     });
     this.operationService.getCompleteness(id).subscribe(c => this.completeness.set(c));
-    if (this.authService.hasRole(['ADMIN'])) {
+    if (this.authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
       this.auditService.getByOperation(id).subscribe(logs => this.auditLogs.set(logs));
     }
     this.documentService.getByOperation(id).subscribe(docs => this.documents.set(docs));
