@@ -50,7 +50,7 @@ class TimelineResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Timeline test", "arrivalPortId": 1}
+                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Timeline test", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)

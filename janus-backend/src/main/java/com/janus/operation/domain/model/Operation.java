@@ -1,6 +1,6 @@
 package com.janus.operation.domain.model;
 
-import com.janus.client.domain.model.Client;
+import com.janus.customer.domain.model.Customer;
 import com.janus.port.domain.model.Port;
 import com.janus.shared.domain.BaseEntity;
 import com.janus.user.domain.model.User;
@@ -22,7 +22,7 @@ public class Operation extends BaseEntity {
     public String referenceNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    public Client client;
+    public Customer customer;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "operation_type", nullable = false)

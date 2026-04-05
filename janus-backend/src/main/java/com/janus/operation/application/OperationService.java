@@ -3,7 +3,7 @@ package com.janus.operation.application;
 import com.janus.alert.domain.repository.AlertRepository;
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
-import com.janus.client.domain.repository.ClientRepository;
+import com.janus.customer.domain.repository.CustomerRepository;
 import com.janus.comment.domain.repository.OperationCommentRepository;
 import com.janus.declaration.domain.repository.CrossingDiscrepancyRepository;
 import com.janus.declaration.domain.repository.CrossingResultRepository;
@@ -53,7 +53,7 @@ public class OperationService {
     StatusHistoryRepository statusHistoryRepository;
 
     @Inject
-    ClientRepository clientRepository;
+    CustomerRepository customerRepository;
 
     @Inject
     UserRepository userRepository;
@@ -117,8 +117,8 @@ public class OperationService {
         return operationRepository.findByStatus(status);
     }
 
-    public List<Operation> findByClientId(Long clientId) {
-        return operationRepository.findByClientId(clientId);
+    public List<Operation> findByCustomerId(Long customerId) {
+        return operationRepository.findByCustomerId(customerId);
     }
 
     public Operation findById(Long id) {
@@ -129,8 +129,8 @@ public class OperationService {
     @Transactional
     public Operation create(CreateOperationRequest request, String username) {
 
-        var client = clientRepository.findByIdOptional(request.clientId())
-                .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
+        var customer = customerRepository.findByIdOptional(request.customerId())
+                .orElseThrow(() -> new NotFoundException("Customer", request.customerId()));
 
         // Validate containerNumber required for MARITIME + FCL
         if (request.transportMode() == TransportMode.MARITIME
@@ -140,7 +140,7 @@ public class OperationService {
         }
 
         var op = new Operation();
-        op.client = client;
+        op.customer = customer;
         op.operationType = request.operationType();
         op.transportMode = request.transportMode();
         op.cargoType = request.cargoType();
@@ -234,8 +234,8 @@ public class OperationService {
                 "notes", op.notes != null ? op.notes : ""
         ));
 
-        op.client = clientRepository.findByIdOptional(request.clientId())
-                .orElseThrow(() -> new NotFoundException("Client", request.clientId()));
+        op.customer = customerRepository.findByIdOptional(request.customerId())
+                .orElseThrow(() -> new NotFoundException("Customer", request.customerId()));
         op.operationType = request.operationType();
         op.transportMode = request.transportMode();
         op.cargoType = request.cargoType();
@@ -295,7 +295,7 @@ public class OperationService {
         ));
 
         // Force initialization of lazy associations for DTO mapping
-        if (op.client != null) { var ignored = op.client.name; }
+        if (op.customer != null) { var ignored = op.customer.name; }
         if (op.assignedAgent != null) { var ignored = op.assignedAgent.fullName; }
         if (op.arrivalPort != null) { var ignored = op.arrivalPort.name; }
 
@@ -356,7 +356,7 @@ public class OperationService {
         }
 
         notificationService.sendStatusChangeNotification(
-                op.id, op.client.email, op.referenceNumber, request.newStatus().name()
+                op.id, op.customer.email, op.referenceNumber, request.newStatus().name()
         );
     }
 

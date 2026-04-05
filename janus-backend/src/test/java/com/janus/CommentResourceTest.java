@@ -25,7 +25,7 @@ class CommentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"clientId": 1, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Comment test op", "arrivalPortId": 1}
+                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Comment test op", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -63,7 +63,7 @@ class CommentResourceTest {
 
     @Test
     @Order(4)
-    void testClientCanListComments() {
+    void testCustomerCanListComments() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/operations/{opId}/comments", operationId)
@@ -73,7 +73,7 @@ class CommentResourceTest {
 
     @Test
     @Order(5)
-    void testClientCannotAddComment() {
+    void testCustomerCannotAddComment() {
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)

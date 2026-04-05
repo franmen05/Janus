@@ -54,7 +54,7 @@ public class InspectionResource {
     @POST
     @Path("/type")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response setInspectionType(@PathParam("operationId") Long operationId,
                                        @Valid SetInspectionTypeRequest request,
                                        @Context SecurityContext sec) {
@@ -66,7 +66,7 @@ public class InspectionResource {
     @POST
     @Path("/photos")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response uploadPhoto(@PathParam("operationId") Long operationId,
                                  @RestForm("file") FileUpload file,
                                  @RestForm("caption") String caption,
@@ -92,11 +92,11 @@ public class InspectionResource {
 
     @GET
     @Path("/photos")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     @Transactional
     public List<InspectionPhotoResponse> listPhotos(@PathParam("operationId") Long operationId,
                                                      @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         return inspectionService.getPhotos(operationId).stream()
                 .map(InspectionPhotoResponse::from)
                 .toList();
@@ -105,11 +105,11 @@ public class InspectionResource {
     @GET
     @Path("/photos/{photoId}/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public Response downloadPhoto(@PathParam("operationId") Long operationId,
                                    @PathParam("photoId") Long photoId,
                                    @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         var photos = inspectionService.getPhotos(operationId);
         var photo = photos.stream()
                 .filter(p -> p.id.equals(photoId))
@@ -132,7 +132,7 @@ public class InspectionResource {
     @POST
     @Path("/expenses")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response addExpense(@PathParam("operationId") Long operationId,
                                @Valid CreateExpenseRequest request,
                                @Context SecurityContext sec) {
@@ -144,7 +144,7 @@ public class InspectionResource {
 
     @GET
     @Path("/expenses")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     @Transactional
     public ExpenseSummaryResponse listExpenses(@PathParam("operationId") Long operationId,
                                                @QueryParam("chargeType") ChargeType chargeType) {
@@ -160,7 +160,7 @@ public class InspectionResource {
     @PUT
     @Path("/expenses/{expenseId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     @Transactional
     public InspectionExpenseResponse updateExpense(@PathParam("operationId") Long operationId,
                                                     @PathParam("expenseId") Long expenseId,
@@ -172,7 +172,7 @@ public class InspectionResource {
 
     @DELETE
     @Path("/expenses/{expenseId}")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response deleteExpense(@PathParam("operationId") Long operationId,
                                    @PathParam("expenseId") Long expenseId,
                                    @Context SecurityContext sec) {
@@ -182,14 +182,14 @@ public class InspectionResource {
 
     @GET
     @Path("/expenses/cross-reference")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     public ChargeCrossReferenceResponse getCrossReference(@PathParam("operationId") Long operationId) {
         return inspectionService.getChargeCrossReference(operationId);
     }
 
     @POST
     @Path("/expenses/send-to-billing")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public SendToBillingResponse sendToBilling(@PathParam("operationId") Long operationId,
                                                 @Context SecurityContext sec) {
         return inspectionService.sendReimbursableToBilling(operationId, sec.getUserPrincipal().getName());

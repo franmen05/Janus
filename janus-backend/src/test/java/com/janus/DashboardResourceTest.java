@@ -59,7 +59,7 @@ class DashboardResourceTest {
 
     @Test
     @Order(5)
-    void testClientCannotAccessDashboard() {
+    void testCustomerCannotAccessDashboard() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/dashboard/metrics")

@@ -47,12 +47,12 @@ public class DocumentResource {
     SecurityHelper securityHelper;
 
     @GET
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     @Transactional
     public List<DocumentResponse> list(@PathParam("operationId") Long operationId,
                                        @QueryParam("includeDeleted") @DefaultValue("false") boolean includeDeleted,
                                        @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         var documents = (includeDeleted && sec.isUserInRole("ADMIN"))
                 ? documentService.findAllByOperationId(operationId)
                 : documentService.findByOperationId(operationId);
@@ -69,18 +69,18 @@ public class DocumentResource {
 
     @GET
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     @Transactional
     public DocumentResponse getById(@PathParam("operationId") Long operationId,
                                      @PathParam("id") Long id,
                                      @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         return DocumentResponse.from(documentService.findById(id));
     }
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "CARRIER"})
+    @RolesAllowed({"ADMIN", "AGENT", "CARRIER"})
     public Response upload(@PathParam("operationId") Long operationId,
                            @RestForm("file") FileUpload file,
                            @RestForm("documentType") DocumentType documentType,
@@ -121,11 +121,11 @@ public class DocumentResource {
     @GET
     @Path("/{id}/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public Response downloadLatest(@PathParam("operationId") Long operationId,
                                     @PathParam("id") Long id,
                                     @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         if (sec.isUserInRole("ADMIN")) {
             documentService.findByIdIncludingDeleted(id);
         } else {
@@ -145,11 +145,11 @@ public class DocumentResource {
 
     @GET
     @Path("/{id}/versions")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public List<DocumentVersionResponse> getVersions(@PathParam("operationId") Long operationId,
                                                       @PathParam("id") Long id,
                                                       @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         var includeDeleted = sec.isUserInRole("ADMIN");
         return documentService.getVersions(id, includeDeleted).stream()
                 .map(DocumentVersionResponse::from)
@@ -159,12 +159,12 @@ public class DocumentResource {
     @GET
     @Path("/{id}/versions/{versionNumber}/download")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public Response downloadVersion(@PathParam("operationId") Long operationId,
                                      @PathParam("id") Long id,
                                      @PathParam("versionNumber") int versionNumber,
                                      @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         var includeDeleted = sec.isUserInRole("ADMIN");
         var version = documentService.getVersion(id, versionNumber, includeDeleted);
         var path = storageService.resolve(version.filePath);
@@ -180,7 +180,7 @@ public class DocumentResource {
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT"})
+    @RolesAllowed({"ADMIN", "AGENT"})
     public Response softDelete(@PathParam("id") Long id, @Context SecurityContext sec) {
         documentService.softDelete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
@@ -188,10 +188,10 @@ public class DocumentResource {
 
     @GET
     @Path("/completeness")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public CompletenessResponse getCompleteness(@PathParam("operationId") Long operationId,
                                                  @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         return CompletenessResponse.from(documentService.getCompleteness(operationId));
     }
 }

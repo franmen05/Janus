@@ -159,9 +159,9 @@ public class InspectionService {
                 "Inspection photo uploaded: " + originalName
         ));
 
-        // Notify client
-        if (operation.client != null && operation.client.email != null) {
-            notificationService.send(operationId, operation.client.email,
+        // Notify customer
+        if (operation.customer != null && operation.customer.email != null) {
+            notificationService.send(operationId, operation.customer.email,
                     "Inspection Photo Uploaded - " + operation.referenceNumber,
                     "An inspection photo has been uploaded for operation " + operation.referenceNumber
                             + ". Please log in to the Janus platform for more details.");

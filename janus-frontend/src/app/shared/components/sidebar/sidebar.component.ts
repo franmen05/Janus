@@ -29,9 +29,9 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
           </li>
           @if (authService.hasRole(['ADMIN', 'SUPERVISOR', 'AGENT'])) {
             <li class="nav-item">
-              <a class="nav-link" routerLink="/clients" routerLinkActive="active">
+              <a class="nav-link" routerLink="/customers" routerLinkActive="active">
                 <i class="bi bi-people"></i>
-                <span>{{ 'NAV.CLIENTS' | translate }}</span>
+                <span>{{ 'NAV.CUSTOMERS' | translate }}</span>
               </a>
             </li>
             <li class="nav-item">

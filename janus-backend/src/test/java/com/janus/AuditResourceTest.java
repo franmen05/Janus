@@ -36,7 +36,7 @@ class AuditResourceTest {
 
     @Test
     @Order(3)
-    void testClientCannotListAll() {
+    void testCustomerCannotListAll() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/audit")

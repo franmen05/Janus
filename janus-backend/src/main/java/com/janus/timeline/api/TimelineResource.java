@@ -31,12 +31,12 @@ public class TimelineResource {
     SecurityHelper securityHelper;
 
     @GET
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public List<TimelineEventResponse> getTimeline(
             @PathParam("operationId") Long operationId,
             @QueryParam("type") TimelineEventType type,
             @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         return timelineService.getTimeline(operationId, type);
     }
 }

@@ -17,7 +17,7 @@ describe('OperationListComponent', () => {
 
   const mockOperations: Operation[] = [
     {
-      id: 1, referenceNumber: 'OP-001', clientId: 1, clientName: 'Client A',
+      id: 1, referenceNumber: 'OP-001', customerId: 1, customerName: 'Customer A',
       operationType: OperationType.IMPORT, transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
       status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
       blNumber: null, containerNumber: 'CONT-001', estimatedArrival: null, blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,

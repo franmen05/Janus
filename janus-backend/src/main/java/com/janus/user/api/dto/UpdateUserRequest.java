@@ -9,7 +9,7 @@ public record UpdateUserRequest(
         @NotBlank String fullName,
         @NotBlank @Email String email,
         @NotNull Role role,
-        Long clientId,
+        Long customerId,
         boolean active,
         String password
 ) {}

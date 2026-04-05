@@ -11,7 +11,7 @@ import { getErrorMessage } from '../../../../core/utils/error-message.util';
 import { InspectionExpense, ExpenseCategory, CreateExpenseRequest, ChargeType, PaymentType, BillToType } from '../../../../core/models/inspection.model';
 import { ExpenseCategoryService } from '../../../../core/services/expense-category.service';
 import { ExpenseCategoryConfig } from '../../../../core/models/expense-category.model';
-import { Client } from '../../../../core/models/client.model';
+import { Customer } from '../../../../core/models/customer.model';
 
 @Component({
   selector: 'app-expense-detail-modal',
@@ -187,10 +187,10 @@ import { Client } from '../../../../core/models/client.model';
               <label class="form-label">{{ (activeTab() === 'EXPENSE' ? 'INSPECTION.RESPONSIBLE_NAME' : 'INSPECTION.BILL_TO_NAME') | translate }}</label>
               <input type="text" class="form-control form-control-sm"
                 formControlName="billToName"
-                [ngbTypeahead]="searchClient"
-                [resultFormatter]="clientResultFormatter"
-                [inputFormatter]="clientInputFormatter"
-                (selectItem)="onClientSelected($event)">
+                [ngbTypeahead]="searchCustomer"
+                [resultFormatter]="customerResultFormatter"
+                [inputFormatter]="customerInputFormatter"
+                (selectItem)="onCustomerSelected($event)">
             </div>
             <div class="col-md-2">
               <label class="form-label">{{ 'INSPECTION.INVOICE_NUMBER' | translate }}</label>
@@ -291,10 +291,10 @@ export class ExpenseDetailModalComponent implements OnInit {
     volumetricWeight?: number | null;
     volume?: number | null;
     declaredValue?: number | null;
-    clientName?: string | null;
+    customerName?: string | null;
     blNumber?: string | null;
   } | null = null;
-  clients: Client[] = [];
+  customers: Customer[] = [];
   defaultChargeType: ChargeType = 'EXPENSE';
 
   readonly unitOptions = [
@@ -356,17 +356,17 @@ export class ExpenseDetailModalComponent implements OnInit {
     notes: new FormControl<string>('', { nonNullable: true })
   });
 
-  // Client typeahead — filters by selected billToType and searches name, taxId, email
-  searchClient: OperatorFunction<string, Client[]> = (text$: Observable<string>) =>
+  // Customer typeahead — filters by selected billToType and searches name, taxId, email
+  searchCustomer: OperatorFunction<string, Customer[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       map(term => {
         const selectedType = this.editForm.controls.billToType.value;
-        let filtered = this.clients.filter(c => c.active);
-        // Filter by clientType matching selected billToType
+        let filtered = this.customers.filter(c => c.active);
+        // Filter by customerType matching selected billToType
         if (selectedType) {
-          filtered = filtered.filter(c => c.clientType === selectedType);
+          filtered = filtered.filter(c => c.customerType === selectedType);
         }
         if (term.length < 1) {
           return filtered.slice(0, 10);
@@ -380,12 +380,12 @@ export class ExpenseDetailModalComponent implements OnInit {
       })
     );
 
-  clientResultFormatter = (client: Client) => `${client.name} \u2014 ${client.taxId} \u00b7 ${client.email}`;
-  clientInputFormatter = (client: any) => typeof client === 'string' ? client : client.name;
+  customerResultFormatter = (customer: Customer) => `${customer.name} \u2014 ${customer.taxId} \u00b7 ${customer.email}`;
+  customerInputFormatter = (customer: any) => typeof customer === 'string' ? customer : customer.name;
 
-  onClientSelected(event: any): void {
-    const client = event.item;
-    this.editForm.controls.billToName.setValue(client.name);
+  onCustomerSelected(event: any): void {
+    const customer = event.item;
+    this.editForm.controls.billToName.setValue(customer.name);
   }
 
   setTab(tab: any): void {

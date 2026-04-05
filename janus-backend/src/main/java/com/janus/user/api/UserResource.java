@@ -69,7 +69,7 @@ public class UserResource {
 
     @GET
     @Path("/me")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "ACCOUNTING", "CLIENT", "CARRIER"})
+    @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER", "CARRIER"})
     public UserResponse me(@Context SecurityContext securityContext) {
         var username = securityContext.getUserPrincipal().getName();
         var user = userService.findByUsername(username);

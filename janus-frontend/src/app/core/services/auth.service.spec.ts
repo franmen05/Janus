@@ -15,7 +15,7 @@ const mockUser: User = {
   email: 'admin@test.com',
   role: 'ADMIN',
   active: true,
-  clientId: null,
+  customerId: null,
   createdAt: '2024-01-01T00:00:00'
 };
 
@@ -146,7 +146,7 @@ describe('AuthService', () => {
       const req = httpMock.expectOne(`${environment.apiUrl}/api/users/me`);
       req.flush(mockUser);
 
-      expect(service.hasRole(['CLIENT'])).toBeFalse();
+      expect(service.hasRole(['CUSTOMER'])).toBeFalse();
       expect(service.hasRole(['AGENT', 'CARRIER'])).toBeFalse();
     });
 

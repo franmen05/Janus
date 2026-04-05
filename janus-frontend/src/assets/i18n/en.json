@@ -6,7 +6,7 @@
   "NAV": {
     "DASHBOARD": "Dashboard",
     "OPERATIONS": "Operations",
-    "CLIENTS": "Clients",
+    "CUSTOMERS": "Customers",
     "AUDIT_LOG": "Audit Log",
     "ALERTS": "Alerts",
     "USERS": "Users",
@@ -71,8 +71,8 @@
     "ALL_STATUSES": "All Statuses",
     "NO_OPERATIONS": "No operations found",
     "REFERENCE": "Reference",
-    "CLIENT": "Client",
-    "SELECT_CLIENT": "Select client...",
+    "CUSTOMER": "Customer",
+    "SELECT_CUSTOMER": "Select customer...",
     "TRANSPORT_MODE": "Transport Mode",
     "OPERATION_CATEGORY": "Operation Category",
     "BL_NUMBER": "Master BL (MBL)",
@@ -105,8 +105,8 @@
     "SELECT_BL_AVAILABILITY": "Select BL availability...",
     "BL_AVAILABILITY_REQUIRED": "BL availability is required",
     "BL_NOT_AVAILABLE_WARNING": "BL is not available. This must be resolved before valuation.",
-    "CLIENT_SEARCH_PLACEHOLDER": "Search client by name, tax ID, or email...",
-    "CREATE_CLIENT": "Create new client",
+    "CUSTOMER_SEARCH_PLACEHOLDER": "Search customer by name, tax ID, or email...",
+    "CREATE_CUSTOMER": "Create new customer",
     "OPERATION_TYPE": "Operation Type",
     "SELECT_OPERATION_TYPE": "Select operation type",
     "OPERATION_TYPE_REQUIRED": "Operation type is required",
@@ -144,11 +144,11 @@
     "RENAME_FILE": "Rename",
     "UPLOADING_FILE": "Uploading file {{current}} of {{total}}..."
   },
-  "CLIENTS": {
-    "TITLE": "Clients",
-    "NEW": "New Client",
-    "EDIT_TITLE": "Edit Client",
-    "NEW_TITLE": "New Client",
+  "CUSTOMERS": {
+    "TITLE": "Customers",
+    "NEW": "New Customer",
+    "EDIT_TITLE": "Edit Customer",
+    "NEW_TITLE": "New Customer",
     "NAME": "Name",
     "TAX_ID": "Tax ID",
     "EMAIL": "Email",
@@ -181,7 +181,7 @@
     "IMPORT_SELECTED": "Import Selected",
     "IMPORT_SUCCESS": "Successfully imported {{imported}} ports ({{skipped}} already existed)"
   },
-  "CLIENT_TYPES": {
+  "CUSTOMER_TYPES": {
     "COMPANY": "Company",
     "CONSIGNEE": "Consignee",
     "INDIVIDUAL": "Individual"
@@ -729,17 +729,17 @@
     "PASSWORD_HINT": "Leave blank to keep current password",
     "EMAIL": "Email",
     "ROLE": "Role",
-    "CLIENT": "Client",
+    "CUSTOMER": "Customer",
     "ACTIVE": "Active",
     "INACTIVE": "Inactive",
     "NO_USERS": "No users found",
-    "CLIENT_SEARCH_PLACEHOLDER": "Search by name, tax ID, or email..."
+    "CUSTOMER_SEARCH_PLACEHOLDER": "Search by name, tax ID, or email..."
   },
   "ROLES": {
     "ADMIN": "Administrator",
     "AGENT": "Agent",
     "ACCOUNTING": "Accounting",
-    "CLIENT": "Client",
+    "CUSTOMER": "Customer",
     "CARRIER": "Carrier",
     "SUPERVISOR": "Supervisor"
   },

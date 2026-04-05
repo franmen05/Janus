@@ -10,10 +10,10 @@ export class OperationService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/operations`;
 
-  getAll(status?: string, clientId?: number): Observable<Operation[]> {
+  getAll(status?: string, customerId?: number): Observable<Operation[]> {
     let params = new HttpParams();
     if (status) params = params.set('status', status);
-    if (clientId) params = params.set('clientId', clientId.toString());
+    if (customerId) params = params.set('customerId', customerId.toString());
     return this.http.get<Operation[]>(this.apiUrl, { params });
   }
 

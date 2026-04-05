@@ -32,7 +32,7 @@ public class AuditResource {
     OperationService operationService;
 
     @GET
-    @RolesAllowed({"ADMIN", "SUPERVISOR"})
+    @RolesAllowed("ADMIN")
     public List<AuditLogResponse> list(@QueryParam("username") String username,
                                        @QueryParam("from") String from,
                                        @QueryParam("to") String to) {
@@ -48,10 +48,10 @@ public class AuditResource {
 
     @GET
     @Path("/operations/{operationId}")
-    @RolesAllowed({"ADMIN", "SUPERVISOR", "AGENT", "CLIENT"})
+    @RolesAllowed({"ADMIN", "AGENT", "CUSTOMER"})
     public List<AuditLogResponse> getByOperation(@PathParam("operationId") Long operationId,
                                                   @Context SecurityContext sec) {
-        securityHelper.enforceClientAccess(sec, operationService.findById(operationId));
+        securityHelper.enforceCustomerAccess(sec, operationService.findById(operationId));
         return auditService.findByOperationId(operationId).stream()
                 .map(AuditLogResponse::from)
                 .toList();

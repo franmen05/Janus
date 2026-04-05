@@ -28,7 +28,7 @@ class LiquidationApprovalConfigTest {
 
     @Test
     @Order(2)
-    void testConfigEndpointAccessibleByClient() {
+    void testConfigEndpointAccessibleByCustomer() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/operations/1/liquidation/config")

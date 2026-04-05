@@ -39,7 +39,7 @@ class UserResourceTest {
 
     @Test
     @Order(3)
-    void testClientCannotListUsers() {
+    void testCustomerCannotListUsers() {
         given()
                 .auth().basic("client", "client123")
                 .when().get("/api/users")
@@ -104,8 +104,8 @@ class UserResourceTest {
                 .then()
                 .statusCode(200)
                 .body("username", is("client"))
-                .body("role", is("CLIENT"))
-                .body("clientId", notNullValue());
+                .body("role", is("CUSTOMER"))
+                .body("customerId", notNullValue());
     }
 
     @Test

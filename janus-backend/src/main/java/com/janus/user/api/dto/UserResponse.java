@@ -10,7 +10,7 @@ public record UserResponse(
         String email,
         String role,
         boolean active,
-        Long clientId,
+        Long customerId,
         LocalDateTime createdAt
 ) {
     public static UserResponse from(User user) {
@@ -21,7 +21,7 @@ public record UserResponse(
                 user.email,
                 user.role,
                 user.active,
-                user.clientId,
+                user.customerId,
                 user.createdAt
         );
     }
