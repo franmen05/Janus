@@ -128,6 +128,7 @@ export class ChargesTableComponent implements OnInit {
     blNumber?: string | null;
   } | null>(null);
   clients = input<Client[]>([]);
+  liquidationStatus = input<string | null>(null);
   changed = output<void>();
 
   private inspectionService = inject(InspectionService);
@@ -157,6 +158,8 @@ export class ChargesTableComponent implements OnInit {
   }
 
   canManageExpenses(): boolean {
+    const status = this.liquidationStatus();
+    if (status === 'DEFINITIVE' || status === 'PAID') return false;
     return this.authService.hasRole(['ADMIN', 'AGENT']);
   }
 
