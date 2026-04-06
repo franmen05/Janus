@@ -927,6 +927,7 @@
     "SEND_TO_BILLING": "Send to Billing",
     "SENDING_TO_BILLING": "Sending...",
     "SENT_TO_BILLING_SUCCESS": "{{count}} reimbursable charges sent to billing",
+    "SENT_TO_BILLING_SUCCESS_DETAIL": "{{count}} charges sent to billing.\n\nInvoice: {{invoiceCode}}\nNCF: {{ncfNumber}}\nTotal: ${{totalAmount}}",
     "BILLING_PROGRESS": "{{sent}} of {{total}} reimbursable sent to billing",
     "ALL_SENT_TO_BILLING": "All reimbursable sent to billing",
     "SEND_TO_BILLING_CONFIRM": "Charges will be grouped by categories for billing. Do you want to continue?",
@@ -1025,6 +1026,9 @@
     "INVALID_EXPENSE_CATEGORY": "Invalid expense category",
     "INACTIVE_EXPENSE_CATEGORY": "Expense category is inactive",
     "EXPENSE_CATEGORY_NAME_EXISTS": "A category with this name already exists",
-    "EXPENSE_CATEGORY_HAS_EXPENSES": "Cannot delete: category has associated expenses"
+    "EXPENSE_CATEGORY_HAS_EXPENSES": "Cannot delete: category has associated expenses",
+    "BILLING_SERVICE_UNAVAILABLE": "Billing service is unavailable. Please try again later.",
+    "BILLING_SERVICE_ERROR": "Error communicating with billing system.",
+    "MISSING_TAX_ID": "Customer must have a tax ID for billing."
   }
 }

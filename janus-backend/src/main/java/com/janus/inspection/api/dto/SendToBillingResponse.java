@@ -1,3 +1,6 @@
 package com.janus.inspection.api.dto;
 
-public record SendToBillingResponse(int updatedCount) {}
+import com.janus.billing.api.dto.InvoiceSummary;
+import java.util.List;
+
+public record SendToBillingResponse(int updatedCount, List<InvoiceSummary> invoices) {}
