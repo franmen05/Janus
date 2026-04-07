@@ -184,7 +184,9 @@
     "DELETE_CONTACT_CONFIRM": "¿Está seguro que desea eliminar este contacto?",
     "NO_CONTACTS": "No hay contactos registrados",
     "SAVE_CUSTOMER_FIRST": "Guarde el cliente primero para agregar contactos",
-    "CONTACT_ACTIONS": "Acciones"
+    "CONTACT_ACTIONS": "Acciones",
+    "ALL_TYPES": "Todos los tipos",
+    "FILTER_TYPE": "Filtrar por tipo"
   },
   "PORTS": {
     "TITLE": "Puertos",

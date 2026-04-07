@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { CustomerService } from '../../../core/services/customer.service';
-import { Customer } from '../../../core/models/customer.model';
+import { Customer, CustomerType } from '../../../core/models/customer.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
@@ -24,10 +24,25 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
     } @else {
     <div class="card">
       <div class="card-header">
-        <input type="text" class="form-control"
-               [placeholder]="'CUSTOMERS.SEARCH' | translate"
-               [ngModel]="searchTerm()"
-               (ngModelChange)="searchTerm.set($event)">
+        <div class="row g-2">
+          <div class="col-md-8">
+            <input type="text" class="form-control"
+                   [placeholder]="'CUSTOMERS.SEARCH' | translate"
+                   [ngModel]="searchTerm()"
+                   (ngModelChange)="searchTerm.set($event)">
+          </div>
+          <div class="col-md-4">
+            <select class="form-select"
+                    [attr.aria-label]="'CUSTOMERS.FILTER_TYPE' | translate"
+                    [ngModel]="selectedType()"
+                    (ngModelChange)="selectedType.set($event)">
+              <option value="">{{ 'CUSTOMERS.ALL_TYPES' | translate }}</option>
+              @for (type of customerTypes; track type) {
+                <option [value]="type">{{ 'CUSTOMER_TYPES.' + type | translate }}</option>
+              }
+            </select>
+          </div>
+        </div>
       </div>
       <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
@@ -70,14 +85,19 @@ export class CustomerListComponent implements OnInit {
   loading = signal(true);
   customers = signal<Customer[]>([]);
   searchTerm = signal('');
+  selectedType = signal('');
+  customerTypes = Object.values(CustomerType);
   filteredCustomers = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    if (!term) return this.customers();
-    return this.customers().filter(c =>
-      c.name.toLowerCase().includes(term) ||
-      c.taxId.toLowerCase().includes(term) ||
-      (c.businessName?.toLowerCase().includes(term) ?? false)
-    );
+    const type = this.selectedType();
+    return this.customers().filter(c => {
+      const matchesTerm = !term ||
+        c.name.toLowerCase().includes(term) ||
+        c.taxId.toLowerCase().includes(term) ||
+        (c.businessName?.toLowerCase().includes(term) ?? false);
+      const matchesType = !type || c.customerType === type;
+      return matchesTerm && matchesType;
+    });
   });
 
   ngOnInit(): void {
