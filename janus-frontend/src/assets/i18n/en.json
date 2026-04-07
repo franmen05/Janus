@@ -168,7 +168,23 @@
     "DOCUMENT_TYPE": "Document Type",
     "SELECT_DOCUMENT_TYPE": "Select document type...",
     "ALTERNATE_PHONE": "Alternate Phone",
-    "COUNTRY": "Country"
+    "COUNTRY": "Country",
+    "CONTACTS": "Contacts",
+    "ADD_CONTACT": "Add Contact",
+    "EDIT_CONTACT": "Edit Contact",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "IDENTIFICATION": "Identification",
+    "CONTACT_EMAIL": "Email",
+    "CONTACT_PHONE": "Phone",
+    "CONTACT_TYPE": "Type",
+    "RECEIVE_NOTIFICATIONS": "Email Notifications",
+    "PRIMARY": "Primary",
+    "ALTERNATE": "Alternate",
+    "DELETE_CONTACT_CONFIRM": "Are you sure you want to delete this contact?",
+    "NO_CONTACTS": "No contacts registered",
+    "SAVE_CUSTOMER_FIRST": "Save the customer first to add contacts",
+    "CONTACT_ACTIONS": "Actions"
   },
   "PORTS": {
     "TITLE": "Ports",
@@ -1026,7 +1042,12 @@
     "INVALID_EXPENSE_CATEGORY": "Invalid expense category",
     "INACTIVE_EXPENSE_CATEGORY": "Expense category is inactive",
     "EXPENSE_CATEGORY_NAME_EXISTS": "A category with this name already exists",
-    "EXPENSE_CATEGORY_HAS_EXPENSES": "Cannot delete: category has associated expenses"
+    "EXPENSE_CATEGORY_HAS_EXPENSES": "Cannot delete: category has associated expenses",
+    "BILLING_SERVICE_UNAVAILABLE": "Billing service is unavailable. Please try again later.",
+    "BILLING_SERVICE_ERROR": "Error communicating with billing system.",
+    "MISSING_TAX_ID": "Customer must have a tax ID for billing.",
+    "DUPLICATE_PRIMARY_CONTACT": "Customer already has a primary contact.",
+    "EMAIL_REQUIRED_FOR_NOTIFICATIONS": "Email is required to receive notifications."
   },
   "API_KEYS": {
     "TITLE": "API Keys",

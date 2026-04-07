@@ -617,7 +617,20 @@ export class PaymentPanelComponent implements OnInit {
     this.inspectionService.sendAllIncomeToBilling(this.operationId()).subscribe({
       next: (result) => {
         this.sendingToBilling.set(false);
-        const msg = this.translate.instant('PAYMENT.SENT_TO_BILLING_SUCCESS', { count: result.updatedCount });
+        let msg: string;
+        if (result.invoices && result.invoices.length > 0) {
+          const invoiceDetails = result.invoices.map(inv =>
+            this.translate.instant('PAYMENT.SENT_TO_BILLING_SUCCESS_DETAIL', {
+              count: result.updatedCount,
+              invoiceCode: inv.invoiceCode,
+              ncfNumber: inv.ncfNumber,
+              totalAmount: inv.totalAmount.toFixed(2)
+            })
+          ).join('\n\n---\n\n');
+          msg = invoiceDetails;
+        } else {
+          msg = this.translate.instant('PAYMENT.SENT_TO_BILLING_SUCCESS', { count: result.updatedCount });
+        }
         alert(msg);
         this.inspectionService.getCrossReference(this.operationId()).subscribe({
           next: (cr) => this.crossReference.set(cr),

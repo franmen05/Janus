@@ -34,7 +34,9 @@ public record InspectionExpenseResponse(
         boolean showOnDocuments,
         boolean updateRelated,
         String notes,
-        String billingStatus
+        String billingStatus,
+        Long billFlowInvoiceId,
+        String ncfNumber
 ) {
     public static InspectionExpenseResponse from(InspectionExpense expense) {
         return new InspectionExpenseResponse(
@@ -65,7 +67,9 @@ public record InspectionExpenseResponse(
                 expense.showOnDocuments,
                 expense.updateRelated,
                 expense.notes,
-                expense.billingStatus != null ? expense.billingStatus.name() : null
+                expense.billingStatus != null ? expense.billingStatus.name() : null,
+                expense.billFlowInvoiceId,
+                expense.ncfNumber
         );
     }
 }

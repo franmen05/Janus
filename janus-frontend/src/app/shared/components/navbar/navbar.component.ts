@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgbDropdownModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../core/services/auth.service';
 import { LanguageService } from '../../../core/services/language.service';
+import { SidebarService } from '../../../core/services/sidebar.service';
 import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
 
 @Component({
@@ -14,6 +15,10 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
   template: `
     <nav class="navbar navbar-expand-lg navbar-dark navbar-janus">
       <div class="container-fluid">
+        <button class="btn sidebar-toggle-btn d-none d-lg-flex align-items-center justify-content-center me-2"
+                (click)="sidebarService.toggle()">
+          <i class="bi bi-list"></i>
+        </button>
         <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
           <i class="bi bi-layers-half me-2" style="color: #6ea8fe; font-size: 1.5rem;"></i>
           <strong>JANUS</strong>
@@ -149,6 +154,7 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
 export class NavbarComponent {
   authService = inject(AuthService);
   langService = inject(LanguageService);
+  sidebarService = inject(SidebarService);
   themeService = inject(ThemeService);
   menuCollapsed = signal(true);
 

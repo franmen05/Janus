@@ -22,13 +22,19 @@ public class CustomerService {
     @Inject
     Event<AuditEvent> auditEvent;
 
+    @Transactional
     public List<Customer> listAll() {
-        return customerRepository.listAll();
+        var customers = customerRepository.listAll();
+        customers.forEach(c -> c.contacts.size()); // force lazy init
+        return customers;
     }
 
+    @Transactional
     public Customer findById(Long id) {
-        return customerRepository.findByIdOptional(id)
+        var customer = customerRepository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Customer", id));
+        customer.contacts.size(); // force lazy init
+        return customer;
     }
 
     @Transactional
@@ -49,6 +55,8 @@ public class CustomerService {
         customer.documentType = request.documentType();
         customer.alternatePhone = request.alternatePhone();
         customer.country = request.country();
+        customer.companyCode = request.companyCode();
+        customer.notes = request.notes();
         customerRepository.persist(customer);
         auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "Customer", customer.id, null, null, null, "Customer created: " + customer.name));
         return customer;
@@ -68,6 +76,8 @@ public class CustomerService {
         customer.documentType = request.documentType();
         customer.alternatePhone = request.alternatePhone();
         customer.country = request.country();
+        customer.companyCode = request.companyCode();
+        customer.notes = request.notes();
         auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Customer", customer.id, null, null, null, "Customer updated: " + customer.name));
         return customer;
     }

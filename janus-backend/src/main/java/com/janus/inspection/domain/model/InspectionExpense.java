@@ -99,4 +99,10 @@ public class InspectionExpense extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "billing_status", columnDefinition = "VARCHAR(20) DEFAULT 'NONE' NOT NULL")
     public BillingStatus billingStatus = BillingStatus.NONE;
+
+    @Column(name = "billflow_invoice_id")
+    public Long billFlowInvoiceId;
+
+    @Column(name = "ncf_number", length = 50)
+    public String ncfNumber;
 }

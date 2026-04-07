@@ -2,6 +2,8 @@ package com.janus.inspection.application;
 
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
+import com.janus.billing.api.dto.InvoiceSummary;
+import com.janus.billing.application.BillingService;
 import com.janus.document.domain.service.DocumentValidationService;
 import com.janus.document.infrastructure.storage.StorageService;
 import com.janus.inspection.api.dto.ChargeCrossReferenceResponse;
@@ -79,6 +81,9 @@ public class InspectionService {
 
     @Inject
     LiquidationService liquidationService;
+
+    @Inject
+    BillingService billingService;
 
     @Inject
     Event<AuditEvent> auditEvent;
@@ -405,27 +410,28 @@ public class InspectionService {
 
     @Transactional
     public SendToBillingResponse sendReimbursableToBilling(Long operationId, String username) {
-        operationService.findById(operationId);
+        var operation = operationService.findById(operationId);
 
         var pendingReimbursableCharges = inspectionExpenseRepository
                 .findActiveReimbursableWithBillingStatus(operationId, BillingStatus.NONE);
 
-        for (var charge : pendingReimbursableCharges) {
-            charge.billingStatus = BillingStatus.SENT_TO_BILLING;
+        if (pendingReimbursableCharges.isEmpty()) {
+            return new SendToBillingResponse(0, List.of());
         }
 
-        if (!pendingReimbursableCharges.isEmpty()) {
-            auditEvent.fire(new AuditEvent(
-                    username, AuditAction.UPDATE, "InspectionExpense", null, operationId,
-                    null, null,
-                    "Sent " + pendingReimbursableCharges.size() + " reimbursable charges to billing"
-            ));
-        }
+        // Create invoice in BillFlow - this also stamps charges with billingStatus, invoiceId, ncfNumber
+        var invoiceSummary = billingService.createInvoice(operation.customer, pendingReimbursableCharges);
 
-        LOG.infof("Sent %d reimbursable charges to billing for operation %d by %s",
-                pendingReimbursableCharges.size(), operationId, username);
+        auditEvent.fire(new AuditEvent(
+                username, AuditAction.UPDATE, "InspectionExpense", null, operationId,
+                null, null,
+                "Sent " + pendingReimbursableCharges.size() + " reimbursable charges to billing. Invoice: " + invoiceSummary.invoiceCode()
+        ));
 
-        return new SendToBillingResponse(pendingReimbursableCharges.size());
+        LOG.infof("Sent %d reimbursable charges to billing for operation %d by %s. Invoice: %s",
+                pendingReimbursableCharges.size(), operationId, username, invoiceSummary.invoiceCode());
+
+        return new SendToBillingResponse(pendingReimbursableCharges.size(), List.of(invoiceSummary));
     }
 
     private void regeneratePreliminaryLiquidation(Long operationId, String username) {

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Operation } from '../models/operation.model';
-import { InspectionPhoto, SetInspectionTypeRequest, InspectionExpense, ExpenseSummary, CreateExpenseRequest, ChargeCrossReference } from '../models/inspection.model';
+import { InspectionPhoto, SetInspectionTypeRequest, InspectionExpense, ExpenseSummary, CreateExpenseRequest, ChargeCrossReference, SendToBillingResult } from '../models/inspection.model';
 
 @Injectable({ providedIn: 'root' })
 export class InspectionService {
@@ -51,7 +51,7 @@ export class InspectionService {
     return this.http.get<ChargeCrossReference>(`${this.apiUrl}/api/operations/${operationId}/inspection/expenses/cross-reference`);
   }
 
-  sendAllIncomeToBilling(operationId: number): Observable<{updatedCount: number}> {
-    return this.http.post<{updatedCount: number}>(`${this.apiUrl}/api/operations/${operationId}/inspection/expenses/send-to-billing`, {});
+  sendAllIncomeToBilling(operationId: number): Observable<SendToBillingResult> {
+    return this.http.post<SendToBillingResult>(`${this.apiUrl}/api/operations/${operationId}/inspection/expenses/send-to-billing`, {});
   }
 }

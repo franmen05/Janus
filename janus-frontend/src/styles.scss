@@ -27,7 +27,7 @@
 :root:not([data-bs-theme="dark"]) {
   --janus-bg-body: #f5f6fa;
   --janus-bg-card: #ffffff;
-  --janus-bg-elevated: #f0f1f5;
+  //--janus-bg-elevated: #f0f1f5;
   --janus-bg-sidebar: #ffffff;
   --janus-bg-navbar: #ffffff;
   --janus-border: rgba(0, 0, 0, 0.08);
@@ -57,7 +57,7 @@
 [data-bs-theme="dark"] {
   --janus-bg-body: #0f1117;
   --janus-bg-card: #171923;
-  --janus-bg-elevated: #1e2233;
+  --janus-bg-elevated: #23283c;
   --janus-bg-sidebar: #0a0c12;
   --janus-bg-navbar: #0c0e14;
   --janus-border: rgba(255, 255, 255, 0.06);
@@ -469,6 +469,27 @@ input[type="datetime-local"] {
 .navbar-janus .navbar-brand,
 .navbar-janus .nav-link {
   color: #e8eaf0;
+}
+
+.sidebar-toggle-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  i {
+    font-size: 1.2rem;
+  }
 }
 
 // ---- Content area ----

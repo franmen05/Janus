@@ -54,6 +54,8 @@ export interface InspectionExpense {
   updateRelated: boolean;
   notes: string | null;
   billingStatus: BillingStatus;
+  billFlowInvoiceId: number | null;
+  ncfNumber: string | null;
 }
 
 export interface CategoryBreakdown {
@@ -79,6 +81,18 @@ export interface ExpenseSummary {
   total: number;
   incomeTotal: number;
   expenseTotal: number;
+}
+
+export interface InvoiceSummary {
+  invoiceCode: string;
+  ncfNumber: string;
+  totalAmount: number;
+  lineCount: number;
+}
+
+export interface SendToBillingResult {
+  updatedCount: number;
+  invoices: InvoiceSummary[];
 }
 
 export interface CreateExpenseRequest {

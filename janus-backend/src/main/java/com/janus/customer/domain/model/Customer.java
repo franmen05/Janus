@@ -1,11 +1,16 @@
 package com.janus.customer.domain.model;
 
 import com.janus.shared.domain.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "customers")
@@ -39,6 +44,13 @@ public class Customer extends BaseEntity {
 
     public String country;
 
+    public String companyCode;
+
+    public String notes;
+
     @Column(nullable = false)
     public boolean active = true;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    public List<CustomerContact> contacts = new ArrayList<>();
 }

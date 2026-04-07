@@ -4,6 +4,7 @@ import com.janus.customer.domain.model.Customer;
 import com.janus.customer.domain.model.CustomerType;
 import com.janus.customer.domain.model.DocumentType;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record CustomerResponse(
         Long id,
@@ -19,7 +20,10 @@ public record CustomerResponse(
         DocumentType documentType,
         String alternatePhone,
         String country,
-        LocalDateTime createdAt
+        String companyCode,
+        String notes,
+        LocalDateTime createdAt,
+        List<CustomerContactResponse> contacts
 ) {
     public static CustomerResponse from(Customer customer) {
         return new CustomerResponse(
@@ -36,7 +40,10 @@ public record CustomerResponse(
                 customer.documentType,
                 customer.alternatePhone,
                 customer.country,
-                customer.createdAt
+                customer.companyCode,
+                customer.notes,
+                customer.createdAt,
+                customer.contacts.stream().map(CustomerContactResponse::from).toList()
         );
     }
 }
