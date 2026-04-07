@@ -175,6 +175,12 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/expense-category-config/expense-category-config.component').then(m => m.ExpenseCategoryConfigComponent),
         data: { roles: ['ADMIN'] },
         canActivate: [roleGuard]
+      },
+      {
+        path: 'api-keys',
+        loadComponent: () => import('./features/api-keys/api-key-list/api-key-list.component').then(m => m.ApiKeyListComponent),
+        data: { roles: ['ADMIN'] },
+        canActivate: [roleGuard]
       }
     ]
   },

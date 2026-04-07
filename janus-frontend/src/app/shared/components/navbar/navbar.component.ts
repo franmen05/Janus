@@ -98,6 +98,11 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
                     <i class="bi bi-tag me-2"></i>{{ 'NAV.EXPENSE_CATEGORIES' | translate }}
                   </a>
                 </li>
+                <li class="nav-item d-lg-none">
+                  <a class="nav-link ps-4" routerLink="/api-keys" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-key me-2"></i>{{ 'NAV.API_KEYS' | translate }}
+                  </a>
+                </li>
               }
               <li class="d-lg-none"><hr class="dropdown-divider border-secondary"></li>
               <li class="d-lg-none nav-item">
