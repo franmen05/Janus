@@ -157,6 +157,16 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
                     }
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLink="/api-keys" routerLinkActive="active"
+                     [ngbTooltip]="sidebarService.collapsed() ? ('NAV.API_KEYS' | translate) : null"
+                     placement="end" container="body">
+                    <i class="bi bi-key"></i>
+                    @if (!sidebarService.collapsed()) {
+                      <span>{{ 'NAV.API_KEYS' | translate }}</span>
+                    }
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -269,7 +279,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     const url = this.router.url;
-    if (url.startsWith('/users') || url.startsWith('/ports') || url.startsWith('/exchange-rates') || url.startsWith('/compliance-config') || url.startsWith('/admin/document-types') || url.startsWith('/admin/expense-categories')) {
+    if (url.startsWith('/users') || url.startsWith('/ports') || url.startsWith('/exchange-rates') || url.startsWith('/compliance-config') || url.startsWith('/admin/document-types') || url.startsWith('/admin/expense-categories') || url.startsWith('/api-keys')) {
       this.configCollapsed.set(false);
     }
   }

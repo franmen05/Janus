@@ -21,7 +21,8 @@
     "DOCUMENT_TYPES_CONFIG": "Document Types",
     "EXPENSE_CATEGORIES": "Expense Categories",
     "COLLAPSE_SIDEBAR": "Collapse",
-    "EXPAND_SIDEBAR": "Expand"
+    "EXPAND_SIDEBAR": "Expand",
+    "API_KEYS": "API Keys"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -1026,5 +1027,29 @@
     "INACTIVE_EXPENSE_CATEGORY": "Expense category is inactive",
     "EXPENSE_CATEGORY_NAME_EXISTS": "A category with this name already exists",
     "EXPENSE_CATEGORY_HAS_EXPENSES": "Cannot delete: category has associated expenses"
+  },
+  "API_KEYS": {
+    "TITLE": "API Keys",
+    "NEW": "New API Key",
+    "NAME": "Name",
+    "KEY_PREFIX": "Key Prefix",
+    "EXPIRES_AT": "Expires",
+    "STATUS": "Status",
+    "CREATED_BY": "Created By",
+    "LAST_USED": "Last Used",
+    "ACTIVE": "Active",
+    "REVOKED": "Revoked",
+    "EXPIRED": "Expired",
+    "NEVER": "Never",
+    "NEVER_USED": "Never used",
+    "REVOKE": "Revoke",
+    "REVOKE_CONFIRM": "Are you sure you want to revoke this API key?",
+    "CREATED_SUCCESS": "API key created successfully",
+    "REVOKED_SUCCESS": "API key revoked successfully",
+    "COPY_KEY": "Copy Key",
+    "KEY_WARNING": "This key will not be shown again. Copy it now.",
+    "KEY_COPIED": "Key copied to clipboard",
+    "NAME_PLACEHOLDER": "e.g. Billing System",
+    "NO_KEYS": "No API keys found"
   }
 }

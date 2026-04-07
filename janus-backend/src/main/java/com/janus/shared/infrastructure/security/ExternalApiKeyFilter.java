@@ -1,6 +1,8 @@
 package com.janus.shared.infrastructure.security;
 
+import com.janus.apikey.application.ApiKeyService;
 import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
@@ -8,6 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import java.util.Optional;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
@@ -15,16 +18,17 @@ public class ExternalApiKeyFilter implements ContainerRequestFilter {
 
     public static final String API_KEY_HEADER = "X-API-Key";
     public static final String EXTERNAL_USER_PROPERTY = "external.username";
-    public static final String EXTERNAL_USERNAME = "external-billing-system";
+
+    @Inject
+    ApiKeyService apiKeyService;
 
     @ConfigProperty(name = "janus.external.api-key")
-    String expectedApiKey;
+    Optional<String> legacyApiKey;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
         String path = requestContext.getUriInfo().getPath();
 
-        // Only apply to /api/external/* routes
         if (!path.startsWith("/api/external/") && !path.startsWith("api/external/")) {
             return;
         }
@@ -41,17 +45,24 @@ public class ExternalApiKeyFilter implements ContainerRequestFilter {
             return;
         }
 
-        if (!expectedApiKey.equals(apiKey)) {
-            requestContext.abortWith(
-                Response.status(Response.Status.UNAUTHORIZED)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .entity(java.util.Map.of("error", "Invalid API key"))
-                    .build()
-            );
+        // Try DB-managed keys first
+        var validKey = apiKeyService.validate(apiKey);
+        if (validKey.isPresent()) {
+            requestContext.setProperty(EXTERNAL_USER_PROPERTY, "apikey:" + validKey.get().name);
             return;
         }
 
-        // Store the identity for downstream use
-        requestContext.setProperty(EXTERNAL_USER_PROPERTY, EXTERNAL_USERNAME);
+        // Fallback to legacy config key
+        if (legacyApiKey.isPresent() && legacyApiKey.get().equals(apiKey)) {
+            requestContext.setProperty(EXTERNAL_USER_PROPERTY, "external-billing-system");
+            return;
+        }
+
+        requestContext.abortWith(
+            Response.status(Response.Status.UNAUTHORIZED)
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .entity(java.util.Map.of("error", "Invalid API key"))
+                .build()
+        );
     }
 }

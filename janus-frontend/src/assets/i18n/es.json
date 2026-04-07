@@ -21,7 +21,8 @@
     "DOCUMENT_TYPES_CONFIG": "Tipos de Documento",
     "EXPENSE_CATEGORIES": "Categor\u00edas de Gastos",
     "COLLAPSE_SIDEBAR": "Contraer",
-    "EXPAND_SIDEBAR": "Expandir"
+    "EXPAND_SIDEBAR": "Expandir",
+    "API_KEYS": "Claves API"
   },
   "LOGIN": {
     "USERNAME": "Usuario",
@@ -1026,5 +1027,29 @@
     "INACTIVE_EXPENSE_CATEGORY": "La categor\u00eda de gasto est\u00e1 inactiva",
     "EXPENSE_CATEGORY_NAME_EXISTS": "Ya existe una categor\u00eda con este nombre",
     "EXPENSE_CATEGORY_HAS_EXPENSES": "No se puede eliminar: la categor\u00eda tiene gastos asociados"
+  },
+  "API_KEYS": {
+    "TITLE": "Claves API",
+    "NEW": "Nueva Clave API",
+    "NAME": "Nombre",
+    "KEY_PREFIX": "Prefijo",
+    "EXPIRES_AT": "Expira",
+    "STATUS": "Estado",
+    "CREATED_BY": "Creado por",
+    "LAST_USED": "\u00daltimo uso",
+    "ACTIVE": "Activa",
+    "REVOKED": "Revocada",
+    "EXPIRED": "Expirada",
+    "NEVER": "Nunca",
+    "NEVER_USED": "Sin uso",
+    "REVOKE": "Revocar",
+    "REVOKE_CONFIRM": "\u00bfEst\u00e1 seguro que desea revocar esta clave API?",
+    "CREATED_SUCCESS": "Clave API creada exitosamente",
+    "REVOKED_SUCCESS": "Clave API revocada exitosamente",
+    "COPY_KEY": "Copiar Clave",
+    "KEY_WARNING": "Esta clave no se mostrar\u00e1 de nuevo. C\u00f3piela ahora.",
+    "KEY_COPIED": "Clave copiada al portapapeles",
+    "NAME_PLACEHOLDER": "ej. Sistema de Facturaci\u00f3n",
+    "NO_KEYS": "No se encontraron claves API"
   }
 }
