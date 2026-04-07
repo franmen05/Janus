@@ -55,7 +55,7 @@ public class CustomerService {
         customer.documentType = request.documentType();
         customer.alternatePhone = request.alternatePhone();
         customer.country = request.country();
-        customer.companyCode = request.companyCode();
+        customer.customerCode = request.customerCode();
         customer.notes = request.notes();
         customerRepository.persist(customer);
         auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "Customer", customer.id, null, null, null, "Customer created: " + customer.name));
@@ -76,7 +76,7 @@ public class CustomerService {
         customer.documentType = request.documentType();
         customer.alternatePhone = request.alternatePhone();
         customer.country = request.country();
-        customer.companyCode = request.companyCode();
+        customer.customerCode = request.customerCode();
         customer.notes = request.notes();
         auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Customer", customer.id, null, null, null, "Customer updated: " + customer.name));
         return customer;

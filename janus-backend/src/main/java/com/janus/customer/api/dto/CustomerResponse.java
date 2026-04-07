@@ -20,7 +20,7 @@ public record CustomerResponse(
         DocumentType documentType,
         String alternatePhone,
         String country,
-        String companyCode,
+        String customerCode,
         String notes,
         LocalDateTime createdAt,
         List<CustomerContactResponse> contacts
@@ -40,7 +40,7 @@ public record CustomerResponse(
                 customer.documentType,
                 customer.alternatePhone,
                 customer.country,
-                customer.companyCode,
+                customer.customerCode,
                 customer.notes,
                 customer.createdAt,
                 customer.contacts.stream().map(CustomerContactResponse::from).toList()

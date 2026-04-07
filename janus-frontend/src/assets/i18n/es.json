@@ -186,7 +186,9 @@
     "SAVE_CUSTOMER_FIRST": "Guarde el cliente primero para agregar contactos",
     "CONTACT_ACTIONS": "Acciones",
     "ALL_TYPES": "Todos los tipos",
-    "FILTER_TYPE": "Filtrar por tipo"
+    "FILTER_TYPE": "Filtrar por tipo",
+    "CUSTOMER_CODE": "Código de Cliente",
+    "NOTES": "Notas"
   },
   "PORTS": {
     "TITLE": "Puertos",

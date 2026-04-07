@@ -29,8 +29,8 @@ import { CustomerType, DocumentType, ContactType, CustomerContact, CreateCustome
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'CUSTOMERS.REPRESENTATIVE' | translate }}</label>
-              <input type="text" class="form-control" formControlName="representative">
+              <label class="form-label">{{ 'CUSTOMERS.CUSTOMER_CODE' | translate }}</label>
+              <input type="text" class="form-control" formControlName="customerCode">
             </div>
             <div class="col-md-6">
               <label class="form-label">{{ 'CUSTOMERS.TYPE' | translate }} <span class="text-danger">*</span></label>
@@ -77,9 +77,15 @@ import { CustomerType, DocumentType, ContactType, CustomerContact, CreateCustome
               <input type="text" class="form-control" formControlName="country">
             </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">{{ 'CUSTOMERS.ADDRESS' | translate }}</label>
-            <textarea class="form-control" formControlName="address" rows="2"></textarea>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">{{ 'CUSTOMERS.ADDRESS' | translate }}</label>
+              <textarea class="form-control" formControlName="address" rows="2"></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ 'CUSTOMERS.NOTES' | translate }}</label>
+              <textarea class="form-control" formControlName="notes" rows="2"></textarea>
+            </div>
           </div>
           <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ (isEdit() ? 'ACTIONS.UPDATE' : 'ACTIONS.CREATE') | translate }}</button>
@@ -227,7 +233,6 @@ export class CustomerFormComponent implements OnInit {
   form = new FormGroup({
     businessName: new FormControl('', { nonNullable: true }),
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    representative: new FormControl('', { nonNullable: true }),
     taxId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
     customerType: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -235,7 +240,9 @@ export class CustomerFormComponent implements OnInit {
     phone: new FormControl('', { nonNullable: true }),
     alternatePhone: new FormControl('', { nonNullable: true }),
     address: new FormControl('', { nonNullable: true }),
-    country: new FormControl('', { nonNullable: true })
+    country: new FormControl('', { nonNullable: true }),
+    customerCode: new FormControl('', { nonNullable: true }),
+    notes: new FormControl('', { nonNullable: true })
   });
 
   contactForm = new FormGroup({
@@ -275,10 +282,11 @@ export class CustomerFormComponent implements OnInit {
           phone: c.phone ?? '',
           address: c.address ?? '',
           businessName: c.businessName ?? '',
-          representative: c.representative ?? '',
           documentType: c.documentType ?? '',
           alternatePhone: c.alternatePhone ?? '',
-          country: c.country ?? ''
+          country: c.country ?? '',
+          customerCode: c.customerCode ?? '',
+          notes: c.notes ?? ''
         });
       });
       this.loadContacts();
@@ -371,9 +379,10 @@ export class CustomerFormComponent implements OnInit {
       customerType: raw.customerType as CustomerType,
       documentType: raw.documentType ? raw.documentType as DocumentType : undefined,
       businessName: raw.businessName || undefined,
-      representative: raw.representative || undefined,
       alternatePhone: raw.alternatePhone || undefined,
-      country: raw.country || undefined
+      country: raw.country || undefined,
+      customerCode: raw.customerCode || undefined,
+      notes: raw.notes || undefined
     };
     const obs = this.isEdit() ? this.customerService.update(this.customerId!, val) : this.customerService.create(val);
     obs.subscribe(() => this.router.navigate(['/customers']));

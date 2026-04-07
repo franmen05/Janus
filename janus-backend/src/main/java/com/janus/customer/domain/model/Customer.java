@@ -44,7 +44,7 @@ public class Customer extends BaseEntity {
 
     public String country;
 
-    public String companyCode;
+    public String customerCode;
 
     public String notes;
 

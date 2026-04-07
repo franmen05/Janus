@@ -21,6 +21,8 @@ export interface Customer {
   documentType: DocumentType | null;
   alternatePhone: string | null;
   country: string | null;
+  customerCode: string | null;
+  notes: string | null;
   contacts: CustomerContact[];
 }
 
@@ -63,4 +65,6 @@ export interface CreateCustomerRequest {
   documentType?: DocumentType;
   alternatePhone?: string;
   country?: string;
+  customerCode?: string;
+  notes?: string;
 }

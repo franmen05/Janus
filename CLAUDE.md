@@ -80,7 +80,8 @@ User Request
 **Prompt template:**
 ```
 You are working on janus-backend (Quarkus 3.27.2, Java 21, Gradle).
-Package: com.janus. DTOs are Java records. Use Jakarta EE APIs (jakarta.*).
+Package: com.janus (domain-oriented: e.g. com.janus.customer.domain.model, com.janus.customer.api).
+DTOs are Java records. Use Jakarta EE APIs (jakarta.*).
 Conventions: see .claude/rules/backend.md
 
 Task: [describe task]

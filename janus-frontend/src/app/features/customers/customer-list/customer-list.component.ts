@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { CustomerService } from '../../../core/services/customer.service';
@@ -47,21 +47,22 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
       <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
           <thead class="table-light">
-            <tr><th>{{ 'CUSTOMERS.NAME' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'CUSTOMERS.BUSINESS_NAME' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'CUSTOMERS.TAX_ID' | translate }}</th><th class="d-none d-md-table-cell">{{ 'CUSTOMERS.TYPE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'CUSTOMERS.EMAIL' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'CUSTOMERS.PHONE' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'COMMON.ACTIONS' | translate }}</th></tr>
+            <tr><th>{{ 'CUSTOMERS.NAME' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'CUSTOMERS.CUSTOMER_CODE' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'CUSTOMERS.TAX_ID' | translate }}</th><th class="d-none d-md-table-cell">{{ 'CUSTOMERS.TYPE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'CUSTOMERS.EMAIL' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'CUSTOMERS.PHONE' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th>{{ 'COMMON.ACTIONS' | translate }}</th></tr>
           </thead>
           <tbody>
             @for (customer of filteredCustomers(); track customer.id) {
-              <tr>
+              <tr role="button" [style.cursor]="'pointer'" (click)="goToDetail(customer.id)">
                 <td class="fw-bold">{{ customer.name }}</td>
-                <td class="d-none d-sm-table-cell">{{ customer.businessName ?? '-' }}</td>
+                <td class="d-none d-sm-table-cell">{{ customer.customerCode ?? '-' }}</td>
                 <td class="d-none d-sm-table-cell">{{ customer.taxId }}</td>
                 <td class="d-none d-md-table-cell">{{ 'CUSTOMER_TYPES.' + customer.customerType | translate }}</td>
                 <td class="d-none d-md-table-cell">{{ customer.email }}</td>
                 <td class="d-none d-lg-table-cell">{{ customer.phone ?? '-' }}</td>
                 <td><span class="badge" [class]="customer.active ? 'bg-success' : 'bg-secondary'">{{ (customer.active ? 'CUSTOMERS.ACTIVE' : 'CUSTOMERS.INACTIVE') | translate }}</span></td>
                 <td>
+                  <div class="d-flex flex-column flex-md-row gap-1">
                   @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-                    <a [routerLink]="['/customers', customer.id, 'edit']" class="btn btn-sm btn-outline-primary me-1">{{ 'ACTIONS.EDIT' | translate }}</a>
+                    <a [routerLink]="['/customers', customer.id, 'edit']" class="btn btn-sm btn-outline-primary">{{ 'ACTIONS.EDIT' | translate }}</a>
                   }
                   @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                     <a [routerLink]="['/operations/new']" [queryParams]="{ customerId: customer.id }"
@@ -69,6 +70,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                       {{ 'CUSTOMERS.OPERATIONS' | translate }}
                     </a>
                   }
+                  </div>
                 </td>
               </tr>
             }
@@ -81,6 +83,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
 })
 export class CustomerListComponent implements OnInit {
   private customerService = inject(CustomerService);
+  private router = inject(Router);
   authService = inject(AuthService);
   loading = signal(true);
   customers = signal<Customer[]>([]);
@@ -94,11 +97,15 @@ export class CustomerListComponent implements OnInit {
       const matchesTerm = !term ||
         c.name.toLowerCase().includes(term) ||
         c.taxId.toLowerCase().includes(term) ||
-        (c.businessName?.toLowerCase().includes(term) ?? false);
+        (c.customerCode?.toLowerCase().includes(term) ?? false);
       const matchesType = !type || c.customerType === type;
       return matchesTerm && matchesType;
     });
   });
+
+  goToDetail(id: number): void {
+    this.router.navigate(['/customers', id, 'edit']);
+  }
 
   ngOnInit(): void {
     this.customerService.getAll().subscribe(customers => {

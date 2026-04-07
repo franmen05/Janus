@@ -186,7 +186,9 @@
     "SAVE_CUSTOMER_FIRST": "Save the customer first to add contacts",
     "CONTACT_ACTIONS": "Actions",
     "ALL_TYPES": "All types",
-    "FILTER_TYPE": "Filter by type"
+    "FILTER_TYPE": "Filter by type",
+    "CUSTOMER_CODE": "Customer Code",
+    "NOTES": "Notes"
   },
   "PORTS": {
     "TITLE": "Ports",
