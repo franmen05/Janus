@@ -1,10 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { OperationService } from '../../../core/services/operation.service';
-import { Operation, OperationStatus } from '../../../core/models/operation.model';
+import { Operation, OperationStatus, TransportMode } from '../../../core/models/operation.model';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
@@ -28,9 +28,20 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-4">
+              <input type="text" class="form-control" [placeholder]="'OPERATIONS.SEARCH' | translate" [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)">
+            </div>
+            <div class="col-md-4">
               <select class="form-select" [(ngModel)]="filterStatus" (ngModelChange)="onFilterChange()">
                 <option value="">{{ 'OPERATIONS.ALL_STATUSES' | translate }}</option>
                 @for (s of statuses; track s) { <option [value]="s">{{ s | statusLabel }}</option> }
+              </select>
+            </div>
+            <div class="col-md-4">
+              <select class="form-select" [ngModel]="selectedTransport()" (ngModelChange)="selectedTransport.set($event)">
+                <option value="">{{ 'OPERATIONS.ALL_TRANSPORT_MODES' | translate }}</option>
+                @for (tm of transportModes; track tm) {
+                  <option [value]="tm">{{ 'TRANSPORT_MODES.' + tm | translate }}</option>
+                }
               </select>
             </div>
           </div>
@@ -49,21 +60,21 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           <div class="table-responsive">
           <table class="table table-hover mb-0">
             <thead class="table-light">
-              <tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CUSTOMER' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.OPERATION_CATEGORY' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'OPERATIONS.AGENT' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr>
+              <tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CUSTOMER' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.TRANSPORT_MODE' | translate }}</th><th class="d-none d-md-table-cell">{{ 'OPERATIONS.ARRIVAL_PORT' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-lg-table-cell">{{ 'OPERATIONS.AGENT' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr>
             </thead>
             <tbody>
-              @for (op of operations(); track op.id) {
+              @for (op of filteredOperations(); track op.id) {
                 <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
                   <td class="fw-bold">{{ op.referenceNumber }}</td>
                   <td>{{ op.customerName }}</td>
                   <td class="d-none d-md-table-cell">{{ op.transportMode | statusLabel }}</td>
-                  <td class="d-none d-md-table-cell">{{ op.operationCategory | statusLabel }}</td>
+                  <td class="d-none d-md-table-cell">{{ op.arrivalPortName ?? '-' }}</td>
                   <td><app-status-badge [status]="op.status" /></td>
                   <td class="d-none d-lg-table-cell">{{ op.assignedAgentName ?? '-' }}</td>
                   <td class="d-none d-sm-table-cell">{{ op.createdAt | date:'shortDate' }}</td>
                 </tr>
               }
-              @if (operations().length === 0) {
+              @if (filteredOperations().length === 0) {
                 <tr><td colspan="7" class="text-center text-muted py-4">{{ 'OPERATIONS.NO_OPERATIONS' | translate }}</td></tr>
               }
             </tbody>
@@ -84,6 +95,25 @@ export class OperationListComponent implements OnInit {
   filterStatus = '';
   activeFilter = '';
   statuses = Object.values(OperationStatus);
+  searchTerm = signal('');
+  selectedTransport = signal('');
+  transportModes = Object.values(TransportMode);
+  filteredOperations = computed(() => {
+    let ops = this.operations();
+    const term = this.searchTerm().toLowerCase();
+    const transport = this.selectedTransport();
+    if (term) {
+      ops = ops.filter(op =>
+        op.referenceNumber.toLowerCase().includes(term) ||
+        op.customerName.toLowerCase().includes(term) ||
+        (op.assignedAgentName && op.assignedAgentName.toLowerCase().includes(term))
+      );
+    }
+    if (transport) {
+      ops = ops.filter(op => op.transportMode === transport);
+    }
+    return ops;
+  });
 
   ngOnInit(): void {
     const statusParam = this.route.snapshot.queryParamMap.get('status');

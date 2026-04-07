@@ -115,7 +115,9 @@
     "OPERATION_TYPE_REQUIRED": "Operation type is required",
     "ARRIVAL_PORT": "Arrival Port",
     "ARRIVAL_PORT_REQUIRED": "Arrival port is required",
-    "SELECT_PORT": "Select port..."
+    "SELECT_PORT": "Select port...",
+    "SEARCH": "Search by reference, agent or customer...",
+    "ALL_TRANSPORT_MODES": "All transport modes"
   },
   "DOCUMENTS": {
     "TITLE": "Documents",

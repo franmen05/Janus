@@ -236,7 +236,7 @@ When infra changes affect app configuration:
 
 **Every plan must include a "Functional Testing" section.** Functional tests are executed using **Playwright MCP tools** (browser automation), NOT curl or manual API calls. Always test all affected areas — not just the feature directly changed.
 
-**Tool:** Playwright MCP (available as `mcp__plugin_playwright_playwright__browser_*` tools). The main context executes these tests directly — they are NOT delegated to sub-agents.
+**Tool:** Playwright MCP (available as `mcp__plugin_playwright_playwright__browser_*` tools). Functional tests are delegated to a **sonnet-model sub-agent** (`model: "sonnet"`) to optimize cost while maintaining test quality. The sub-agent receives the test plan and executes all Playwright interactions.
 
 ```
 1. IMPACT ANALYSIS → after defining the implementation steps, identify:
