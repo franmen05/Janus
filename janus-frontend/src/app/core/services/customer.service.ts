@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Customer, CreateCustomerRequest } from '../models/customer.model';
+import { Customer, CreateCustomerRequest, CustomerContact, CreateCustomerContactRequest } from '../models/customer.model';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
@@ -23,5 +23,21 @@ export class CustomerService {
 
   update(id: number, request: CreateCustomerRequest): Observable<Customer> {
     return this.http.put<Customer>(`${this.apiUrl}/${id}`, request);
+  }
+
+  getContacts(customerId: number): Observable<CustomerContact[]> {
+    return this.http.get<CustomerContact[]>(`${this.apiUrl}/${customerId}/contacts`);
+  }
+
+  createContact(customerId: number, request: CreateCustomerContactRequest): Observable<CustomerContact> {
+    return this.http.post<CustomerContact>(`${this.apiUrl}/${customerId}/contacts`, request);
+  }
+
+  updateContact(customerId: number, contactId: number, request: CreateCustomerContactRequest): Observable<CustomerContact> {
+    return this.http.put<CustomerContact>(`${this.apiUrl}/${customerId}/contacts/${contactId}`, request);
+  }
+
+  deleteContact(customerId: number, contactId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${customerId}/contacts/${contactId}`);
   }
 }

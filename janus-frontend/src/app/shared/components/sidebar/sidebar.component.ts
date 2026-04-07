@@ -163,20 +163,6 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
         }
       </div>
 
-      <!-- Toggle button -->
-      <div class="sidebar-toggle" [class.px-2]="!sidebarService.collapsed()" [class.px-1]="sidebarService.collapsed()">
-        <button class="btn toggle-btn w-100 d-flex align-items-center"
-                [class.justify-content-center]="sidebarService.collapsed()"
-                (click)="sidebarService.toggle()"
-                [ngbTooltip]="sidebarService.collapsed() ? ('NAV.EXPAND_SIDEBAR' | translate) : null"
-                placement="end" container="body">
-          <i class="bi" [class.bi-layout-sidebar-inset]="!sidebarService.collapsed()" [class.bi-layout-sidebar]="sidebarService.collapsed()"></i>
-          @if (!sidebarService.collapsed()) {
-            <span class="ms-2">{{ 'NAV.COLLAPSE_SIDEBAR' | translate }}</span>
-          }
-        </button>
-      </div>
-
       <!-- Footer -->
       <div class="sidebar-footer py-3 border-top border-secondary"
            [class.px-3]="!sidebarService.collapsed()" [class.px-2]="sidebarService.collapsed()">
@@ -239,25 +225,6 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
       font-size: 1.2rem;
     }
 
-    /* Toggle button */
-    .sidebar-toggle {
-      padding-bottom: 0.25rem;
-    }
-    .toggle-btn {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.8rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      border: none;
-      transition: all 0.2s ease;
-    }
-    .toggle-btn:hover {
-      color: rgba(255, 255, 255, 0.8);
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-    .toggle-btn i {
-      font-size: 1rem;
-    }
   `]
 })
 export class SidebarComponent implements OnInit {

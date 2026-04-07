@@ -17,5 +17,7 @@ public record CreateCustomerRequest(
         String representative,
         DocumentType documentType,
         String alternatePhone,
-        String country
+        String country,
+        String companyCode,
+        String notes
 ) {}

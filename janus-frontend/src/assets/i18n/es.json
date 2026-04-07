@@ -167,7 +167,23 @@
     "DOCUMENT_TYPE": "Tipo de Documento",
     "SELECT_DOCUMENT_TYPE": "Seleccionar tipo de documento...",
     "ALTERNATE_PHONE": "Teléfono Alterno",
-    "COUNTRY": "País"
+    "COUNTRY": "País",
+    "CONTACTS": "Contactos",
+    "ADD_CONTACT": "Agregar Contacto",
+    "EDIT_CONTACT": "Editar Contacto",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellido",
+    "IDENTIFICATION": "Identificación",
+    "CONTACT_EMAIL": "Correo Electrónico",
+    "CONTACT_PHONE": "Teléfono",
+    "CONTACT_TYPE": "Tipo",
+    "RECEIVE_NOTIFICATIONS": "Notificaciones por Email",
+    "PRIMARY": "Principal",
+    "ALTERNATE": "Alterno",
+    "DELETE_CONTACT_CONFIRM": "¿Está seguro que desea eliminar este contacto?",
+    "NO_CONTACTS": "No hay contactos registrados",
+    "SAVE_CUSTOMER_FIRST": "Guarde el cliente primero para agregar contactos",
+    "CONTACT_ACTIONS": "Acciones"
   },
   "PORTS": {
     "TITLE": "Puertos",
@@ -1029,6 +1045,8 @@
     "EXPENSE_CATEGORY_HAS_EXPENSES": "No se puede eliminar: la categor\u00eda tiene gastos asociados",
     "BILLING_SERVICE_UNAVAILABLE": "El servicio de facturaci\u00f3n no est\u00e1 disponible. Intente m\u00e1s tarde.",
     "BILLING_SERVICE_ERROR": "Error al comunicarse con el sistema de facturaci\u00f3n.",
-    "MISSING_TAX_ID": "El cliente debe tener un n\u00famero de identificaci\u00f3n fiscal para facturar."
+    "MISSING_TAX_ID": "El cliente debe tener un n\u00famero de identificaci\u00f3n fiscal para facturar.",
+    "DUPLICATE_PRIMARY_CONTACT": "El cliente ya tiene un contacto principal.",
+    "EMAIL_REQUIRED_FOR_NOTIFICATIONS": "Se requiere un correo electr\u00f3nico para recibir notificaciones."
   }
 }

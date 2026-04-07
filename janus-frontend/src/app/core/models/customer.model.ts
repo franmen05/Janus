@@ -21,6 +21,34 @@ export interface Customer {
   documentType: DocumentType | null;
   alternatePhone: string | null;
   country: string | null;
+  contacts: CustomerContact[];
+}
+
+export enum ContactType {
+  PRIMARY = 'PRIMARY',
+  ALTERNATE = 'ALTERNATE'
+}
+
+export interface CustomerContact {
+  id: number;
+  firstName: string;
+  lastName: string;
+  identification: string;
+  phone: string;
+  email: string | null;
+  contactType: ContactType;
+  receiveNotifications: boolean;
+  createdAt: string;
+}
+
+export interface CreateCustomerContactRequest {
+  firstName: string;
+  lastName: string;
+  identification: string;
+  phone: string;
+  email?: string;
+  contactType: ContactType;
+  receiveNotifications: boolean;
 }
 
 export interface CreateCustomerRequest {

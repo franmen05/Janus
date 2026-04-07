@@ -231,9 +231,11 @@ When infra changes affect app configuration:
    - angular.json / build.gradle for build changes
 ```
 
-### Protocol F: Functional Testing (Mandatory)
+### Protocol F: Functional Testing (Mandatory — Playwright)
 
-**Every plan must include a "Functional Testing" section.** When running functional tests (E2E/Playwright), always test all affected areas — not just the feature directly changed.
+**Every plan must include a "Functional Testing" section.** Functional tests are executed using **Playwright MCP tools** (browser automation), NOT curl or manual API calls. Always test all affected areas — not just the feature directly changed.
+
+**Tool:** Playwright MCP (available as `mcp__plugin_playwright_playwright__browser_*` tools). The main context executes these tests directly — they are NOT delegated to sub-agents.
 
 ```
 1. IMPACT ANALYSIS → after defining the implementation steps, identify:
@@ -242,14 +244,19 @@ When infra changes affect app configuration:
      data that flows between features, components that consume changed APIs)
 
 2. TEST MAP → in the plan, add a section:
-   ## Functional Testing
+   ## Functional Testing (Playwright)
    | Change | Affected Areas | Tests to Run |
    |--------|---------------|--------------|
-   | [what changed] | [what else could break] | [specific tests] |
+   | [what changed] | [what else could break] | [specific Playwright test steps] |
 
-3. EXECUTION → after implementation, run functional tests for ALL listed areas:
-   - Direct: tests for the modified feature
-   - Indirect: tests for every area in the "Affected Areas" column
+3. EXECUTION → after implementation, use Playwright MCP tools to:
+   - Navigate to the affected pages (browser_navigate to http://localhost:4200)
+   - Interact with the UI (browser_click, browser_fill_form, browser_select_option)
+   - Verify elements are visible and correct (browser_snapshot)
+   - Take screenshots for evidence (browser_take_screenshot)
+   - Test the complete flow end-to-end through the browser
+   - Direct: test the modified feature's UI flow
+   - Indirect: test every area in the "Affected Areas" column
    - Regression: if a shared service/component was modified, test all consumers
 
 4. REPORT → do not mark the task as complete until all affected-area tests pass
