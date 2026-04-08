@@ -29,6 +29,15 @@ public class PortService {
         return portRepository.listAll();
     }
 
+    public List<Port> listByType(String type) {
+        if ("origin".equals(type)) {
+            return portRepository.findByOriginPort(true);
+        } else if ("arrival".equals(type)) {
+            return portRepository.findByArrivalPort(true);
+        }
+        return portRepository.listAll();
+    }
+
     public Port findById(Long id) {
         return portRepository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Port", id));
@@ -46,6 +55,8 @@ public class PortService {
         port.description = request.description();
         port.address = request.address();
         port.country = request.country();
+        port.originPort = request.originPort() != null ? request.originPort() : true;
+        port.arrivalPort = request.arrivalPort() != null ? request.arrivalPort() : true;
         portRepository.persist(port);
         auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "Port", port.id, null, null, null, "Port created: " + port.name));
         return port;
@@ -66,6 +77,8 @@ public class PortService {
         port.description = request.description();
         port.address = request.address();
         port.country = request.country();
+        port.originPort = request.originPort() != null ? request.originPort() : port.originPort;
+        port.arrivalPort = request.arrivalPort() != null ? request.arrivalPort() : port.arrivalPort;
         auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Port", port.id, null, null, null, "Port updated: " + port.name));
         return port;
     }

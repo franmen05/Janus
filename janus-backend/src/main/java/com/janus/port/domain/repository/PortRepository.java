@@ -22,4 +22,12 @@ public class PortRepository implements PanacheRepository<Port> {
                 .map(p -> p.code)
                 .toList();
     }
+
+    public List<Port> findByOriginPort(boolean value) {
+        return list("originPort", value);
+    }
+
+    public List<Port> findByArrivalPort(boolean value) {
+        return list("arrivalPort", value);
+    }
 }

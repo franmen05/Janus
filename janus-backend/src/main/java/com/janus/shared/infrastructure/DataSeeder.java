@@ -144,18 +144,20 @@ public class DataSeeder {
     }
 
     private void seedPorts() {
-        createPort("HNPCR", "Puerto Cortés", "Principal puerto comercial de Honduras", "HN");
-        createPort("HNLCE", "La Ceiba", "Puerto de La Ceiba", "HN");
-        createPort("HNRTB", "Roatán", "Puerto de Roatán, Islas de la Bahía", "HN");
-        createPort("HNTEA", "Tela", "Puerto de Tela", "HN");
+        createPort("HNPCR", "Puerto Cortés", "Principal puerto comercial de Honduras", "HN", true, true);
+        createPort("HNLCE", "La Ceiba", "Puerto de La Ceiba", "HN", true, true);
+        createPort("HNRTB", "Roatán", "Puerto de Roatán, Islas de la Bahía", "HN", false, true);
+        createPort("HNTEA", "Tela", "Puerto de Tela", "HN", false, true);
     }
 
-    private void createPort(String code, String name, String description, String country) {
+    private void createPort(String code, String name, String description, String country, boolean originPort, boolean arrivalPort) {
         var port = new Port();
         port.code = code;
         port.name = name;
         port.description = description;
         port.country = country;
+        port.originPort = originPort;
+        port.arrivalPort = arrivalPort;
         portRepository.persist(port);
     }
 

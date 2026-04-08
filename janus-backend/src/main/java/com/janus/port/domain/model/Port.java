@@ -23,4 +23,10 @@ public class Port extends BaseEntity {
 
     @Column(length = 2)
     public String country;
+
+    @Column(nullable = false)
+    public boolean originPort = true;
+
+    @Column(nullable = false)
+    public boolean arrivalPort = true;
 }

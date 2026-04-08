@@ -10,6 +10,8 @@ public record PortResponse(
         String description,
         String address,
         String country,
+        boolean originPort,
+        boolean arrivalPort,
         LocalDateTime createdAt
 ) {
     public static PortResponse from(Port port) {
@@ -20,6 +22,8 @@ public record PortResponse(
                 port.description,
                 port.address,
                 port.country,
+                port.originPort,
+                port.arrivalPort,
                 port.createdAt
         );
     }
