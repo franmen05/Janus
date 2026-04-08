@@ -157,6 +157,15 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                 <div class="invalid-feedback">{{ 'OPERATIONS.ARRIVAL_PORT_REQUIRED' | translate }}</div>
               }
             </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ 'OPERATIONS.ORIGIN_PORT' | translate }}</label>
+              <select class="form-select" formControlName="originPortId">
+                <option value="">{{ 'OPERATIONS.SELECT_PORT' | translate }}</option>
+                @for (port of ports(); track port.id) {
+                  <option [value]="port.id">{{ port.code }} - {{ port.name }}</option>
+                }
+              </select>
+            </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
@@ -237,7 +246,8 @@ export class OperationFormComponent implements OnInit {
     notes: new FormControl('', { nonNullable: true }),
     arrivalDate: new FormControl('', { nonNullable: true }),
     incoterm: new FormControl('', { nonNullable: true }),
-    arrivalPortId: new FormControl('', { nonNullable: true, validators: [Validators.required] })
+    arrivalPortId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    originPortId: new FormControl('', { nonNullable: true })
   });
 
   searchCustomer: OperatorFunction<string, Customer[]> = (text$: Observable<string>) =>
@@ -321,7 +331,8 @@ export class OperationFormComponent implements OnInit {
           notes: op.notes ?? '',
           arrivalDate: op.arrivalDate ?? '',
           incoterm: op.incoterm ?? '',
-          arrivalPortId: op.arrivalPortId?.toString() ?? ''
+          arrivalPortId: op.arrivalPortId?.toString() ?? '',
+          originPortId: op.originPortId?.toString() ?? ''
         });
         // Disable BL Availability when operation is at or past VALUATION_REVIEW
         if (this.blAvailabilityLockedStatuses.has(op.status)) {
@@ -400,7 +411,8 @@ export class OperationFormComponent implements OnInit {
       notes: val.notes || undefined,
       arrivalDate: val.arrivalDate || undefined,
       incoterm: val.incoterm || undefined,
-      arrivalPortId: val.arrivalPortId ? +val.arrivalPortId : undefined
+      arrivalPortId: val.arrivalPortId ? +val.arrivalPortId : undefined,
+      originPortId: val.originPortId ? +val.originPortId : undefined
     };
     const obs = this.isEdit() ? this.operationService.update(this.operationId!, request) : this.operationService.create(request);
     obs.subscribe(op => this.router.navigate(['/operations', op.id]));

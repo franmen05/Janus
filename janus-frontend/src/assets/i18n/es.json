@@ -115,6 +115,7 @@
     "OPERATION_TYPE_REQUIRED": "El tipo de operaci\u00f3n es requerido",
     "ARRIVAL_PORT": "Puerto de Arribo",
     "ARRIVAL_PORT_REQUIRED": "El puerto de arribo es obligatorio",
+    "ORIGIN_PORT": "Puerto de Origen",
     "SELECT_PORT": "Seleccionar puerto...",
     "SEARCH": "Buscar por referencia, agente o cliente...",
     "ALL_TRANSPORT_MODES": "Todos los modos de transporte"
@@ -215,7 +216,9 @@
   "CUSTOMER_TYPES": {
     "COMPANY": "Empresa",
     "CONSIGNEE": "Consignatario",
-    "INDIVIDUAL": "Particular"
+    "INDIVIDUAL": "Particular",
+    "SHIPPER": "Embarcador",
+    "CARRIER": "Transportista"
   },
   "ID_DOCUMENT_TYPES": {
     "RNC": "RNC",

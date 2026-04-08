@@ -287,6 +287,7 @@ public class ValuationService {
         if (operation.customer != null) { var ignored = operation.customer.name; }
         if (operation.assignedAgent != null) { var ignored = operation.assignedAgent.fullName; }
         if (operation.arrivalPort != null) { var ignored = operation.arrivalPort.code; }
+        if (operation.originPort != null) { var ignored = operation.originPort.code; }
 
         return operation;
     }

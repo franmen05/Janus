@@ -115,6 +115,7 @@
     "OPERATION_TYPE_REQUIRED": "Operation type is required",
     "ARRIVAL_PORT": "Arrival Port",
     "ARRIVAL_PORT_REQUIRED": "Arrival port is required",
+    "ORIGIN_PORT": "Origin Port",
     "SELECT_PORT": "Select port...",
     "SEARCH": "Search by reference, agent or customer...",
     "ALL_TRANSPORT_MODES": "All transport modes"
@@ -215,7 +216,9 @@
   "CUSTOMER_TYPES": {
     "COMPANY": "Company",
     "CONSIGNEE": "Consignee",
-    "INDIVIDUAL": "Individual"
+    "INDIVIDUAL": "Individual",
+    "SHIPPER": "Shipper",
+    "CARRIER": "Carrier"
   },
   "ID_DOCUMENT_TYPES": {
     "RNC": "RNC",

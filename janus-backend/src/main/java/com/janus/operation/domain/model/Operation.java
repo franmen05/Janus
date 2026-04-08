@@ -50,6 +50,9 @@ public class Operation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     public Port arrivalPort;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Port originPort;
+
     @Column(name = "bl_number")
     public String blNumber;
 

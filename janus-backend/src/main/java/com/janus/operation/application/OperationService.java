@@ -159,6 +159,11 @@ public class OperationService {
         op.arrivalPort = portRepository.findByIdOptional(request.arrivalPortId())
                 .orElseThrow(() -> new NotFoundException("Port", request.arrivalPortId()));
 
+        if (request.originPortId() != null) {
+            op.originPort = portRepository.findByIdOptional(request.originPortId())
+                    .orElseThrow(() -> new NotFoundException("Port", request.originPortId()));
+        }
+
         op.referenceNumber = generateReferenceNumber(op.arrivalPort.code);
 
         // Validate childBlNumber (HBL) required for CONSOLIDATED BL
@@ -255,6 +260,13 @@ public class OperationService {
                     .orElseThrow(() -> new NotFoundException("Port", request.arrivalPortId()));
         }
 
+        if (request.originPortId() != null) {
+            op.originPort = portRepository.findByIdOptional(request.originPortId())
+                    .orElseThrow(() -> new NotFoundException("Port", request.originPortId()));
+        } else {
+            op.originPort = null;
+        }
+
         // Validate childBlNumber (HBL) required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
                 && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
@@ -298,6 +310,7 @@ public class OperationService {
         if (op.customer != null) { var ignored = op.customer.name; }
         if (op.assignedAgent != null) { var ignored = op.assignedAgent.fullName; }
         if (op.arrivalPort != null) { var ignored = op.arrivalPort.name; }
+        if (op.originPort != null) { var ignored = op.originPort.name; }
 
         return op;
     }
