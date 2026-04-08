@@ -211,7 +211,12 @@
     "ALREADY_LOADED": "Ya cargado",
     "SELECTED_FOR_IMPORT": "puertos seleccionados para importar",
     "IMPORT_SELECTED": "Importar Seleccionados",
-    "IMPORT_SUCCESS": "Se importaron {{imported}} puertos ({{skipped}} ya exist\u00edan)"
+    "IMPORT_SUCCESS": "Se importaron {{imported}} puertos ({{skipped}} ya exist\u00edan)",
+    "ORIGIN_PORT": "Puerto de Origen",
+    "ARRIVAL_PORT": "Puerto de Arribo",
+    "TYPE": "Tipo",
+    "BADGE_ORIGIN": "Origen",
+    "BADGE_ARRIVAL": "Arribo"
   },
   "CUSTOMER_TYPES": {
     "COMPANY": "Empresa",

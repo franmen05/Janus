@@ -9,8 +9,9 @@ export class PortService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/ports`;
 
-  getAll(): Observable<Port[]> {
-    return this.http.get<Port[]>(this.apiUrl);
+  getAll(type?: 'origin' | 'arrival'): Observable<Port[]> {
+    const url = type ? `${this.apiUrl}?type=${type}` : this.apiUrl;
+    return this.http.get<Port[]>(url);
   }
 
   getById(id: number): Observable<Port> {

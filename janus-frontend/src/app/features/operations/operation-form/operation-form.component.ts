@@ -149,7 +149,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
               <select class="form-select" formControlName="arrivalPortId"
                       [class.is-invalid]="form.get('arrivalPortId')!.invalid && form.get('arrivalPortId')!.touched">
                 <option value="">{{ 'OPERATIONS.SELECT_PORT' | translate }}</option>
-                @for (port of ports(); track port.id) {
+                @for (port of arrivalPorts(); track port.id) {
                   <option [value]="port.id">{{ port.code }} - {{ port.name }}</option>
                 }
               </select>
@@ -161,7 +161,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
               <label class="form-label">{{ 'OPERATIONS.ORIGIN_PORT' | translate }}</label>
               <select class="form-select" formControlName="originPortId">
                 <option value="">{{ 'OPERATIONS.SELECT_PORT' | translate }}</option>
-                @for (port of ports(); track port.id) {
+                @for (port of originPorts(); track port.id) {
                   <option [value]="port.id">{{ port.code }} - {{ port.name }}</option>
                 }
               </select>
@@ -214,7 +214,8 @@ export class OperationFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   customers = signal<Customer[]>([]);
-  ports = signal<Port[]>([]);
+  arrivalPorts = signal<Port[]>([]);
+  originPorts = signal<Port[]>([]);
   isEdit = signal(false);
   operationId: number | null = null;
   selectedCustomer = signal<Customer | null>(null);
@@ -308,10 +309,12 @@ export class OperationFormComponent implements OnInit {
       forkJoin({
         customers: this.customerService.getAll(),
         operation: this.operationService.getById(+id),
-        ports: this.portService.getAll()
-      }).subscribe(({ customers, operation: op, ports }) => {
+        arrivalPorts: this.portService.getAll('arrival'),
+        originPorts: this.portService.getAll('origin')
+      }).subscribe(({ customers, operation: op, arrivalPorts, originPorts }) => {
         this.customers.set(customers);
-        this.ports.set(ports);
+        this.arrivalPorts.set(arrivalPorts);
+        this.originPorts.set(originPorts);
         if (op.status === 'CLOSED' || op.status === 'CANCELLED') {
           this.router.navigate(['/operations', op.id]);
           return;
@@ -348,7 +351,13 @@ export class OperationFormComponent implements OnInit {
       });
     } else {
       // Not editing: just load clients for the typeahead and ports
-      this.portService.getAll().subscribe(ports => this.ports.set(ports));
+      forkJoin({
+        arrivalPorts: this.portService.getAll('arrival'),
+        originPorts: this.portService.getAll('origin')
+      }).subscribe(({ arrivalPorts, originPorts }) => {
+        this.arrivalPorts.set(arrivalPorts);
+        this.originPorts.set(originPorts);
+      });
       this.customerService.getAll().subscribe(customers => {
         this.customers.set(customers);
         const customerIdParam = this.route.snapshot.queryParamMap.get('customerId');

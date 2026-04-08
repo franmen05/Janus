@@ -41,6 +41,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
               <th>{{ 'PORTS.CODE' | translate }}</th>
               <th>{{ 'PORTS.NAME' | translate }}</th>
               <th>{{ 'PORTS.COUNTRY' | translate }}</th>
+              <th>{{ 'PORTS.TYPE' | translate }}</th>
               <th class="d-none d-md-table-cell">{{ 'PORTS.DESCRIPTION' | translate }}</th>
               <th class="d-none d-md-table-cell">{{ 'PORTS.ADDRESS' | translate }}</th>
               <th>{{ 'COMMON.ACTIONS' | translate }}</th>
@@ -52,6 +53,14 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                 <td class="fw-bold">{{ port.code }}</td>
                 <td>{{ port.name }}</td>
                 <td>{{ port.country ?? '-' }}</td>
+                <td>
+                  @if (port.originPort) {
+                    <span class="badge bg-info me-1">{{ 'PORTS.BADGE_ORIGIN' | translate }}</span>
+                  }
+                  @if (port.arrivalPort) {
+                    <span class="badge bg-success">{{ 'PORTS.BADGE_ARRIVAL' | translate }}</span>
+                  }
+                </td>
                 <td class="d-none d-md-table-cell text-truncate" style="max-width: 300px;" [title]="port.description ?? ''">{{ port.description ?? '-' }}</td>
                 <td class="d-none d-md-table-cell">{{ port.address ?? '-' }}</td>
                 <td>
@@ -62,7 +71,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
               </tr>
             }
             @empty {
-              <tr><td colspan="6" class="text-center text-muted py-3">{{ 'PORTS.NO_PORTS' | translate }}</td></tr>
+              <tr><td colspan="7" class="text-center text-muted py-3">{{ 'PORTS.NO_PORTS' | translate }}</td></tr>
             }
           </tbody>
         </table>

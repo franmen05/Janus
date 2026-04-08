@@ -5,6 +5,8 @@ export interface Port {
   description: string | null;
   address: string | null;
   country: string | null;
+  originPort: boolean;
+  arrivalPort: boolean;
   createdAt: string;
 }
 
@@ -14,6 +16,8 @@ export interface CreatePortRequest {
   description?: string;
   address?: string;
   country?: string;
+  originPort?: boolean;
+  arrivalPort?: boolean;
 }
 
 export interface CatalogCountry {

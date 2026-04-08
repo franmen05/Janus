@@ -39,6 +39,20 @@ import { PortService } from '../../../core/services/port.service';
             <label class="form-label">{{ 'PORTS.DESCRIPTION' | translate }}</label>
             <textarea class="form-control" formControlName="description" rows="2"></textarea>
           </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" formControlName="originPort" id="originPort">
+                <label class="form-check-label" for="originPort">{{ 'PORTS.ORIGIN_PORT' | translate }}</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" formControlName="arrivalPort" id="arrivalPort">
+                <label class="form-check-label" for="arrivalPort">{{ 'PORTS.ARRIVAL_PORT' | translate }}</label>
+              </div>
+            </div>
+          </div>
           <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ (isEdit() ? 'ACTIONS.UPDATE' : 'ACTIONS.CREATE') | translate }}</button>
             <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">{{ 'ACTIONS.CANCEL' | translate }}</button>
@@ -61,7 +75,9 @@ export class PortFormComponent implements OnInit {
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true }),
     address: new FormControl('', { nonNullable: true }),
-    country: new FormControl('', { nonNullable: true })
+    country: new FormControl('', { nonNullable: true }),
+    originPort: new FormControl(true, { nonNullable: true }),
+    arrivalPort: new FormControl(true, { nonNullable: true })
   });
 
   ngOnInit(): void {
@@ -70,7 +86,7 @@ export class PortFormComponent implements OnInit {
       this.isEdit.set(true);
       this.portId = +id;
       this.portService.getById(+id).subscribe(p => {
-        this.form.patchValue({ code: p.code, name: p.name, description: p.description ?? '', address: p.address ?? '', country: p.country ?? '' });
+        this.form.patchValue({ code: p.code, name: p.name, description: p.description ?? '', address: p.address ?? '', country: p.country ?? '', originPort: p.originPort, arrivalPort: p.arrivalPort });
       });
     }
   }
@@ -78,7 +94,7 @@ export class PortFormComponent implements OnInit {
   onSubmit(): void {
     if (this.form.invalid) return;
     const val = this.form.getRawValue();
-    const request = { code: val.code, name: val.name, description: val.description || undefined, address: val.address || undefined, country: val.country || undefined };
+    const request = { code: val.code, name: val.name, description: val.description || undefined, address: val.address || undefined, country: val.country || undefined, originPort: val.originPort, arrivalPort: val.arrivalPort };
     const obs = this.isEdit() ? this.portService.update(this.portId!, request) : this.portService.create(request);
     obs.subscribe(() => this.router.navigate(['/ports']));
   }
