@@ -463,7 +463,7 @@ export class PaymentPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.customerService.getAll().subscribe(c => this.customers.set(c));
+    this.customerService.getAll(0, 9999).subscribe(response => this.customers.set(response.content));
   }
 
   loadData(): void {

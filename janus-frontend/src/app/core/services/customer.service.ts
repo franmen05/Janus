@@ -1,16 +1,21 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Customer, CreateCustomerRequest, CustomerContact, CreateCustomerContactRequest } from '../models/customer.model';
+import { PageResponse } from '../models/page.model';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/customers`;
 
-  getAll(): Observable<Customer[]> {
-    return this.http.get<Customer[]>(this.apiUrl);
+  getAll(page = 0, size = 10, search?: string): Observable<PageResponse<Customer>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    if (search) params = params.set('search', search);
+    return this.http.get<PageResponse<Customer>>(this.apiUrl, { params });
   }
 
   getById(id: number): Observable<Customer> {

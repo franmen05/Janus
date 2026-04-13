@@ -159,7 +159,8 @@ export class UserFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.customerService.getAll().subscribe(customers => {
+    this.customerService.getAll(0, 9999).subscribe(response => {
+      const customers = response.content;
       this.customers.set(customers);
 
       const id = this.route.snapshot.paramMap.get('id');
@@ -177,7 +178,7 @@ export class UserFormComponent implements OnInit {
             customerId: u.customerId
           });
           if (u.customerId) {
-            const customer = customers.find(c => c.id === u.customerId);
+            const customer = customers.find((c: Customer) => c.id === u.customerId);
             if (customer) {
               this.selectedCustomer.set(customer);
               this.selectedCustomerDisplay.set(customer.name);

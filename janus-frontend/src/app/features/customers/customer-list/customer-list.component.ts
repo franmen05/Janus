@@ -1,5 +1,6 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-
+import { Component, inject, OnInit, OnDestroy, signal, computed } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,11 +8,12 @@ import { CustomerService } from '../../../core/services/customer.service';
 import { Customer, CustomerType } from '../../../core/models/customer.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-customer-list',
   standalone: true,
-  imports: [RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent],
+  imports: [RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent, PaginationComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'CUSTOMERS.TITLE' | translate }}</h2>
@@ -29,7 +31,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
             <input type="text" class="form-control"
                    [placeholder]="'CUSTOMERS.SEARCH' | translate"
                    [ngModel]="searchTerm()"
-                   (ngModelChange)="searchTerm.set($event)">
+                   (ngModelChange)="onSearch($event)">
           </div>
           <div class="col-md-4">
             <select class="form-select"
@@ -77,40 +79,80 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           </tbody>
         </table>
       </div>
+      <app-pagination
+        [currentPage]="currentPage()"
+        [pageSize]="pageSize"
+        [totalElements]="totalElements()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)" />
     </div>
     }
   `
 })
-export class CustomerListComponent implements OnInit {
+export class CustomerListComponent implements OnInit, OnDestroy {
   private customerService = inject(CustomerService);
   private router = inject(Router);
   authService = inject(AuthService);
+
   loading = signal(true);
   customers = signal<Customer[]>([]);
   searchTerm = signal('');
   selectedType = signal('');
+  currentPage = signal(1);
+  pageSize = 10;
+  totalElements = signal(0);
+  totalPages = signal(0);
+
   customerTypes = Object.values(CustomerType);
+
+  private searchSubject = new Subject<string>();
+  private searchSubscription?: Subscription;
+
   filteredCustomers = computed(() => {
-    const term = this.searchTerm().toLowerCase();
     const type = this.selectedType();
-    return this.customers().filter(c => {
-      const matchesTerm = !term ||
-        c.name.toLowerCase().includes(term) ||
-        c.taxId.toLowerCase().includes(term) ||
-        (c.customerCode?.toLowerCase().includes(term) ?? false);
-      const matchesType = !type || c.customerType === type;
-      return matchesTerm && matchesType;
-    });
+    return this.customers().filter(c => !type || c.customerType === type);
   });
+
+  ngOnInit(): void {
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.currentPage.set(1);
+      this.loadCustomers();
+    });
+    this.loadCustomers();
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
+  }
+
+  private loadCustomers(): void {
+    this.loading.set(true);
+    const search = this.searchTerm() || undefined;
+    this.customerService.getAll(this.currentPage() - 1, this.pageSize, search).subscribe({
+      next: response => {
+        this.customers.set(response.content);
+        this.totalElements.set(response.totalElements);
+        this.totalPages.set(response.totalPages);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false)
+    });
+  }
+
+  onSearch(term: string): void {
+    this.searchTerm.set(term);
+    this.searchSubject.next(term);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
+    this.loadCustomers();
+  }
 
   goToDetail(id: number): void {
     this.router.navigate(['/customers', id, 'edit']);
-  }
-
-  ngOnInit(): void {
-    this.customerService.getAll().subscribe(customers => {
-      this.customers.set(customers);
-      this.loading.set(false);
-    });
   }
 }

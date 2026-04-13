@@ -370,12 +370,13 @@ export class OperationFormComponent implements OnInit {
       this.operationId = +id;
       // Use forkJoin to ensure both clients and operation are loaded before client lookup
       forkJoin({
-        customers: this.customerService.getAll(),
+        customersPage: this.customerService.getAll(0, 9999),
         operation: this.operationService.getById(+id),
         arrivalPorts: this.portService.getAll('arrival'),
         originPorts: this.portService.getAll('origin'),
         depositos: this.depositoService.getAll()
-      }).subscribe(({ customers, operation: op, arrivalPorts, originPorts, depositos }) => {
+      }).subscribe(({ customersPage, operation: op, arrivalPorts, originPorts, depositos }) => {
+        const customers = customersPage.content;
         this.customers.set(customers);
         this.arrivalPorts.set(arrivalPorts);
         this.originPorts.set(originPorts);
@@ -433,11 +434,12 @@ export class OperationFormComponent implements OnInit {
         this.originPorts.set(originPorts);
         this.depositos.set(depositos);
       });
-      this.customerService.getAll().subscribe(customers => {
+      this.customerService.getAll(0, 9999).subscribe(response => {
+        const customers = response.content;
         this.customers.set(customers);
         const customerIdParam = this.route.snapshot.queryParamMap.get('customerId');
         if (customerIdParam) {
-          const customer = customers.find(c => c.id === +customerIdParam);
+          const customer = customers.find((c: Customer) => c.id === +customerIdParam);
           if (customer) {
             this.selectedCustomer.set(customer);
             this.selectedCustomerDisplay.set(customer.name);
