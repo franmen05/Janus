@@ -15,7 +15,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'DEPOSITOS.TITLE' | translate }}</h2>
-      @if (authService.hasRole(['SUPERVISOR'])) {
+      @if (authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
         <div class="d-flex gap-2">
           <a routerLink="/depositos/new" class="btn btn-primary">{{ 'DEPOSITOS.NEW' | translate }}</a>
         </div>
@@ -48,7 +48,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                 <td>{{ dep.name }}</td>
                 <td class="d-none d-md-table-cell text-truncate" style="max-width: 300px;" [title]="dep.description ?? ''">{{ dep.description ?? '-' }}</td>
                 <td>
-                  @if (authService.hasRole(['SUPERVISOR'])) {
+                  @if (authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
                     <a [routerLink]="['/depositos', dep.id, 'edit']" class="btn btn-sm btn-outline-primary">{{ 'ACTIONS.EDIT' | translate }}</a>
                   }
                 </td>
