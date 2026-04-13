@@ -81,6 +81,7 @@ public class OperationRepository implements PanacheRepository<Operation> {
         }
         if (search != null && !search.isBlank()) {
             clauses.add("(LOWER(referenceNumber) LIKE ?" + paramIndex + " OR LOWER(customer.name) LIKE ?" + paramIndex + " OR LOWER(blNumber) LIKE ?" + paramIndex + ")");
+            paramIndex++;
         }
         return clauses;
     }
