@@ -86,6 +86,9 @@ export interface Operation {
   originPortId?: number | null;
   originPortCode?: string | null;
   originPortName?: string | null;
+  depositoId?: number | null;
+  depositoCode?: string | null;
+  depositoName?: string | null;
   createdAt: string;
   updatedAt: string;
   pieces?: number | null;
@@ -113,6 +116,7 @@ export interface CreateOperationRequest {
   incoterm?: string;
   arrivalPortId?: number;
   originPortId?: number;
+  depositoId?: number;
 }
 
 export interface ChangeStatusRequest {

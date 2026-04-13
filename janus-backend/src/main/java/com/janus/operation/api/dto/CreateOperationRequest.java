@@ -26,5 +26,6 @@ public record CreateOperationRequest(
         BlType blType,
         String childBlNumber,
         @NotNull Long arrivalPortId,
-        Long originPortId
+        Long originPortId,
+        Long depositoId
 ) {}

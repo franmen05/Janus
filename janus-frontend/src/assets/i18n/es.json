@@ -22,7 +22,8 @@
     "EXPENSE_CATEGORIES": "Categor\u00edas de Gastos",
     "COLLAPSE_SIDEBAR": "Contraer",
     "EXPAND_SIDEBAR": "Expandir",
-    "API_KEYS": "Claves API"
+    "API_KEYS": "Claves API",
+    "DEPOSITOS": "Depósitos"
   },
   "LOGIN": {
     "USERNAME": "Usuario",
@@ -118,7 +119,9 @@
     "ORIGIN_PORT": "Puerto de Origen",
     "SELECT_PORT": "Seleccionar puerto...",
     "SEARCH": "Buscar por referencia, agente o cliente...",
-    "ALL_TRANSPORT_MODES": "Todos los modos de transporte"
+    "ALL_TRANSPORT_MODES": "Todos los modos de transporte",
+    "DEPOSITO": "Depósito",
+    "SELECT_DEPOSITO": "Buscar depósito por código o nombre..."
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
@@ -217,6 +220,17 @@
     "TYPE": "Tipo",
     "BADGE_ORIGIN": "Origen",
     "BADGE_ARRIVAL": "Arribo"
+  },
+  "DEPOSITOS": {
+    "TITLE": "Depósitos",
+    "NEW": "Nuevo Depósito",
+    "EDIT_TITLE": "Editar Depósito",
+    "NEW_TITLE": "Nuevo Depósito",
+    "CODE": "Código",
+    "NAME": "Nombre",
+    "DESCRIPTION": "Descripción",
+    "SEARCH": "Buscar por código o nombre...",
+    "NO_DEPOSITOS": "No se encontraron depósitos"
   },
   "CUSTOMER_TYPES": {
     "COMPANY": "Empresa",

@@ -81,6 +81,18 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
                 }
               </a>
             </li>
+            @if (authService.hasRole(['SUPERVISOR'])) {
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/depositos" routerLinkActive="active"
+                   [ngbTooltip]="sidebarService.collapsed() ? ('NAV.DEPOSITOS' | translate) : null"
+                   placement="end" container="body">
+                  <i class="bi bi-building"></i>
+                  @if (!sidebarService.collapsed()) {
+                    <span>{{ 'NAV.DEPOSITOS' | translate }}</span>
+                  }
+                </a>
+              </li>
+            }
           </ul>
         }
 

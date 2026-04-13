@@ -23,6 +23,7 @@ import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.model.StatusHistory;
 import com.janus.operation.domain.model.CargoType;
 import com.janus.operation.domain.model.TransportMode;
+import com.janus.deposito.domain.repository.DepositoRepository;
 import com.janus.port.domain.repository.PortRepository;
 import com.janus.operation.domain.repository.OperationRepository;
 import com.janus.operation.domain.repository.StatusHistoryRepository;
@@ -72,6 +73,9 @@ public class OperationService {
 
     @Inject
     PortRepository portRepository;
+
+    @Inject
+    DepositoRepository depositoRepository;
 
     @Inject
     AlertRepository alertRepository;
@@ -162,6 +166,11 @@ public class OperationService {
         if (request.originPortId() != null) {
             op.originPort = portRepository.findByIdOptional(request.originPortId())
                     .orElseThrow(() -> new NotFoundException("Port", request.originPortId()));
+        }
+
+        if (request.depositoId() != null) {
+            op.deposito = depositoRepository.findByIdOptional(request.depositoId())
+                    .orElseThrow(() -> new NotFoundException("Deposito", request.depositoId()));
         }
 
         op.referenceNumber = generateReferenceNumber(op.arrivalPort.code);
@@ -267,6 +276,13 @@ public class OperationService {
             op.originPort = null;
         }
 
+        if (request.depositoId() != null) {
+            op.deposito = depositoRepository.findByIdOptional(request.depositoId())
+                    .orElseThrow(() -> new NotFoundException("Deposito", request.depositoId()));
+        } else {
+            op.deposito = null;
+        }
+
         // Validate childBlNumber (HBL) required for CONSOLIDATED BL
         if (op.blType == BlType.CONSOLIDATED
                 && (op.childBlNumber == null || op.childBlNumber.isBlank())) {
@@ -311,6 +327,7 @@ public class OperationService {
         if (op.assignedAgent != null) { var ignored = op.assignedAgent.fullName; }
         if (op.arrivalPort != null) { var ignored = op.arrivalPort.name; }
         if (op.originPort != null) { var ignored = op.originPort.name; }
+        if (op.deposito != null) { var ignored = op.deposito.name; }
 
         return op;
     }
