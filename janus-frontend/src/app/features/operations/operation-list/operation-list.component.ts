@@ -1,4 +1,6 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, OnDestroy, signal } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -9,11 +11,12 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-operation-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe, LoadingIndicatorComponent],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule, StatusBadgeComponent, StatusLabelPipe, LoadingIndicatorComponent, PaginationComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'OPERATIONS.TITLE' | translate }}</h2>
@@ -28,7 +31,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-4">
-              <input type="text" class="form-control" [placeholder]="'OPERATIONS.SEARCH' | translate" [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)">
+              <input type="text" class="form-control" [placeholder]="'OPERATIONS.SEARCH' | translate" [ngModel]="searchTerm()" (ngModelChange)="onSearch($event)">
             </div>
             <div class="col-md-4">
               <select class="form-select" [(ngModel)]="filterStatus" (ngModelChange)="onFilterChange()">
@@ -81,15 +84,22 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           </table>
           </div>
         </div>
+        <app-pagination
+          [currentPage]="currentPage()"
+          [pageSize]="pageSize"
+          [totalElements]="totalElements()"
+          [totalPages]="totalPages()"
+          (pageChange)="onPageChange($event)" />
       </div>
     }
   `
 })
-export class OperationListComponent implements OnInit {
+export class OperationListComponent implements OnInit, OnDestroy {
   private operationService = inject(OperationService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   authService = inject(AuthService);
+
   loading = signal(true);
   operations = signal<Operation[]>([]);
   filterStatus = '';
@@ -98,21 +108,19 @@ export class OperationListComponent implements OnInit {
   searchTerm = signal('');
   selectedTransport = signal('');
   transportModes = Object.values(TransportMode);
+
+  currentPage = signal(1);
+  pageSize = 10;
+  totalElements = signal(0);
+  totalPages = signal(0);
+
+  private searchSubject = new Subject<string>();
+  private searchSubscription?: Subscription;
+
   filteredOperations = computed(() => {
-    let ops = this.operations();
-    const term = this.searchTerm().toLowerCase();
     const transport = this.selectedTransport();
-    if (term) {
-      ops = ops.filter(op =>
-        op.referenceNumber.toLowerCase().includes(term) ||
-        op.customerName.toLowerCase().includes(term) ||
-        (op.assignedAgentName && op.assignedAgentName.toLowerCase().includes(term))
-      );
-    }
-    if (transport) {
-      ops = ops.filter(op => op.transportMode === transport);
-    }
-    return ops;
+    if (!transport) return this.operations();
+    return this.operations().filter(op => op.transportMode === transport);
   });
 
   ngOnInit(): void {
@@ -123,41 +131,80 @@ export class OperationListComponent implements OnInit {
     } else if (filterParam) {
       this.activeFilter = filterParam;
     }
+
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.currentPage.set(1);
+      this.loadOperations();
+    });
+
     this.loadOperations();
   }
 
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
+  }
+
   loadOperations(): void {
+    this.loading.set(true);
     if (this.activeFilter) {
-      this.operationService.getAll().subscribe(ops => {
-        if (this.activeFilter === 'active') {
-          const excluded = new Set(['CLOSED', 'CANCELLED', 'DRAFT']);
-          this.operations.set(ops.filter(o => !excluded.has(o.status)));
-        } else if (this.activeFilter === 'overdue') {
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          this.operations.set(ops.filter(o =>
-            o.status !== 'CLOSED' && o.status !== 'CANCELLED' &&
-            o.arrivalDate != null && new Date(o.arrivalDate) < today
-          ));
-        }
-        this.loading.set(false);
+      this.operationService.getAll(undefined, undefined, undefined, 0, 9999).subscribe({
+        next: response => {
+          let ops = response.content;
+          if (this.activeFilter === 'active') {
+            const excluded = new Set(['CLOSED', 'CANCELLED', 'DRAFT']);
+            ops = ops.filter(o => !excluded.has(o.status));
+          } else if (this.activeFilter === 'overdue') {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            ops = ops.filter(o =>
+              o.status !== 'CLOSED' && o.status !== 'CANCELLED' &&
+              o.arrivalDate != null && new Date(o.arrivalDate) < today
+            );
+          }
+          this.operations.set(ops);
+          this.totalElements.set(ops.length);
+          this.totalPages.set(1);
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false)
       });
     } else {
-      this.operationService.getAll(this.filterStatus || undefined).subscribe(ops => {
-        this.operations.set(ops);
-        this.loading.set(false);
+      const search = this.searchTerm() || undefined;
+      this.operationService.getAll(this.filterStatus || undefined, undefined, search, this.currentPage() - 1, this.pageSize).subscribe({
+        next: response => {
+          this.operations.set(response.content);
+          this.totalElements.set(response.totalElements);
+          this.totalPages.set(response.totalPages);
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false)
       });
     }
   }
 
+  onSearch(term: string): void {
+    this.searchTerm.set(term);
+    this.searchSubject.next(term);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
+    this.loadOperations();
+  }
+
   onFilterChange(): void {
     this.activeFilter = '';
+    this.currentPage.set(1);
     this.loadOperations();
   }
 
   clearFilter(): void {
     this.activeFilter = '';
     this.filterStatus = '';
+    this.currentPage.set(1);
     this.loadOperations();
     this.router.navigate(['/operations']);
   }

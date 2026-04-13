@@ -91,10 +91,11 @@ export class DashboardComponent implements OnInit {
   }
 
   loadData(): void {
-    this.operationService.getAll().subscribe(ops => {
+    this.operationService.getAll(undefined, undefined, undefined, 0, 9999).subscribe(response => {
+      const ops = response.content;
       this.recentOperations.set(ops.slice(0, 10));
-      this.activeCount.set(ops.filter(o => o.status !== OperationStatus.CLOSED && o.status !== OperationStatus.CANCELLED && o.status !== OperationStatus.DRAFT).length);
-      this.closedCount.set(ops.filter(o => o.status === OperationStatus.CLOSED).length);
+      this.activeCount.set(ops.filter((o: Operation) => o.status !== OperationStatus.CLOSED && o.status !== OperationStatus.CANCELLED && o.status !== OperationStatus.DRAFT).length);
+      this.closedCount.set(ops.filter((o: Operation) => o.status === OperationStatus.CLOSED).length);
       this.loading.set(false);
     });
 

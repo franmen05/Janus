@@ -4,17 +4,21 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Operation, CreateOperationRequest, ChangeStatusRequest, StatusHistory } from '../models/operation.model';
 import { CompletenessResponse } from '../models/document.model';
+import { PageResponse } from '../models/page.model';
 
 @Injectable({ providedIn: 'root' })
 export class OperationService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/operations`;
 
-  getAll(status?: string, customerId?: number): Observable<Operation[]> {
-    let params = new HttpParams();
+  getAll(status?: string, customerId?: number, search?: string, page = 0, size = 10): Observable<PageResponse<Operation>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
     if (status) params = params.set('status', status);
     if (customerId) params = params.set('customerId', customerId.toString());
-    return this.http.get<Operation[]>(this.apiUrl, { params });
+    if (search) params = params.set('search', search);
+    return this.http.get<PageResponse<Operation>>(this.apiUrl, { params });
   }
 
   getById(id: number): Observable<Operation> {
