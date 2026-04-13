@@ -7,11 +7,13 @@ import com.janus.exchangerate.api.dto.CreateExchangeRateRequest;
 import com.janus.exchangerate.api.dto.ExchangeRateResponse;
 import com.janus.exchangerate.application.ExchangeRateService;
 import com.janus.exchangerate.infrastructure.ExchangeRateScheduler;
+import com.janus.shared.api.dto.PageResponse;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -43,10 +45,10 @@ public class ExchangeRateResource {
 
     @GET
     @RolesAllowed("ADMIN")
-    public List<ExchangeRateResponse> list() {
-        return exchangeRateService.listAll().stream()
-                .map(ExchangeRateResponse::from)
-                .toList();
+    public PageResponse<ExchangeRateResponse> list(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("10") int size) {
+        return exchangeRateService.listPaginated(page, size);
     }
 
     @GET

@@ -2,6 +2,7 @@ package com.janus.exchangerate.domain.repository;
 
 import com.janus.exchangerate.domain.model.ExchangeRate;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,5 +28,15 @@ public class ExchangeRateRepository implements PanacheRepository<ExchangeRate> {
 
     public List<ExchangeRate> listAllOrdered() {
         return list("order by effectiveDate desc, createdAt desc");
+    }
+
+    public List<ExchangeRate> listPaginated(int page, int size) {
+        return find("order by effectiveDate desc, createdAt desc")
+                .page(Page.of(page, size))
+                .list();
+    }
+
+    public long countAll() {
+        return count();
     }
 }

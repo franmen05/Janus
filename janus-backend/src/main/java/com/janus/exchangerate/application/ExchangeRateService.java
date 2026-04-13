@@ -2,9 +2,11 @@ package com.janus.exchangerate.application;
 
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
+import com.janus.exchangerate.api.dto.ExchangeRateResponse;
 import com.janus.exchangerate.domain.model.ExchangeRate;
 import com.janus.exchangerate.domain.repository.ExchangeRateRepository;
 import com.janus.exchangerate.infrastructure.ExternalRateService;
+import com.janus.shared.api.dto.PageResponse;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.NotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,6 +31,13 @@ public class ExchangeRateService {
 
     public List<ExchangeRate> listAll() {
         return exchangeRateRepository.listAllOrdered();
+    }
+
+    public PageResponse<ExchangeRateResponse> listPaginated(int page, int size) {
+        var rates = exchangeRateRepository.listPaginated(page, size);
+        var total = exchangeRateRepository.countAll();
+        var content = rates.stream().map(ExchangeRateResponse::from).toList();
+        return PageResponse.of(content, page, size, total);
     }
 
     public ExchangeRate findById(Long id) {
