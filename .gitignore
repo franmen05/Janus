@@ -12,3 +12,6 @@
 # Editor-based HTTP Client requests
 /janus-backend/httpRequests/
 /janus-backend/.idea/
+
+# Screenshots from functional testing
+screenshots/

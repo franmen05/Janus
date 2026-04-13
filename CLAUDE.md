@@ -59,10 +59,13 @@ User Request
     │   └─ Explore Agent
     │
     ├─ Complex feature needing design?
-    │   └─ EnterPlanMode → then spawn agents
+    │   └─ EnterPlanMode → then spawn agents → Functional Testing Agent
     │
     ├─ Matches a Skill trigger? (see §Skills)
     │   └─ Skill tool
+    │
+    ├─ Plan mode complete, needs browser verification?
+    │   └─ Functional Testing Agent (automatic — always runs after plan mode impl)
     │
     └─ Commit, PR, quick question?
         └─ Main context (only exception)
@@ -132,6 +135,46 @@ Task: [describe task]
 **When:** Understanding features, investigating bugs, finding usages, tracing data flow, research before planning.
 
 No special template — describe what you're looking for.
+
+### Functional Testing Agent
+**Type:** `general-purpose`
+**Model:** `sonnet`
+
+**When:** After implementation is complete and the feature needs browser-based functional verification. Handles Playwright MCP interactions, browser recovery, and test evidence collection.
+
+**Prompt template:**
+```
+You are a functional testing agent for the Janus project.
+You test features using Playwright MCP browser tools against http://localhost:4200.
+
+Available tools: browser_navigate, browser_click, browser_fill_form, browser_select_option,
+browser_snapshot, browser_take_screenshot, browser_press_key, browser_hover, browser_close.
+
+## Screenshots
+All screenshots MUST be saved to the `screenshots/` folder at the project root.
+Use descriptive names: `screenshots/{feature}-{step}-{description}.png`
+Example: `screenshots/operations-01-list-page.png`, `screenshots/operations-02-form-filled.png`
+
+## Browser Recovery Protocol
+If the browser becomes unresponsive (navigation hangs, actions timeout, or tools return errors):
+1. Call browser_close to force-close the browser
+2. Wait briefly, then call browser_navigate to reopen and navigate fresh
+3. Retry the failed test step from the beginning of the flow
+
+## Test Execution
+Task: [describe what to test — pages, flows, and expected behavior]
+
+Context: [what was changed, affected areas to verify, regression risks]
+
+Steps:
+1. Navigate to the affected page(s)
+2. Execute the test plan: interact with UI elements, fill forms, verify content
+3. Take screenshots as evidence at each key step
+4. If a test fails or browser hangs, apply the Browser Recovery Protocol and retry
+5. Test ALL affected areas, not just the directly changed feature
+
+Report: test results (pass/fail per area), screenshots taken, any issues found.
+```
 
 ---
 
@@ -236,7 +279,9 @@ When infra changes affect app configuration:
 
 **Every plan must include a "Functional Testing" section.** Functional tests are executed using **Playwright MCP tools** (browser automation), NOT curl or manual API calls. Always test all affected areas — not just the feature directly changed.
 
-**Tool:** Playwright MCP (available as `mcp__plugin_playwright_playwright__browser_*` tools). Functional tests are delegated to a **sonnet-model sub-agent** (`model: "sonnet"`) to optimize cost while maintaining test quality. The sub-agent receives the test plan and executes all Playwright interactions.
+**Tool:** Playwright MCP (available as `mcp__plugin_playwright_playwright__browser_*` tools). Functional tests are **always delegated to the Functional Testing Agent** (see Sub-Agent Definitions). This agent runs with `model: "sonnet"` to optimize cost while maintaining test quality. It includes browser recovery logic (close and reopen) for unresponsive browsers.
+
+**Activation:** This protocol is **mandatory in every plan mode execution** that involves implementation. After all implementation agents complete, the orchestrator MUST spawn the Functional Testing Agent with the test plan before marking the task as complete.
 
 ```
 1. IMPACT ANALYSIS → after defining the implementation steps, identify:
