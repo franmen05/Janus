@@ -1,7 +1,9 @@
 export enum CustomerType {
   COMPANY = 'COMPANY',
   CONSIGNEE = 'CONSIGNEE',
-  INDIVIDUAL = 'INDIVIDUAL'
+  INDIVIDUAL = 'INDIVIDUAL',
+  SHIPPER = 'SHIPPER',
+  CARRIER = 'CARRIER'
 }
 
 export type DocumentType = 'RNC' | 'CEDULA' | 'PASSPORT';
