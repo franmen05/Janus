@@ -24,9 +24,6 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         <a routerLink="/operations/new" class="btn btn-primary">{{ 'OPERATIONS.NEW' | translate }}</a>
       }
     </div>
-    @if (loading()) {
-      <app-loading-indicator />
-    } @else {
       <div class="card mb-3">
         <div class="card-body">
           <div class="row g-3">
@@ -59,6 +56,9 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         </div>
       </div>
       <div class="card">
+        @if (loading()) {
+          <div class="card-body"><app-loading-indicator /></div>
+        } @else {
         <div class="card-body p-0">
           <div class="table-responsive">
           <table class="table table-hover mb-0">
@@ -90,8 +90,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
           [totalElements]="totalElements()"
           [totalPages]="totalPages()"
           (pageChange)="onPageChange($event)" />
+        }
       </div>
-    }
   `
 })
 export class OperationListComponent implements OnInit, OnDestroy {
@@ -133,7 +133,7 @@ export class OperationListComponent implements OnInit, OnDestroy {
     }
 
     this.searchSubscription = this.searchSubject.pipe(
-      debounceTime(300),
+      debounceTime(1000),
       distinctUntilChanged()
     ).subscribe(() => {
       this.currentPage.set(1);

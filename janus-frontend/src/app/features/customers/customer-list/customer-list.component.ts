@@ -21,9 +21,6 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         <a routerLink="/customers/new" class="btn btn-primary">{{ 'CUSTOMERS.NEW' | translate }}</a>
       }
     </div>
-    @if (loading()) {
-      <app-loading-indicator />
-    } @else {
     <div class="card">
       <div class="card-header">
         <div class="row g-2">
@@ -46,6 +43,9 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
           </div>
         </div>
       </div>
+      @if (loading()) {
+        <div class="card-body"><app-loading-indicator /></div>
+      } @else {
       <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
           <thead class="table-light">
@@ -85,8 +85,8 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         [totalElements]="totalElements()"
         [totalPages]="totalPages()"
         (pageChange)="onPageChange($event)" />
+      }
     </div>
-    }
   `
 })
 export class CustomerListComponent implements OnInit, OnDestroy {
@@ -115,7 +115,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.searchSubscription = this.searchSubject.pipe(
-      debounceTime(300),
+      debounceTime(1000),
       distinctUntilChanged()
     ).subscribe(() => {
       this.currentPage.set(1);
