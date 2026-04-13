@@ -9,6 +9,7 @@ import com.janus.inspection.domain.repository.ServiceConfigRepository;
 import com.janus.inspection.domain.repository.InspectionExpenseRepository;
 import com.janus.inspection.domain.model.ServiceModule;
 import com.janus.shared.infrastructure.exception.BusinessException;
+import com.janus.shared.infrastructure.exception.NotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -61,7 +62,7 @@ public class ServiceConfigService {
     @Transactional
     public ServiceConfig update(Long id, UpdateServiceRequest request, String username) {
         var config = repository.findByIdOptional(id)
-                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Service not found"));
+                .orElseThrow(() -> new NotFoundException("ServiceConfig", id));
 
         config.labelEs = request.labelEs();
         config.labelEn = request.labelEn();
@@ -79,7 +80,7 @@ public class ServiceConfigService {
     @Transactional
     public ServiceConfig toggleActive(Long id, String username) {
         var config = repository.findByIdOptional(id)
-                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Service not found"));
+                .orElseThrow(() -> new NotFoundException("ServiceConfig", id));
 
         config.active = !config.active;
 
@@ -93,7 +94,7 @@ public class ServiceConfigService {
     @Transactional
     public void delete(Long id, String username) {
         var config = repository.findByIdOptional(id)
-                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Service not found"));
+                .orElseThrow(() -> new NotFoundException("ServiceConfig", id));
 
         long usageCount = expenseRepository.count("category = ?1 and active = true", config.name);
         if (usageCount > 0) {
