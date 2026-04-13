@@ -3,21 +3,23 @@ package com.janus.customer.api;
 import com.janus.customer.api.dto.CustomerResponse;
 import com.janus.customer.api.dto.CreateCustomerRequest;
 import com.janus.customer.application.CustomerService;
+import com.janus.shared.api.dto.PageResponse;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
-import java.util.List;
 
 @Path("/api/customers")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,10 +31,11 @@ public class CustomerResource {
     CustomerService customerService;
 
     @GET
-    public List<CustomerResponse> list() {
-        return customerService.listAll().stream()
-                .map(CustomerResponse::from)
-                .toList();
+    public PageResponse<CustomerResponse> list(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("10") int size,
+            @QueryParam("search") String search) {
+        return customerService.listPaginated(search, page, size);
     }
 
     @GET

@@ -70,7 +70,7 @@ class CustomerResourceTest {
                 .when().get("/api/customers")
                 .then()
                 .statusCode(200)
-                .body("size()", greaterThanOrEqualTo(2));
+                .body("content.size()", greaterThanOrEqualTo(2));
     }
 
     @Test
@@ -81,7 +81,7 @@ class CustomerResourceTest {
                 .when().get("/api/customers")
                 .then()
                 .statusCode(200)
-                .body("size()", greaterThanOrEqualTo(2));
+                .body("content.size()", greaterThanOrEqualTo(2));
     }
 
     @Test
@@ -92,7 +92,7 @@ class CustomerResourceTest {
                 .when().get("/api/customers")
                 .then()
                 .statusCode(200)
-                .extract().jsonPath().getLong("[0].id");
+                .extract().jsonPath().getLong("content[0].id");
 
         given()
                 .auth().basic("admin", "admin123")

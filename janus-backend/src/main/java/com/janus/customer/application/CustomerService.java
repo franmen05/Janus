@@ -3,8 +3,10 @@ package com.janus.customer.application;
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
 import com.janus.customer.api.dto.CreateCustomerRequest;
+import com.janus.customer.api.dto.CustomerResponse;
 import com.janus.customer.domain.model.Customer;
 import com.janus.customer.domain.repository.CustomerRepository;
+import com.janus.shared.api.dto.PageResponse;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.NotFoundException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,6 +29,15 @@ public class CustomerService {
         var customers = customerRepository.listAll();
         customers.forEach(c -> c.contacts.size()); // force lazy init
         return customers;
+    }
+
+    @Transactional
+    public PageResponse<CustomerResponse> listPaginated(String search, int page, int size) {
+        var customers = customerRepository.findPaginated(search, page, size);
+        customers.forEach(c -> c.contacts.size()); // force lazy init
+        var total = customerRepository.countFiltered(search);
+        var content = customers.stream().map(CustomerResponse::from).toList();
+        return PageResponse.of(content, page, size, total);
     }
 
     @Transactional
