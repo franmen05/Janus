@@ -9,11 +9,12 @@ import { Port } from '../../../core/models/port.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadPortsModalComponent } from '../load-ports-modal/load-ports-modal.component';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-port-list',
   standalone: true,
-  imports: [RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent],
+  imports: [RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent, PaginationComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'PORTS.TITLE' | translate }}</h2>
@@ -32,7 +33,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
         <input type="text" class="form-control"
                [placeholder]="'PORTS.SEARCH' | translate"
                [ngModel]="searchTerm()"
-               (ngModelChange)="searchTerm.set($event)">
+               (ngModelChange)="onSearch($event)">
       </div>
       <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
@@ -48,7 +49,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
             </tr>
           </thead>
           <tbody>
-            @for (port of filteredPorts(); track port.id) {
+            @for (port of paginatedPorts(); track port.id) {
               <tr>
                 <td class="fw-bold">{{ port.code }}</td>
                 <td>{{ port.name }}</td>
@@ -76,6 +77,12 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           </tbody>
         </table>
       </div>
+      <app-pagination
+        [currentPage]="currentPage()"
+        [pageSize]="pageSize"
+        [totalElements]="totalElements()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)" />
     </div>
     }
   `
@@ -87,6 +94,9 @@ export class PortListComponent implements OnInit {
   loading = signal(true);
   ports = signal<Port[]>([]);
   searchTerm = signal('');
+  currentPage = signal(1);
+  readonly pageSize = 10;
+
   filteredPorts = computed(() => {
     const term = this.searchTerm().toLowerCase();
     if (!term) return this.ports();
@@ -98,8 +108,26 @@ export class PortListComponent implements OnInit {
     );
   });
 
+  paginatedPorts = computed(() => {
+    const filtered = this.filteredPorts();
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return filtered.slice(start, start + this.pageSize);
+  });
+
+  totalElements = computed(() => this.filteredPorts().length);
+  totalPages = computed(() => Math.ceil(this.filteredPorts().length / this.pageSize));
+
   ngOnInit(): void {
     this.loadPorts();
+  }
+
+  onSearch(term: string): void {
+    this.searchTerm.set(term);
+    this.currentPage.set(1);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
   }
 
   private loadPorts(): void {
