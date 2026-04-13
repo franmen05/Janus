@@ -83,7 +83,7 @@ create table clients (
     name varchar(255) not null,
     phone varchar(255),
     tax_id varchar(255) not null unique,
-    clientType enum ('COMPANY','CONSIGNEE','INDIVIDUAL') not null,
+    clientType enum ('CARRIER','COMPANY','CONSIGNEE','INDIVIDUAL','SHIPPER') not null,
     primary key (id)
 );
 
@@ -155,7 +155,7 @@ create table customers (
     phone varchar(255),
     representative varchar(255),
     tax_id varchar(255) not null unique,
-    customerType enum ('COMPANY','CONSIGNEE','INDIVIDUAL') not null,
+    customerType enum ('CARRIER','COMPANY','CONSIGNEE','INDIVIDUAL','SHIPPER') not null,
     documentType enum ('CEDULA','PASSPORT','RNC'),
     primary key (id)
 );
