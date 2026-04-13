@@ -249,7 +249,7 @@ class OperationResourceTest {
                 .when().get("/api/operations")
                 .then()
                 .statusCode(200)
-                .body("size()", greaterThanOrEqualTo(1));
+                .body("content.size()", greaterThanOrEqualTo(1));
     }
 
     @Test
@@ -278,7 +278,7 @@ class OperationResourceTest {
                 .when().get("/api/operations")
                 .then()
                 .statusCode(200)
-                .body("size()", greaterThanOrEqualTo(1));
+                .body("content.size()", greaterThanOrEqualTo(1));
     }
 
     @Test
@@ -290,7 +290,7 @@ class OperationResourceTest {
                 .when().get("/api/operations")
                 .then()
                 .statusCode(200)
-                .body("size()", greaterThanOrEqualTo(1));
+                .body("content.size()", greaterThanOrEqualTo(1));
     }
 
     @Test

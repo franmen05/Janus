@@ -55,8 +55,8 @@ class PermissionHardeningTest {
                 .auth().basic("client", "client123")
                 .when().get("/api/operations")
                 .then().statusCode(200)
-                .body("size()", greaterThanOrEqualTo(1))
-                .extract().jsonPath().getList("customerId", Long.class);
+                .body("content.size()", greaterThanOrEqualTo(1))
+                .extract().jsonPath().getList("content.customerId", Long.class);
 
         // All returned operations should belong to customer 1
         for (Long cid : ops) {

@@ -3,8 +3,10 @@ package com.janus.operation.domain.repository;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Page;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -46,5 +48,48 @@ public class OperationRepository implements PanacheRepository<Operation> {
                 OperationStatus.PENDING_CORRECTION,
                 OperationStatus.PRELIQUIDATION_REVIEW,
                 OperationStatus.ANALYST_ASSIGNED);
+    }
+
+    public List<Operation> findPaginated(OperationStatus status, Long customerId, String search, int page, int size) {
+        var query = buildFilterQuery(status, customerId, search);
+        var params = buildFilterParams(status, customerId, search);
+        if (query.isEmpty()) {
+            return findAll().page(Page.of(page, size)).list();
+        }
+        return find(String.join(" AND ", query), params.toArray())
+                .page(Page.of(page, size))
+                .list();
+    }
+
+    public long countFiltered(OperationStatus status, Long customerId, String search) {
+        var query = buildFilterQuery(status, customerId, search);
+        var params = buildFilterParams(status, customerId, search);
+        if (query.isEmpty()) {
+            return count();
+        }
+        return count(String.join(" AND ", query), params.toArray());
+    }
+
+    private List<String> buildFilterQuery(OperationStatus status, Long customerId, String search) {
+        var clauses = new ArrayList<String>();
+        int paramIndex = 1;
+        if (status != null) {
+            clauses.add("status = ?" + paramIndex++);
+        }
+        if (customerId != null) {
+            clauses.add("customer.id = ?" + paramIndex++);
+        }
+        if (search != null && !search.isBlank()) {
+            clauses.add("(LOWER(referenceNumber) LIKE ?" + paramIndex + " OR LOWER(customer.name) LIKE ?" + paramIndex + " OR LOWER(blNumber) LIKE ?" + paramIndex + ")");
+        }
+        return clauses;
+    }
+
+    private List<Object> buildFilterParams(OperationStatus status, Long customerId, String search) {
+        var params = new ArrayList<>();
+        if (status != null) params.add(status);
+        if (customerId != null) params.add(customerId);
+        if (search != null && !search.isBlank()) params.add("%" + search.toLowerCase() + "%");
+        return params;
     }
 }

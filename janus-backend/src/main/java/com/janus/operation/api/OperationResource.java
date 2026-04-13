@@ -7,6 +7,7 @@ import com.janus.operation.api.dto.StatusHistoryResponse;
 import com.janus.operation.application.OperationService;
 import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.service.StatusTransitionService;
+import com.janus.shared.api.dto.PageResponse;
 import com.janus.shared.infrastructure.security.SecurityHelper;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -14,6 +15,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
@@ -46,31 +48,18 @@ public class OperationResource {
     @GET
     @Transactional
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
-    public List<OperationResponse> list(
+    public PageResponse<OperationResponse> list(
             @QueryParam("status") OperationStatus status,
             @QueryParam("customerId") Long customerId,
+            @QueryParam("search") String search,
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("10") int size,
             @Context SecurityContext sec) {
         var customerIdFilter = securityHelper.getCustomerIdFilter(sec);
         if (customerIdFilter != null) {
-            // CUSTOMER users can only see their own operations
-            return operationService.findByCustomerId(customerIdFilter).stream()
-                    .map(OperationResponse::from)
-                    .toList();
+            customerId = customerIdFilter;
         }
-
-        if (status != null) {
-            return operationService.findByStatus(status).stream()
-                    .map(OperationResponse::from)
-                    .toList();
-        } else if (customerId != null) {
-            return operationService.findByCustomerId(customerId).stream()
-                    .map(OperationResponse::from)
-                    .toList();
-        } else {
-            return operationService.listAll().stream()
-                    .map(OperationResponse::from)
-                    .toList();
-        }
+        return operationService.listPaginated(status, customerId, search, page, size);
     }
 
     @GET

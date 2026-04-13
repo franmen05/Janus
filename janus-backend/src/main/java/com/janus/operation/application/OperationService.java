@@ -16,7 +16,9 @@ import com.janus.inspection.domain.repository.InspectionPhotoRepository;
 import com.janus.notification.application.NotificationService;
 import com.janus.operation.api.dto.ChangeStatusRequest;
 import com.janus.operation.api.dto.CreateOperationRequest;
+import com.janus.operation.api.dto.OperationResponse;
 import com.janus.operation.domain.model.BlAvailability;
+import com.janus.shared.api.dto.PageResponse;
 import com.janus.operation.domain.model.BlType;
 import com.janus.operation.domain.model.Operation;
 import com.janus.operation.domain.model.OperationStatus;
@@ -123,6 +125,13 @@ public class OperationService {
 
     public List<Operation> findByCustomerId(Long customerId) {
         return operationRepository.findByCustomerId(customerId);
+    }
+
+    public PageResponse<OperationResponse> listPaginated(OperationStatus status, Long customerId, String search, int page, int size) {
+        var operations = operationRepository.findPaginated(status, customerId, search, page, size);
+        var total = operationRepository.countFiltered(status, customerId, search);
+        var content = operations.stream().map(OperationResponse::from).toList();
+        return PageResponse.of(content, page, size, total);
     }
 
     public Operation findById(Long id) {
