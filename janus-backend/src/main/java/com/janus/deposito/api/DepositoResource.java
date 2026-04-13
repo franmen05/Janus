@@ -43,7 +43,7 @@ public class DepositoResource {
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "SUPERVISOR"})
+    @RolesAllowed("SUPERVISOR")
     public Response create(@Valid CreateDepositoRequest request, @Context SecurityContext sec) {
         var deposito = depositoService.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
@@ -53,7 +53,7 @@ public class DepositoResource {
 
     @PUT
     @Path("/{id}")
-    @RolesAllowed({"ADMIN", "SUPERVISOR"})
+    @RolesAllowed("SUPERVISOR")
     public DepositoResponse update(@PathParam("id") Long id, @Valid CreateDepositoRequest request, @Context SecurityContext sec) {
         return DepositoResponse.from(depositoService.update(id, request, sec.getUserPrincipal().getName()));
     }

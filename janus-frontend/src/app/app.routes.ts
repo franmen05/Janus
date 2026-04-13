@@ -113,19 +113,19 @@ export const routes: Routes = [
       {
         path: 'depositos',
         loadComponent: () => import('./features/depositos/deposito-list/deposito-list.component').then(m => m.DepositoListComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR'] },
+        data: { roles: ['SUPERVISOR'] },
         canActivate: [roleGuard]
       },
       {
         path: 'depositos/new',
         loadComponent: () => import('./features/depositos/deposito-form/deposito-form.component').then(m => m.DepositoFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR'] },
+        data: { roles: ['SUPERVISOR'] },
         canActivate: [roleGuard]
       },
       {
         path: 'depositos/:id/edit',
         loadComponent: () => import('./features/depositos/deposito-form/deposito-form.component').then(m => m.DepositoFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR'] },
+        data: { roles: ['SUPERVISOR'] },
         canActivate: [roleGuard]
       },
       {
