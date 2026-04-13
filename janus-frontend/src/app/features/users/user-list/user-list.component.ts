@@ -1,15 +1,16 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../../../core/models/user.model';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [RouterModule, TranslateModule, LoadingIndicatorComponent],
+  imports: [RouterModule, TranslateModule, LoadingIndicatorComponent, PaginationComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'USERS.TITLE' | translate }}</h2>
@@ -32,7 +33,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
             </tr>
           </thead>
           <tbody>
-            @for (user of users(); track user.id) {
+            @for (user of paginatedUsers(); track user.id) {
               <tr>
                 <td class="fw-bold">{{ user.username }}</td>
                 <td>{{ user.fullName }}</td>
@@ -56,6 +57,12 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           </tbody>
         </table>
       </div>
+      <app-pagination
+        [currentPage]="currentPage()"
+        [pageSize]="pageSize"
+        [totalElements]="totalElements()"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)" />
     </div>
     }
   `
@@ -64,6 +71,17 @@ export class UserListComponent implements OnInit {
   private userService = inject(UserService);
   loading = signal(true);
   users = signal<User[]>([]);
+  currentPage = signal(1);
+  readonly pageSize = 10;
+
+  paginatedUsers = computed(() => {
+    const all = this.users();
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return all.slice(start, start + this.pageSize);
+  });
+
+  totalElements = computed(() => this.users().length);
+  totalPages = computed(() => Math.ceil(this.users().length / this.pageSize));
 
   ngOnInit(): void {
     this.loadUsers();
@@ -71,6 +89,10 @@ export class UserListComponent implements OnInit {
 
   toggleActive(user: User): void {
     this.userService.toggleActive(user.id).subscribe(() => this.loadUsers());
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
   }
 
   private loadUsers(): void {
