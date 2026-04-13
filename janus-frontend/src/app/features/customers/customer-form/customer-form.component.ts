@@ -34,12 +34,20 @@ import { CustomerType, DocumentType, ContactType, CustomerContact, CreateCustome
             </div>
             <div class="col-md-6">
               <label class="form-label">{{ 'CUSTOMERS.TYPE' | translate }} <span class="text-danger">*</span></label>
-              <select class="form-select" formControlName="customerType">
-                <option value="">{{ 'CUSTOMERS.SELECT_TYPE' | translate }}</option>
+              <div class="d-flex flex-wrap gap-3">
                 @for (ct of customerTypes; track ct) {
-                  <option [value]="ct">{{ 'CUSTOMER_TYPES.' + ct | translate }}</option>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" [id]="'type-' + ct"
+                           [checked]="isTypeSelected(ct)" (change)="onTypeToggle(ct, $event)">
+                    <label class="form-check-label" [for]="'type-' + ct">
+                      {{ 'CUSTOMER_TYPES.' + ct | translate }}
+                    </label>
+                  </div>
                 }
-              </select>
+              </div>
+              @if (typeTouched() && selectedTypes().length === 0) {
+                <div class="text-danger small">{{ 'CUSTOMERS.TYPE_REQUIRED' | translate }}</div>
+              }
             </div>
           </div>
           <div class="row mb-3">
@@ -88,7 +96,7 @@ import { CustomerType, DocumentType, ContactType, CustomerContact, CreateCustome
             </div>
           </div>
           <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary" [disabled]="form.invalid">{{ (isEdit() ? 'ACTIONS.UPDATE' : 'ACTIONS.CREATE') | translate }}</button>
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid || selectedTypes().length === 0">{{ (isEdit() ? 'ACTIONS.UPDATE' : 'ACTIONS.CREATE') | translate }}</button>
             <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">{{ 'ACTIONS.CANCEL' | translate }}</button>
           </div>
         </form>
@@ -225,6 +233,10 @@ export class CustomerFormComponent implements OnInit {
   documentTypes: DocumentType[] = ['RNC', 'CEDULA', 'PASSPORT'];
   contactTypes = Object.values(ContactType);
 
+  // Customer types state (checkboxes instead of dropdown)
+  selectedTypes = signal<CustomerType[]>([]);
+  typeTouched = signal(false);
+
   // Contacts state
   contacts = signal<CustomerContact[]>([]);
   showContactForm = signal(false);
@@ -235,7 +247,6 @@ export class CustomerFormComponent implements OnInit {
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     taxId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    customerType: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     documentType: new FormControl('', { nonNullable: true }),
     phone: new FormControl('', { nonNullable: true }),
     alternatePhone: new FormControl('', { nonNullable: true }),
@@ -278,7 +289,6 @@ export class CustomerFormComponent implements OnInit {
           name: c.name,
           taxId: c.taxId,
           email: c.email,
-          customerType: c.customerType,
           phone: c.phone ?? '',
           address: c.address ?? '',
           businessName: c.businessName ?? '',
@@ -288,6 +298,7 @@ export class CustomerFormComponent implements OnInit {
           customerCode: c.customerCode ?? '',
           notes: c.notes ?? ''
         });
+        this.selectedTypes.set(c.customerTypes);
       });
       this.loadContacts();
     }
@@ -371,12 +382,27 @@ export class CustomerFormComponent implements OnInit {
     this.contactForm.reset();
   }
 
+  isTypeSelected(type: CustomerType): boolean {
+    return this.selectedTypes().includes(type);
+  }
+
+  onTypeToggle(type: CustomerType, event: Event): void {
+    this.typeTouched.set(true);
+    const checked = (event.target as HTMLInputElement).checked;
+    const current = this.selectedTypes();
+    if (checked) {
+      this.selectedTypes.set([...current, type]);
+    } else {
+      this.selectedTypes.set(current.filter(t => t !== type));
+    }
+  }
+
   onSubmit(): void {
-    if (this.form.invalid) return;
+    if (this.form.invalid || this.selectedTypes().length === 0) return;
     const raw = this.form.getRawValue();
     const val = {
       ...raw,
-      customerType: raw.customerType as CustomerType,
+      customerTypes: this.selectedTypes(),
       documentType: raw.documentType ? raw.documentType as DocumentType : undefined,
       businessName: raw.businessName || undefined,
       alternatePhone: raw.alternatePhone || undefined,

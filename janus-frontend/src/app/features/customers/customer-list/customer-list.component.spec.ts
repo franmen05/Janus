@@ -14,8 +14,8 @@ describe('CustomerListComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   const mockCustomers: Customer[] = [
-    { id: 1, name: 'Customer A', taxId: '123-456', email: 'a@example.com', phone: '555-0001', address: '123 Main St', customerType: CustomerType.COMPANY, active: true, createdAt: '2024-01-01' },
-    { id: 2, name: 'Customer B', taxId: '789-012', email: 'b@example.com', phone: null, address: null, customerType: CustomerType.CONSIGNEE, active: false, createdAt: '2024-01-02' }
+    { id: 1, name: 'Customer A', taxId: '123-456', email: 'a@example.com', phone: '555-0001', address: '123 Main St', customerTypes: [CustomerType.COMPANY], active: true, createdAt: '2024-01-01' },
+    { id: 2, name: 'Customer B', taxId: '789-012', email: 'b@example.com', phone: null, address: null, customerTypes: [CustomerType.CONSIGNEE], active: false, createdAt: '2024-01-02' }
   ];
 
   beforeEach(async () => {

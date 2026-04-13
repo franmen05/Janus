@@ -5,6 +5,8 @@ import com.janus.customer.domain.model.DocumentType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.Set;
 
 public record CreateCustomerRequest(
         @NotBlank String name,
@@ -12,7 +14,7 @@ public record CreateCustomerRequest(
         @NotBlank @Email String email,
         String phone,
         String address,
-        @NotNull CustomerType customerType,
+        @NotNull @Size(min = 1) Set<CustomerType> customerTypes,
         String businessName,
         String representative,
         DocumentType documentType,

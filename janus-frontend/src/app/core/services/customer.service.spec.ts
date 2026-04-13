@@ -18,7 +18,7 @@ describe('CustomerService', () => {
     email: 'customer@test.com',
     phone: '+1234567890',
     address: '123 Main St',
-    customerType: CustomerType.COMPANY,
+    customerTypes: [CustomerType.COMPANY],
     active: true,
     createdAt: '2024-01-01T00:00:00'
   };
@@ -73,7 +73,7 @@ describe('CustomerService', () => {
         name: 'New Customer',
         taxId: 'TAX-002',
         email: 'new@test.com',
-        customerType: CustomerType.COMPANY,
+        customerTypes: [CustomerType.COMPANY],
         phone: '+9876543210',
         address: '456 Oak Ave'
       };
@@ -95,7 +95,7 @@ describe('CustomerService', () => {
         name: 'Updated Customer',
         taxId: 'TAX-001',
         email: 'updated@test.com',
-        customerType: CustomerType.CONSIGNEE
+        customerTypes: [CustomerType.CONSIGNEE]
       };
 
       service.update(1, request).subscribe(customer => {

@@ -28,7 +28,7 @@ describe('OperationFormComponent', () => {
 
     customerServiceSpy = jasmine.createSpyObj('CustomerService', ['getAll']);
     customerServiceSpy.getAll.and.returnValue(of([
-      { id: 1, name: 'Customer A', taxId: '123', email: 'a@b.com', phone: null, address: null, customerType: CustomerType.COMPANY, active: true, createdAt: '2024-01-01' }
+      { id: 1, name: 'Customer A', taxId: '123', email: 'a@b.com', phone: null, address: null, customerTypes: [CustomerType.COMPANY], active: true, createdAt: '2024-01-01' }
     ]));
 
     await TestBed.configureTestingModule({

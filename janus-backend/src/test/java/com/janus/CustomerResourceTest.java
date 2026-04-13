@@ -127,7 +127,7 @@ class CustomerResourceTest {
                             "email": "test@testcustomer.com",
                             "phone": "+504-9999-0000",
                             "address": "Test City, Honduras",
-                            "customerType": "COMPANY"
+                            "customerTypes": ["COMPANY"]
                         }
                         """)
                 .when().post("/api/customers")
@@ -154,7 +154,7 @@ class CustomerResourceTest {
                             "email": "updated@testcustomer.com",
                             "phone": "+504-8888-0000",
                             "address": "Updated City, Honduras",
-                            "customerType": "COMPANY"
+                            "customerTypes": ["COMPANY"]
                         }
                         """)
                 .when().put("/api/customers/{id}", createdCustomerId)
@@ -173,7 +173,7 @@ class CustomerResourceTest {
                 .auth().basic("agent", "agent123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"name": "Agent Created", "taxId": "RTN-AGENT-001", "email": "agentcreated@test.com", "customerType": "COMPANY"}
+                        {"name": "Agent Created", "taxId": "RTN-AGENT-001", "email": "agentcreated@test.com", "customerTypes": ["COMPANY"]}
                         """)
                 .when().post("/api/customers")
                 .then()
@@ -187,7 +187,7 @@ class CustomerResourceTest {
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"name": "Blocked", "taxId": "RTN-BLOCK-002", "email": "blocked2@test.com", "customerType": "COMPANY"}
+                        {"name": "Blocked", "taxId": "RTN-BLOCK-002", "email": "blocked2@test.com", "customerTypes": ["COMPANY"]}
                         """)
                 .when().post("/api/customers")
                 .then()

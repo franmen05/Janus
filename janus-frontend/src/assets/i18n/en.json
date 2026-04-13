@@ -194,7 +194,8 @@
     "ALL_TYPES": "All types",
     "FILTER_TYPE": "Filter by type",
     "CUSTOMER_CODE": "Customer Code",
-    "NOTES": "Notes"
+    "NOTES": "Notes",
+    "TYPE_REQUIRED": "At least one type must be selected"
   },
   "PORTS": {
     "TITLE": "Ports",

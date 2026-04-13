@@ -13,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 
 @ApplicationScoped
@@ -60,7 +61,7 @@ public class CustomerService {
         customer.email = request.email();
         customer.phone = request.phone();
         customer.address = request.address();
-        customer.customerType = request.customerType();
+        customer.customerTypes = new HashSet<>(request.customerTypes());
         customer.businessName = request.businessName();
         customer.representative = request.representative();
         customer.documentType = request.documentType();
@@ -81,7 +82,8 @@ public class CustomerService {
         customer.email = request.email();
         customer.phone = request.phone();
         customer.address = request.address();
-        customer.customerType = request.customerType();
+        customer.customerTypes.clear();
+        customer.customerTypes.addAll(request.customerTypes());
         customer.businessName = request.businessName();
         customer.representative = request.representative();
         customer.documentType = request.documentType();

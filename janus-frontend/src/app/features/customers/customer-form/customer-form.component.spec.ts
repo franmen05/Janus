@@ -17,7 +17,7 @@ describe('CustomerFormComponent', () => {
     customerServiceSpy = jasmine.createSpyObj('CustomerService', ['create', 'update', 'getById']);
     customerServiceSpy.create.and.returnValue(of({
       id: 10, name: 'New Customer', taxId: '999', email: 'new@test.com',
-      phone: null, address: null, customerType: CustomerType.COMPANY, active: true, createdAt: '2024-01-01'
+      phone: null, address: null, customerTypes: [CustomerType.COMPANY], active: true, createdAt: '2024-01-01'
     }));
 
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -62,9 +62,9 @@ describe('CustomerFormComponent', () => {
     component.form.patchValue({
       name: 'Test Customer',
       taxId: '123-456',
-      email: 'test@example.com',
-      customerType: 'COMPANY'
+      email: 'test@example.com'
     });
+    component.selectedTypes.set([CustomerType.COMPANY]);
     expect(component.form.valid).toBeTrue();
   });
 
@@ -74,21 +74,19 @@ describe('CustomerFormComponent', () => {
       name: 'New Customer',
       taxId: '999',
       email: 'new@test.com',
-      customerType: 'COMPANY',
       phone: '',
       address: ''
     });
+    component.selectedTypes.set([CustomerType.COMPANY]);
 
     component.onSubmit();
 
-    expect(customerServiceSpy.create).toHaveBeenCalledWith({
+    expect(customerServiceSpy.create).toHaveBeenCalledWith(jasmine.objectContaining({
       name: 'New Customer',
       taxId: '999',
       email: 'new@test.com',
-      customerType: CustomerType.COMPANY,
-      phone: '',
-      address: ''
-    });
+      customerTypes: [CustomerType.COMPANY]
+    }));
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/customers']);
   });
 });

@@ -15,7 +15,7 @@ export interface Customer {
   email: string;
   phone: string | null;
   address: string | null;
-  customerType: CustomerType;
+  customerTypes: CustomerType[];
   active: boolean;
   createdAt: string;
   businessName: string | null;
@@ -59,7 +59,7 @@ export interface CreateCustomerRequest {
   name: string;
   taxId: string;
   email: string;
-  customerType: CustomerType;
+  customerTypes: CustomerType[];
   phone?: string;
   address?: string;
   businessName?: string;

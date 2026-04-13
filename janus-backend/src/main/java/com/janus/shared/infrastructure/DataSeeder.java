@@ -107,7 +107,7 @@ public class DataSeeder {
         customer1.email = "info@demoimport.com";
         customer1.phone = "+504-2222-3333";
         customer1.address = "San Pedro Sula, Honduras";
-        customer1.customerType = CustomerType.COMPANY;
+        customer1.customerTypes = Set.of(CustomerType.COMPANY);
         customerRepository.persist(customer1);
 
         var customer2 = new Customer();
@@ -116,7 +116,7 @@ public class DataSeeder {
         customer2.email = "contact@globaltrade.hn";
         customer2.phone = "+504-2555-6666";
         customer2.address = "Tegucigalpa, Honduras";
-        customer2.customerType = CustomerType.COMPANY;
+        customer2.customerTypes = Set.of(CustomerType.COMPANY);
         customerRepository.persist(customer2);
     }
 

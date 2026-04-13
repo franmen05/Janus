@@ -11,7 +11,7 @@ import { getErrorMessage } from '../../../../core/utils/error-message.util';
 import { InspectionExpense, ExpenseCategory, CreateExpenseRequest, ChargeType, PaymentType, BillToType } from '../../../../core/models/inspection.model';
 import { ServiceService } from '../../../../core/services/service.service';
 import { ServiceConfig } from '../../../../core/models/service.model';
-import { Customer } from '../../../../core/models/customer.model';
+import { Customer, CustomerType } from '../../../../core/models/customer.model';
 
 @Component({
   selector: 'app-expense-detail-modal',
@@ -366,7 +366,7 @@ export class ExpenseDetailModalComponent implements OnInit {
         let filtered = this.customers.filter(c => c.active);
         // Filter by customerType matching selected billToType
         if (selectedType) {
-          filtered = filtered.filter(c => c.customerType === selectedType);
+          filtered = filtered.filter(c => c.customerTypes.includes(selectedType as CustomerType));
         }
         if (term.length < 1) {
           return filtered.slice(0, 10);

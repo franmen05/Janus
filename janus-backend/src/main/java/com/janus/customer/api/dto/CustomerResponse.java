@@ -5,6 +5,7 @@ import com.janus.customer.domain.model.CustomerType;
 import com.janus.customer.domain.model.DocumentType;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public record CustomerResponse(
         Long id,
@@ -14,7 +15,7 @@ public record CustomerResponse(
         String phone,
         String address,
         boolean active,
-        CustomerType customerType,
+        Set<CustomerType> customerTypes,
         String businessName,
         String representative,
         DocumentType documentType,
@@ -34,7 +35,7 @@ public record CustomerResponse(
                 customer.phone,
                 customer.address,
                 customer.active,
-                customer.customerType,
+                customer.customerTypes,
                 customer.businessName,
                 customer.representative,
                 customer.documentType,

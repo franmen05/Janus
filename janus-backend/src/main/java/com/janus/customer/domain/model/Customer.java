@@ -2,15 +2,20 @@ package com.janus.customer.domain.model;
 
 import com.janus.shared.domain.BaseEntity;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -19,9 +24,11 @@ public class Customer extends BaseEntity {
     @Column(nullable = false)
     public String name;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "customer_types", joinColumns = @JoinColumn(name = "customer_id"))
+    @Column(name = "customer_type")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    public CustomerType customerType;
+    public Set<CustomerType> customerTypes = new HashSet<>();
 
     @Column(name = "tax_id", nullable = false, unique = true)
     public String taxId;

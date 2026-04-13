@@ -57,7 +57,11 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
                 <td class="fw-bold">{{ customer.name }}</td>
                 <td class="d-none d-sm-table-cell">{{ customer.customerCode ?? '-' }}</td>
                 <td class="d-none d-sm-table-cell">{{ customer.taxId }}</td>
-                <td class="d-none d-md-table-cell">{{ 'CUSTOMER_TYPES.' + customer.customerType | translate }}</td>
+                <td class="d-none d-md-table-cell">
+                  @for (ct of customer.customerTypes; track ct) {
+                    <span class="badge bg-info me-1">{{ 'CUSTOMER_TYPES.' + ct | translate }}</span>
+                  }
+                </td>
                 <td class="d-none d-md-table-cell">{{ customer.email }}</td>
                 <td class="d-none d-lg-table-cell">{{ customer.phone ?? '-' }}</td>
                 <td><span class="badge" [class]="customer.active ? 'bg-success' : 'bg-secondary'">{{ (customer.active ? 'CUSTOMERS.ACTIVE' : 'CUSTOMERS.INACTIVE') | translate }}</span></td>
@@ -110,7 +114,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
 
   filteredCustomers = computed(() => {
     const type = this.selectedType();
-    return this.customers().filter(c => !type || c.customerType === type);
+    return this.customers().filter(c => !type || c.customerTypes.includes(type as CustomerType));
   });
 
   ngOnInit(): void {
