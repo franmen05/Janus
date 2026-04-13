@@ -1101,5 +1101,8 @@
     "KEY_COPIED": "Clave copiada al portapapeles",
     "NAME_PLACEHOLDER": "ej. Sistema de Facturaci\u00f3n",
     "NO_KEYS": "No se encontraron claves API"
+  },
+  "PAGINATION": {
+    "SHOWING": "Mostrando {{from}} a {{to}} de {{total}} resultados"
   }
 }

@@ -1100,5 +1100,8 @@
     "KEY_COPIED": "Key copied to clipboard",
     "NAME_PLACEHOLDER": "e.g. Billing System",
     "NO_KEYS": "No API keys found"
+  },
+  "PAGINATION": {
+    "SHOWING": "Showing {{from}} to {{to}} of {{total}} results"
   }
 }
