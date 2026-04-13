@@ -44,6 +44,7 @@ public class Customer extends BaseEntity {
 
     public String country;
 
+    @Column(name = "company_code")
     public String customerCode;
 
     public String notes;
