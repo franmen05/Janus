@@ -2,23 +2,25 @@ package com.janus.inspection.application;
 
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
-import com.janus.inspection.api.dto.CreateExpenseCategoryRequest;
-import com.janus.inspection.api.dto.UpdateExpenseCategoryRequest;
-import com.janus.inspection.domain.model.ExpenseCategoryConfig;
-import com.janus.inspection.domain.repository.ExpenseCategoryConfigRepository;
+import com.janus.inspection.api.dto.CreateServiceRequest;
+import com.janus.inspection.api.dto.UpdateServiceRequest;
+import com.janus.inspection.domain.model.ServiceConfig;
+import com.janus.inspection.domain.repository.ServiceConfigRepository;
 import com.janus.inspection.domain.repository.InspectionExpenseRepository;
+import com.janus.inspection.domain.model.ServiceModule;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import java.util.EnumSet;
 import java.util.List;
 
 @ApplicationScoped
-public class ExpenseCategoryConfigService {
+public class ServiceConfigService {
 
     @Inject
-    ExpenseCategoryConfigRepository repository;
+    ServiceConfigRepository repository;
 
     @Inject
     InspectionExpenseRepository expenseRepository;
@@ -26,58 +28,62 @@ public class ExpenseCategoryConfigService {
     @Inject
     Event<AuditEvent> auditEvent;
 
-    public List<ExpenseCategoryConfig> listAll() {
+    public List<ServiceConfig> listAll() {
         return repository.findAllOrdered();
     }
 
-    public List<ExpenseCategoryConfig> listActive() {
+    public List<ServiceConfig> listActive() {
         return repository.findActive();
     }
 
     @Transactional
-    public ExpenseCategoryConfig create(CreateExpenseCategoryRequest request, String username) {
+    public ServiceConfig create(CreateServiceRequest request, String username) {
         var name = request.name().toUpperCase().trim();
 
         if (repository.findByName(name).isPresent()) {
-            throw new BusinessException("CATEGORY_ALREADY_EXISTS",
-                    "Expense category with name '" + name + "' already exists");
+            throw new BusinessException("SERVICE_ALREADY_EXISTS",
+                    "Service with name '" + name + "' already exists");
         }
 
-        var config = new ExpenseCategoryConfig();
+        var config = new ServiceConfig();
         config.name = name;
         config.labelEs = request.labelEs();
         config.labelEn = request.labelEn();
+        config.appliesTo = request.appliesTo() != null ? request.appliesTo() : EnumSet.allOf(ServiceModule.class);
         repository.persist(config);
 
-        auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "ExpenseCategoryConfig",
+        auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "ServiceConfig",
                 config.id, null, null, null, null));
 
         return config;
     }
 
     @Transactional
-    public ExpenseCategoryConfig update(Long id, UpdateExpenseCategoryRequest request, String username) {
+    public ServiceConfig update(Long id, UpdateServiceRequest request, String username) {
         var config = repository.findByIdOptional(id)
-                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Expense category not found"));
+                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Service not found"));
 
         config.labelEs = request.labelEs();
         config.labelEn = request.labelEn();
         config.sortOrder = request.sortOrder();
+        if (request.appliesTo() != null) {
+            config.appliesTo = request.appliesTo();
+        }
 
-        auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "ExpenseCategoryConfig",
+        auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "ServiceConfig",
                 config.id, null, null, null, null));
 
         return config;
     }
 
     @Transactional
-    public ExpenseCategoryConfig toggleActive(Long id, String username) {
+    public ServiceConfig toggleActive(Long id, String username) {
         var config = repository.findByIdOptional(id)
-                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Expense category not found"));
+                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Service not found"));
 
         config.active = !config.active;
 
-        auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "ExpenseCategoryConfig",
+        auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "ServiceConfig",
                 config.id, null, null, null,
                 "Toggled active to " + config.active));
 
@@ -87,18 +93,18 @@ public class ExpenseCategoryConfigService {
     @Transactional
     public void delete(Long id, String username) {
         var config = repository.findByIdOptional(id)
-                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Expense category not found"));
+                .orElseThrow(() -> new jakarta.ws.rs.NotFoundException("Service not found"));
 
         long usageCount = expenseRepository.count("category = ?1 and active = true", config.name);
         if (usageCount > 0) {
-            throw new BusinessException("CATEGORY_IN_USE",
-                    "Cannot delete category '" + config.name + "' because it is referenced by " + usageCount + " expense(s)");
+            throw new BusinessException("SERVICE_IN_USE",
+                    "Cannot delete service '" + config.name + "' because it is referenced by " + usageCount + " expense(s)");
         }
 
         var entityId = config.id;
         repository.delete(config);
 
-        auditEvent.fire(new AuditEvent(username, AuditAction.DELETE, "ExpenseCategoryConfig",
+        auditEvent.fire(new AuditEvent(username, AuditAction.DELETE, "ServiceConfig",
                 entityId, null, null, null, null));
     }
 }

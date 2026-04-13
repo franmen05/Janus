@@ -14,7 +14,7 @@ import com.janus.inspection.domain.model.ChargeType;
 import com.janus.inspection.domain.model.InspectionExpense;
 import com.janus.inspection.domain.model.PaymentStatus;
 import com.janus.inspection.domain.model.InspectionPhoto;
-import com.janus.inspection.domain.repository.ExpenseCategoryConfigRepository;
+import com.janus.inspection.domain.repository.ServiceConfigRepository;
 import com.janus.inspection.domain.repository.InspectionExpenseRepository;
 import com.janus.inspection.domain.repository.InspectionPhotoRepository;
 import com.janus.notification.application.NotificationService;
@@ -65,7 +65,7 @@ public class InspectionService {
     InspectionExpenseRepository inspectionExpenseRepository;
 
     @Inject
-    ExpenseCategoryConfigRepository expenseCategoryConfigRepository;
+    ServiceConfigRepository serviceConfigRepository;
 
     @Inject
     UserRepository userRepository;
@@ -197,12 +197,12 @@ public class InspectionService {
                     "Expenses can only be added when operation is in SUBMITTED_TO_CUSTOMS, VALUATION_REVIEW, PAYMENT_PREPARATION or IN_TRANSIT status");
         }
 
-        var categoryConfig = expenseCategoryConfigRepository.findByName(request.category())
-                .orElseThrow(() -> new BusinessException("INVALID_EXPENSE_CATEGORY",
-                        "Expense category '" + request.category() + "' does not exist"));
+        var categoryConfig = serviceConfigRepository.findByName(request.category())
+                .orElseThrow(() -> new BusinessException("INVALID_SERVICE",
+                        "Service '" + request.category() + "' does not exist"));
         if (!categoryConfig.active) {
-            throw new BusinessException("INACTIVE_EXPENSE_CATEGORY",
-                    "Expense category '" + request.category() + "' is not active");
+            throw new BusinessException("INACTIVE_SERVICE",
+                    "Service '" + request.category() + "' is not active");
         }
 
         var expense = new InspectionExpense();
@@ -272,12 +272,12 @@ public class InspectionService {
             throw new BusinessException("Cannot update a deleted expense");
         }
 
-        var categoryConfig = expenseCategoryConfigRepository.findByName(request.category())
-                .orElseThrow(() -> new BusinessException("INVALID_EXPENSE_CATEGORY",
-                        "Expense category '" + request.category() + "' does not exist"));
+        var categoryConfig = serviceConfigRepository.findByName(request.category())
+                .orElseThrow(() -> new BusinessException("INVALID_SERVICE",
+                        "Service '" + request.category() + "' does not exist"));
         if (!categoryConfig.active) {
-            throw new BusinessException("INACTIVE_EXPENSE_CATEGORY",
-                    "Expense category '" + request.category() + "' is not active");
+            throw new BusinessException("INACTIVE_SERVICE",
+                    "Service '" + request.category() + "' is not active");
         }
 
         expense.category = request.category();

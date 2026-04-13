@@ -9,8 +9,8 @@ import { InspectionService } from '../../../../core/services/inspection.service'
 import { ToastService } from '../../../../core/services/toast.service';
 import { getErrorMessage } from '../../../../core/utils/error-message.util';
 import { InspectionExpense, ExpenseCategory, CreateExpenseRequest, ChargeType, PaymentType, BillToType } from '../../../../core/models/inspection.model';
-import { ExpenseCategoryService } from '../../../../core/services/expense-category.service';
-import { ExpenseCategoryConfig } from '../../../../core/models/expense-category.model';
+import { ServiceService } from '../../../../core/services/service.service';
+import { ServiceConfig } from '../../../../core/models/service.model';
 import { Customer } from '../../../../core/models/customer.model';
 
 @Component({
@@ -280,7 +280,7 @@ export class ExpenseDetailModalComponent implements OnInit {
   private inspectionService = inject(InspectionService);
   private toastService = inject(ToastService);
   private translate = inject(TranslateService);
-  private expenseCategoryService = inject(ExpenseCategoryService);
+  private serviceService = inject(ServiceService);
 
   expense: InspectionExpense | null = null;
   operationId!: number;
@@ -309,20 +309,20 @@ export class ExpenseDetailModalComponent implements OnInit {
   editing = signal(false);
   activeTab = signal<ChargeType>('EXPENSE');
 
-  activeCategories = signal<ExpenseCategoryConfig[]>([]);
+  activeCategories = signal<ServiceConfig[]>([]);
   categoriesLoading = signal(true);
 
   ngOnInit(): void {
     this.loadCategories();
   }
 
-  getCategoryLabel(cat: ExpenseCategoryConfig): string {
+  getCategoryLabel(cat: ServiceConfig): string {
     return this.translate.currentLang === 'es' ? cat.labelEs : cat.labelEn;
   }
 
   private loadCategories(): void {
     this.categoriesLoading.set(true);
-    this.expenseCategoryService.getActive().subscribe({
+    this.serviceService.getActive().subscribe({
       next: categories => {
         this.activeCategories.set(categories);
         this.categoriesLoading.set(false);

@@ -8,8 +8,8 @@ import com.janus.document.domain.model.DocumentTypeConfig;
 import com.janus.document.domain.repository.DocumentTypeConfigRepository;
 import com.janus.exchangerate.domain.model.ExchangeRate;
 import com.janus.exchangerate.domain.repository.ExchangeRateRepository;
-import com.janus.inspection.domain.model.ExpenseCategoryConfig;
-import com.janus.inspection.domain.repository.ExpenseCategoryConfigRepository;
+import com.janus.inspection.domain.model.ServiceConfig;
+import com.janus.inspection.domain.repository.ServiceConfigRepository;
 import com.janus.deposito.domain.model.Deposito;
 import com.janus.deposito.domain.repository.DepositoRepository;
 import com.janus.port.domain.model.Port;
@@ -56,7 +56,7 @@ public class DataSeeder {
     ExchangeRateRepository exchangeRateRepository;
 
     @Inject
-    ExpenseCategoryConfigRepository expenseCategoryConfigRepository;
+    ServiceConfigRepository serviceConfigRepository;
 
     @Transactional
     void onStart(@Observes StartupEvent event) {
@@ -93,10 +93,10 @@ public class DataSeeder {
             seedExchangeRates();
             LOG.info("Exchange rate seeding complete.");
         }
-        if (expenseCategoryConfigRepository.count() == 0) {
-            LOG.info("Seeding expense category configs...");
-            seedExpenseCategories();
-            LOG.info("Expense category config seeding complete.");
+        if (serviceConfigRepository.count() == 0) {
+            LOG.info("Seeding service configs...");
+            seedServices();
+            LOG.info("Service config seeding complete.");
         }
     }
 
@@ -229,26 +229,26 @@ public class DataSeeder {
         exchangeRateRepository.persist(rate);
     }
 
-    private void seedExpenseCategories() {
-        createExpenseCategory("LABOR", "Mano de Obra", "Labor", 1);
-        createExpenseCategory("EQUIPMENT", "Equipos", "Equipment", 2);
-        createExpenseCategory("TRANSPORT", "Transporte", "Transport", 3);
-        createExpenseCategory("SECURITY", "Seguridad", "Security", 4);
-        createExpenseCategory("OVERTIME", "Horas Extra", "Overtime", 5);
-        createExpenseCategory("STORAGE", "Almacenaje", "Storage", 6);
-        createExpenseCategory("DEMURRAGE", "Demora", "Demurrage", 7);
-        createExpenseCategory("FREIGHT", "Flete", "Freight", 8);
-        createExpenseCategory("LOCAL_CHARGES", "Cargos Locales", "Local Charges", 9);
-        createExpenseCategory("OTHER", "Otros", "Other", 10);
+    private void seedServices() {
+        createService("LABOR", "Mano de Obra", "Labor", 1);
+        createService("EQUIPMENT", "Equipos", "Equipment", 2);
+        createService("TRANSPORT", "Transporte", "Transport", 3);
+        createService("SECURITY", "Seguridad", "Security", 4);
+        createService("OVERTIME", "Horas Extra", "Overtime", 5);
+        createService("STORAGE", "Almacenaje", "Storage", 6);
+        createService("DEMURRAGE", "Demora", "Demurrage", 7);
+        createService("FREIGHT", "Flete", "Freight", 8);
+        createService("LOCAL_CHARGES", "Cargos Locales", "Local Charges", 9);
+        createService("OTHER", "Otros", "Other", 10);
     }
 
-    private void createExpenseCategory(String name, String labelEs, String labelEn, int sortOrder) {
-        var config = new ExpenseCategoryConfig();
+    private void createService(String name, String labelEs, String labelEn, int sortOrder) {
+        var config = new ServiceConfig();
         config.name = name;
         config.labelEs = labelEs;
         config.labelEn = labelEn;
         config.sortOrder = sortOrder;
-        expenseCategoryConfigRepository.persist(config);
+        serviceConfigRepository.persist(config);
     }
 
     private void createUser(String username, String password, String fullName,

@@ -19,7 +19,7 @@ create sequence document_type_configs_SEQ start with 1 increment by 50;
 create sequence document_versions_SEQ start with 1 increment by 50;
 create sequence documents_SEQ start with 1 increment by 50;
 create sequence exchange_rate_SEQ start with 1 increment by 50;
-create sequence expense_category_configs_SEQ start with 1 increment by 50;
+create sequence service_configs_SEQ start with 1 increment by 50;
 create sequence external_permits_SEQ start with 1 increment by 50;
 create sequence inspection_expenses_SEQ start with 1 increment by 50;
 create sequence inspection_photos_SEQ start with 1 increment by 50;
@@ -180,7 +180,7 @@ create table exchange_rate (
     unique (source_currency, target_currency, effective_date)
 );
 
-create table expense_category_configs (
+create table service_configs (
     id BIGINT not null,
     active BOOLEAN not null,
     sort_order INTEGER not null,
@@ -190,6 +190,13 @@ create table expense_category_configs (
     label_es VARCHAR(255) not null,
     name VARCHAR(255) not null unique,
     primary key (id)
+);
+
+create table service_config_modules (
+    service_config_id BIGINT not null,
+    module VARCHAR(255) not null,
+    primary key (service_config_id, module),
+    foreign key (service_config_id) references service_configs(id)
 );
 
 -- Tables with foreign keys to independent tables

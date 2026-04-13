@@ -1,9 +1,9 @@
 package com.janus.inspection.api;
 
-import com.janus.inspection.api.dto.CreateExpenseCategoryRequest;
-import com.janus.inspection.api.dto.ExpenseCategoryResponse;
-import com.janus.inspection.api.dto.UpdateExpenseCategoryRequest;
-import com.janus.inspection.application.ExpenseCategoryConfigService;
+import com.janus.inspection.api.dto.CreateServiceRequest;
+import com.janus.inspection.api.dto.ServiceResponse;
+import com.janus.inspection.api.dto.UpdateServiceRequest;
+import com.janus.inspection.application.ServiceConfigService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -22,20 +22,20 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import java.util.List;
 
-@Path("/api/expense-categories")
+@Path("/api/services")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ExpenseCategoryResource {
+public class ServiceResource {
 
     @Inject
-    ExpenseCategoryConfigService service;
+    ServiceConfigService service;
 
     @GET
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
     @Transactional
-    public List<ExpenseCategoryResponse> listActive() {
+    public List<ServiceResponse> listActive() {
         return service.listActive().stream()
-                .map(ExpenseCategoryResponse::from)
+                .map(ServiceResponse::from)
                 .toList();
     }
 
@@ -43,39 +43,39 @@ public class ExpenseCategoryResource {
     @Path("/all")
     @RolesAllowed("ADMIN")
     @Transactional
-    public List<ExpenseCategoryResponse> listAll() {
+    public List<ServiceResponse> listAll() {
         return service.listAll().stream()
-                .map(ExpenseCategoryResponse::from)
+                .map(ServiceResponse::from)
                 .toList();
     }
 
     @POST
     @RolesAllowed("ADMIN")
-    public Response create(@Valid CreateExpenseCategoryRequest request,
+    public Response create(@Valid CreateServiceRequest request,
                            @Context SecurityContext sec) {
         var config = service.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
-                .entity(ExpenseCategoryResponse.from(config))
+                .entity(ServiceResponse.from(config))
                 .build();
     }
 
     @PUT
     @Path("/{id}")
     @RolesAllowed("ADMIN")
-    public ExpenseCategoryResponse update(@PathParam("id") Long id,
-                                          @Valid UpdateExpenseCategoryRequest request,
+    public ServiceResponse update(@PathParam("id") Long id,
+                                          @Valid UpdateServiceRequest request,
                                           @Context SecurityContext sec) {
         var config = service.update(id, request, sec.getUserPrincipal().getName());
-        return ExpenseCategoryResponse.from(config);
+        return ServiceResponse.from(config);
     }
 
     @PUT
     @Path("/{id}/toggle")
     @RolesAllowed("ADMIN")
-    public ExpenseCategoryResponse toggleActive(@PathParam("id") Long id,
+    public ServiceResponse toggleActive(@PathParam("id") Long id,
                                                 @Context SecurityContext sec) {
         var config = service.toggleActive(id, sec.getUserPrincipal().getName());
-        return ExpenseCategoryResponse.from(config);
+        return ServiceResponse.from(config);
     }
 
     @DELETE

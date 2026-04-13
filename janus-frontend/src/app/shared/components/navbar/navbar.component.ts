@@ -94,8 +94,8 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
                   </a>
                 </li>
                 <li class="nav-item d-lg-none">
-                  <a class="nav-link ps-4" routerLink="/admin/expense-categories" routerLinkActive="active" (click)="closeMenu()">
-                    <i class="bi bi-tag me-2"></i>{{ 'NAV.EXPENSE_CATEGORIES' | translate }}
+                  <a class="nav-link ps-4" routerLink="/admin/services" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-tag me-2"></i>{{ 'NAV.SERVICES' | translate }}
                   </a>
                 </li>
                 <li class="nav-item d-lg-none">
