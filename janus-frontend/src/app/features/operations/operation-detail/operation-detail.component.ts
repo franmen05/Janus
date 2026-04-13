@@ -308,6 +308,9 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                       @if (operation()!.originPortName) {
                         <dt>{{ 'OPERATIONS.ORIGIN_PORT' | translate }}</dt><dd>{{ operation()!.originPortCode }} - {{ operation()!.originPortName }}</dd>
                       }
+                      @if (operation()!.depositoName) {
+                        <dt>{{ 'OPERATIONS.DEPOSITO' | translate }}</dt><dd>{{ operation()!.depositoCode }} - {{ operation()!.depositoName }}</dd>
+                      }
                       <dt>{{ 'OPERATIONS.BL_AVAILABILITY' | translate }}</dt>
                       <dd class="d-flex align-items-center gap-2">
                         <span class="badge" [ngClass]="operation()!.blAvailability === 'ORIGINAL' ? 'bg-success' : operation()!.blAvailability === 'ENDORSED' ? 'bg-info' : 'bg-warning text-dark'">

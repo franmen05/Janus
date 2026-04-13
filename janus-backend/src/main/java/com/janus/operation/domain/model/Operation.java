@@ -1,6 +1,7 @@
 package com.janus.operation.domain.model;
 
 import com.janus.customer.domain.model.Customer;
+import com.janus.deposito.domain.model.Deposito;
 import com.janus.port.domain.model.Port;
 import com.janus.shared.domain.BaseEntity;
 import com.janus.user.domain.model.User;
@@ -52,6 +53,9 @@ public class Operation extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     public Port originPort;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Deposito deposito;
 
     @Column(name = "bl_number")
     public String blNumber;

@@ -10,6 +10,8 @@ import com.janus.exchangerate.domain.model.ExchangeRate;
 import com.janus.exchangerate.domain.repository.ExchangeRateRepository;
 import com.janus.inspection.domain.model.ExpenseCategoryConfig;
 import com.janus.inspection.domain.repository.ExpenseCategoryConfigRepository;
+import com.janus.deposito.domain.model.Deposito;
+import com.janus.deposito.domain.repository.DepositoRepository;
 import com.janus.port.domain.model.Port;
 import com.janus.port.domain.repository.PortRepository;
 import com.janus.compliance.domain.model.ComplianceRuleConfig;
@@ -45,6 +47,9 @@ public class DataSeeder {
     PortRepository portRepository;
 
     @Inject
+    DepositoRepository depositoRepository;
+
+    @Inject
     DocumentTypeConfigRepository documentTypeConfigRepository;
 
     @Inject
@@ -65,6 +70,11 @@ public class DataSeeder {
             seedCustomers();
             seedUsers();
             LOG.info("Data seeding complete.");
+        }
+        if (depositoRepository.count() == 0) {
+            LOG.info("Seeding depositos...");
+            seedDepositos();
+            LOG.info("Deposito seeding complete.");
         }
         if (complianceRuleConfigRepository.count() == 0) {
             LOG.info("Seeding compliance rule configs...");
@@ -159,6 +169,26 @@ public class DataSeeder {
         port.originPort = originPort;
         port.arrivalPort = arrivalPort;
         portRepository.persist(port);
+    }
+
+    private void seedDepositos() {
+        var dep1 = new Deposito();
+        dep1.code = "DEP-001";
+        dep1.name = "Depósito Central";
+        dep1.description = "Depósito principal de carga general";
+        depositoRepository.persist(dep1);
+
+        var dep2 = new Deposito();
+        dep2.code = "DEP-002";
+        dep2.name = "Depósito Zona Libre";
+        dep2.description = "Depósito en zona franca";
+        depositoRepository.persist(dep2);
+
+        var dep3 = new Deposito();
+        dep3.code = "DEP-003";
+        dep3.name = "Depósito Refrigerado";
+        dep3.description = "Depósito para carga refrigerada y perecederos";
+        depositoRepository.persist(dep3);
     }
 
     private void createConfig(String ruleCode, String paramKey, String paramValue, String description) {

@@ -9,8 +9,10 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
 import { CustomerService } from '../../../core/services/customer.service';
 import { PortService } from '../../../core/services/port.service';
+import { DepositoService } from '../../../core/services/deposito.service';
 import { Customer } from '../../../core/models/customer.model';
 import { Port } from '../../../core/models/port.model';
+import { Deposito } from '../../../core/models/deposito.model';
 import { TransportMode, OperationType, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
@@ -169,6 +171,30 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
+              <label class="form-label">{{ 'OPERATIONS.DEPOSITO' | translate }}</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-building"></i></span>
+                <input type="text" class="form-control"
+                  [ngbTypeahead]="searchDeposito"
+                  [resultFormatter]="depositoResultFormatter"
+                  [inputFormatter]="depositoInputFormatter"
+                  (selectItem)="onDepositoSelected($event)"
+                  [value]="selectedDepositoDisplay()"
+                  placeholder="{{ 'OPERATIONS.SELECT_DEPOSITO' | translate }}" />
+              </div>
+              @if (selectedDeposito()) {
+                <div class="mt-1 d-flex align-items-center gap-2">
+                  <span class="badge bg-secondary">{{ selectedDeposito()!.code }}</span>
+                  <small class="text-muted">{{ selectedDeposito()!.name }}</small>
+                  <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearDeposito()">
+                    <i class="bi bi-x-circle"></i>
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.INCOTERM' | translate }}</label>
               <select class="form-select" formControlName="incoterm">
                 <option value="">-</option>
@@ -210,6 +236,7 @@ export class OperationFormComponent implements OnInit {
   private operationService = inject(OperationService);
   private customerService = inject(CustomerService);
   private portService = inject(PortService);
+  private depositoService = inject(DepositoService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -221,6 +248,9 @@ export class OperationFormComponent implements OnInit {
   selectedCustomer = signal<Customer | null>(null);
   selectedCustomerDisplay = signal('');
   customerLocked = signal(false);
+  depositos = signal<Deposito[]>([]);
+  selectedDeposito = signal<Deposito | null>(null);
+  selectedDepositoDisplay = signal('');
   transportModes = Object.values(TransportMode);
   cargoTypes = Object.values(CargoType);
   operationCategories = Object.values(OperationCategory);
@@ -248,7 +278,8 @@ export class OperationFormComponent implements OnInit {
     arrivalDate: new FormControl('', { nonNullable: true }),
     incoterm: new FormControl('', { nonNullable: true }),
     arrivalPortId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    originPortId: new FormControl('', { nonNullable: true })
+    originPortId: new FormControl('', { nonNullable: true }),
+    depositoId: new FormControl('', { nonNullable: true })
   });
 
   searchCustomer: OperatorFunction<string, Customer[]> = (text$: Observable<string>) =>
@@ -270,6 +301,38 @@ export class OperationFormComponent implements OnInit {
     `${customer.name}  —  ${customer.taxId || ''}  ${customer.email ? '· ' + customer.email : ''}`;
 
   customerInputFormatter = (customer: Customer) => customer.name;
+
+  searchDeposito: OperatorFunction<string, Deposito[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => {
+        if (term.length < 1) return this.depositos().slice(0, 10);
+        const lower = term.toLowerCase();
+        return this.depositos().filter(d =>
+          d.code.toLowerCase().includes(lower) ||
+          d.name.toLowerCase().includes(lower)
+        ).slice(0, 10);
+      })
+    );
+
+  depositoResultFormatter = (deposito: Deposito) =>
+    `${deposito.code}  —  ${deposito.name}`;
+
+  depositoInputFormatter = (deposito: Deposito) => deposito.name;
+
+  onDepositoSelected(event: any): void {
+    const deposito = event.item as Deposito;
+    this.selectedDeposito.set(deposito);
+    this.selectedDepositoDisplay.set(deposito.name);
+    this.form.get('depositoId')!.setValue(deposito.id.toString());
+  }
+
+  clearDeposito(): void {
+    this.selectedDeposito.set(null);
+    this.selectedDepositoDisplay.set('');
+    this.form.get('depositoId')!.setValue('');
+  }
 
   onCustomerSelected(event: any): void {
     const customer = event.item as Customer;
@@ -310,11 +373,13 @@ export class OperationFormComponent implements OnInit {
         customers: this.customerService.getAll(),
         operation: this.operationService.getById(+id),
         arrivalPorts: this.portService.getAll('arrival'),
-        originPorts: this.portService.getAll('origin')
-      }).subscribe(({ customers, operation: op, arrivalPorts, originPorts }) => {
+        originPorts: this.portService.getAll('origin'),
+        depositos: this.depositoService.getAll()
+      }).subscribe(({ customers, operation: op, arrivalPorts, originPorts, depositos }) => {
         this.customers.set(customers);
         this.arrivalPorts.set(arrivalPorts);
         this.originPorts.set(originPorts);
+        this.depositos.set(depositos);
         if (op.status === 'CLOSED' || op.status === 'CANCELLED') {
           this.router.navigate(['/operations', op.id]);
           return;
@@ -335,7 +400,8 @@ export class OperationFormComponent implements OnInit {
           arrivalDate: op.arrivalDate ?? '',
           incoterm: op.incoterm ?? '',
           arrivalPortId: op.arrivalPortId?.toString() ?? '',
-          originPortId: op.originPortId?.toString() ?? ''
+          originPortId: op.originPortId?.toString() ?? '',
+          depositoId: op.depositoId?.toString() ?? ''
         });
         // Disable BL Availability when operation is at or past VALUATION_REVIEW
         if (this.blAvailabilityLockedStatuses.has(op.status)) {
@@ -348,15 +414,24 @@ export class OperationFormComponent implements OnInit {
             this.selectedCustomerDisplay.set(customer.name);
           }
         }
+        if (op.depositoId) {
+          const deposito = depositos.find(d => d.id === op.depositoId);
+          if (deposito) {
+            this.selectedDeposito.set(deposito);
+            this.selectedDepositoDisplay.set(deposito.name);
+          }
+        }
       });
     } else {
       // Not editing: just load clients for the typeahead and ports
       forkJoin({
         arrivalPorts: this.portService.getAll('arrival'),
-        originPorts: this.portService.getAll('origin')
-      }).subscribe(({ arrivalPorts, originPorts }) => {
+        originPorts: this.portService.getAll('origin'),
+        depositos: this.depositoService.getAll()
+      }).subscribe(({ arrivalPorts, originPorts, depositos }) => {
         this.arrivalPorts.set(arrivalPorts);
         this.originPorts.set(originPorts);
+        this.depositos.set(depositos);
       });
       this.customerService.getAll().subscribe(customers => {
         this.customers.set(customers);
@@ -421,7 +496,8 @@ export class OperationFormComponent implements OnInit {
       arrivalDate: val.arrivalDate || undefined,
       incoterm: val.incoterm || undefined,
       arrivalPortId: val.arrivalPortId ? +val.arrivalPortId : undefined,
-      originPortId: val.originPortId ? +val.originPortId : undefined
+      originPortId: val.originPortId ? +val.originPortId : undefined,
+      depositoId: val.depositoId ? +val.depositoId : undefined
     };
     const obs = this.isEdit() ? this.operationService.update(this.operationId!, request) : this.operationService.create(request);
     obs.subscribe(op => this.router.navigate(['/operations', op.id]));

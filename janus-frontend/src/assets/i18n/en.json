@@ -22,7 +22,8 @@
     "EXPENSE_CATEGORIES": "Expense Categories",
     "COLLAPSE_SIDEBAR": "Collapse",
     "EXPAND_SIDEBAR": "Expand",
-    "API_KEYS": "API Keys"
+    "API_KEYS": "API Keys",
+    "DEPOSITOS": "Warehouses"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -118,7 +119,9 @@
     "ORIGIN_PORT": "Origin Port",
     "SELECT_PORT": "Select port...",
     "SEARCH": "Search by reference, agent or customer...",
-    "ALL_TRANSPORT_MODES": "All transport modes"
+    "ALL_TRANSPORT_MODES": "All transport modes",
+    "DEPOSITO": "Warehouse",
+    "SELECT_DEPOSITO": "Search warehouse by code or name..."
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -217,6 +220,17 @@
     "TYPE": "Type",
     "BADGE_ORIGIN": "Origin",
     "BADGE_ARRIVAL": "Arrival"
+  },
+  "DEPOSITOS": {
+    "TITLE": "Warehouses",
+    "NEW": "New Warehouse",
+    "EDIT_TITLE": "Edit Warehouse",
+    "NEW_TITLE": "New Warehouse",
+    "CODE": "Code",
+    "NAME": "Name",
+    "DESCRIPTION": "Description",
+    "SEARCH": "Search by code or name...",
+    "NO_DEPOSITOS": "No warehouses found"
   },
   "CUSTOMER_TYPES": {
     "COMPANY": "Company",
