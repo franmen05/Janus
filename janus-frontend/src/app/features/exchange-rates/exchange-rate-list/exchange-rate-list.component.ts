@@ -5,11 +5,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ExchangeRateService } from '../../../core/services/exchange-rate.service';
 import { ExchangeRate, AutoFetchStatus } from '../../../core/models/exchange-rate.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-exchange-rate-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, PaginationComponent],
   template: `
     <!-- Current Rate Card -->
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
@@ -128,6 +129,12 @@ import { AuthService } from '../../../core/services/auth.service';
               }
             </tbody>
           </table>
+          <app-pagination
+            [currentPage]="currentPage()"
+            [pageSize]="pageSize"
+            [totalElements]="totalElements()"
+            [totalPages]="totalPages()"
+            (pageChange)="onPageChange($event)" />
         }
       </div>
     </div>
@@ -146,6 +153,12 @@ export class ExchangeRateListComponent implements OnInit {
   autoFetchHour = signal(8);
   autoFetchMinute = signal(0);
   togglingAutoFetch = signal(false);
+
+  currentPage = signal(1);
+  pageSize = 10;
+  totalElements = signal(0);
+  totalPages = signal(0);
+
   scheduledTime = computed(() => {
     const h = this.autoFetchHour().toString().padStart(2, '0');
     const m = this.autoFetchMinute().toString().padStart(2, '0');
@@ -160,13 +173,20 @@ export class ExchangeRateListComponent implements OnInit {
 
   private loadRates(): void {
     this.loading.set(true);
-    this.exchangeRateService.getAll().subscribe({
-      next: rates => {
-        this.rates.set(rates);
+    this.exchangeRateService.getAll(this.currentPage() - 1, this.pageSize).subscribe({
+      next: response => {
+        this.rates.set(response.content);
+        this.totalElements.set(response.totalElements);
+        this.totalPages.set(response.totalPages);
         this.loading.set(false);
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
+    this.loadRates();
   }
 
   private loadCurrentRate(): void {

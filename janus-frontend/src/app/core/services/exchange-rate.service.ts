@@ -1,16 +1,20 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ExchangeRate, CreateExchangeRateRequest, AutoFetchStatus } from '../models/exchange-rate.model';
+import { PageResponse } from '../models/page.model';
 
 @Injectable({ providedIn: 'root' })
 export class ExchangeRateService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/exchange-rates`;
 
-  getAll(): Observable<ExchangeRate[]> {
-    return this.http.get<ExchangeRate[]>(this.apiUrl);
+  getAll(page = 0, size = 10): Observable<PageResponse<ExchangeRate>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<PageResponse<ExchangeRate>>(this.apiUrl, { params });
   }
 
   getById(id: number): Observable<ExchangeRate> {
