@@ -11,7 +11,7 @@ public record UserResponse(
         String email,
         List<String> roles,
         boolean active,
-        Long customerId,
+        Long accountId,
         LocalDateTime createdAt
 ) {
     public static UserResponse from(User user) {
@@ -22,7 +22,7 @@ public record UserResponse(
                 user.email,
                 List.copyOf(user.roles),
                 user.active,
-                user.customerId,
+                user.accountId,
                 user.createdAt
         );
     }

@@ -11,7 +11,7 @@ import { getErrorMessage } from '../../../../core/utils/error-message.util';
 import { InspectionExpense, ExpenseCategory, CreateExpenseRequest, ChargeType, PaymentType, BillToType } from '../../../../core/models/inspection.model';
 import { ServiceService } from '../../../../core/services/service.service';
 import { ServiceConfig } from '../../../../core/models/service.model';
-import { Customer, CustomerType } from '../../../../core/models/customer.model';
+import { Account, AccountType } from '../../../../core/models/account.model';
 
 @Component({
   selector: 'app-expense-detail-modal',
@@ -187,10 +187,10 @@ import { Customer, CustomerType } from '../../../../core/models/customer.model';
               <label class="form-label">{{ (activeTab() === 'EXPENSE' ? 'INSPECTION.RESPONSIBLE_NAME' : 'INSPECTION.BILL_TO_NAME') | translate }}</label>
               <input type="text" class="form-control form-control-sm"
                 formControlName="billToName"
-                [ngbTypeahead]="searchCustomer"
-                [resultFormatter]="customerResultFormatter"
-                [inputFormatter]="customerInputFormatter"
-                (selectItem)="onCustomerSelected($event)">
+                [ngbTypeahead]="searchAccount"
+                [resultFormatter]="accountResultFormatter"
+                [inputFormatter]="accountInputFormatter"
+                (selectItem)="onAccountSelected($event)">
             </div>
             <div class="col-md-2">
               <label class="form-label">{{ 'INSPECTION.INVOICE_NUMBER' | translate }}</label>
@@ -291,10 +291,10 @@ export class ExpenseDetailModalComponent implements OnInit {
     volumetricWeight?: number | null;
     volume?: number | null;
     declaredValue?: number | null;
-    customerName?: string | null;
+    accountName?: string | null;
     blNumber?: string | null;
   } | null = null;
-  customers: Customer[] = [];
+  accounts: Account[] = [];
   defaultChargeType: ChargeType = 'EXPENSE';
 
   readonly unitOptions = [
@@ -356,17 +356,17 @@ export class ExpenseDetailModalComponent implements OnInit {
     notes: new FormControl<string>('', { nonNullable: true })
   });
 
-  // Customer typeahead — filters by selected billToType and searches name, taxId, email
-  searchCustomer: OperatorFunction<string, Customer[]> = (text$: Observable<string>) =>
+  // Account typeahead — filters by selected billToType and searches name, taxId, email
+  searchAccount: OperatorFunction<string, Account[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       map(term => {
         const selectedType = this.editForm.controls.billToType.value;
-        let filtered = this.customers.filter(c => c.active);
-        // Filter by customerType matching selected billToType
+        let filtered = this.accounts.filter(c => c.active);
+        // Filter by accountType matching selected billToType
         if (selectedType) {
-          filtered = filtered.filter(c => c.customerTypes.includes(selectedType as CustomerType));
+          filtered = filtered.filter(c => c.accountTypes.includes(selectedType as AccountType));
         }
         if (term.length < 1) {
           return filtered.slice(0, 10);
@@ -380,12 +380,12 @@ export class ExpenseDetailModalComponent implements OnInit {
       })
     );
 
-  customerResultFormatter = (customer: Customer) => `${customer.name} \u2014 ${customer.taxId} \u00b7 ${customer.email}`;
-  customerInputFormatter = (customer: any) => typeof customer === 'string' ? customer : customer.name;
+  accountResultFormatter = (account: Account) => `${account.name} \u2014 ${account.taxId} \u00b7 ${account.email}`;
+  accountInputFormatter = (account: any) => typeof account === 'string' ? account : account.name;
 
-  onCustomerSelected(event: any): void {
-    const customer = event.item;
-    this.editForm.controls.billToName.setValue(customer.name);
+  onAccountSelected(event: any): void {
+    const account = event.item;
+    this.editForm.controls.billToName.setValue(account.name);
   }
 
   setTab(tab: any): void {

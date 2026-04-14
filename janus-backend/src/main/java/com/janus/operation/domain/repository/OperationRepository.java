@@ -16,8 +16,8 @@ public class OperationRepository implements PanacheRepository<Operation> {
         return list("status", status);
     }
 
-    public List<Operation> findByCustomerId(Long customerId) {
-        return list("customer.id", customerId);
+    public List<Operation> findByAccountId(Long accountId) {
+        return list("account.id", accountId);
     }
 
     public long countByStatus(OperationStatus status) {
@@ -50,9 +50,9 @@ public class OperationRepository implements PanacheRepository<Operation> {
                 OperationStatus.ANALYST_ASSIGNED);
     }
 
-    public List<Operation> findPaginated(OperationStatus status, Long customerId, String search, int page, int size) {
-        var query = buildFilterQuery(status, customerId, search);
-        var params = buildFilterParams(status, customerId, search);
+    public List<Operation> findPaginated(OperationStatus status, Long accountId, String search, int page, int size) {
+        var query = buildFilterQuery(status, accountId, search);
+        var params = buildFilterParams(status, accountId, search);
         if (query.isEmpty()) {
             return findAll().page(Page.of(page, size)).list();
         }
@@ -61,35 +61,35 @@ public class OperationRepository implements PanacheRepository<Operation> {
                 .list();
     }
 
-    public long countFiltered(OperationStatus status, Long customerId, String search) {
-        var query = buildFilterQuery(status, customerId, search);
-        var params = buildFilterParams(status, customerId, search);
+    public long countFiltered(OperationStatus status, Long accountId, String search) {
+        var query = buildFilterQuery(status, accountId, search);
+        var params = buildFilterParams(status, accountId, search);
         if (query.isEmpty()) {
             return count();
         }
         return count(String.join(" AND ", query), params.toArray());
     }
 
-    private List<String> buildFilterQuery(OperationStatus status, Long customerId, String search) {
+    private List<String> buildFilterQuery(OperationStatus status, Long accountId, String search) {
         var clauses = new ArrayList<String>();
         int paramIndex = 1;
         if (status != null) {
             clauses.add("status = ?" + paramIndex++);
         }
-        if (customerId != null) {
-            clauses.add("customer.id = ?" + paramIndex++);
+        if (accountId != null) {
+            clauses.add("account.id = ?" + paramIndex++);
         }
         if (search != null && !search.isBlank()) {
-            clauses.add("(LOWER(referenceNumber) LIKE ?" + paramIndex + " OR LOWER(customer.name) LIKE ?" + paramIndex + " OR LOWER(blNumber) LIKE ?" + paramIndex + ")");
+            clauses.add("(LOWER(referenceNumber) LIKE ?" + paramIndex + " OR LOWER(account.name) LIKE ?" + paramIndex + " OR LOWER(blNumber) LIKE ?" + paramIndex + ")");
             paramIndex++;
         }
         return clauses;
     }
 
-    private List<Object> buildFilterParams(OperationStatus status, Long customerId, String search) {
+    private List<Object> buildFilterParams(OperationStatus status, Long accountId, String search) {
         var params = new ArrayList<>();
         if (status != null) params.add(status);
-        if (customerId != null) params.add(customerId);
+        if (accountId != null) params.add(accountId);
         if (search != null && !search.isBlank()) params.add("%" + search.toLowerCase() + "%");
         return params;
     }

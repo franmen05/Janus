@@ -56,8 +56,8 @@ export enum BlAvailability {
 export interface Operation {
   id: number;
   referenceNumber: string;
-  customerId: number;
-  customerName: string;
+  accountId: number;
+  accountName: string;
   operationType: OperationType;
   transportMode: TransportMode;
   cargoType?: CargoType | null;
@@ -99,7 +99,7 @@ export interface Operation {
 }
 
 export interface CreateOperationRequest {
-  customerId: number;
+  accountId: number;
   operationType: OperationType;
   transportMode: TransportMode;
   cargoType?: CargoType;

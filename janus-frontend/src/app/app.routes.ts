@@ -75,20 +75,20 @@ export const routes: Routes = [
         canActivate: [roleGuard]
       },
       {
-        path: 'customers',
-        loadComponent: () => import('./features/customers/customer-list/customer-list.component').then(m => m.CustomerListComponent),
+        path: 'accounts',
+        loadComponent: () => import('./features/accounts/account-list/account-list.component').then(m => m.AccountListComponent),
         data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
-        path: 'customers/new',
-        loadComponent: () => import('./features/customers/customer-form/customer-form.component').then(m => m.CustomerFormComponent),
+        path: 'accounts/new',
+        loadComponent: () => import('./features/accounts/account-form/account-form.component').then(m => m.AccountFormComponent),
         data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },
       {
-        path: 'customers/:id/edit',
-        loadComponent: () => import('./features/customers/customer-form/customer-form.component').then(m => m.CustomerFormComponent),
+        path: 'accounts/:id/edit',
+        loadComponent: () => import('./features/accounts/account-form/account-form.component').then(m => m.AccountFormComponent),
         data: { roles: ['ADMIN', 'AGENT'] },
         canActivate: [roleGuard]
       },

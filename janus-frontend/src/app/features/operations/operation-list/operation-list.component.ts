@@ -69,7 +69,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
               @for (op of filteredOperations(); track op.id) {
                 <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
                   <td class="fw-bold">{{ op.referenceNumber }}</td>
-                  <td>{{ op.customerName }}</td>
+                  <td>{{ op.accountName }}</td>
                   <td class="d-none d-md-table-cell">{{ op.transportMode | statusLabel }}</td>
                   <td class="d-none d-md-table-cell">{{ op.arrivalPortName ?? '-' }}</td>
                   <td><app-status-badge [status]="op.status" /></td>

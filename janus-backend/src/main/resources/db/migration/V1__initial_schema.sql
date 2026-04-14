@@ -11,8 +11,8 @@ create sequence clients_SEQ start with 1 increment by 50;
 create sequence compliance_rule_configs_SEQ start with 1 increment by 50;
 create sequence crossing_discrepancies_SEQ start with 1 increment by 50;
 create sequence crossing_results_SEQ start with 1 increment by 50;
-create sequence customer_contacts_SEQ start with 1 increment by 50;
-create sequence customers_SEQ start with 1 increment by 50;
+create sequence account_contacts_SEQ start with 1 increment by 50;
+create sequence accounts_SEQ start with 1 increment by 50;
 create sequence declarations_SEQ start with 1 increment by 50;
 create sequence depositos_SEQ start with 1 increment by 50;
 create sequence document_type_configs_SEQ start with 1 increment by 50;
@@ -44,7 +44,7 @@ create table users (
     id BIGINT not null,
     active BOOLEAN not null,
     created_at TIMESTAMP not null,
-    customer_id BIGINT,
+    account_id BIGINT,
     updated_at TIMESTAMP,
     email VARCHAR(255) not null,
     full_name VARCHAR(255) not null,
@@ -58,7 +58,7 @@ create table user_roles (
     role VARCHAR(255)
 );
 
-create table customers (
+create table accounts (
     id BIGINT not null,
     active BOOLEAN not null,
     created_at TIMESTAMP not null,
@@ -67,23 +67,22 @@ create table customers (
     alternatePhone VARCHAR(255),
     businessName VARCHAR(255),
     country VARCHAR(255),
-    customerCode VARCHAR(255),
+    accountCode VARCHAR(255),
     email VARCHAR(255) not null,
     name VARCHAR(255) not null,
     notes VARCHAR(255),
     phone VARCHAR(255),
     representative VARCHAR(255),
     tax_id VARCHAR(255) not null unique,
-    customerType VARCHAR(50) not null,
     documentType VARCHAR(50),
     primary key (id)
 );
 
-create table customer_contacts (
+create table account_contacts (
     id BIGINT not null,
     receive_notifications BOOLEAN not null,
     created_at TIMESTAMP not null,
-    customer_id BIGINT,
+    account_id BIGINT,
     updated_at TIMESTAMP,
     email VARCHAR(255),
     firstName VARCHAR(255) not null,
@@ -92,6 +91,13 @@ create table customer_contacts (
     phone VARCHAR(255) not null,
     contact_type VARCHAR(50) not null,
     primary key (id)
+);
+
+create table account_types (
+    account_id BIGINT NOT NULL,
+    account_type VARCHAR(50) NOT NULL,
+    PRIMARY KEY (account_id, account_type),
+    CONSTRAINT FK_account_types_account_id FOREIGN KEY (account_id) REFERENCES accounts(id)
 );
 
 create table ports (
@@ -214,7 +220,7 @@ create table operations (
     assignedAgent_id BIGINT,
     closed_at TIMESTAMP,
     created_at TIMESTAMP not null,
-    customer_id BIGINT,
+    account_id BIGINT,
     deposito_id BIGINT,
     estimated_arrival TIMESTAMP,
     inspection_set_at TIMESTAMP,
@@ -539,7 +545,7 @@ ALTER TABLE crossing_results ADD CONSTRAINT FK_crossing_results_finalDeclaration
 ALTER TABLE crossing_results ADD CONSTRAINT FK_crossing_results_operation_id FOREIGN KEY (operation_id) REFERENCES operations (id);
 ALTER TABLE crossing_results ADD CONSTRAINT FK_crossing_results_preliminaryDeclaration_id FOREIGN KEY (preliminaryDeclaration_id) REFERENCES declarations (id);
 
-ALTER TABLE customer_contacts ADD CONSTRAINT FK_customer_contacts_customer_id FOREIGN KEY (customer_id) REFERENCES customers (id);
+ALTER TABLE account_contacts ADD CONSTRAINT FK_account_contacts_account_id FOREIGN KEY (account_id) REFERENCES accounts (id);
 
 ALTER TABLE declarations ADD CONSTRAINT FK_declarations_operation_id FOREIGN KEY (operation_id) REFERENCES operations (id);
 
@@ -566,7 +572,7 @@ ALTER TABLE operation_comments ADD CONSTRAINT FK_operation_comments_operation_id
 
 ALTER TABLE operations ADD CONSTRAINT FK_operations_arrivalPort_id FOREIGN KEY (arrivalPort_id) REFERENCES ports (id);
 ALTER TABLE operations ADD CONSTRAINT FK_operations_assignedAgent_id FOREIGN KEY (assignedAgent_id) REFERENCES users (id);
-ALTER TABLE operations ADD CONSTRAINT FK_operations_customer_id FOREIGN KEY (customer_id) REFERENCES customers (id);
+ALTER TABLE operations ADD CONSTRAINT FK_operations_account_id FOREIGN KEY (account_id) REFERENCES accounts (id);
 ALTER TABLE operations ADD CONSTRAINT FK_operations_deposito_id FOREIGN KEY (deposito_id) REFERENCES depositos (id);
 ALTER TABLE operations ADD CONSTRAINT FK_operations_originPort_id FOREIGN KEY (originPort_id) REFERENCES ports (id);
 

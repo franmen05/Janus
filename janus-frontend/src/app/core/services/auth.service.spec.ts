@@ -15,7 +15,7 @@ const mockUser: User = {
   email: 'admin@test.com',
   roles: ['ADMIN'],
   active: true,
-  customerId: null,
+  accountId: null,
   createdAt: '2024-01-01T00:00:00'
 };
 
@@ -26,7 +26,7 @@ const mockMultiRoleUser: User = {
   email: 'supervisor@test.com',
   roles: ['SUPERVISOR', 'AGENT'],
   active: true,
-  customerId: null,
+  accountId: null,
   createdAt: '2024-01-01T00:00:00'
 };
 

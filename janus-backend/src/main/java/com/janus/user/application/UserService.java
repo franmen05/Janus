@@ -52,7 +52,7 @@ public class UserService {
         user.fullName = request.fullName();
         user.email = request.email();
         user.roles = request.roles().stream().map(Role::name).collect(Collectors.toSet());
-        user.customerId = request.customerId();
+        user.accountId = request.accountId();
         userRepository.persist(user);
         auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "User", user.id, null, null, null,
                 "User created: " + user.username));
@@ -65,7 +65,7 @@ public class UserService {
         user.fullName = request.fullName();
         user.email = request.email();
         user.roles = request.roles().stream().map(Role::name).collect(Collectors.toSet());
-        user.customerId = request.customerId();
+        user.accountId = request.accountId();
         user.active = request.active();
         if (request.password() != null && !request.password().isBlank()) {
             user.password = BcryptUtil.bcryptHash(request.password());

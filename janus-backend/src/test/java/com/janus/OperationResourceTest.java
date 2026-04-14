@@ -185,7 +185,7 @@ class OperationResourceTest {
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 1, "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -199,7 +199,7 @@ class OperationResourceTest {
                 .auth().basic("accounting", "acc123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL"}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -215,7 +215,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Test operation", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Test operation", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -259,7 +259,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_3", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Updated notes", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_3", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Updated notes", "arrivalPortId": 1}
                         """)
                 .when().put("/api/operations/{id}", createdOperationId)
                 .then()
@@ -283,10 +283,10 @@ class OperationResourceTest {
 
     @Test
     @Order(15)
-    void testFilterByCustomerId() {
+    void testFilterByAccountId() {
         given()
                 .auth().basic("admin", "admin123")
-                .queryParam("customerId", 1)
+                .queryParam("accountId", 1)
                 .when().get("/api/operations")
                 .then()
                 .statusCode(200)
@@ -300,7 +300,7 @@ class OperationResourceTest {
                 .auth().basic("agent", "agent123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 2, "operationType": "EXPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_2", "blNumber": "BL-TEST-002", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 2}
+                        {"accountId": 2, "operationType": "EXPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_2", "blNumber": "BL-TEST-002", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 2}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -370,7 +370,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -481,7 +481,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-UPDATED", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Should not work", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-UPDATED", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "notes": "Should not work", "arrivalPortId": 1}
                         """)
                 .when().put("/api/operations/{id}", opId)
                 .then()
@@ -498,7 +498,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_1", "containerNumber": "CONT-001", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then()
@@ -596,7 +596,7 @@ class OperationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-RR-COMP", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-RR-COMP", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)

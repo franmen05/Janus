@@ -42,8 +42,8 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
               </li>
               @if (authService.hasRole(['ADMIN', 'AGENT'])) {
                 <li class="nav-item d-lg-none">
-                  <a class="nav-link" routerLink="/customers" routerLinkActive="active" (click)="closeMenu()">
-                    <i class="bi bi-people me-2"></i>{{ 'NAV.CUSTOMERS' | translate }}
+                  <a class="nav-link" routerLink="/accounts" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-people me-2"></i>{{ 'NAV.ACCOUNTS' | translate }}
                   </a>
                 </li>
               }

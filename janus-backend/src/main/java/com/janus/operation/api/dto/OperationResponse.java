@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 public record OperationResponse(
         Long id,
         String referenceNumber,
-        Long customerId,
-        String customerName,
+        Long accountId,
+        String accountName,
         OperationType operationType,
         TransportMode transportMode,
         CargoType cargoType,
@@ -61,8 +61,8 @@ public record OperationResponse(
         return new OperationResponse(
                 op.id,
                 op.referenceNumber,
-                op.customer != null ? op.customer.id : null,
-                op.customer != null ? op.customer.name : null,
+                op.account != null ? op.account.id : null,
+                op.account != null ? op.account.name : null,
                 op.operationType,
                 op.transportMode,
                 op.cargoType,

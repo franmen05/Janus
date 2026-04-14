@@ -10,7 +10,7 @@ public record UpdateUserRequest(
         @NotBlank String fullName,
         @NotBlank @Email String email,
         @NotEmpty List<Role> roles,
-        Long customerId,
+        Long accountId,
         boolean active,
         String password
 ) {}

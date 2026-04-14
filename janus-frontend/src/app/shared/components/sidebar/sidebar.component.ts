@@ -40,12 +40,12 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
           </li>
           @if (authService.hasRole(['ADMIN', 'AGENT'])) {
             <li class="nav-item">
-              <a class="nav-link" routerLink="/customers" routerLinkActive="active"
-                 [ngbTooltip]="sidebarService.collapsed() ? ('NAV.CUSTOMERS' | translate) : null"
+              <a class="nav-link" routerLink="/accounts" routerLinkActive="active"
+                 [ngbTooltip]="sidebarService.collapsed() ? ('NAV.ACCOUNTS' | translate) : null"
                  placement="end" container="body">
                 <i class="bi bi-people"></i>
                 @if (!sidebarService.collapsed()) {
-                  <span>{{ 'NAV.CUSTOMERS' | translate }}</span>
+                  <span>{{ 'NAV.ACCOUNTS' | translate }}</span>
                 }
               </a>
             </li>

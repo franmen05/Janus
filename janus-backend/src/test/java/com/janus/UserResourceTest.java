@@ -105,7 +105,7 @@ class UserResourceTest {
                 .statusCode(200)
                 .body("username", is("client"))
                 .body("roles", org.hamcrest.Matchers.hasItem("CUSTOMER"))
-                .body("customerId", notNullValue());
+                .body("accountId", notNullValue());
     }
 
     @Test

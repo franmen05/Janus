@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateOperationRequest(
-        @NotNull Long customerId,
+        @NotNull Long accountId,
         @NotNull OperationType operationType,
         @NotNull TransportMode transportMode,
         CargoType cargoType,

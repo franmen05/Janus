@@ -50,16 +50,16 @@ public class OperationResource {
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING", "CUSTOMER"})
     public PageResponse<OperationResponse> list(
             @QueryParam("status") OperationStatus status,
-            @QueryParam("customerId") Long customerId,
+            @QueryParam("accountId") Long accountId,
             @QueryParam("search") String search,
             @QueryParam("page") @DefaultValue("0") int page,
             @QueryParam("size") @DefaultValue("10") int size,
             @Context SecurityContext sec) {
-        var customerIdFilter = securityHelper.getCustomerIdFilter(sec);
-        if (customerIdFilter != null) {
-            customerId = customerIdFilter;
+        var accountIdFilter = securityHelper.getAccountIdFilter(sec);
+        if (accountIdFilter != null) {
+            accountId = accountIdFilter;
         }
-        return operationService.listPaginated(status, customerId, search, page, size);
+        return operationService.listPaginated(status, accountId, search, page, size);
     }
 
     @GET

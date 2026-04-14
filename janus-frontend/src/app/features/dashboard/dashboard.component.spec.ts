@@ -22,21 +22,21 @@ describe('DashboardComponent', () => {
 
   const mockOperations: Operation[] = [
     {
-      id: 1, referenceNumber: 'OP-001', customerId: 1, customerName: 'Customer A',
+      id: 1, referenceNumber: 'OP-001', accountId: 1, accountName: 'Customer A',
       operationType: OperationType.IMPORT, transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_1,
       status: OperationStatus.DRAFT, assignedAgentId: null, assignedAgentName: null,
       blNumber: null, containerNumber: 'CONT-001', estimatedArrival: null, blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,
       notes: null, arrivalDate: null, closedAt: null, createdAt: '2024-01-01', updatedAt: '2024-01-01'
     },
     {
-      id: 2, referenceNumber: 'OP-002', customerId: 2, customerName: 'Customer B',
+      id: 2, referenceNumber: 'OP-002', accountId: 2, accountName: 'Customer B',
       operationType: OperationType.EXPORT, transportMode: TransportMode.AIR, operationCategory: OperationCategory.CATEGORY_2,
       status: OperationStatus.CLOSED, assignedAgentId: null, assignedAgentName: null,
       blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: 'ORIGINAL' as any, blOriginalAvailable: true,
       notes: null, arrivalDate: null, closedAt: '2024-01-10', createdAt: '2024-01-02', updatedAt: '2024-01-10'
     },
     {
-      id: 3, referenceNumber: 'OP-003', customerId: 1, customerName: 'Customer A',
+      id: 3, referenceNumber: 'OP-003', accountId: 1, accountName: 'Customer A',
       operationType: OperationType.IMPORT, transportMode: TransportMode.MARITIME, operationCategory: OperationCategory.CATEGORY_3,
       status: OperationStatus.CANCELLED, assignedAgentId: null, assignedAgentName: null,
       blNumber: null, containerNumber: null, estimatedArrival: null, blAvailability: 'NOT_AVAILABLE' as any, blOriginalAvailable: false,

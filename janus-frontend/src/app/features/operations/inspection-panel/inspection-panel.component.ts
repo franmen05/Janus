@@ -5,8 +5,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InspectionService } from '../../../core/services/inspection.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { CustomerService } from '../../../core/services/customer.service';
-import { Customer } from '../../../core/models/customer.model';
+import { AccountService } from '../../../core/services/account.service';
+import { Account } from '../../../core/models/account.model';
 import { Operation, InspectionType } from '../../../core/models/operation.model';
 import { InspectionPhoto, SetInspectionTypeRequest } from '../../../core/models/inspection.model';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
@@ -25,7 +25,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
         [operationId]="operationId()"
         [operation]="operation()"
         [operationSummary]="operationSummary()"
-        [customers]="customers()"
+        [accounts]="accounts()"
         (changed)="onChargesChanged()" />
     }
 
@@ -125,7 +125,7 @@ export class InspectionPanelComponent implements OnInit {
   private inspectionService = inject(InspectionService);
   private translate = inject(TranslateService);
   private toastService = inject(ToastService);
-  private customerService = inject(CustomerService);
+  private accountService = inject(AccountService);
   authService = inject(AuthService);
 
   photos = signal<InspectionPhoto[]>([]);
@@ -133,7 +133,7 @@ export class InspectionPanelComponent implements OnInit {
   selectedFile: File | null = null;
   caption = '';
 
-  customers = signal<Customer[]>([]);
+  accounts = signal<Account[]>([]);
 
   operationSummary = computed(() => {
     const op = this.operation();
@@ -144,7 +144,7 @@ export class InspectionPanelComponent implements OnInit {
       volumetricWeight: op.volumetricWeight,
       volume: op.volume,
       declaredValue: op.declaredValue,
-      customerName: op.customerName,
+      accountName: op.accountName,
       blNumber: op.blNumber
     };
   });
@@ -153,7 +153,7 @@ export class InspectionPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPhotos();
-    this.customerService.getAll(0, 9999).subscribe(response => this.customers.set(response.content));
+    this.accountService.getAll(0, 9999).subscribe(response => this.accounts.set(response.content));
   }
 
   canSetType(): boolean {

@@ -23,10 +23,10 @@ class DeclarationResourceTest {
     private static Long operationId;
     private static Long preliminaryId;
     private static Long finalId;
-    private static Long customerApprovalOpId;
-    private static Long customerApprovalDeclId;
-    private static Long otherCustomerOpId;
-    private static Long otherCustomerDeclId;
+    private static Long accountApprovalOpId;
+    private static Long accountApprovalDeclId;
+    private static Long otherAccountOpId;
+    private static Long otherAccountDeclId;
 
     @Test
     @Order(1)
@@ -35,7 +35,7 @@ class DeclarationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -319,7 +319,7 @@ class DeclarationResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -395,31 +395,31 @@ class DeclarationResourceTest {
     @Test
     @Order(30)
     void testCustomerApprovalSetup() {
-        // Create operation with customerId=1 (matches "client" user)
-        customerApprovalOpId = given()
+        // Create operation with accountId=1 (matches "client" user)
+        accountApprovalOpId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-CLIENT-APPROVAL", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-CLIENT-APPROVAL", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
         // Upload mandatory docs
-        uploadDocument(customerApprovalOpId, "BL");
-        uploadDocument(customerApprovalOpId, "COMMERCIAL_INVOICE");
-        uploadDocument(customerApprovalOpId, "PACKING_LIST");
+        uploadDocument(accountApprovalOpId, "BL");
+        uploadDocument(accountApprovalOpId, "COMMERCIAL_INVOICE");
+        uploadDocument(accountApprovalOpId, "PACKING_LIST");
 
         // Register preliminary declaration
-        customerApprovalDeclId = given()
+        accountApprovalDeclId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
                         {"declarationNumber": "PRELIM-CA", "fobValue": 5000.00, "cifValue": 6000.00,
                          "taxableBase": 6000.00, "totalTaxes": 900.00, "freightValue": 800.00, "insuranceValue": 200.00}
                         """)
-                .when().post("/api/operations/{opId}/declarations/preliminary", customerApprovalOpId)
+                .when().post("/api/operations/{opId}/declarations/preliminary", accountApprovalOpId)
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
@@ -430,18 +430,18 @@ class DeclarationResourceTest {
                 .body("""
                         {"comment": "Technical OK"}
                         """)
-                .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", customerApprovalOpId, customerApprovalDeclId)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-technical", accountApprovalOpId, accountApprovalDeclId)
                 .then().statusCode(200);
 
         // Advance to PRELIQUIDATION_REVIEW
-        changeStatus(customerApprovalOpId, "DOCUMENTATION_COMPLETE");
-        changeStatus(customerApprovalOpId, "IN_REVIEW");
-        changeStatus(customerApprovalOpId, "PRELIQUIDATION_REVIEW");
+        changeStatus(accountApprovalOpId, "DOCUMENTATION_COMPLETE");
+        changeStatus(accountApprovalOpId, "IN_REVIEW");
+        changeStatus(accountApprovalOpId, "PRELIQUIDATION_REVIEW");
 
         // Verify operation is in PRELIQUIDATION_REVIEW (client will approve final here)
         given()
                 .auth().basic("admin", "admin123")
-                .when().get("/api/operations/{id}", customerApprovalOpId)
+                .when().get("/api/operations/{id}", accountApprovalOpId)
                 .then()
                 .statusCode(200)
                 .body("status", is("PRELIQUIDATION_REVIEW"));
@@ -452,7 +452,7 @@ class DeclarationResourceTest {
     void testCustomerCanListDeclarations() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{opId}/declarations", customerApprovalOpId)
+                .when().get("/api/operations/{opId}/declarations", accountApprovalOpId)
                 .then()
                 .statusCode(200)
                 .body("size()", greaterThanOrEqualTo(1));
@@ -460,38 +460,38 @@ class DeclarationResourceTest {
 
     @Test
     @Order(32)
-    void testCustomerCannotApproveFinalForOtherCustomer() {
-        // Create operation with customerId=2 (different from "client" user's customerId=1)
-        otherCustomerOpId = given()
+    void testCustomerCannotApproveFinalForOtherAccount() {
+        // Create operation with accountId=2 (different from "client" user's accountId=1)
+        otherAccountOpId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 2, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-OTHER-CLIENT", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 2}
+                        {"accountId": 2, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-OTHER-CLIENT", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 2}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
-        // Register a declaration on the other customer's operation
-        otherCustomerDeclId = given()
+        // Register a declaration on the other account's operation
+        otherAccountDeclId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
                         {"declarationNumber": "PRELIM-OTHER", "fobValue": 3000.00, "cifValue": 3500.00,
                          "taxableBase": 3500.00, "totalTaxes": 525.00}
                         """)
-                .when().post("/api/operations/{opId}/declarations/preliminary", otherCustomerOpId)
+                .when().post("/api/operations/{opId}/declarations/preliminary", otherAccountOpId)
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
-        // Customer tries to approve on other customer's operation -> 403
+        // Customer tries to approve on other account's operation -> 403
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
                         {"comment": "Should be forbidden"}
                         """)
-                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", otherCustomerOpId, otherCustomerDeclId)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", otherAccountOpId, otherAccountDeclId)
                 .then()
                 .statusCode(403);
     }
@@ -505,7 +505,7 @@ class DeclarationResourceTest {
                 .body("""
                         {"comment": "Agent trying to approve"}
                         """)
-                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", customerApprovalOpId, customerApprovalDeclId)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", accountApprovalOpId, accountApprovalDeclId)
                 .then()
                 .statusCode(403);
     }
@@ -516,7 +516,7 @@ class DeclarationResourceTest {
         given()
                 .auth().basic("agent", "agent123")
                 .contentType(ContentType.JSON)
-                .when().post("/api/operations/{opId}/declarations/{id}/send-approval-link", customerApprovalOpId, customerApprovalDeclId)
+                .when().post("/api/operations/{opId}/declarations/{id}/send-approval-link", accountApprovalOpId, accountApprovalDeclId)
                 .then()
                 .statusCode(200);
     }
@@ -527,7 +527,7 @@ class DeclarationResourceTest {
         given()
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
-                .when().post("/api/operations/{opId}/declarations/{id}/send-approval-link", customerApprovalOpId, customerApprovalDeclId)
+                .when().post("/api/operations/{opId}/declarations/{id}/send-approval-link", accountApprovalOpId, accountApprovalDeclId)
                 .then()
                 .statusCode(403);
     }
@@ -541,7 +541,7 @@ class DeclarationResourceTest {
                 .body("""
                         {"comment": "Customer approves final declaration"}
                         """)
-                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", customerApprovalOpId, customerApprovalDeclId)
+                .when().post("/api/operations/{opId}/declarations/{id}/approve-final", accountApprovalOpId, accountApprovalDeclId)
                 .then()
                 .statusCode(200)
                 .body("finalApprovedBy", is("client"));
@@ -549,7 +549,7 @@ class DeclarationResourceTest {
         // Verify auto-advance from PRELIQUIDATION_REVIEW to DECLARATION_IN_PROGRESS
         given()
                 .auth().basic("admin", "admin123")
-                .when().get("/api/operations/{id}", customerApprovalOpId)
+                .when().get("/api/operations/{id}", accountApprovalOpId)
                 .then()
                 .statusCode(200)
                 .body("status", is("DECLARATION_IN_PROGRESS"));

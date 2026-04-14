@@ -233,7 +233,7 @@
           @for (op of recentOperations(); track op.id) {
             <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
               <td>{{ op.referenceNumber }}</td>
-              <td>{{ op.customerName }}</td>
+              <td>{{ op.accountName }}</td>
               <td><app-status-badge [status]="op.status" /></td>
               <td class="d-none d-sm-table-cell mono">{{ op.createdAt | date:'shortDate' }}</td>
             </tr>

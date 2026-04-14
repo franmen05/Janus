@@ -7,8 +7,8 @@ create sequence clients_SEQ start with 1 increment by 50;
 create sequence compliance_rule_configs_SEQ start with 1 increment by 50;
 create sequence crossing_discrepancies_SEQ start with 1 increment by 50;
 create sequence crossing_results_SEQ start with 1 increment by 50;
-create sequence customer_contacts_SEQ start with 1 increment by 50;
-create sequence customers_SEQ start with 1 increment by 50;
+create sequence account_contacts_SEQ start with 1 increment by 50;
+create sequence accounts_SEQ start with 1 increment by 50;
 create sequence declarations_SEQ start with 1 increment by 50;
 create sequence depositos_SEQ start with 1 increment by 50;
 create sequence document_type_configs_SEQ start with 1 increment by 50;
@@ -124,10 +124,10 @@ create table crossing_results (
     primary key (id)
 );
 
-create table customer_contacts (
+create table account_contacts (
     receive_notifications boolean not null,
     created_at timestamp(6) not null,
-    customer_id bigint,
+    account_id bigint,
     id bigint not null,
     updated_at timestamp(6),
     email varchar(255),
@@ -139,7 +139,7 @@ create table customer_contacts (
     primary key (id)
 );
 
-create table customers (
+create table accounts (
     active boolean not null,
     created_at timestamp(6) not null,
     id bigint not null,
@@ -148,16 +148,22 @@ create table customers (
     alternatePhone varchar(255),
     businessName varchar(255),
     country varchar(255),
-    customerCode varchar(255),
+    accountCode varchar(255),
     email varchar(255) not null,
     name varchar(255) not null,
     notes varchar(255),
     phone varchar(255),
     representative varchar(255),
     tax_id varchar(255) not null unique,
-    customerType enum ('CARRIER','COMPANY','CONSIGNEE','INDIVIDUAL','SHIPPER') not null,
     documentType enum ('CEDULA','PASSPORT','RNC'),
     primary key (id)
+);
+
+create table account_types (
+    account_id bigint not null,
+    account_type varchar(50) not null,
+    primary key (account_id, account_type),
+    constraint FK_account_types_account_id foreign key (account_id) references accounts(id)
 );
 
 create table declarations (
@@ -407,7 +413,7 @@ create table operations (
     assignedAgent_id bigint,
     closed_at timestamp(6),
     created_at timestamp(6) not null,
-    customer_id bigint,
+    account_id bigint,
     deposito_id bigint,
     estimated_arrival timestamp(6),
     id bigint not null,
@@ -505,7 +511,7 @@ create table user_roles (
 create table users (
     active boolean not null,
     created_at timestamp(6) not null,
-    customer_id bigint,
+    account_id bigint,
     id bigint not null,
     updated_at timestamp(6),
     email varchar(255) not null,
@@ -521,7 +527,7 @@ alter table if exists crossing_discrepancies add constraint FKsx2aoj7rq7odyv4pmp
 alter table if exists crossing_results add constraint FK6hav65ol0th9ftsc4hevvx765 foreign key (finalDeclaration_id) references declarations;
 alter table if exists crossing_results add constraint FK8kdcktj2e5xcwdr8snag6jy07 foreign key (operation_id) references operations;
 alter table if exists crossing_results add constraint FKn66h6j96kremu817w4en98m74 foreign key (preliminaryDeclaration_id) references declarations;
-alter table if exists customer_contacts add constraint FK729j9cwisdda2ecw8hq5b9vy4 foreign key (customer_id) references customers;
+alter table if exists account_contacts add constraint FK_account_contacts_account_id foreign key (account_id) references accounts;
 alter table if exists declarations add constraint FKd5u7kua4xn837muqe49maavhm foreign key (operation_id) references operations;
 alter table if exists document_versions add constraint FKi6p7dgv96b8s8ivf84hqo9pt foreign key (document_id) references documents;
 alter table if exists document_versions add constraint FK45vb1rpdln7ak28mh3vcfp2l6 foreign key (uploadedBy_id) references users;
@@ -538,7 +544,7 @@ alter table if exists operation_comments add constraint FK6m976k7d0mso8qwhc6qyax
 alter table if exists operation_comments add constraint FKgvs8waillmsaaif2rhiglo2f7 foreign key (operation_id) references operations;
 alter table if exists operations add constraint FKaeqmfjxl3ykc1erys1jufwi86 foreign key (arrivalPort_id) references ports;
 alter table if exists operations add constraint FKjfwwqvlnjjdmf7v1b0rm3clwc foreign key (assignedAgent_id) references users;
-alter table if exists operations add constraint FKay1h9lvf5jbch3mbwnohsshuy foreign key (customer_id) references customers;
+alter table if exists operations add constraint FK_operations_account_id foreign key (account_id) references accounts;
 alter table if exists operations add constraint FK3s1my4vddcmdie5mp5kfapd9q foreign key (deposito_id) references depositos;
 alter table if exists operations add constraint FKmu5wxioks49hfxbdr4qutf75a foreign key (originPort_id) references ports;
 alter table if exists payments add constraint FKo5c8q0f1pm48xdfwgi4eyql1l foreign key (liquidation_id) references liquidations;

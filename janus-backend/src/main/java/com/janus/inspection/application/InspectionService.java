@@ -165,8 +165,8 @@ public class InspectionService {
         ));
 
         // Notify customer
-        if (operation.customer != null && operation.customer.email != null) {
-            notificationService.send(operationId, operation.customer.email,
+        if (operation.account != null && operation.account.email != null) {
+            notificationService.send(operationId, operation.account.email,
                     "Inspection Photo Uploaded - " + operation.referenceNumber,
                     "An inspection photo has been uploaded for operation " + operation.referenceNumber
                             + ". Please log in to the Janus platform for more details.");
@@ -420,7 +420,7 @@ public class InspectionService {
         }
 
         // Create invoice in BillFlow - this also stamps charges with billingStatus, invoiceId, ncfNumber
-        var invoiceSummary = billingService.createInvoice(operation.customer, pendingReimbursableCharges);
+        var invoiceSummary = billingService.createInvoice(operation.account, pendingReimbursableCharges);
 
         auditEvent.fire(new AuditEvent(
                 username, AuditAction.UPDATE, "InspectionExpense", null, operationId,

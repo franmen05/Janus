@@ -7,10 +7,10 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { OperatorFunction, Observable, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
-import { CustomerService } from '../../../core/services/customer.service';
+import { AccountService } from '../../../core/services/account.service';
 import { PortService } from '../../../core/services/port.service';
 import { DepositoService } from '../../../core/services/deposito.service';
-import { Customer } from '../../../core/models/customer.model';
+import { Account } from '../../../core/models/account.model';
 import { Port } from '../../../core/models/port.model';
 import { Deposito } from '../../../core/models/deposito.model';
 import { TransportMode, OperationType, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
@@ -27,32 +27,32 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.CUSTOMER' | translate }} <span class="text-danger">*</span></label>
+              <label class="form-label">{{ 'OPERATIONS.ACCOUNT' | translate }} <span class="text-danger">*</span></label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control"
-                  [ngbTypeahead]="searchCustomer"
-                  [resultFormatter]="customerResultFormatter"
-                  [inputFormatter]="customerInputFormatter"
-                  (selectItem)="onCustomerSelected($event)"
-                  [value]="selectedCustomerDisplay()"
-                  [disabled]="customerLocked()"
-                  placeholder="{{ 'OPERATIONS.CUSTOMER_SEARCH_PLACEHOLDER' | translate }}" />
+                  [ngbTypeahead]="searchAccount"
+                  [resultFormatter]="accountResultFormatter"
+                  [inputFormatter]="accountInputFormatter"
+                  (selectItem)="onAccountSelected($event)"
+                  [value]="selectedAccountDisplay()"
+                  [disabled]="accountLocked()"
+                  placeholder="{{ 'OPERATIONS.ACCOUNT_SEARCH_PLACEHOLDER' | translate }}" />
               </div>
-              @if (selectedCustomer()) {
+              @if (selectedAccount()) {
                 <div class="mt-1 d-flex align-items-center gap-2">
-                  <span class="badge bg-primary">{{ selectedCustomer()!.name }}</span>
-                  <small class="text-muted">{{ selectedCustomer()!.taxId }}</small>
-                  @if (!customerLocked()) {
-                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearCustomer()">
+                  <span class="badge bg-primary">{{ selectedAccount()!.name }}</span>
+                  <small class="text-muted">{{ selectedAccount()!.taxId }}</small>
+                  @if (!accountLocked()) {
+                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearAccount()">
                       <i class="bi bi-x-circle"></i>
                     </button>
                   }
                 </div>
               } @else {
                 <div class="mt-1">
-                  <a routerLink="/customers/new" class="small text-decoration-none">
-                    <i class="bi bi-plus-circle me-1"></i>{{ 'OPERATIONS.CREATE_CUSTOMER' | translate }}
+                  <a routerLink="/accounts/new" class="small text-decoration-none">
+                    <i class="bi bi-plus-circle me-1"></i>{{ 'OPERATIONS.CREATE_ACCOUNT' | translate }}
                   </a>
                 </div>
               }
@@ -234,20 +234,20 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 })
 export class OperationFormComponent implements OnInit {
   private operationService = inject(OperationService);
-  private customerService = inject(CustomerService);
+  private accountService = inject(AccountService);
   private portService = inject(PortService);
   private depositoService = inject(DepositoService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  customers = signal<Customer[]>([]);
+  accounts = signal<Account[]>([]);
   arrivalPorts = signal<Port[]>([]);
   originPorts = signal<Port[]>([]);
   isEdit = signal(false);
   operationId: number | null = null;
-  selectedCustomer = signal<Customer | null>(null);
-  selectedCustomerDisplay = signal('');
-  customerLocked = signal(false);
+  selectedAccount = signal<Account | null>(null);
+  selectedAccountDisplay = signal('');
+  accountLocked = signal(false);
   depositos = signal<Deposito[]>([]);
   selectedDeposito = signal<Deposito | null>(null);
   selectedDepositoDisplay = signal('');
@@ -263,7 +263,7 @@ export class OperationFormComponent implements OnInit {
   ]);
 
   form = new FormGroup({
-    customerId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    accountId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     operationType: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     transportMode: new FormControl(TransportMode.MARITIME, { nonNullable: true, validators: [Validators.required] }),
     cargoType: new FormControl(CargoType.FCL, { nonNullable: true }),
@@ -282,14 +282,14 @@ export class OperationFormComponent implements OnInit {
     depositoId: new FormControl('', { nonNullable: true })
   });
 
-  searchCustomer: OperatorFunction<string, Customer[]> = (text$: Observable<string>) =>
+  searchAccount: OperatorFunction<string, Account[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       map(term => {
-        if (term.length < 1) return this.customers().filter(c => c.active).slice(0, 10);
+        if (term.length < 1) return this.accounts().filter(c => c.active).slice(0, 10);
         const lower = term.toLowerCase();
-        return this.customers().filter(c => c.active &&
+        return this.accounts().filter(c => c.active &&
           (c.name.toLowerCase().includes(lower) ||
            c.taxId?.toLowerCase().includes(lower) ||
            c.email?.toLowerCase().includes(lower))
@@ -297,10 +297,10 @@ export class OperationFormComponent implements OnInit {
       })
     );
 
-  customerResultFormatter = (customer: Customer) =>
-    `${customer.name}  —  ${customer.taxId || ''}  ${customer.email ? '· ' + customer.email : ''}`;
+  accountResultFormatter = (account: Account) =>
+    `${account.name}  —  ${account.taxId || ''}  ${account.email ? '· ' + account.email : ''}`;
 
-  customerInputFormatter = (customer: Customer) => customer.name;
+  accountInputFormatter = (account: Account) => account.name;
 
   searchDeposito: OperatorFunction<string, Deposito[]> = (text$: Observable<string>) =>
     text$.pipe(
@@ -334,17 +334,17 @@ export class OperationFormComponent implements OnInit {
     this.form.get('depositoId')!.setValue('');
   }
 
-  onCustomerSelected(event: any): void {
-    const customer = event.item as Customer;
-    this.selectedCustomer.set(customer);
-    this.selectedCustomerDisplay.set(customer.name);
-    this.form.get('customerId')!.setValue(customer.id.toString());
+  onAccountSelected(event: any): void {
+    const account = event.item as Account;
+    this.selectedAccount.set(account);
+    this.selectedAccountDisplay.set(account.name);
+    this.form.get('accountId')!.setValue(account.id.toString());
   }
 
-  clearCustomer(): void {
-    this.selectedCustomer.set(null);
-    this.selectedCustomerDisplay.set('');
-    this.form.get('customerId')!.setValue('');
+  clearAccount(): void {
+    this.selectedAccount.set(null);
+    this.selectedAccountDisplay.set('');
+    this.form.get('accountId')!.setValue('');
   }
 
   ngOnInit(): void {
@@ -370,14 +370,14 @@ export class OperationFormComponent implements OnInit {
       this.operationId = +id;
       // Use forkJoin to ensure both clients and operation are loaded before client lookup
       forkJoin({
-        customersPage: this.customerService.getAll(0, 9999),
+        accountsPage: this.accountService.getAll(0, 9999),
         operation: this.operationService.getById(+id),
         arrivalPorts: this.portService.getAll('arrival'),
         originPorts: this.portService.getAll('origin'),
         depositos: this.depositoService.getAll()
-      }).subscribe(({ customersPage, operation: op, arrivalPorts, originPorts, depositos }) => {
-        const customers = customersPage.content;
-        this.customers.set(customers);
+      }).subscribe(({ accountsPage, operation: op, arrivalPorts, originPorts, depositos }) => {
+        const accounts = accountsPage.content;
+        this.accounts.set(accounts);
         this.arrivalPorts.set(arrivalPorts);
         this.originPorts.set(originPorts);
         this.depositos.set(depositos);
@@ -386,7 +386,7 @@ export class OperationFormComponent implements OnInit {
           return;
         }
         this.form.patchValue({
-          customerId: op.customerId?.toString() ?? '',
+          accountId: op.accountId?.toString() ?? '',
           operationType: op.operationType ?? '',
           transportMode: op.transportMode,
           cargoType: op.cargoType ?? CargoType.FCL,
@@ -408,11 +408,11 @@ export class OperationFormComponent implements OnInit {
         if (this.blAvailabilityLockedStatuses.has(op.status)) {
           this.form.get('blAvailability')!.disable();
         }
-        if (op.customerId) {
-          const customer = customers.find(c => c.id === op.customerId);
-          if (customer) {
-            this.selectedCustomer.set(customer);
-            this.selectedCustomerDisplay.set(customer.name);
+        if (op.accountId) {
+          const account = accounts.find(c => c.id === op.accountId);
+          if (account) {
+            this.selectedAccount.set(account);
+            this.selectedAccountDisplay.set(account.name);
           }
         }
         if (op.depositoId) {
@@ -434,17 +434,17 @@ export class OperationFormComponent implements OnInit {
         this.originPorts.set(originPorts);
         this.depositos.set(depositos);
       });
-      this.customerService.getAll(0, 9999).subscribe(response => {
-        const customers = response.content;
-        this.customers.set(customers);
-        const customerIdParam = this.route.snapshot.queryParamMap.get('customerId');
-        if (customerIdParam) {
-          const customer = customers.find((c: Customer) => c.id === +customerIdParam);
-          if (customer) {
-            this.selectedCustomer.set(customer);
-            this.selectedCustomerDisplay.set(customer.name);
-            this.form.get('customerId')!.setValue(customerIdParam);
-            this.customerLocked.set(true);
+      this.accountService.getAll(0, 9999).subscribe(response => {
+        const accounts = response.content;
+        this.accounts.set(accounts);
+        const accountIdParam = this.route.snapshot.queryParamMap.get('accountId');
+        if (accountIdParam) {
+          const account = accounts.find((c: Account) => c.id === +accountIdParam);
+          if (account) {
+            this.selectedAccount.set(account);
+            this.selectedAccountDisplay.set(account.name);
+            this.form.get('accountId')!.setValue(accountIdParam);
+            this.accountLocked.set(true);
           }
         }
       });
@@ -483,7 +483,7 @@ export class OperationFormComponent implements OnInit {
     if (this.form.invalid) return;
     const val = this.form.getRawValue();
     const request = {
-      customerId: +val.customerId,
+      accountId: +val.accountId,
       operationType: val.operationType as OperationType,
       transportMode: val.transportMode,
       cargoType: val.transportMode === TransportMode.MARITIME ? val.cargoType as CargoType : undefined,

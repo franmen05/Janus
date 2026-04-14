@@ -16,26 +16,26 @@ public class SecurityHelper {
     UserRepository userRepository;
 
     /**
-     * Returns the customerId for a CUSTOMER user, or null for non-CUSTOMER roles.
+     * Returns the accountId for a CUSTOMER user, or null for non-CUSTOMER roles.
      */
-    public Long getCustomerIdFilter(SecurityContext sec) {
+    public Long getAccountIdFilter(SecurityContext sec) {
         var user = getUser(sec);
         if (user.hasRole("CUSTOMER")) {
-            return user.customerId;
+            return user.accountId;
         }
         return null;
     }
 
     /**
      * Throws ForbiddenException if a CUSTOMER user tries to access an operation
-     * that doesn't belong to their customer.
+     * that doesn't belong to their account.
      */
     public void enforceCustomerAccess(SecurityContext sec, Operation operation) {
         var user = getUser(sec);
         if (user.hasRole("CUSTOMER")) {
-            if (user.customerId == null || operation.customer == null
-                    || !user.customerId.equals(operation.customer.id)) {
-                throw new ForbiddenException("Access denied: operation does not belong to your customer");
+            if (user.accountId == null || operation.account == null
+                    || !user.accountId.equals(operation.account.id)) {
+                throw new ForbiddenException("Access denied: operation does not belong to your account");
             }
         }
     }

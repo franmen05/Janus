@@ -1,7 +1,7 @@
 package com.janus.billing.infrastructure;
 
 import com.janus.billing.infrastructure.dto.*;
-import com.janus.customer.domain.model.Customer;
+import com.janus.account.domain.model.Account;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.json.Json;
@@ -31,23 +31,23 @@ public class BillFlowClient {
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
-    public BillFlowClientResponse createOrFindClient(Customer customer) {
-        String firstName = customer.name;
+    public BillFlowClientResponse createOrFindClient(Account account) {
+        String firstName = account.name;
         String lastName = "";
-        if (customer.name != null && customer.name.contains(" ")) {
-            int idx = customer.name.indexOf(' ');
-            firstName = customer.name.substring(0, idx);
-            lastName = customer.name.substring(idx + 1);
+        if (account.name != null && account.name.contains(" ")) {
+            int idx = account.name.indexOf(' ');
+            firstName = account.name.substring(0, idx);
+            lastName = account.name.substring(idx + 1);
         }
 
         var jsonBody = Json.createObjectBuilder()
                 .add("firstName", firstName != null ? firstName : "")
                 .add("lastName", lastName)
-                .add("idDocumentType", customer.documentType != null ? customer.documentType.name() : "RNC")
-                .add("idDocumentNumber", customer.taxId)
-                .add("email", customer.email != null ? customer.email : "")
-                .add("phone", customer.phone != null ? customer.phone : "")
-                .add("address", customer.address != null ? customer.address : "")
+                .add("idDocumentType", account.documentType != null ? account.documentType.name() : "RNC")
+                .add("idDocumentNumber", account.taxId)
+                .add("email", account.email != null ? account.email : "")
+                .add("phone", account.phone != null ? account.phone : "")
+                .add("address", account.address != null ? account.address : "")
                 .build()
                 .toString();
 

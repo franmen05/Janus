@@ -3,7 +3,7 @@ package com.janus.operation.application;
 import com.janus.alert.domain.repository.AlertRepository;
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
-import com.janus.customer.domain.repository.CustomerRepository;
+import com.janus.account.domain.repository.AccountRepository;
 import com.janus.comment.domain.repository.OperationCommentRepository;
 import com.janus.declaration.domain.repository.CrossingDiscrepancyRepository;
 import com.janus.declaration.domain.repository.CrossingResultRepository;
@@ -56,7 +56,7 @@ public class OperationService {
     StatusHistoryRepository statusHistoryRepository;
 
     @Inject
-    CustomerRepository customerRepository;
+    AccountRepository accountRepository;
 
     @Inject
     UserRepository userRepository;
@@ -123,13 +123,13 @@ public class OperationService {
         return operationRepository.findByStatus(status);
     }
 
-    public List<Operation> findByCustomerId(Long customerId) {
-        return operationRepository.findByCustomerId(customerId);
+    public List<Operation> findByAccountId(Long accountId) {
+        return operationRepository.findByAccountId(accountId);
     }
 
-    public PageResponse<OperationResponse> listPaginated(OperationStatus status, Long customerId, String search, int page, int size) {
-        var operations = operationRepository.findPaginated(status, customerId, search, page, size);
-        var total = operationRepository.countFiltered(status, customerId, search);
+    public PageResponse<OperationResponse> listPaginated(OperationStatus status, Long accountId, String search, int page, int size) {
+        var operations = operationRepository.findPaginated(status, accountId, search, page, size);
+        var total = operationRepository.countFiltered(status, accountId, search);
         var content = operations.stream().map(OperationResponse::from).toList();
         return PageResponse.of(content, page, size, total);
     }
@@ -142,8 +142,8 @@ public class OperationService {
     @Transactional
     public Operation create(CreateOperationRequest request, String username) {
 
-        var customer = customerRepository.findByIdOptional(request.customerId())
-                .orElseThrow(() -> new NotFoundException("Customer", request.customerId()));
+        var account = accountRepository.findByIdOptional(request.accountId())
+                .orElseThrow(() -> new NotFoundException("Account", request.accountId()));
 
         // Validate containerNumber required for MARITIME + FCL
         if (request.transportMode() == TransportMode.MARITIME
@@ -153,7 +153,7 @@ public class OperationService {
         }
 
         var op = new Operation();
-        op.customer = customer;
+        op.account = account;
         op.operationType = request.operationType();
         op.transportMode = request.transportMode();
         op.cargoType = request.cargoType();
@@ -257,8 +257,8 @@ public class OperationService {
                 "notes", op.notes != null ? op.notes : ""
         ));
 
-        op.customer = customerRepository.findByIdOptional(request.customerId())
-                .orElseThrow(() -> new NotFoundException("Customer", request.customerId()));
+        op.account = accountRepository.findByIdOptional(request.accountId())
+                .orElseThrow(() -> new NotFoundException("Account", request.accountId()));
         op.operationType = request.operationType();
         op.transportMode = request.transportMode();
         op.cargoType = request.cargoType();
@@ -332,7 +332,7 @@ public class OperationService {
         ));
 
         // Force initialization of lazy associations for DTO mapping
-        if (op.customer != null) { var ignored = op.customer.name; }
+        if (op.account != null) { var ignored = op.account.name; }
         if (op.assignedAgent != null) { var ignored = op.assignedAgent.fullName; }
         if (op.arrivalPort != null) { var ignored = op.arrivalPort.name; }
         if (op.originPort != null) { var ignored = op.originPort.name; }
@@ -395,7 +395,7 @@ public class OperationService {
         }
 
         notificationService.sendStatusChangeNotification(
-                op.id, op.customer.email, op.referenceNumber, request.newStatus().name()
+                op.id, op.account.email, op.referenceNumber, request.newStatus().name()
         );
     }
 

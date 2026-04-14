@@ -3,7 +3,7 @@ package com.janus.billing.application;
 import com.janus.billing.api.dto.InvoiceSummary;
 import com.janus.billing.infrastructure.BillFlowClient;
 import com.janus.billing.infrastructure.dto.*;
-import com.janus.customer.domain.model.Customer;
+import com.janus.account.domain.model.Account;
 import com.janus.inspection.domain.model.BillingStatus;
 import com.janus.inspection.domain.model.InspectionExpense;
 import com.janus.shared.infrastructure.exception.BusinessException;
@@ -26,13 +26,13 @@ public class BillingService {
     @ConfigProperty(name = "janus.billing.default-ncf-type", defaultValue = "E31")
     String defaultNcfType;
 
-    public InvoiceSummary createInvoice(Customer customer, List<InspectionExpense> charges) {
-        if (customer.taxId == null || customer.taxId.isBlank()) {
-            throw new BusinessException("MISSING_TAX_ID", "Customer must have a tax ID for billing");
+    public InvoiceSummary createInvoice(Account account, List<InspectionExpense> charges) {
+        if (account.taxId == null || account.taxId.isBlank()) {
+            throw new BusinessException("MISSING_TAX_ID", "Account must have a tax ID for billing");
         }
 
         // 1. Create or find client in BillFlow
-        var clientResponse = billFlowClient.createOrFindClient(customer);
+        var clientResponse = billFlowClient.createOrFindClient(account);
         LOG.infof("BillFlow client %s (id=%d, created=%s)",
                 clientResponse.idDocumentNumber(), clientResponse.id(), clientResponse.created());
 
@@ -48,7 +48,7 @@ public class BillingService {
 
         // 3. Create invoice in BillFlow
         var invoiceRequest = new BillFlowInvoiceRequest(
-                customer.taxId,
+                account.taxId,
                 defaultNcfType,
                 LocalDate.now().plusDays(30).toString(),
                 true,

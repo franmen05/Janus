@@ -6,7 +6,7 @@
   "NAV": {
     "DASHBOARD": "Dashboard",
     "OPERATIONS": "Operations",
-    "CUSTOMERS": "Customers",
+    "ACCOUNTS": "Accounts",
     "AUDIT_LOG": "Audit Log",
     "ALERTS": "Alerts",
     "USERS": "Users",
@@ -75,8 +75,8 @@
     "ALL_STATUSES": "All Statuses",
     "NO_OPERATIONS": "No operations found",
     "REFERENCE": "Reference",
-    "CUSTOMER": "Customer",
-    "SELECT_CUSTOMER": "Select customer...",
+    "ACCOUNT": "Account",
+    "SELECT_ACCOUNT": "Select account...",
     "TRANSPORT_MODE": "Transport Mode",
     "OPERATION_CATEGORY": "Operation Category",
     "BL_NUMBER": "Master BL (MBL)",
@@ -109,8 +109,8 @@
     "SELECT_BL_AVAILABILITY": "Select BL availability...",
     "BL_AVAILABILITY_REQUIRED": "BL availability is required",
     "BL_NOT_AVAILABLE_WARNING": "BL is not available. This must be resolved before valuation.",
-    "CUSTOMER_SEARCH_PLACEHOLDER": "Search customer by name, tax ID, or email...",
-    "CREATE_CUSTOMER": "Create new customer",
+    "ACCOUNT_SEARCH_PLACEHOLDER": "Search account by name, tax ID, or email...",
+    "CREATE_ACCOUNT": "Create new account",
     "OPERATION_TYPE": "Operation Type",
     "SELECT_OPERATION_TYPE": "Select operation type",
     "OPERATION_TYPE_REQUIRED": "Operation type is required",
@@ -118,7 +118,7 @@
     "ARRIVAL_PORT_REQUIRED": "Arrival port is required",
     "ORIGIN_PORT": "Origin Port",
     "SELECT_PORT": "Select port...",
-    "SEARCH": "Search by reference, agent or customer...",
+    "SEARCH": "Search by reference, agent or account...",
     "ALL_TRANSPORT_MODES": "All transport modes",
     "DEPOSITO": "Warehouse",
     "SELECT_DEPOSITO": "Search warehouse by code or name..."
@@ -153,11 +153,11 @@
     "RENAME_FILE": "Rename",
     "UPLOADING_FILE": "Uploading file {{current}} of {{total}}..."
   },
-  "CUSTOMERS": {
-    "TITLE": "Customers",
-    "NEW": "New Customer",
-    "EDIT_TITLE": "Edit Customer",
-    "NEW_TITLE": "New Customer",
+  "ACCOUNTS": {
+    "TITLE": "Accounts",
+    "NEW": "New Account",
+    "EDIT_TITLE": "Edit Account",
+    "NEW_TITLE": "New Account",
     "NAME": "Name",
     "TAX_ID": "Tax ID",
     "EMAIL": "Email",
@@ -189,11 +189,11 @@
     "ALTERNATE": "Alternate",
     "DELETE_CONTACT_CONFIRM": "Are you sure you want to delete this contact?",
     "NO_CONTACTS": "No contacts registered",
-    "SAVE_CUSTOMER_FIRST": "Save the customer first to add contacts",
+    "SAVE_ACCOUNT_FIRST": "Save the account first to add contacts",
     "CONTACT_ACTIONS": "Actions",
     "ALL_TYPES": "All types",
     "FILTER_TYPE": "Filter by type",
-    "CUSTOMER_CODE": "Customer Code",
+    "ACCOUNT_CODE": "Account Code",
     "NOTES": "Notes",
     "TYPE_REQUIRED": "At least one type must be selected"
   },
@@ -233,7 +233,7 @@
     "SEARCH": "Search by code or name...",
     "NO_DEPOSITOS": "No warehouses found"
   },
-  "CUSTOMER_TYPES": {
+  "ACCOUNT_TYPES": {
     "COMPANY": "Company",
     "CONSIGNEE": "Consignee",
     "INDIVIDUAL": "Individual",
@@ -696,7 +696,7 @@
     "SHOW_ON_DOCUMENTS_TOOLTIP": "Include this charge in generated documents (settlement, printed reports)",
     "UPDATE_RELATED": "Update",
     "UPDATE_RELATED_TOOLTIP": "When saving, also update other charges of the same category in this operation",
-    "REIMBURSABLE_TOOLTIP": "Mark charge as reimbursable to the client (will be billed back)",
+    "REIMBURSABLE_TOOLTIP": "Mark charge as reimbursable to the account (will be billed back)",
     "NOTES": "Notes",
     "SAVE_AND_ADD": "Save & Add",
     "INCOME_TOTAL": "Income Total",
@@ -788,11 +788,11 @@
     "PASSWORD_HINT": "Leave blank to keep current password",
     "EMAIL": "Email",
     "ROLE": "Role",
-    "CUSTOMER": "Customer",
+    "ACCOUNT": "Account",
     "ACTIVE": "Active",
     "INACTIVE": "Inactive",
     "NO_USERS": "No users found",
-    "CUSTOMER_SEARCH_PLACEHOLDER": "Search by name, tax ID, or email...",
+    "ACCOUNT_SEARCH_PLACEHOLDER": "Search by name, tax ID, or email...",
     "ROLES": "Roles"
   },
   "ROLES": {
@@ -866,7 +866,7 @@
     "finalApproval": "Final Approval",
     "approvedBy": "Approved by",
     "rejectedBy": "Rejected by",
-    "pendingCorrection": "Pending client correction",
+    "pendingCorrection": "Pending account correction",
     "inReview": "Under internal review",
     "preliquidationReview": "Preliquidation under review",
     "analystAssigned": "Analyst assigned",
@@ -876,7 +876,7 @@
     "proceedToDeclaration": "Proceed to Declaration",
     "noDeclarationsYet": "No declarations registered yet.",
     "createDeclarationPrompt": "Go to Declarations tab to create one.",
-    "declarationInProgress": "Declaration is in progress. ADMIN or CLIENT can approve the final declaration.",
+    "declarationInProgress": "Declaration is in progress. ADMIN or ACCOUNT can approve the final declaration.",
     "awaitsTechnical": "Awaits technical approval",
     "submittedToCustoms": "Declaration has been submitted to customs.",
     "valuationReview": "Valuation review in progress.",
@@ -890,7 +890,7 @@
     "copyLink": "Copy Link",
     "sendEmail": "Send Link by Email",
     "linkCopied": "Link copied to clipboard",
-    "emailSent": "Approval email sent to client"
+    "emailSent": "Approval email sent to account"
   },
   "preliquidation": {
     "title": "Preliquidation",
@@ -1077,8 +1077,8 @@
     "SERVICE_HAS_EXPENSES": "Cannot delete: service has associated expenses",
     "BILLING_SERVICE_UNAVAILABLE": "Billing service is unavailable. Please try again later.",
     "BILLING_SERVICE_ERROR": "Error communicating with billing system.",
-    "MISSING_TAX_ID": "Customer must have a tax ID for billing.",
-    "DUPLICATE_PRIMARY_CONTACT": "Customer already has a primary contact.",
+    "MISSING_TAX_ID": "Account must have a tax ID for billing.",
+    "DUPLICATE_PRIMARY_CONTACT": "Account already has a primary contact.",
     "EMAIL_REQUIRED_FOR_NOTIFICATIONS": "Email is required to receive notifications."
   },
   "API_KEYS": {

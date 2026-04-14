@@ -57,7 +57,7 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
       <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
         <div>
           <h2 class="mb-0 fs-4 fs-md-2">{{ operation()!.referenceNumber }}</h2>
-          <small class="text-muted">{{ operation()!.customerName }}</small>
+          <small class="text-muted">{{ operation()!.accountName }}</small>
         </div>
         <div class="d-flex gap-2 align-items-center flex-wrap">
           <app-status-badge [status]="operation()!.status" />

@@ -18,28 +18,28 @@ import static org.hamcrest.Matchers.hasKey;
 class PermissionHardeningTest {
 
     private static Long operationId;
-    private static Long otherCustomerOperationId;
+    private static Long otherAccountOperationId;
 
     @Test
     @Order(1)
     void testSetupOperations() {
-        // Create an operation with customer 1 (the "client" user's customer)
+        // Create an operation with account 1 (the "client" user's account)
         operationId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
                 .extract().jsonPath().getLong("id");
 
-        // Create an operation with customer 2 (NOT the "client" user's customer)
-        otherCustomerOperationId = given()
+        // Create an operation with account 2 (NOT the "client" user's account)
+        otherAccountOperationId = given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 2, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_3", "containerNumber": "CONT-002", "blNumber": "BL-TEST-002", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 2, "operationType": "IMPORT", "transportMode": "MARITIME", "operationCategory": "CATEGORY_3", "containerNumber": "CONT-002", "blNumber": "BL-TEST-002", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(201)
@@ -56,11 +56,11 @@ class PermissionHardeningTest {
                 .when().get("/api/operations")
                 .then().statusCode(200)
                 .body("content.size()", greaterThanOrEqualTo(1))
-                .extract().jsonPath().getList("content.customerId", Long.class);
+                .extract().jsonPath().getList("content.accountId", Long.class);
 
-        // All returned operations should belong to customer 1
+        // All returned operations should belong to account 1
         for (Long cid : ops) {
-            assert cid == 1L : "CUSTOMER sees operations from another customer: " + cid;
+            assert cid == 1L : "CUSTOMER sees operations from another account: " + cid;
         }
     }
 
@@ -76,65 +76,65 @@ class PermissionHardeningTest {
 
     @Test
     @Order(4)
-    void testCustomerCannotAccessOtherCustomerOperation() {
+    void testCustomerCannotAccessOtherAccountOperation() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}", otherCustomerOperationId)
+                .when().get("/api/operations/{id}", otherAccountOperationId)
                 .then().statusCode(403)
-                .body("error", is("Access denied: operation does not belong to your customer"));
+                .body("error", is("Access denied: operation does not belong to your account"));
     }
 
     @Test
     @Order(5)
-    void testCustomerCannotAccessOtherCustomerHistory() {
+    void testCustomerCannotAccessOtherAccountHistory() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/history", otherCustomerOperationId)
+                .when().get("/api/operations/{id}/history", otherAccountOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(6)
-    void testCustomerCannotAccessOtherCustomerDocuments() {
+    void testCustomerCannotAccessOtherAccountDocuments() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/documents", otherCustomerOperationId)
+                .when().get("/api/operations/{id}/documents", otherAccountOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(7)
-    void testCustomerCannotAccessOtherCustomerComments() {
+    void testCustomerCannotAccessOtherAccountComments() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/comments", otherCustomerOperationId)
+                .when().get("/api/operations/{id}/comments", otherAccountOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(8)
-    void testCustomerCannotAccessOtherCustomerTimeline() {
+    void testCustomerCannotAccessOtherAccountTimeline() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/timeline", otherCustomerOperationId)
+                .when().get("/api/operations/{id}/timeline", otherAccountOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(9)
-    void testCustomerCannotAccessOtherCustomerCompleteness() {
+    void testCustomerCannotAccessOtherAccountCompleteness() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/documents/completeness", otherCustomerOperationId)
+                .when().get("/api/operations/{id}/documents/completeness", otherAccountOperationId)
                 .then().statusCode(403);
     }
 
     @Test
     @Order(10)
-    void testCustomerCannotAccessOtherCustomerCrossing() {
+    void testCustomerCannotAccessOtherAccountCrossing() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}/declarations/crossing", otherCustomerOperationId)
+                .when().get("/api/operations/{id}/declarations/crossing", otherAccountOperationId)
                 .then().statusCode(403);
     }
 
@@ -203,7 +203,7 @@ class PermissionHardeningTest {
                 .auth().basic("accounting", "acc123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(403);
@@ -251,7 +251,7 @@ class PermissionHardeningTest {
                 .auth().basic("client", "client123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-TEST-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "arrivalPortId": 1}
                         """)
                 .when().post("/api/operations")
                 .then().statusCode(403);
@@ -297,7 +297,7 @@ class PermissionHardeningTest {
     void testForbiddenResponseIsJson() {
         given()
                 .auth().basic("client", "client123")
-                .when().get("/api/operations/{id}", otherCustomerOperationId)
+                .when().get("/api/operations/{id}", otherAccountOperationId)
                 .then()
                 .statusCode(403)
                 .contentType(ContentType.JSON)

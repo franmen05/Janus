@@ -123,7 +123,7 @@ class ExternalPaymentResourceTest {
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
-                        {"customerId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1",
                          "blNumber": "BL-EXT-PAY-001", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL",
                          "incoterm": "FOB", "arrivalPortId": 1}
                         """)

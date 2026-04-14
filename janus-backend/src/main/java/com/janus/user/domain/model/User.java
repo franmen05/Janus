@@ -37,8 +37,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     public boolean active = true;
 
-    @Column(name = "customer_id")
-    public Long customerId;
+    @Column(name = "account_id")
+    public Long accountId;
 
     @Transient
     public Set<Role> getRoleEnums() {

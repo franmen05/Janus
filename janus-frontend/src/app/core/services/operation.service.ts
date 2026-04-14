@@ -11,12 +11,12 @@ export class OperationService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/operations`;
 
-  getAll(status?: string, customerId?: number, search?: string, page = 0, size = 10): Observable<PageResponse<Operation>> {
+  getAll(status?: string, accountId?: number, search?: string, page = 0, size = 10): Observable<PageResponse<Operation>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
     if (status) params = params.set('status', status);
-    if (customerId) params = params.set('customerId', customerId.toString());
+    if (accountId) params = params.set('accountId', accountId.toString());
     if (search) params = params.set('search', search);
     return this.http.get<PageResponse<Operation>>(this.apiUrl, { params });
   }

@@ -7,9 +7,9 @@ import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { OperatorFunction, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { UserService } from '../../../core/services/user.service';
-import { CustomerService } from '../../../core/services/customer.service';
+import { AccountService } from '../../../core/services/account.service';
 import { Role } from '../../../core/models/user.model';
-import { Customer } from '../../../core/models/customer.model';
+import { Account } from '../../../core/models/account.model';
 
 @Component({
   selector: 'app-user-form',
@@ -58,22 +58,22 @@ import { Customer } from '../../../core/models/customer.model';
             </div>
             @if (isRoleSelected('CUSTOMER')) {
               <div class="col-md-6">
-                <label class="form-label">{{ 'USERS.CUSTOMER' | translate }}</label>
+                <label class="form-label">{{ 'USERS.ACCOUNT' | translate }}</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-search"></i></span>
                   <input type="text" class="form-control"
-                    [ngbTypeahead]="searchCustomer"
-                    [resultFormatter]="customerResultFormatter"
-                    [inputFormatter]="customerInputFormatter"
-                    (selectItem)="onCustomerSelected($event)"
-                    [value]="selectedCustomerDisplay()"
-                    placeholder="{{ 'USERS.CUSTOMER_SEARCH_PLACEHOLDER' | translate }}" />
+                    [ngbTypeahead]="searchAccount"
+                    [resultFormatter]="accountResultFormatter"
+                    [inputFormatter]="accountInputFormatter"
+                    (selectItem)="onAccountSelected($event)"
+                    [value]="selectedAccountDisplay()"
+                    placeholder="{{ 'USERS.ACCOUNT_SEARCH_PLACEHOLDER' | translate }}" />
                 </div>
-                @if (selectedCustomer()) {
+                @if (selectedAccount()) {
                   <div class="mt-1 d-flex align-items-center gap-2">
-                    <span class="badge bg-primary">{{ selectedCustomer()!.name }}</span>
-                    <small class="text-muted">{{ selectedCustomer()!.taxId }}</small>
-                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearCustomer()">
+                    <span class="badge bg-primary">{{ selectedAccount()!.name }}</span>
+                    <small class="text-muted">{{ selectedAccount()!.taxId }}</small>
+                    <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearAccount()">
                       <i class="bi bi-x-circle"></i>
                     </button>
                   </div>
@@ -92,16 +92,16 @@ import { Customer } from '../../../core/models/customer.model';
 })
 export class UserFormComponent implements OnInit {
   private userService = inject(UserService);
-  private customerService = inject(CustomerService);
+  private accountService = inject(AccountService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
   isEdit = signal(false);
   userId: number | null = null;
   availableRoles = Object.values(Role);
-  customers = signal<Customer[]>([]);
-  selectedCustomer = signal<Customer | null>(null);
-  selectedCustomerDisplay = signal('');
+  accounts = signal<Account[]>([]);
+  selectedAccount = signal<Account | null>(null);
+  selectedAccountDisplay = signal('');
 
   form = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -109,17 +109,17 @@ export class UserFormComponent implements OnInit {
     fullName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
     roles: new FormControl<string[]>(['AGENT'], { nonNullable: true, validators: [Validators.required] }),
-    customerId: new FormControl<number | null>(null)
+    accountId: new FormControl<number | null>(null)
   });
 
-  searchCustomer: OperatorFunction<string, Customer[]> = (text$: Observable<string>) =>
+  searchAccount: OperatorFunction<string, Account[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       map(term => {
-        if (term.length < 1) return this.customers().filter(c => c.active).slice(0, 10);
+        if (term.length < 1) return this.accounts().filter(c => c.active).slice(0, 10);
         const lower = term.toLowerCase();
-        return this.customers().filter(c => c.active &&
+        return this.accounts().filter(c => c.active &&
           (c.name.toLowerCase().includes(lower) ||
            c.taxId?.toLowerCase().includes(lower) ||
            c.email?.toLowerCase().includes(lower))
@@ -127,16 +127,16 @@ export class UserFormComponent implements OnInit {
       })
     );
 
-  customerResultFormatter = (customer: Customer) =>
-    `${customer.name}  —  ${customer.taxId || ''}  ${customer.email ? '· ' + customer.email : ''}`;
+  accountResultFormatter = (account: Account) =>
+    `${account.name}  —  ${account.taxId || ''}  ${account.email ? '· ' + account.email : ''}`;
 
-  customerInputFormatter = (customer: Customer) => customer.name;
+  accountInputFormatter = (account: Account) => account.name;
 
-  onCustomerSelected(event: any): void {
-    const customer = event.item as Customer;
-    this.selectedCustomer.set(customer);
-    this.selectedCustomerDisplay.set(customer.name);
-    this.form.get('customerId')!.setValue(customer.id);
+  onAccountSelected(event: any): void {
+    const account = event.item as Account;
+    this.selectedAccount.set(account);
+    this.selectedAccountDisplay.set(account.name);
+    this.form.get('accountId')!.setValue(account.id);
   }
 
   isRoleSelected(role: string): boolean {
@@ -152,16 +152,16 @@ export class UserFormComponent implements OnInit {
     }
   }
 
-  clearCustomer(): void {
-    this.selectedCustomer.set(null);
-    this.selectedCustomerDisplay.set('');
-    this.form.get('customerId')!.setValue(null);
+  clearAccount(): void {
+    this.selectedAccount.set(null);
+    this.selectedAccountDisplay.set('');
+    this.form.get('accountId')!.setValue(null);
   }
 
   ngOnInit(): void {
-    this.customerService.getAll(0, 9999).subscribe(response => {
-      const customers = response.content;
-      this.customers.set(customers);
+    this.accountService.getAll(0, 9999).subscribe(response => {
+      const accounts = response.content;
+      this.accounts.set(accounts);
 
       const id = this.route.snapshot.paramMap.get('id');
       if (id) {
@@ -175,13 +175,13 @@ export class UserFormComponent implements OnInit {
             fullName: u.fullName,
             email: u.email,
             roles: u.roles,
-            customerId: u.customerId
+            accountId: u.accountId
           });
-          if (u.customerId) {
-            const customer = customers.find((c: Customer) => c.id === u.customerId);
-            if (customer) {
-              this.selectedCustomer.set(customer);
-              this.selectedCustomerDisplay.set(customer.name);
+          if (u.accountId) {
+            const account = accounts.find((c: Account) => c.id === u.accountId);
+            if (account) {
+              this.selectedAccount.set(account);
+              this.selectedAccountDisplay.set(account.name);
             }
           }
         });
@@ -197,7 +197,7 @@ export class UserFormComponent implements OnInit {
         fullName: val.fullName,
         email: val.email,
         roles: val.roles as Role[],
-        customerId: val.customerId,
+        accountId: val.accountId,
         active: true,
         password: val.password || null
       }).subscribe(() => this.router.navigate(['/users']));
@@ -208,7 +208,7 @@ export class UserFormComponent implements OnInit {
         fullName: val.fullName,
         email: val.email,
         roles: val.roles as Role[],
-        customerId: val.customerId
+        accountId: val.accountId
       }).subscribe(() => this.router.navigate(['/users']));
     }
   }

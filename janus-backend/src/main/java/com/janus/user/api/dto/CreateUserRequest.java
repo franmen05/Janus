@@ -12,5 +12,5 @@ public record CreateUserRequest(
         @NotBlank String fullName,
         @NotBlank @Email String email,
         @NotEmpty List<Role> roles,
-        Long customerId
+        Long accountId
 ) {}
