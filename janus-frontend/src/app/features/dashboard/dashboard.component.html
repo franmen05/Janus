@@ -228,7 +228,7 @@
     </div>
     <div class="card-body p-0 table-responsive">
       <table class="table table-hover mb-0">
-        <thead><tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.CUSTOMER' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr></thead>
+        <thead><tr><th>{{ 'OPERATIONS.REFERENCE' | translate }}</th><th>{{ 'OPERATIONS.ACCOUNT' | translate }}</th><th>{{ 'COMMON.STATUS' | translate }}</th><th class="d-none d-sm-table-cell">{{ 'OPERATIONS.CREATED' | translate }}</th></tr></thead>
         <tbody>
           @for (op of recentOperations(); track op.id) {
             <tr [routerLink]="['/operations', op.id]" style="cursor: pointer;">
