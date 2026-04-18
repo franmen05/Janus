@@ -119,7 +119,16 @@ export class WarehouseListComponent implements OnInit {
 
   onToggleActive(warehouse: Warehouse): void {
     if (warehouse.active && !confirm(this.translate.instant('WAREHOUSES.CONFIRM_INACTIVATE'))) return;
-    this.warehouseService.toggleActive(warehouse.id).subscribe(() => this.loadWarehouses());
+    this.warehouseService.toggleActive(warehouse.id).subscribe({
+      next: () => this.loadWarehouses(),
+      error: (err) => {
+        const errorCode = err.error?.errorCode;
+        const message = errorCode
+          ? this.translate.instant('ERRORS.' + errorCode)
+          : (err.error?.error ?? this.translate.instant('ERRORS.GENERIC_ERROR'));
+        alert(message);
+      }
+    });
   }
 
   onDelete(warehouse: Warehouse): void {
@@ -138,9 +147,9 @@ export class WarehouseListComponent implements OnInit {
 
   private loadWarehouses(): void {
     this.loading.set(true);
-    this.warehouseService.getAll(this.showInactive()).subscribe(warehouses => {
-      this.warehouses.set(warehouses);
-      this.loading.set(false);
+    this.warehouseService.getAll(this.showInactive()).subscribe({
+      next: warehouses => { this.warehouses.set(warehouses); this.loading.set(false); },
+      error: () => { this.loading.set(false); }
     });
   }
 }

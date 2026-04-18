@@ -99,8 +99,8 @@ public class WarehouseService {
             throw new ConflictException("WAREHOUSE_HAS_OPERATIONS",
                     "Cannot delete warehouse with existing operations: " + warehouse.code);
         }
+        warehouseRepository.delete(warehouse);
         auditEvent.fire(new AuditEvent(username, AuditAction.DELETE, "Warehouse", warehouse.id, null, null, null,
                 "Warehouse deleted: " + warehouse.name));
-        warehouseRepository.delete(warehouse);
     }
 }
