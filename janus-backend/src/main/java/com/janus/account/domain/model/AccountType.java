@@ -5,5 +5,6 @@ public enum AccountType {
     CONSIGNEE,
     INDIVIDUAL,
     SHIPPER,
-    CARRIER
+    CARRIER,
+    SOCIO
 }

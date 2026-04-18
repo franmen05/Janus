@@ -3,7 +3,8 @@ export enum AccountType {
   CONSIGNEE = 'CONSIGNEE',
   INDIVIDUAL = 'INDIVIDUAL',
   SHIPPER = 'SHIPPER',
-  CARRIER = 'CARRIER'
+  CARRIER = 'CARRIER',
+  SOCIO = 'SOCIO'
 }
 
 export type DocumentType = 'RNC' | 'CEDULA' | 'PASSPORT';

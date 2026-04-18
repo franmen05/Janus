@@ -258,7 +258,8 @@
     "CONSIGNEE": "Consignatario",
     "INDIVIDUAL": "Particular",
     "SHIPPER": "Embarcador",
-    "CARRIER": "Transportista"
+    "CARRIER": "Transportista",
+    "SOCIO": "Socio"
   },
   "ID_DOCUMENT_TYPES": {
     "RNC": "RNC",

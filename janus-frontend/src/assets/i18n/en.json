@@ -258,7 +258,8 @@
     "CONSIGNEE": "Consignee",
     "INDIVIDUAL": "Individual",
     "SHIPPER": "Shipper",
-    "CARRIER": "Carrier"
+    "CARRIER": "Carrier",
+    "SOCIO": "Partner"
   },
   "ID_DOCUMENT_TYPES": {
     "RNC": "RNC",
