@@ -24,6 +24,10 @@ public class OperationRepository implements PanacheRepository<Operation> {
         return count("status", status);
     }
 
+    public long countByWarehouseId(Long warehouseId) {
+        return count("warehouse.id", warehouseId);
+    }
+
     public long getNextSequence() {
         var max = find("ORDER BY id DESC").firstResultOptional();
         return max.map(op -> ((Operation) op).id + 1).orElse(1L);
