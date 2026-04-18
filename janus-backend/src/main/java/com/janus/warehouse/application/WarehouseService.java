@@ -6,9 +6,11 @@ import com.janus.warehouse.api.dto.CreateWarehouseRequest;
 import com.janus.warehouse.domain.model.Warehouse;
 import com.janus.warehouse.domain.repository.WarehouseRepository;
 import com.janus.operation.domain.repository.OperationRepository;
+import com.janus.shared.api.dto.PageResponse;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.ConflictException;
 import com.janus.shared.infrastructure.exception.NotFoundException;
+import com.janus.warehouse.api.dto.WarehouseResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -32,6 +34,14 @@ public class WarehouseService {
             return warehouseRepository.findAllOrdered();
         }
         return warehouseRepository.findAllActive();
+    }
+
+    @Transactional
+    public PageResponse<WarehouseResponse> listPaginated(String search, boolean includeInactive, int page, int size) {
+        var warehouses = warehouseRepository.findPaginated(search, includeInactive, page, size);
+        long total = warehouseRepository.countFiltered(search, includeInactive);
+        var content = warehouses.stream().map(WarehouseResponse::from).toList();
+        return PageResponse.of(content, page, size, total);
     }
 
     public Warehouse findById(Long id) {
