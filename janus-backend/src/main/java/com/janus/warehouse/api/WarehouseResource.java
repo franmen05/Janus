@@ -7,12 +7,15 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -29,8 +32,8 @@ public class WarehouseResource {
 
     @GET
     @RolesAllowed({"SUPERVISOR", "ADMIN", "AGENT"})
-    public List<WarehouseResponse> list() {
-        return warehouseService.listAll(false).stream()
+    public List<WarehouseResponse> list(@QueryParam("includeInactive") boolean includeInactive) {
+        return warehouseService.listAll(includeInactive).stream()
                 .map(WarehouseResponse::from)
                 .toList();
     }
@@ -56,5 +59,20 @@ public class WarehouseResource {
     @RolesAllowed("SUPERVISOR")
     public WarehouseResponse update(@PathParam("id") Long id, @Valid CreateWarehouseRequest request, @Context SecurityContext sec) {
         return WarehouseResponse.from(warehouseService.update(id, request, sec.getUserPrincipal().getName()));
+    }
+
+    @PATCH
+    @Path("/{id}/toggle-active")
+    @RolesAllowed({"SUPERVISOR", "ADMIN"})
+    public WarehouseResponse toggleActive(@PathParam("id") Long id, @Context SecurityContext sec) {
+        return WarehouseResponse.from(warehouseService.toggleActive(id, sec.getUserPrincipal().getName()));
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @RolesAllowed({"SUPERVISOR", "ADMIN"})
+    public Response delete(@PathParam("id") Long id, @Context SecurityContext sec) {
+        warehouseService.delete(id, sec.getUserPrincipal().getName());
+        return Response.noContent().build();
     }
 }
