@@ -22,3 +22,9 @@ export interface CreateWarehouseRequest {
   ubicacionArea?: string | null;
   paisOrigen?: string | null;
 }
+
+export interface CsvImportResponse {
+  imported: number;
+  skipped: number;
+  errors: string[];
+}

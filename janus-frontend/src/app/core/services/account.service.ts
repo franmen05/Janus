@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Account, CreateAccountRequest, AccountContact, CreateAccountContactRequest } from '../models/account.model';
+import { CsvImportResponse } from '../models/warehouse.model';
 import { PageResponse } from '../models/page.model';
 
 @Injectable({ providedIn: 'root' })
@@ -44,5 +45,21 @@ export class AccountService {
 
   deleteContact(accountId: number, contactId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${accountId}/contacts/${contactId}`);
+  }
+
+  exportCsv(): Observable<Blob> {
+    return this.http.get(
+      `${environment.apiUrl}/api/accounts/export`,
+      { responseType: 'blob' }
+    );
+  }
+
+  importCsv(file: File): Observable<CsvImportResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<CsvImportResponse>(
+      `${environment.apiUrl}/api/accounts/import`,
+      formData
+    );
   }
 }

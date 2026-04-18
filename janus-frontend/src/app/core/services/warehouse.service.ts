@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Warehouse, CreateWarehouseRequest } from '../models/warehouse.model';
+import { Warehouse, CreateWarehouseRequest, CsvImportResponse } from '../models/warehouse.model';
 
 @Injectable({ providedIn: 'root' })
 export class WarehouseService {
@@ -32,5 +32,21 @@ export class WarehouseService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  exportCsv(includeInactive: boolean): Observable<Blob> {
+    return this.http.get(
+      `${environment.apiUrl}/api/warehouses/export?includeInactive=${includeInactive}`,
+      { responseType: 'blob' }
+    );
+  }
+
+  importCsv(file: File): Observable<CsvImportResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<CsvImportResponse>(
+      `${environment.apiUrl}/api/warehouses/import`,
+      formData
+    );
   }
 }
