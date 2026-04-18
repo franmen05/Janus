@@ -195,7 +195,10 @@
     "FILTER_TYPE": "Filter by type",
     "ACCOUNT_CODE": "Account Code",
     "NOTES": "Notes",
-    "TYPE_REQUIRED": "At least one type must be selected"
+    "TYPE_REQUIRED": "At least one type must be selected",
+    "EXPORT_CSV": "Export CSV",
+    "IMPORT_CSV": "Import CSV",
+    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}"
   },
   "PORTS": {
     "TITLE": "Ports",
@@ -243,7 +246,10 @@
     "ACTIVATE": "Activate",
     "DELETE": "Delete",
     "CONFIRM_DELETE": "Are you sure you want to delete this warehouse?",
-    "CONFIRM_INACTIVATE": "Are you sure you want to inactivate this warehouse?"
+    "CONFIRM_INACTIVATE": "Are you sure you want to inactivate this warehouse?",
+    "EXPORT_CSV": "Export CSV",
+    "IMPORT_CSV": "Import CSV",
+    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}"
   },
   "ACCOUNT_TYPES": {
     "COMPANY": "Company",
