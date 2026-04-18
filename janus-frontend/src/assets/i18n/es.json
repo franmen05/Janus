@@ -22,7 +22,7 @@
     "COLLAPSE_SIDEBAR": "Contraer",
     "EXPAND_SIDEBAR": "Expandir",
     "API_KEYS": "Claves API",
-    "DEPOSITOS": "Depósitos",
+    "WAREHOUSES": "Almacenes",
     "SERVICES": "Servicios"
   },
   "LOGIN": {
@@ -120,8 +120,8 @@
     "SELECT_PORT": "Seleccionar puerto...",
     "SEARCH": "Buscar por referencia, agente o cuenta...",
     "ALL_TRANSPORT_MODES": "Todos los modos de transporte",
-    "DEPOSITO": "Depósito",
-    "SELECT_DEPOSITO": "Buscar depósito por código o nombre..."
+    "WAREHOUSE": "Almacén",
+    "SELECT_WAREHOUSE": "Buscar almacén por código o nombre..."
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
@@ -222,16 +222,28 @@
     "BADGE_ORIGIN": "Origen",
     "BADGE_ARRIVAL": "Arribo"
   },
-  "DEPOSITOS": {
-    "TITLE": "Depósitos",
-    "NEW": "Nuevo Depósito",
-    "EDIT_TITLE": "Editar Depósito",
-    "NEW_TITLE": "Nuevo Depósito",
+  "WAREHOUSES": {
+    "TITLE": "Almacenes",
+    "NEW": "Nuevo Almacén",
+    "EDIT_TITLE": "Editar Almacén",
+    "NEW_TITLE": "Nuevo Almacén",
     "CODE": "Código",
     "NAME": "Nombre",
     "DESCRIPTION": "Descripción",
     "SEARCH": "Buscar por código o nombre...",
-    "NO_DEPOSITOS": "No se encontraron depósitos"
+    "NO_WAREHOUSES": "No se encontraron almacenes",
+    "SECUENCIA": "Secuencia",
+    "TIPO_LOCALIZACION": "Tipo de Localización",
+    "CENTRO_LOGISTICO": "Centro Logístico",
+    "UBICACION_AREA": "Ubicación/Área",
+    "PAIS_ORIGEN": "País de Origen",
+    "SHOW_INACTIVE": "Mostrar inactivos",
+    "INACTIVE_BADGE": "Inactivo",
+    "INACTIVATE": "Inactivar",
+    "ACTIVATE": "Activar",
+    "DELETE": "Eliminar",
+    "CONFIRM_DELETE": "¿Está seguro de que desea eliminar este almacén?",
+    "CONFIRM_INACTIVATE": "¿Está seguro de que desea inactivar este almacén?"
   },
   "ACCOUNT_TYPES": {
     "COMPANY": "Empresa",
@@ -1061,7 +1073,8 @@
     "INVALID_SERVICE": "Servicio inválido",
     "INACTIVE_SERVICE": "El servicio está inactivo",
     "SERVICE_NAME_EXISTS": "Ya existe un servicio con este nombre",
-    "SERVICE_HAS_EXPENSES": "No se puede eliminar: el servicio tiene gastos asociados"
+    "SERVICE_HAS_EXPENSES": "No se puede eliminar: el servicio tiene gastos asociados",
+    "WAREHOUSE_HAS_OPERATIONS": "Este almacén no puede eliminarse porque tiene operaciones asociadas."
   },
   "API_KEYS": {
     "TITLE": "Claves API",

@@ -23,7 +23,7 @@
     "COLLAPSE_SIDEBAR": "Collapse",
     "EXPAND_SIDEBAR": "Expand",
     "API_KEYS": "API Keys",
-    "DEPOSITOS": "Warehouses"
+    "WAREHOUSES": "Warehouses"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -120,8 +120,8 @@
     "SELECT_PORT": "Select port...",
     "SEARCH": "Search by reference, agent or account...",
     "ALL_TRANSPORT_MODES": "All transport modes",
-    "DEPOSITO": "Warehouse",
-    "SELECT_DEPOSITO": "Search warehouse by code or name..."
+    "WAREHOUSE": "Warehouse",
+    "SELECT_WAREHOUSE": "Search warehouse by code or name..."
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -222,7 +222,7 @@
     "BADGE_ORIGIN": "Origin",
     "BADGE_ARRIVAL": "Arrival"
   },
-  "DEPOSITOS": {
+  "WAREHOUSES": {
     "TITLE": "Warehouses",
     "NEW": "New Warehouse",
     "EDIT_TITLE": "Edit Warehouse",
@@ -231,7 +231,19 @@
     "NAME": "Name",
     "DESCRIPTION": "Description",
     "SEARCH": "Search by code or name...",
-    "NO_DEPOSITOS": "No warehouses found"
+    "NO_WAREHOUSES": "No warehouses found",
+    "SECUENCIA": "Sequence",
+    "TIPO_LOCALIZACION": "Location Type",
+    "CENTRO_LOGISTICO": "Logistics Center",
+    "UBICACION_AREA": "Location/Area",
+    "PAIS_ORIGEN": "Country of Origin",
+    "SHOW_INACTIVE": "Show inactive",
+    "INACTIVE_BADGE": "Inactive",
+    "INACTIVATE": "Inactivate",
+    "ACTIVATE": "Activate",
+    "DELETE": "Delete",
+    "CONFIRM_DELETE": "Are you sure you want to delete this warehouse?",
+    "CONFIRM_INACTIVATE": "Are you sure you want to inactivate this warehouse?"
   },
   "ACCOUNT_TYPES": {
     "COMPANY": "Company",
@@ -1079,7 +1091,8 @@
     "BILLING_SERVICE_ERROR": "Error communicating with billing system.",
     "MISSING_TAX_ID": "Account must have a tax ID for billing.",
     "DUPLICATE_PRIMARY_CONTACT": "Account already has a primary contact.",
-    "EMAIL_REQUIRED_FOR_NOTIFICATIONS": "Email is required to receive notifications."
+    "EMAIL_REQUIRED_FOR_NOTIFICATIONS": "Email is required to receive notifications.",
+    "WAREHOUSE_HAS_OPERATIONS": "This warehouse cannot be deleted because it has associated operations."
   },
   "API_KEYS": {
     "TITLE": "API Keys",
