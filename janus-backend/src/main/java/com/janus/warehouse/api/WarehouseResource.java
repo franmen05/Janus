@@ -1,7 +1,6 @@
 package com.janus.warehouse.api;
 
 import com.janus.shared.api.dto.CsvImportResponse;
-import com.janus.shared.api.dto.PageResponse;
 import com.janus.warehouse.api.dto.CreateWarehouseRequest;
 import com.janus.warehouse.api.dto.WarehouseResponse;
 import com.janus.warehouse.application.WarehouseCsvService;
@@ -11,7 +10,6 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
@@ -27,6 +25,7 @@ import jakarta.ws.rs.core.SecurityContext;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
@@ -43,12 +42,10 @@ public class WarehouseResource {
 
     @GET
     @RolesAllowed({"SUPERVISOR", "ADMIN", "AGENT"})
-    public PageResponse<WarehouseResponse> list(
-            @QueryParam("page") @DefaultValue("0") int page,
-            @QueryParam("size") @DefaultValue("10") int size,
-            @QueryParam("search") String search,
-            @QueryParam("includeInactive") boolean includeInactive) {
-        return warehouseService.listPaginated(search, includeInactive, page, size);
+    public List<WarehouseResponse> list(@QueryParam("includeInactive") boolean includeInactive) {
+        return warehouseService.listAll(includeInactive).stream()
+                .map(WarehouseResponse::from)
+                .toList();
     }
 
     @GET
