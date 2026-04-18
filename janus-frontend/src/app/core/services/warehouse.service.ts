@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Warehouse, CreateWarehouseRequest, CsvImportResponse } from '../models/warehouse.model';
@@ -10,7 +10,7 @@ export class WarehouseService {
   private apiUrl = `${environment.apiUrl}/api/warehouses`;
 
   getAll(includeInactive = false): Observable<Warehouse[]> {
-    const params: Record<string, string> = includeInactive ? { includeInactive: 'true' } : {};
+    const params = new HttpParams().set('includeInactive', includeInactive.toString());
     return this.http.get<Warehouse[]>(this.apiUrl, { params });
   }
 

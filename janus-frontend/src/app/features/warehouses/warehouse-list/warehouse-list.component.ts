@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -6,11 +6,12 @@ import { WarehouseService } from '../../../core/services/warehouse.service';
 import { Warehouse, CsvImportResponse } from '../../../core/models/warehouse.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-warehouse-list',
   standalone: true,
-  imports: [RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent],
+  imports: [RouterModule, FormsModule, TranslateModule, LoadingIndicatorComponent, PaginationComponent],
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'WAREHOUSES.TITLE' | translate }}</h2>
@@ -32,16 +33,16 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
         }
       </div>
     </div>
-    @if (loading()) {
-      <app-loading-indicator />
-    } @else {
     <div class="card">
       <div class="card-header">
         <input type="text" class="form-control"
                [placeholder]="'WAREHOUSES.SEARCH' | translate"
                [ngModel]="searchTerm()"
-               (ngModelChange)="searchTerm.set($event)">
+               (ngModelChange)="onSearch($event)">
       </div>
+      @if (loading()) {
+        <div class="card-body"><app-loading-indicator /></div>
+      } @else {
       <div class="card-body p-0 table-responsive">
         <table class="table table-hover mb-0">
           <thead class="table-light">
@@ -57,7 +58,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
             </tr>
           </thead>
           <tbody>
-            @for (dep of filteredWarehouses(); track dep.id) {
+            @for (dep of pagedWarehouses(); track dep.id) {
               <tr [class.table-secondary]="!dep.active" [class.opacity-75]="!dep.active">
                 <td class="fw-bold">{{ dep.code }}</td>
                 <td>
@@ -92,8 +93,14 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           </tbody>
         </table>
       </div>
+      <app-pagination
+        [currentPage]="currentPage()"
+        [pageSize]="pageSize"
+        [totalElements]="filteredWarehouses().length"
+        [totalPages]="totalPages()"
+        (pageChange)="onPageChange($event)" />
+      }
     </div>
-    }
     @if (importResult()) {
       <div class="alert alert-info mt-3 alert-dismissible fade show">
         {{ 'WAREHOUSES.IMPORT_SUCCESS' | translate:{imported: importResult()!.imported, skipped: importResult()!.skipped} }}
@@ -113,28 +120,46 @@ export class WarehouseListComponent implements OnInit {
   private warehouseService = inject(WarehouseService);
   private translate = inject(TranslateService);
   authService = inject(AuthService);
+
   loading = signal(true);
   warehouses = signal<Warehouse[]>([]);
   searchTerm = signal('');
   showInactive = signal(false);
+  currentPage = signal(1);
+  pageSize = 10;
   importing = signal(false);
   importResult = signal<CsvImportResponse | null>(null);
 
   filteredWarehouses = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    if (!term) return this.warehouses();
-    return this.warehouses().filter(d =>
-      d.code.toLowerCase().includes(term) ||
-      d.name.toLowerCase().includes(term)
-    );
+    return term
+      ? this.warehouses().filter(d => d.code.toLowerCase().includes(term) || d.name.toLowerCase().includes(term))
+      : this.warehouses();
   });
+
+  pagedWarehouses = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.filteredWarehouses().slice(start, start + this.pageSize);
+  });
+
+  totalPages = computed(() => Math.ceil(this.filteredWarehouses().length / this.pageSize));
 
   ngOnInit(): void {
     this.loadWarehouses();
   }
 
+  onSearch(term: string): void {
+    this.searchTerm.set(term);
+    this.currentPage.set(1);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
+  }
+
   toggleShowInactive(): void {
     this.showInactive.update(v => !v);
+    this.currentPage.set(1);
     this.loadWarehouses();
   }
 
@@ -209,7 +234,10 @@ export class WarehouseListComponent implements OnInit {
   private loadWarehouses(): void {
     this.loading.set(true);
     this.warehouseService.getAll(this.showInactive()).subscribe({
-      next: warehouses => { this.warehouses.set(warehouses); this.loading.set(false); },
+      next: warehouses => {
+        this.warehouses.set(warehouses);
+        this.loading.set(false);
+      },
       error: () => { this.loading.set(false); }
     });
   }
