@@ -10,7 +10,7 @@ export class WarehouseService {
   private apiUrl = `${environment.apiUrl}/api/warehouses`;
 
   getAll(includeInactive = false): Observable<Warehouse[]> {
-    const params = includeInactive ? { includeInactive: 'true' } : {};
+    const params: Record<string, string> = includeInactive ? { includeInactive: 'true' } : {};
     return this.http.get<Warehouse[]>(this.apiUrl, { params });
   }
 
