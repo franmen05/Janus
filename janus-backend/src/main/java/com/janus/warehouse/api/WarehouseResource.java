@@ -1,7 +1,9 @@
 package com.janus.warehouse.api;
 
+import com.janus.shared.api.dto.CsvImportResponse;
 import com.janus.warehouse.api.dto.CreateWarehouseRequest;
 import com.janus.warehouse.api.dto.WarehouseResponse;
+import com.janus.warehouse.application.WarehouseCsvService;
 import com.janus.warehouse.application.WarehouseService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -20,7 +22,11 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import org.jboss.resteasy.reactive.RestForm;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 @Path("/api/warehouses")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,6 +35,9 @@ public class WarehouseResource {
 
     @Inject
     WarehouseService warehouseService;
+
+    @Inject
+    WarehouseCsvService warehouseCsvService;
 
     @GET
     @RolesAllowed({"SUPERVISOR", "ADMIN", "AGENT"})
@@ -74,5 +83,33 @@ public class WarehouseResource {
     public Response delete(@PathParam("id") Long id, @Context SecurityContext sec) {
         warehouseService.delete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/export")
+    @Produces("text/csv")
+    @RolesAllowed({"SUPERVISOR", "ADMIN", "AGENT"})
+    public Response exportCsv(@QueryParam("includeInactive") boolean includeInactive) {
+        String csv = warehouseCsvService.exportCsv(includeInactive);
+        return Response.ok(csv)
+                .header("Content-Disposition", "attachment; filename=\"warehouses.csv\"")
+                .header("Content-Type", "text/csv; charset=UTF-8")
+                .build();
+    }
+
+    @POST
+    @Path("/import")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"SUPERVISOR", "ADMIN"})
+    public CsvImportResponse importCsv(@RestForm("file") FileUpload file,
+                                        @Context SecurityContext sec) {
+        try {
+            return warehouseCsvService.importCsv(
+                    Files.newInputStream(file.uploadedFile()),
+                    sec.getUserPrincipal().getName());
+        } catch (IOException e) {
+            throw new com.janus.shared.infrastructure.exception.BusinessException("CSV_READ_ERROR", "Failed to read uploaded file");
+        }
     }
 }
