@@ -22,6 +22,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
           <label class="form-check-label" for="showInactiveToggle">{{ 'WAREHOUSES.SHOW_INACTIVE' | translate }}</label>
         </div>
         <button class="btn btn-outline-secondary btn-sm" (click)="onExportCsv()">{{ 'WAREHOUSES.EXPORT_CSV' | translate }}</button>
+        <button class="btn btn-outline-secondary btn-sm" (click)="onDownloadTemplate()">{{ 'WAREHOUSES.DOWNLOAD_TEMPLATE' | translate }}</button>
         <label class="btn btn-outline-secondary btn-sm mb-0" [class.disabled]="importing()">
           {{ importing() ? '...' : ('WAREHOUSES.IMPORT_CSV' | translate) }}
           <input type="file" accept=".csv" class="d-none" (change)="onImportCsv($event)">
@@ -149,6 +150,20 @@ export class WarehouseListComponent implements OnInit {
         alert(message);
       }
     });
+  }
+
+  onDownloadTemplate(): void {
+    const content = [
+      'code,name,description,secuencia,tipoLocalizacion,centroLogistico,ubicacionArea,paisOrigen',
+      'WH001,Main Warehouse,Main storage facility,1,INTERIOR,CL-NORTE,Zona A,DO'
+    ].join('\r\n');
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'warehouses-template.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   onExportCsv(): void {

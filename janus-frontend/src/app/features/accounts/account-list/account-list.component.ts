@@ -20,6 +20,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
       <h2>{{ 'ACCOUNTS.TITLE' | translate }}</h2>
       <div class="d-flex gap-2 align-items-center flex-wrap">
         <button class="btn btn-outline-secondary btn-sm" (click)="onExportCsv()">{{ 'ACCOUNTS.EXPORT_CSV' | translate }}</button>
+        <button class="btn btn-outline-secondary btn-sm" (click)="onDownloadTemplate()">{{ 'ACCOUNTS.DOWNLOAD_TEMPLATE' | translate }}</button>
         <label class="btn btn-outline-secondary btn-sm mb-0" [class.disabled]="importing()">
           {{ importing() ? '...' : ('ACCOUNTS.IMPORT_CSV' | translate) }}
           <input type="file" accept=".csv" class="d-none" (change)="onImportCsv($event)">
@@ -167,6 +168,20 @@ export class AccountListComponent implements OnInit, OnDestroy {
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  onDownloadTemplate(): void {
+    const content = [
+      'name,taxId,email,accountTypes,phone,address,businessName,representative,documentType,alternatePhone,country,accountCode,notes',
+      '"Acme Corp","123456789","contact@acme.com","COMPANY;SHIPPER","+1-555-0100","123 Main St","Acme Corporation","John Doe","RNC","+1-555-0101","DO","ACC001","Example account"'
+    ].join('\r\n');
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'accounts-template.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   onExportCsv(): void {

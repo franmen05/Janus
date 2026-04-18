@@ -198,6 +198,7 @@
     "TYPE_REQUIRED": "At least one type must be selected",
     "EXPORT_CSV": "Export CSV",
     "IMPORT_CSV": "Import CSV",
+    "DOWNLOAD_TEMPLATE": "Download Template",
     "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}"
   },
   "PORTS": {
@@ -249,6 +250,7 @@
     "CONFIRM_INACTIVATE": "Are you sure you want to inactivate this warehouse?",
     "EXPORT_CSV": "Export CSV",
     "IMPORT_CSV": "Import CSV",
+    "DOWNLOAD_TEMPLATE": "Download Template",
     "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}"
   },
   "ACCOUNT_TYPES": {
