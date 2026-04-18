@@ -50,6 +50,9 @@ public class DataSeeder {
     WarehouseRepository warehouseRepository;
 
     @Inject
+    com.janus.warehouse.application.WarehouseCsvService warehouseCsvService;
+
+    @Inject
     DocumentTypeConfigRepository documentTypeConfigRepository;
 
     @Inject
@@ -172,23 +175,7 @@ public class DataSeeder {
     }
 
     private void seedWarehouses() {
-        var dep1 = new Warehouse();
-        dep1.code = "DEP-001";
-        dep1.name = "Depósito Central";
-        dep1.description = "Depósito principal de carga general";
-        warehouseRepository.persist(dep1);
-
-        var dep2 = new Warehouse();
-        dep2.code = "DEP-002";
-        dep2.name = "Depósito Zona Libre";
-        dep2.description = "Depósito en zona franca";
-        warehouseRepository.persist(dep2);
-
-        var dep3 = new Warehouse();
-        dep3.code = "DEP-003";
-        dep3.name = "Depósito Refrigerado";
-        dep3.description = "Depósito para carga refrigerada y perecederos";
-        warehouseRepository.persist(dep3);
+        warehouseCsvService.seedFromClasspath("warehouses-catalog.csv", "system");
     }
 
     private void createConfig(String ruleCode, String paramKey, String paramValue, String description) {

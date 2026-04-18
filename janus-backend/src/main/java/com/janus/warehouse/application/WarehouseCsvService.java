@@ -14,10 +14,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class WarehouseCsvService {
 
+    private static final Logger LOG = Logger.getLogger(WarehouseCsvService.class);
     static final String HEADER = "code,name,description,secuencia,tipoLocalizacion,centroLogistico,ubicacionArea,paisOrigen";
 
     @Inject
@@ -101,5 +103,20 @@ public class WarehouseCsvService {
             imported++;
         }
         return new CsvImportResponse(imported, skipped, errors);
+    }
+
+    @Transactional
+    public void seedFromClasspath(String resourcePath, String username) {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
+        if (in == null) {
+            LOG.warnf("Warehouse catalog resource not found: %s", resourcePath);
+            return;
+        }
+        try {
+            CsvImportResponse result = importCsv(in, username);
+            LOG.infof("Warehouse catalog seeded: %d imported, %d skipped", result.imported(), result.skipped());
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to seed warehouses from " + resourcePath, e);
+        }
     }
 }
