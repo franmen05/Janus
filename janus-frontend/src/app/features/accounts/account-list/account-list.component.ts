@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccountService } from '../../../core/services/account.service';
 import { Account, AccountType } from '../../../core/models/account.model';
-import { CsvImportResponse } from '../../../core/models/warehouse.model';
+import { CsvImportResponse } from '../../../core/models/shared.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';

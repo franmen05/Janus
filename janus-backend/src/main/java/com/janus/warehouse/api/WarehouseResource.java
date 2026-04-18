@@ -106,10 +106,8 @@ public class WarehouseResource {
     public CsvImportResponse importCsv(@RestForm("file") FileUpload file,
                                         @Context SecurityContext sec) {
         if (file == null) throw new BusinessException("MISSING_FILE", "CSV file is required");
-        try {
-            return warehouseCsvService.importCsv(
-                    Files.newInputStream(file.uploadedFile()),
-                    sec.getUserPrincipal().getName());
+        try (var stream = Files.newInputStream(file.uploadedFile())) {
+            return warehouseCsvService.importCsv(stream, sec.getUserPrincipal().getName());
         } catch (IOException e) {
             throw new BusinessException("CSV_READ_ERROR", "Failed to read uploaded file");
         }

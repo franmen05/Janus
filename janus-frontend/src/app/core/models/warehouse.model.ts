@@ -23,8 +23,4 @@ export interface CreateWarehouseRequest {
   paisOrigen?: string | null;
 }
 
-export interface CsvImportResponse {
-  imported: number;
-  skipped: number;
-  errors: string[];
-}
+export type { CsvImportResponse } from './shared.model';

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Account, CreateAccountRequest, AccountContact, CreateAccountContactRequest } from '../models/account.model';
-import { CsvImportResponse } from '../models/warehouse.model';
+import { CsvImportResponse } from '../models/shared.model';
 import { PageResponse } from '../models/page.model';
 
 @Injectable({ providedIn: 'root' })
