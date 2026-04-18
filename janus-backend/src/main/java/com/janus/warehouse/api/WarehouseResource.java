@@ -22,6 +22,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import com.janus.shared.infrastructure.exception.BusinessException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -104,12 +105,13 @@ public class WarehouseResource {
     @RolesAllowed({"SUPERVISOR", "ADMIN"})
     public CsvImportResponse importCsv(@RestForm("file") FileUpload file,
                                         @Context SecurityContext sec) {
+        if (file == null) throw new BusinessException("MISSING_FILE", "CSV file is required");
         try {
             return warehouseCsvService.importCsv(
                     Files.newInputStream(file.uploadedFile()),
                     sec.getUserPrincipal().getName());
         } catch (IOException e) {
-            throw new com.janus.shared.infrastructure.exception.BusinessException("CSV_READ_ERROR", "Failed to read uploaded file");
+            throw new BusinessException("CSV_READ_ERROR", "Failed to read uploaded file");
         }
     }
 }
