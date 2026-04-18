@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccountService } from '../../../core/services/account.service';
 import { Account, AccountType } from '../../../core/models/account.model';
+import { CsvImportResponse } from '../../../core/models/warehouse.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
@@ -17,9 +18,16 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
   template: `
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
       <h2>{{ 'ACCOUNTS.TITLE' | translate }}</h2>
-      @if (authService.hasRole(['ADMIN', 'AGENT'])) {
-        <a routerLink="/accounts/new" class="btn btn-primary">{{ 'ACCOUNTS.NEW' | translate }}</a>
-      }
+      <div class="d-flex gap-2 align-items-center flex-wrap">
+        <button class="btn btn-outline-secondary btn-sm" (click)="onExportCsv()">{{ 'ACCOUNTS.EXPORT_CSV' | translate }}</button>
+        <label class="btn btn-outline-secondary btn-sm mb-0" [class.disabled]="importing()">
+          {{ importing() ? '...' : ('ACCOUNTS.IMPORT_CSV' | translate) }}
+          <input type="file" accept=".csv" class="d-none" (change)="onImportCsv($event)">
+        </label>
+        @if (authService.hasRole(['ADMIN', 'AGENT'])) {
+          <a routerLink="/accounts/new" class="btn btn-primary">{{ 'ACCOUNTS.NEW' | translate }}</a>
+        }
+      </div>
     </div>
     <div class="card">
       <div class="card-header">
@@ -91,6 +99,19 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         (pageChange)="onPageChange($event)" />
       }
     </div>
+    @if (importResult()) {
+      <div class="alert alert-info mt-3 alert-dismissible fade show">
+        {{ 'ACCOUNTS.IMPORT_SUCCESS' | translate:{imported: importResult()!.imported, skipped: importResult()!.skipped} }}
+        @if (importResult()!.errors.length > 0) {
+          <ul class="mb-0 mt-1">
+            @for (err of importResult()!.errors; track err) {
+              <li>{{ err }}</li>
+            }
+          </ul>
+        }
+        <button type="button" class="btn-close" (click)="importResult.set(null)"></button>
+      </div>
+    }
   `
 })
 export class AccountListComponent implements OnInit, OnDestroy {
@@ -106,6 +127,8 @@ export class AccountListComponent implements OnInit, OnDestroy {
   pageSize = 10;
   totalElements = signal(0);
   totalPages = signal(0);
+  importing = signal(false);
+  importResult = signal<CsvImportResponse | null>(null);
 
   accountTypes = Object.values(AccountType);
 
@@ -144,6 +167,32 @@ export class AccountListComponent implements OnInit, OnDestroy {
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  onExportCsv(): void {
+    this.accountService.exportCsv().subscribe(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'accounts.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  onImportCsv(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.importing.set(true);
+    this.accountService.importCsv(file).subscribe({
+      next: result => {
+        this.importResult.set(result);
+        this.importing.set(false);
+        this.loadAccounts();
+      },
+      error: () => { this.importing.set(false); }
+    });
+    (event.target as HTMLInputElement).value = '';
   }
 
   onSearch(term: string): void {

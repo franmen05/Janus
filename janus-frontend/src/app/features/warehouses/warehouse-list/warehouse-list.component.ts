@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { WarehouseService } from '../../../core/services/warehouse.service';
-import { Warehouse } from '../../../core/models/warehouse.model';
+import { Warehouse, CsvImportResponse } from '../../../core/models/warehouse.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 
@@ -21,6 +21,11 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
                  (change)="toggleShowInactive()">
           <label class="form-check-label" for="showInactiveToggle">{{ 'WAREHOUSES.SHOW_INACTIVE' | translate }}</label>
         </div>
+        <button class="btn btn-outline-secondary btn-sm" (click)="onExportCsv()">{{ 'WAREHOUSES.EXPORT_CSV' | translate }}</button>
+        <label class="btn btn-outline-secondary btn-sm mb-0" [class.disabled]="importing()">
+          {{ importing() ? '...' : ('WAREHOUSES.IMPORT_CSV' | translate) }}
+          <input type="file" accept=".csv" class="d-none" (change)="onImportCsv($event)">
+        </label>
         @if (authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
           <a routerLink="/warehouses/new" class="btn btn-primary">{{ 'WAREHOUSES.NEW' | translate }}</a>
         }
@@ -88,6 +93,19 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
       </div>
     </div>
     }
+    @if (importResult()) {
+      <div class="alert alert-info mt-3 alert-dismissible fade show">
+        {{ 'WAREHOUSES.IMPORT_SUCCESS' | translate:{imported: importResult()!.imported, skipped: importResult()!.skipped} }}
+        @if (importResult()!.errors.length > 0) {
+          <ul class="mb-0 mt-1">
+            @for (err of importResult()!.errors; track err) {
+              <li>{{ err }}</li>
+            }
+          </ul>
+        }
+        <button type="button" class="btn-close" (click)="importResult.set(null)"></button>
+      </div>
+    }
   `
 })
 export class WarehouseListComponent implements OnInit {
@@ -98,6 +116,8 @@ export class WarehouseListComponent implements OnInit {
   warehouses = signal<Warehouse[]>([]);
   searchTerm = signal('');
   showInactive = signal(false);
+  importing = signal(false);
+  importResult = signal<CsvImportResponse | null>(null);
 
   filteredWarehouses = computed(() => {
     const term = this.searchTerm().toLowerCase();
@@ -129,6 +149,32 @@ export class WarehouseListComponent implements OnInit {
         alert(message);
       }
     });
+  }
+
+  onExportCsv(): void {
+    this.warehouseService.exportCsv(this.showInactive()).subscribe(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'warehouses.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  onImportCsv(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.importing.set(true);
+    this.warehouseService.importCsv(file).subscribe({
+      next: result => {
+        this.importResult.set(result);
+        this.importing.set(false);
+        this.loadWarehouses();
+      },
+      error: () => { this.importing.set(false); }
+    });
+    (event.target as HTMLInputElement).value = '';
   }
 
   onDelete(warehouse: Warehouse): void {
