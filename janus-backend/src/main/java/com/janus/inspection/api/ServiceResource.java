@@ -4,6 +4,9 @@ import com.janus.inspection.api.dto.CreateServiceRequest;
 import com.janus.inspection.api.dto.ServiceResponse;
 import com.janus.inspection.api.dto.UpdateServiceRequest;
 import com.janus.inspection.application.ServiceConfigService;
+import com.janus.inspection.application.ServiceCsvService;
+import com.janus.shared.api.dto.CsvImportResponse;
+import com.janus.shared.infrastructure.exception.BusinessException;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -20,7 +23,11 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import org.jboss.resteasy.reactive.RestForm;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 @Path("/api/services")
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,6 +36,9 @@ public class ServiceResource {
 
     @Inject
     ServiceConfigService service;
+
+    @Inject
+    ServiceCsvService serviceCsvService;
 
     @GET
     @RolesAllowed({"ADMIN", "AGENT", "ACCOUNTING"})
@@ -85,5 +95,32 @@ public class ServiceResource {
                            @Context SecurityContext sec) {
         service.delete(id, sec.getUserPrincipal().getName());
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/export")
+    @Produces("text/csv")
+    @RolesAllowed("ADMIN")
+    public Response exportCsv() {
+        String csv = serviceCsvService.exportCsv();
+        return Response.ok(csv)
+                .type("text/csv; charset=UTF-8")
+                .header("Content-Disposition", "attachment; filename=\"services.csv\"")
+                .build();
+    }
+
+    @POST
+    @Path("/import")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
+    public CsvImportResponse importCsv(@RestForm("file") FileUpload file,
+                                        @Context SecurityContext sec) {
+        if (file == null) throw new BusinessException("MISSING_FILE", "CSV file is required");
+        try (var stream = Files.newInputStream(file.uploadedFile())) {
+            return serviceCsvService.importCsv(stream, sec.getUserPrincipal().getName());
+        } catch (IOException e) {
+            throw new BusinessException("CSV_READ_ERROR", "Failed to read uploaded file");
+        }
     }
 }
