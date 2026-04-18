@@ -111,21 +111,21 @@ export const routes: Routes = [
         canActivate: [roleGuard]
       },
       {
-        path: 'depositos',
-        loadComponent: () => import('./features/depositos/deposito-list/deposito-list.component').then(m => m.DepositoListComponent),
-        data: { roles: ['SUPERVISOR'] },
+        path: 'warehouses',
+        loadComponent: () => import('./features/warehouses/warehouse-list/warehouse-list.component').then(m => m.WarehouseListComponent),
+        data: { roles: ['ADMIN', 'SUPERVISOR'] },
         canActivate: [roleGuard]
       },
       {
-        path: 'depositos/new',
-        loadComponent: () => import('./features/depositos/deposito-form/deposito-form.component').then(m => m.DepositoFormComponent),
-        data: { roles: ['SUPERVISOR'] },
+        path: 'warehouses/new',
+        loadComponent: () => import('./features/warehouses/warehouse-form/warehouse-form.component').then(m => m.WarehouseFormComponent),
+        data: { roles: ['ADMIN', 'SUPERVISOR'] },
         canActivate: [roleGuard]
       },
       {
-        path: 'depositos/:id/edit',
-        loadComponent: () => import('./features/depositos/deposito-form/deposito-form.component').then(m => m.DepositoFormComponent),
-        data: { roles: ['SUPERVISOR'] },
+        path: 'warehouses/:id/edit',
+        loadComponent: () => import('./features/warehouses/warehouse-form/warehouse-form.component').then(m => m.WarehouseFormComponent),
+        data: { roles: ['ADMIN', 'SUPERVISOR'] },
         canActivate: [roleGuard]
       },
       {

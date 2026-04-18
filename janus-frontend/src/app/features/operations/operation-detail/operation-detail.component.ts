@@ -308,8 +308,8 @@ const RECEPTION_VISIBLE_STATUSES = ['IN_TRANSIT', 'CLOSED'];
                       @if (operation()!.originPortName) {
                         <dt>{{ 'OPERATIONS.ORIGIN_PORT' | translate }}</dt><dd>{{ operation()!.originPortCode }} - {{ operation()!.originPortName }}</dd>
                       }
-                      @if (operation()!.depositoName) {
-                        <dt>{{ 'OPERATIONS.DEPOSITO' | translate }}</dt><dd>{{ operation()!.depositoCode }} - {{ operation()!.depositoName }}</dd>
+                      @if (operation()!.warehouseName) {
+                        <dt>{{ 'OPERATIONS.WAREHOUSE' | translate }}</dt><dd>{{ operation()!.warehouseCode }} - {{ operation()!.warehouseName }}</dd>
                       }
                       <dt>{{ 'OPERATIONS.BL_AVAILABILITY' | translate }}</dt>
                       <dd class="d-flex align-items-center gap-2">

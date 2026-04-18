@@ -27,5 +27,5 @@ public record CreateOperationRequest(
         String childBlNumber,
         @NotNull Long arrivalPortId,
         Long originPortId,
-        Long depositoId
+        Long warehouseId
 ) {}

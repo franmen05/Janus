@@ -25,7 +25,7 @@ import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.model.StatusHistory;
 import com.janus.operation.domain.model.CargoType;
 import com.janus.operation.domain.model.TransportMode;
-import com.janus.deposito.domain.repository.DepositoRepository;
+import com.janus.warehouse.domain.repository.WarehouseRepository;
 import com.janus.port.domain.repository.PortRepository;
 import com.janus.operation.domain.repository.OperationRepository;
 import com.janus.operation.domain.repository.StatusHistoryRepository;
@@ -77,7 +77,7 @@ public class OperationService {
     PortRepository portRepository;
 
     @Inject
-    DepositoRepository depositoRepository;
+    WarehouseRepository warehouseRepository;
 
     @Inject
     AlertRepository alertRepository;
@@ -177,9 +177,9 @@ public class OperationService {
                     .orElseThrow(() -> new NotFoundException("Port", request.originPortId()));
         }
 
-        if (request.depositoId() != null) {
-            op.deposito = depositoRepository.findByIdOptional(request.depositoId())
-                    .orElseThrow(() -> new NotFoundException("Deposito", request.depositoId()));
+        if (request.warehouseId() != null) {
+            op.warehouse = warehouseRepository.findByIdOptional(request.warehouseId())
+                    .orElseThrow(() -> new NotFoundException("Warehouse", request.warehouseId()));
         }
 
         op.referenceNumber = generateReferenceNumber(op.arrivalPort.code);
@@ -285,11 +285,11 @@ public class OperationService {
             op.originPort = null;
         }
 
-        if (request.depositoId() != null) {
-            op.deposito = depositoRepository.findByIdOptional(request.depositoId())
-                    .orElseThrow(() -> new NotFoundException("Deposito", request.depositoId()));
+        if (request.warehouseId() != null) {
+            op.warehouse = warehouseRepository.findByIdOptional(request.warehouseId())
+                    .orElseThrow(() -> new NotFoundException("Warehouse", request.warehouseId()));
         } else {
-            op.deposito = null;
+            op.warehouse = null;
         }
 
         // Validate childBlNumber (HBL) required for CONSOLIDATED BL
@@ -336,7 +336,7 @@ public class OperationService {
         if (op.assignedAgent != null) { var ignored = op.assignedAgent.fullName; }
         if (op.arrivalPort != null) { var ignored = op.arrivalPort.name; }
         if (op.originPort != null) { var ignored = op.originPort.name; }
-        if (op.deposito != null) { var ignored = op.deposito.name; }
+        if (op.warehouse != null) { var ignored = op.warehouse.name; }
 
         return op;
     }

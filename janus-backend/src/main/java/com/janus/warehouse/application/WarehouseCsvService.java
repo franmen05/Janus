@@ -26,6 +26,7 @@ public class WarehouseCsvService {
     @Inject
     Event<AuditEvent> auditEvent;
 
+    @Transactional
     public String exportCsv(boolean includeInactive) {
         List<Warehouse> warehouses = includeInactive
                 ? warehouseRepository.findAllOrdered()

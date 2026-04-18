@@ -9,10 +9,10 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
 import { AccountService } from '../../../core/services/account.service';
 import { PortService } from '../../../core/services/port.service';
-import { DepositoService } from '../../../core/services/deposito.service';
+import { WarehouseService } from '../../../core/services/warehouse.service';
 import { Account } from '../../../core/models/account.model';
 import { Port } from '../../../core/models/port.model';
-import { Deposito } from '../../../core/models/deposito.model';
+import { Warehouse } from '../../../core/models/warehouse.model';
 import { TransportMode, OperationType, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
@@ -171,22 +171,22 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.DEPOSITO' | translate }}</label>
+              <label class="form-label">{{ 'OPERATIONS.WAREHOUSE' | translate }}</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-building"></i></span>
                 <input type="text" class="form-control"
-                  [ngbTypeahead]="searchDeposito"
-                  [resultFormatter]="depositoResultFormatter"
-                  [inputFormatter]="depositoInputFormatter"
-                  (selectItem)="onDepositoSelected($event)"
-                  [value]="selectedDepositoDisplay()"
-                  placeholder="{{ 'OPERATIONS.SELECT_DEPOSITO' | translate }}" />
+                  [ngbTypeahead]="searchWarehouse"
+                  [resultFormatter]="warehouseResultFormatter"
+                  [inputFormatter]="warehouseInputFormatter"
+                  (selectItem)="onWarehouseSelected($event)"
+                  [value]="selectedWarehouseDisplay()"
+                  placeholder="{{ 'OPERATIONS.SELECT_WAREHOUSE' | translate }}" />
               </div>
-              @if (selectedDeposito()) {
+              @if (selectedWarehouse()) {
                 <div class="mt-1 d-flex align-items-center gap-2">
-                  <span class="badge bg-secondary">{{ selectedDeposito()!.code }}</span>
-                  <small class="text-muted">{{ selectedDeposito()!.name }}</small>
-                  <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearDeposito()">
+                  <span class="badge bg-secondary">{{ selectedWarehouse()!.code }}</span>
+                  <small class="text-muted">{{ selectedWarehouse()!.name }}</small>
+                  <button type="button" class="btn btn-link btn-sm text-danger p-0" (click)="clearWarehouse()">
                     <i class="bi bi-x-circle"></i>
                   </button>
                 </div>
@@ -236,7 +236,7 @@ export class OperationFormComponent implements OnInit {
   private operationService = inject(OperationService);
   private accountService = inject(AccountService);
   private portService = inject(PortService);
-  private depositoService = inject(DepositoService);
+  private warehouseService = inject(WarehouseService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -248,9 +248,9 @@ export class OperationFormComponent implements OnInit {
   selectedAccount = signal<Account | null>(null);
   selectedAccountDisplay = signal('');
   accountLocked = signal(false);
-  depositos = signal<Deposito[]>([]);
-  selectedDeposito = signal<Deposito | null>(null);
-  selectedDepositoDisplay = signal('');
+  warehouses = signal<Warehouse[]>([]);
+  selectedWarehouse = signal<Warehouse | null>(null);
+  selectedWarehouseDisplay = signal('');
   transportModes = Object.values(TransportMode);
   cargoTypes = Object.values(CargoType);
   operationCategories = Object.values(OperationCategory);
@@ -279,7 +279,7 @@ export class OperationFormComponent implements OnInit {
     incoterm: new FormControl('', { nonNullable: true }),
     arrivalPortId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     originPortId: new FormControl('', { nonNullable: true }),
-    depositoId: new FormControl('', { nonNullable: true })
+    warehouseId: new FormControl('', { nonNullable: true })
   });
 
   searchAccount: OperatorFunction<string, Account[]> = (text$: Observable<string>) =>
@@ -302,36 +302,36 @@ export class OperationFormComponent implements OnInit {
 
   accountInputFormatter = (account: Account) => account.name;
 
-  searchDeposito: OperatorFunction<string, Deposito[]> = (text$: Observable<string>) =>
+  searchWarehouse: OperatorFunction<string, Warehouse[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
       map(term => {
-        if (term.length < 1) return this.depositos().slice(0, 10);
+        if (term.length < 1) return this.warehouses().slice(0, 10);
         const lower = term.toLowerCase();
-        return this.depositos().filter(d =>
+        return this.warehouses().filter(d =>
           d.code.toLowerCase().includes(lower) ||
           d.name.toLowerCase().includes(lower)
         ).slice(0, 10);
       })
     );
 
-  depositoResultFormatter = (deposito: Deposito) =>
-    `${deposito.code}  —  ${deposito.name}`;
+  warehouseResultFormatter = (warehouse: Warehouse) =>
+    `${warehouse.code}  —  ${warehouse.name}`;
 
-  depositoInputFormatter = (deposito: Deposito) => deposito.name;
+  warehouseInputFormatter = (warehouse: Warehouse) => warehouse.name;
 
-  onDepositoSelected(event: any): void {
-    const deposito = event.item as Deposito;
-    this.selectedDeposito.set(deposito);
-    this.selectedDepositoDisplay.set(deposito.name);
-    this.form.get('depositoId')!.setValue(deposito.id.toString());
+  onWarehouseSelected(event: any): void {
+    const warehouse = event.item as Warehouse;
+    this.selectedWarehouse.set(warehouse);
+    this.selectedWarehouseDisplay.set(warehouse.name);
+    this.form.get('warehouseId')!.setValue(warehouse.id.toString());
   }
 
-  clearDeposito(): void {
-    this.selectedDeposito.set(null);
-    this.selectedDepositoDisplay.set('');
-    this.form.get('depositoId')!.setValue('');
+  clearWarehouse(): void {
+    this.selectedWarehouse.set(null);
+    this.selectedWarehouseDisplay.set('');
+    this.form.get('warehouseId')!.setValue('');
   }
 
   onAccountSelected(event: any): void {
@@ -374,13 +374,13 @@ export class OperationFormComponent implements OnInit {
         operation: this.operationService.getById(+id),
         arrivalPorts: this.portService.getAll('arrival'),
         originPorts: this.portService.getAll('origin'),
-        depositos: this.depositoService.getAll()
-      }).subscribe(({ accountsPage, operation: op, arrivalPorts, originPorts, depositos }) => {
+        warehouses: this.warehouseService.getAll()
+      }).subscribe(({ accountsPage, operation: op, arrivalPorts, originPorts, warehouses }) => {
         const accounts = accountsPage.content;
         this.accounts.set(accounts);
         this.arrivalPorts.set(arrivalPorts);
         this.originPorts.set(originPorts);
-        this.depositos.set(depositos);
+        this.warehouses.set(warehouses);
         if (op.status === 'CLOSED' || op.status === 'CANCELLED') {
           this.router.navigate(['/operations', op.id]);
           return;
@@ -402,7 +402,7 @@ export class OperationFormComponent implements OnInit {
           incoterm: op.incoterm ?? '',
           arrivalPortId: op.arrivalPortId?.toString() ?? '',
           originPortId: op.originPortId?.toString() ?? '',
-          depositoId: op.depositoId?.toString() ?? ''
+          warehouseId: op.warehouseId?.toString() ?? ''
         });
         // Disable BL Availability when operation is at or past VALUATION_REVIEW
         if (this.blAvailabilityLockedStatuses.has(op.status)) {
@@ -415,11 +415,11 @@ export class OperationFormComponent implements OnInit {
             this.selectedAccountDisplay.set(account.name);
           }
         }
-        if (op.depositoId) {
-          const deposito = depositos.find(d => d.id === op.depositoId);
-          if (deposito) {
-            this.selectedDeposito.set(deposito);
-            this.selectedDepositoDisplay.set(deposito.name);
+        if (op.warehouseId) {
+          const warehouse = warehouses.find(d => d.id === op.warehouseId);
+          if (warehouse) {
+            this.selectedWarehouse.set(warehouse);
+            this.selectedWarehouseDisplay.set(warehouse.name);
           }
         }
       });
@@ -428,11 +428,11 @@ export class OperationFormComponent implements OnInit {
       forkJoin({
         arrivalPorts: this.portService.getAll('arrival'),
         originPorts: this.portService.getAll('origin'),
-        depositos: this.depositoService.getAll()
-      }).subscribe(({ arrivalPorts, originPorts, depositos }) => {
+        warehouses: this.warehouseService.getAll()
+      }).subscribe(({ arrivalPorts, originPorts, warehouses }) => {
         this.arrivalPorts.set(arrivalPorts);
         this.originPorts.set(originPorts);
-        this.depositos.set(depositos);
+        this.warehouses.set(warehouses);
       });
       this.accountService.getAll(0, 9999).subscribe(response => {
         const accounts = response.content;
@@ -499,7 +499,7 @@ export class OperationFormComponent implements OnInit {
       incoterm: val.incoterm || undefined,
       arrivalPortId: val.arrivalPortId ? +val.arrivalPortId : undefined,
       originPortId: val.originPortId ? +val.originPortId : undefined,
-      depositoId: val.depositoId ? +val.depositoId : undefined
+      warehouseId: val.warehouseId ? +val.warehouseId : undefined
     };
     const obs = this.isEdit() ? this.operationService.update(this.operationId!, request) : this.operationService.create(request);
     obs.subscribe(op => this.router.navigate(['/operations', op.id]));

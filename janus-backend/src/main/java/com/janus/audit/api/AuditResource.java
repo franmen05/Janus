@@ -36,6 +36,7 @@ public class AuditResource {
     public List<AuditLogResponse> list(@QueryParam("username") String username,
                                        @QueryParam("from") String from,
                                        @QueryParam("to") String to) {
+
         LocalDateTime fromDateTime = from != null && !from.isBlank()
                 ? LocalDate.parse(from).atStartOfDay() : null;
         LocalDateTime toDateTime = to != null && !to.isBlank()

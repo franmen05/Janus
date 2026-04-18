@@ -38,6 +38,7 @@ public class DocumentTypeConfigResource {
     @Transactional
     public DocumentTypeConfigResponse update(@PathParam("code") String code,
                                               DocumentTypeConfigRequest request) {
+
         var config = documentTypeConfigRepository.findByCode(code)
                 .orElseThrow(() -> new NotFoundException("DocumentTypeConfig", code));
         config.allowMultiple = request.allowMultiple();
