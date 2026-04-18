@@ -74,8 +74,8 @@ public class AccountResource {
     public Response exportCsv() {
         String csv = accountCsvService.exportCsv();
         return Response.ok(csv)
+                .type("text/csv; charset=UTF-8")
                 .header("Content-Disposition", "attachment; filename=\"accounts.csv\"")
-                .header("Content-Type", "text/csv; charset=UTF-8")
                 .build();
     }
 
@@ -85,8 +85,8 @@ public class AccountResource {
     @Produces(MediaType.APPLICATION_JSON)
     public CsvImportResponse importCsv(@RestForm("file") FileUpload file, @Context SecurityContext sec) {
         if (file == null) throw new BusinessException("MISSING_FILE", "CSV file is required");
-        try {
-            return accountCsvService.importCsv(Files.newInputStream(file.uploadedFile()), sec.getUserPrincipal().getName());
+        try (var stream = Files.newInputStream(file.uploadedFile())) {
+            return accountCsvService.importCsv(stream, sec.getUserPrincipal().getName());
         } catch (IOException e) {
             throw new BusinessException("CSV_READ_ERROR", "Failed to read uploaded file");
         }

@@ -93,8 +93,8 @@ public class WarehouseResource {
     public Response exportCsv(@QueryParam("includeInactive") boolean includeInactive) {
         String csv = warehouseCsvService.exportCsv(includeInactive);
         return Response.ok(csv)
+                .type("text/csv; charset=UTF-8")
                 .header("Content-Disposition", "attachment; filename=\"warehouses.csv\"")
-                .header("Content-Type", "text/csv; charset=UTF-8")
                 .build();
     }
 

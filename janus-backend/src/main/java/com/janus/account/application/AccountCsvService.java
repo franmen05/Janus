@@ -47,7 +47,7 @@ public class AccountCsvService {
               .append(CsvUtil.escape(a.address)).append(",")
               .append(CsvUtil.escape(a.businessName)).append(",")
               .append(CsvUtil.escape(a.representative)).append(",")
-              .append(a.documentType != null ? a.documentType.name() : "").append(",")
+              .append(CsvUtil.escape(a.documentType != null ? a.documentType.name() : null)).append(",")
               .append(CsvUtil.escape(a.alternatePhone)).append(",")
               .append(CsvUtil.escape(a.country)).append(",")
               .append(CsvUtil.escape(a.accountCode)).append(",")
