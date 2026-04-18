@@ -1060,7 +1060,11 @@
     "INACTIVE": "Inactive",
     "APPLIES_TO": "Applies To",
     "MODULE_LOGISTICS": "Logistics",
-    "MODULE_CARGO": "Cargo"
+    "MODULE_CARGO": "Cargo",
+    "EXPORT_CSV": "Export CSV",
+    "IMPORT_CSV": "Import CSV",
+    "DOWNLOAD_TEMPLATE": "Download Template",
+    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}"
   },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "Cannot change from {{from}} to {{to}}. Only the next step is allowed.",

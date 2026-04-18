@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ServiceConfig, CreateServiceRequest, UpdateServiceRequest } from '../models/service.model';
+import { CsvImportResponse } from '../models/shared.model';
 
 @Injectable({ providedIn: 'root' })
 export class ServiceService {
@@ -31,5 +32,15 @@ export class ServiceService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  exportCsv(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/export`, { responseType: 'blob' });
+  }
+
+  importCsv(file: File): Observable<CsvImportResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<CsvImportResponse>(`${this.apiUrl}/import`, formData);
   }
 }

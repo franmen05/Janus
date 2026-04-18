@@ -1,21 +1,31 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceService } from '../../../core/services/service.service';
 import { ServiceConfig, CreateServiceRequest, UpdateServiceRequest, ServiceModule } from '../../../core/models/service.model';
+import { CsvImportResponse } from '../../../core/models/shared.model';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-service-config',
   standalone: true,
-  imports: [FormsModule, TranslateModule],
+  imports: [FormsModule, TranslateModule, PaginationComponent],
   template: `
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2>{{ 'SERVICE_CONFIG.TITLE' | translate }}</h2>
-      <button class="btn btn-primary" (click)="toggleCreateForm()">
-        <i class="bi bi-plus-lg me-1"></i>
-        {{ 'SERVICE_CONFIG.ADD' | translate }}
-      </button>
+      <div class="d-flex gap-2 align-items-center flex-wrap">
+        <button class="btn btn-outline-secondary btn-sm" (click)="onExportCsv()">{{ 'SERVICE_CONFIG.EXPORT_CSV' | translate }}</button>
+        <button class="btn btn-outline-secondary btn-sm" (click)="onDownloadTemplate()">{{ 'SERVICE_CONFIG.DOWNLOAD_TEMPLATE' | translate }}</button>
+        <label class="btn btn-outline-secondary btn-sm mb-0" [class.disabled]="importing()">
+          {{ importing() ? '...' : ('SERVICE_CONFIG.IMPORT_CSV' | translate) }}
+          <input type="file" accept=".csv" class="d-none" (change)="onImportCsv($event)">
+        </label>
+        <button class="btn btn-primary btn-sm" (click)="toggleCreateForm()">
+          <i class="bi bi-plus-lg me-1"></i>
+          {{ 'SERVICE_CONFIG.ADD' | translate }}
+        </button>
+      </div>
     </div>
 
     @if (loading()) {
@@ -104,7 +114,7 @@ import { ServiceConfig, CreateServiceRequest, UpdateServiceRequest, ServiceModul
               </tr>
             </thead>
             <tbody>
-              @for (cat of services(); track cat.id) {
+              @for (cat of pagedServices(); track cat.id) {
                 <tr>
                   <td class="text-muted small">{{ cat.id }}</td>
                   <td><code>{{ cat.name }}</code></td>
@@ -184,7 +194,27 @@ import { ServiceConfig, CreateServiceRequest, UpdateServiceRequest, ServiceModul
             </tbody>
           </table>
         </div>
+        <app-pagination
+          [currentPage]="currentPage()"
+          [pageSize]="pageSize"
+          [totalElements]="services().length"
+          [totalPages]="totalPages()"
+          (pageChange)="onPageChange($event)" />
       </div>
+
+      @if (importResult()) {
+        <div class="alert alert-info mt-3 alert-dismissible fade show">
+          {{ 'SERVICE_CONFIG.IMPORT_SUCCESS' | translate:{imported: importResult()!.imported, skipped: importResult()!.skipped} }}
+          @if (importResult()!.errors.length > 0) {
+            <ul class="mb-0 mt-1">
+              @for (err of importResult()!.errors; track err) {
+                <li>{{ err }}</li>
+              }
+            </ul>
+          }
+          <button type="button" class="btn-close" (click)="importResult.set(null)"></button>
+        </div>
+      }
     }
   `
 })
@@ -198,6 +228,17 @@ export class ServiceConfigComponent implements OnInit {
   successMessage = signal('');
   editingId = signal<number | null>(null);
   showCreateForm = signal(false);
+  currentPage = signal(1);
+  pageSize = 10;
+  importing = signal(false);
+  importResult = signal<CsvImportResponse | null>(null);
+
+  pagedServices = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.services().slice(start, start + this.pageSize);
+  });
+
+  totalPages = computed(() => Math.ceil(this.services().length / this.pageSize));
 
   editLabelEs = '';
   editLabelEn = '';
@@ -212,6 +253,50 @@ export class ServiceConfigComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadServices();
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage.set(page);
+  }
+
+  onExportCsv(): void {
+    this.serviceService.exportCsv().subscribe(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'services.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  onDownloadTemplate(): void {
+    const content = [
+      'name,labelEs,labelEn,sortOrder,appliesTo',
+      'FUMIGACION,"Fumigación","Fumigation",1,"LOGISTICS;CARGO"'
+    ].join('\r\n');
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'services-template.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  onImportCsv(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.importing.set(true);
+    this.serviceService.importCsv(file).subscribe({
+      next: result => {
+        this.importResult.set(result);
+        this.importing.set(false);
+        this.loadServices();
+      },
+      error: () => { this.importing.set(false); }
+    });
+    (event.target as HTMLInputElement).value = '';
   }
 
   toggleCreateForm(): void {
