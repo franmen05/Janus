@@ -74,7 +74,7 @@ public class PortResource {
 
     @GET
     @Path("/catalog/countries")
-    @RolesAllowed("ADMIN")
+    @RolesAllowed({"ADMIN", "SUPERVISOR"})
     public List<CatalogCountryResponse> getCatalogCountries() {
         return portCatalogService.getCountries();
     }
