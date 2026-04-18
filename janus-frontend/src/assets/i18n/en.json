@@ -118,7 +118,7 @@
     "ARRIVAL_PORT_REQUIRED": "Arrival port is required",
     "ORIGIN_PORT": "Origin Port",
     "SELECT_PORT": "Select port...",
-    "SEARCH": "Search by reference, agent or account...",
+    "SEARCH": "Search by reference, BL, declaration, RNC or customer",
     "ALL_TRANSPORT_MODES": "All transport modes",
     "WAREHOUSE": "Warehouse",
     "SELECT_WAREHOUSE": "Search warehouse by code or name..."

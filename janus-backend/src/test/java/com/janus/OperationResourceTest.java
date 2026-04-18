@@ -294,6 +294,60 @@ class OperationResourceTest {
     }
 
     @Test
+    @Order(18)
+    void testSearchByAccountTaxId() {
+        // Account id=1 has taxId "RTN-0801-1990-00001" (see DataSeeder)
+        // testCreateOperation already created an operation under accountId=1
+        given()
+                .auth().basic("admin", "admin123")
+                .queryParam("search", "RTN-0801-1990")
+                .when().get("/api/operations")
+                .then()
+                .statusCode(200)
+                .body("content.size()", greaterThanOrEqualTo(1));
+    }
+
+    @Test
+    @Order(19)
+    void testSearchByDeclarationNumber() {
+        // Create an operation, advance through compliance, attach a preliminary declaration
+        // with a unique declaration number, then search by it
+        var opId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"accountId": 1, "operationType": "IMPORT", "transportMode": "AIR", "operationCategory": "CATEGORY_1", "blNumber": "BL-SEARCH-DECL", "estimatedArrival": "2025-12-01T10:00:00", "blAvailability": "ORIGINAL", "incoterm": "FOB", "arrivalPortId": 1}
+                        """)
+                .when().post("/api/operations")
+                .then().statusCode(201)
+                .extract().jsonPath().getLong("id");
+
+        uploadAllMandatoryDocs(opId);
+
+        // Create preliminary declaration with a unique declaration number
+        var uniqueDeclNumber = "DECL-SEARCH-UNIQUE-" + opId;
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {"declarationNumber": "%s", "fobValue": 1000.00, "cifValue": 1200.00,
+                         "taxableBase": 1200.00, "totalTaxes": 180.00, "freightValue": 150.00, "insuranceValue": 50.00}
+                        """.formatted(uniqueDeclNumber))
+                .when().post("/api/operations/{opId}/declarations/preliminary", opId)
+                .then().statusCode(201);
+
+        // Search by the unique declaration number — should find the parent operation
+        given()
+                .auth().basic("admin", "admin123")
+                .queryParam("search", uniqueDeclNumber)
+                .when().get("/api/operations")
+                .then()
+                .statusCode(200)
+                .body("content.size()", is(1))
+                .body("content[0].id", is((int) opId));
+    }
+
+    @Test
     @Order(16)
     void testAgentCanCreateOperation() {
         given()

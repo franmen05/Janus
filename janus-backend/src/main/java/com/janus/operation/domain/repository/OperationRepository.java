@@ -60,7 +60,7 @@ public class OperationRepository implements PanacheRepository<Operation> {
         if (query.isEmpty()) {
             return findAll().page(Page.of(page, size)).list();
         }
-        return find(String.join(" AND ", query), params.toArray())
+        return find("FROM Operation o WHERE " + String.join(" AND ", query), params.toArray())
                 .page(Page.of(page, size))
                 .list();
     }
@@ -71,20 +71,24 @@ public class OperationRepository implements PanacheRepository<Operation> {
         if (query.isEmpty()) {
             return count();
         }
-        return count(String.join(" AND ", query), params.toArray());
+        return count("FROM Operation o WHERE " + String.join(" AND ", query), params.toArray());
     }
 
     private List<String> buildFilterQuery(OperationStatus status, Long accountId, String search) {
         var clauses = new ArrayList<String>();
         int paramIndex = 1;
         if (status != null) {
-            clauses.add("status = ?" + paramIndex++);
+            clauses.add("o.status = ?" + paramIndex++);
         }
         if (accountId != null) {
-            clauses.add("account.id = ?" + paramIndex++);
+            clauses.add("o.account.id = ?" + paramIndex++);
         }
         if (search != null && !search.isBlank()) {
-            clauses.add("(LOWER(referenceNumber) LIKE ?" + paramIndex + " OR LOWER(account.name) LIKE ?" + paramIndex + " OR LOWER(blNumber) LIKE ?" + paramIndex + ")");
+            clauses.add("(LOWER(o.referenceNumber) LIKE ?" + paramIndex
+                    + " OR LOWER(o.account.name) LIKE ?" + paramIndex
+                    + " OR LOWER(o.blNumber) LIKE ?" + paramIndex
+                    + " OR LOWER(o.account.taxId) LIKE ?" + paramIndex
+                    + " OR EXISTS (SELECT 1 FROM Declaration d WHERE d.operation = o AND LOWER(d.declarationNumber) LIKE ?" + paramIndex + "))");
             paramIndex++;
         }
         return clauses;
