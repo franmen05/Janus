@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 
+import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ServiceService } from '../../../core/services/service.service';
@@ -10,7 +11,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 @Component({
   selector: 'app-service-config',
   standalone: true,
-  imports: [FormsModule, TranslateModule, PaginationComponent],
+  imports: [FormsModule, TranslateModule, PaginationComponent, DecimalPipe],
   template: `
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2>{{ 'SERVICE_CONFIG.TITLE' | translate }}</h2>
@@ -69,6 +70,22 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
                 </div>
               </div>
               <div class="row g-3 mt-1">
+                <div class="col-md-4">
+                  <label class="form-label">{{ 'SERVICE_CONFIG.DEFAULT_PRICE' | translate }}</label>
+                  <input type="number" class="form-control" [(ngModel)]="newServiceDefaultPrice" name="defaultPrice"
+                         step="0.01" min="0" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">{{ 'SERVICE_CONFIG.DEFAULT_CURRENCY' | translate }}</label>
+                  <select class="form-select" [(ngModel)]="newServiceDefaultCurrency" name="defaultCurrency">
+                    <option value="">-</option>
+                    <option value="USD">USD</option>
+                    <option value="DOP">DOP</option>
+                    <option value="EUR">EUR</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row g-3 mt-1">
                 <div class="col-12">
                   <label class="form-label">{{ 'SERVICE_CONFIG.APPLIES_TO' | translate }}</label>
                   <div class="d-flex gap-3">
@@ -108,6 +125,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
                 <th>{{ 'SERVICE_CONFIG.LABEL_ES' | translate }}</th>
                 <th>{{ 'SERVICE_CONFIG.LABEL_EN' | translate }}</th>
                 <th>{{ 'SERVICE_CONFIG.SORT_ORDER' | translate }}</th>
+                <th>{{ 'SERVICE_CONFIG.DEFAULT_PRICE' | translate }}</th>
                 <th>{{ 'SERVICE_CONFIG.APPLIES_TO' | translate }}</th>
                 <th>{{ 'COMMON.STATUS' | translate }}</th>
                 <th>{{ 'COMMON.ACTIONS' | translate }}</th>
@@ -140,6 +158,26 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
                              style="width: 80px;" (keyup.enter)="saveEdit(cat)" (keyup.escape)="cancelEdit()" />
                     } @else {
                       {{ cat.sortOrder }}
+                    }
+                  </td>
+                  <td>
+                    @if (editingId() === cat.id) {
+                      <div class="d-flex gap-1">
+                        <input type="number" class="form-control form-control-sm" [(ngModel)]="editDefaultPrice"
+                               step="0.01" min="0" style="width: 100px;" />
+                        <select class="form-select form-select-sm" [(ngModel)]="editDefaultCurrency" style="width: 85px;">
+                          <option value="">-</option>
+                          <option value="USD">USD</option>
+                          <option value="DOP">DOP</option>
+                          <option value="EUR">EUR</option>
+                        </select>
+                      </div>
+                    } @else {
+                      @if (cat.defaultPrice != null) {
+                        {{ cat.defaultPrice | number:'1.2-2' }} {{ cat.defaultCurrency || '' }}
+                      } @else {
+                        -
+                      }
                     }
                   </td>
                   <td>
@@ -189,7 +227,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
                   </td>
                 </tr>
               } @empty {
-                <tr><td colspan="8" class="text-center text-muted py-4">{{ 'COMMON.NO_DATA' | translate }}</td></tr>
+                <tr><td colspan="9" class="text-center text-muted py-4">{{ 'COMMON.NO_DATA' | translate }}</td></tr>
               }
             </tbody>
           </table>
@@ -245,9 +283,13 @@ export class ServiceConfigComponent implements OnInit {
   editSortOrder = 0;
   editLogistics = true;
   editCargo = true;
+  editDefaultPrice: number | null = null;
+  editDefaultCurrency = '';
 
   newServiceLogistics = true;
   newServiceCargo = true;
+  newServiceDefaultPrice: number | null = null;
+  newServiceDefaultCurrency = '';
 
   newService: Partial<CreateServiceRequest> = this.emptyService();
 
@@ -305,6 +347,8 @@ export class ServiceConfigComponent implements OnInit {
       this.newService = this.emptyService();
       this.newServiceLogistics = true;
       this.newServiceCargo = true;
+      this.newServiceDefaultPrice = null;
+      this.newServiceDefaultCurrency = '';
     }
   }
 
@@ -316,7 +360,9 @@ export class ServiceConfigComponent implements OnInit {
       name: (this.newService.name || '').toUpperCase(),
       labelEs: this.newService.labelEs || '',
       labelEn: this.newService.labelEn || '',
-      appliesTo
+      appliesTo,
+      defaultPrice: this.newServiceDefaultPrice != null ? this.newServiceDefaultPrice : null,
+      defaultCurrency: this.newServiceDefaultCurrency ? this.newServiceDefaultCurrency : null
     };
     this.serviceService.create(request).subscribe({
       next: () => {
@@ -361,6 +407,8 @@ export class ServiceConfigComponent implements OnInit {
     this.editSortOrder = cat.sortOrder;
     this.editLogistics = cat.appliesTo.includes('LOGISTICS');
     this.editCargo = cat.appliesTo.includes('CARGO');
+    this.editDefaultPrice = cat.defaultPrice ?? null;
+    this.editDefaultCurrency = cat.defaultCurrency ?? '';
   }
 
   cancelEdit(): void {
@@ -370,6 +418,8 @@ export class ServiceConfigComponent implements OnInit {
     this.editSortOrder = 0;
     this.editLogistics = true;
     this.editCargo = true;
+    this.editDefaultPrice = null;
+    this.editDefaultCurrency = '';
   }
 
   saveEdit(cat: ServiceConfig): void {
@@ -380,7 +430,9 @@ export class ServiceConfigComponent implements OnInit {
       labelEs: this.editLabelEs,
       labelEn: this.editLabelEn,
       sortOrder: this.editSortOrder,
-      appliesTo
+      appliesTo,
+      defaultPrice: this.editDefaultPrice != null ? this.editDefaultPrice : null,
+      defaultCurrency: this.editDefaultCurrency ? this.editDefaultCurrency : null
     };
     this.serviceService.update(cat.id, request).subscribe({
       next: () => {

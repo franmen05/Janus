@@ -2,6 +2,7 @@ package com.janus.inspection.api.dto;
 
 import com.janus.inspection.domain.model.ServiceConfig;
 import com.janus.inspection.domain.model.ServiceModule;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ public record ServiceResponse(
         boolean active,
         int sortOrder,
         Set<ServiceModule> appliesTo,
+        BigDecimal defaultPrice,
+        String defaultCurrency,
         LocalDateTime createdAt
 ) {
     public static ServiceResponse from(ServiceConfig config) {
@@ -24,6 +27,8 @@ public record ServiceResponse(
                 config.active,
                 config.sortOrder,
                 config.appliesTo,
+                config.defaultPrice,
+                config.defaultCurrency,
                 config.createdAt
         );
     }

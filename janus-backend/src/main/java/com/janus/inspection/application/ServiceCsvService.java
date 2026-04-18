@@ -13,6 +13,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -22,7 +23,7 @@ import org.jboss.logging.Logger;
 public class ServiceCsvService {
 
     private static final Logger LOG = Logger.getLogger(ServiceCsvService.class);
-    static final String HEADER = "name,labelEs,labelEn,sortOrder,appliesTo";
+    static final String HEADER = "name,labelEs,labelEn,sortOrder,appliesTo,defaultPrice,defaultCurrency";
 
     @Inject
     ServiceConfigRepository serviceConfigRepository;
@@ -38,11 +39,15 @@ public class ServiceCsvService {
             String appliesToValue = s.appliesTo == null || s.appliesTo.isEmpty()
                     ? ""
                     : String.join(";", s.appliesTo.stream().map(Enum::name).sorted().toList());
+            String defaultPriceValue = s.defaultPrice == null ? "" : s.defaultPrice.toPlainString();
+            String defaultCurrencyValue = s.defaultCurrency == null ? "" : s.defaultCurrency;
             sb.append(CsvUtil.escape(s.name)).append(",")
               .append(CsvUtil.escape(s.labelEs)).append(",")
               .append(CsvUtil.escape(s.labelEn)).append(",")
               .append(s.sortOrder).append(",")
-              .append(CsvUtil.escape(appliesToValue)).append("\r\n");
+              .append(CsvUtil.escape(appliesToValue)).append(",")
+              .append(CsvUtil.escape(defaultPriceValue)).append(",")
+              .append(CsvUtil.escape(defaultCurrencyValue)).append("\r\n");
         }
         return sb.toString();
     }
@@ -116,12 +121,28 @@ public class ServiceCsvService {
                     appliesTo = moduleSet;
                 }
             }
+            BigDecimal defaultPrice = null;
+            if (fields.size() > 5 && !fields.get(5).isBlank()) {
+                try {
+                    defaultPrice = new BigDecimal(fields.get(5).trim());
+                } catch (NumberFormatException e) {
+                    errors.add("Row " + rowNum + ": defaultPrice must be a number");
+                    skipped++;
+                    continue;
+                }
+            }
+            String defaultCurrency = null;
+            if (fields.size() > 6 && !fields.get(6).isBlank()) {
+                defaultCurrency = fields.get(6).trim();
+            }
             var config = new ServiceConfig();
             config.name = name;
             config.labelEs = labelEs;
             config.labelEn = labelEn;
             config.sortOrder = sortOrder;
             config.appliesTo = appliesTo;
+            config.defaultPrice = defaultPrice;
+            config.defaultCurrency = defaultCurrency;
             config.active = true;
             serviceConfigRepository.persist(config);
             auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "ServiceConfig", config.id, null, null, null,

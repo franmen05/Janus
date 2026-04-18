@@ -444,6 +444,15 @@ export class ExpenseDetailModalComponent implements OnInit {
     // Auto-compute amount from quantity * rate
     this.editForm.controls.quantity.valueChanges.subscribe(() => this.computeAmount());
     this.editForm.controls.rate.valueChanges.subscribe(() => this.computeAmount());
+    // Autofill rate/currency from selected service's defaults
+    this.editForm.controls.category.valueChanges.subscribe(name => {
+      if (!name) return;
+      const match = this.activeCategories().find(c => c.name === name);
+      if (match && match.defaultPrice != null) {
+        this.editForm.controls.rate.setValue(match.defaultPrice);
+        this.editForm.controls.currency.setValue(match.defaultCurrency || 'USD');
+      }
+    });
     // Clear billToName when billToType changes (filter changed, previous selection no longer valid)
     this.editForm.controls.billToType.valueChanges.subscribe(() => {
       this.editForm.controls.billToName.setValue('');

@@ -1132,6 +1132,8 @@
     "EXPORT_CSV": "Exportar CSV",
     "IMPORT_CSV": "Importar CSV",
     "DOWNLOAD_TEMPLATE": "Descargar Plantilla",
-    "IMPORT_SUCCESS": "Importados {{imported}} registros, omitidos {{skipped}}"
+    "IMPORT_SUCCESS": "Importados {{imported}} registros, omitidos {{skipped}}",
+    "DEFAULT_PRICE": "Precio por Defecto",
+    "DEFAULT_CURRENCY": "Moneda por Defecto"
   }
 }

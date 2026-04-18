@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -31,6 +32,12 @@ public class ServiceConfig extends BaseEntity {
 
     @Column(name = "sort_order", nullable = false)
     public int sortOrder = 0;
+
+    @Column(name = "default_price", precision = 12, scale = 2)
+    public BigDecimal defaultPrice;
+
+    @Column(name = "default_currency", length = 3)
+    public String defaultCurrency;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "service_config_modules", joinColumns = @JoinColumn(name = "service_config_id"))

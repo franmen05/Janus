@@ -8,6 +8,8 @@ export interface ServiceConfig {
   active: boolean;
   sortOrder: number;
   appliesTo: ServiceModule[];
+  defaultPrice?: number | null;
+  defaultCurrency?: string | null;
   createdAt: string;
 }
 
@@ -16,6 +18,8 @@ export interface CreateServiceRequest {
   labelEs: string;
   labelEn: string;
   appliesTo?: ServiceModule[];
+  defaultPrice?: number | null;
+  defaultCurrency?: string | null;
 }
 
 export interface UpdateServiceRequest {
@@ -23,4 +27,6 @@ export interface UpdateServiceRequest {
   labelEn: string;
   sortOrder: number;
   appliesTo?: ServiceModule[];
+  defaultPrice?: number | null;
+  defaultCurrency?: string | null;
 }

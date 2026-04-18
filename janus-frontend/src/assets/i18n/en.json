@@ -1065,7 +1065,9 @@
     "EXPORT_CSV": "Export CSV",
     "IMPORT_CSV": "Import CSV",
     "DOWNLOAD_TEMPLATE": "Download Template",
-    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}"
+    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}",
+    "DEFAULT_PRICE": "Default Price",
+    "DEFAULT_CURRENCY": "Default Currency"
   },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "Cannot change from {{from}} to {{to}}. Only the next step is allowed.",

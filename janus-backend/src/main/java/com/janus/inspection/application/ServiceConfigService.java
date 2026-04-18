@@ -51,6 +51,8 @@ public class ServiceConfigService {
         config.labelEs = request.labelEs();
         config.labelEn = request.labelEn();
         config.appliesTo = request.appliesTo() != null ? request.appliesTo() : EnumSet.allOf(ServiceModule.class);
+        config.defaultPrice = request.defaultPrice();
+        config.defaultCurrency = request.defaultCurrency();
         repository.persist(config);
 
         auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "ServiceConfig",
@@ -70,6 +72,8 @@ public class ServiceConfigService {
         if (request.appliesTo() != null) {
             config.appliesTo = request.appliesTo();
         }
+        config.defaultPrice = request.defaultPrice();
+        config.defaultCurrency = request.defaultCurrency();
 
         auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "ServiceConfig",
                 config.id, null, null, null, null));
