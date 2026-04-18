@@ -39,6 +39,12 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
                     .build();
         }
 
+        if (exception instanceof ConflictException ce) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(Map.of("error", ce.getMessage(), "errorCode", ce.getErrorCode()))
+                    .build();
+        }
+
         if (exception instanceof ConstraintViolationException cve) {
             var violations = cve.getConstraintViolations().stream()
                     .map(v -> v.getPropertyPath() + ": " + v.getMessage())
