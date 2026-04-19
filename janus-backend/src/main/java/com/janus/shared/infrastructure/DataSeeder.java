@@ -10,6 +10,7 @@ import com.janus.exchangerate.domain.model.ExchangeRate;
 import com.janus.exchangerate.domain.repository.ExchangeRateRepository;
 import com.janus.inspection.domain.model.ServiceConfig;
 import com.janus.inspection.domain.repository.ServiceConfigRepository;
+import com.janus.warehouse.bonded.application.BondedWarehouseCsvService;
 import com.janus.warehouse.bonded.domain.repository.BondedWarehouseRepository;
 import com.janus.port.domain.model.Port;
 import com.janus.port.domain.repository.PortRepository;
@@ -49,7 +50,7 @@ public class DataSeeder {
     BondedWarehouseRepository warehouseRepository;
 
     @Inject
-    com.janus.warehouse.bonded.application.BondedWarehouseCsvService warehouseCsvService;
+    BondedWarehouseCsvService warehouseCsvService;
 
     @Inject
     DocumentTypeConfigRepository documentTypeConfigRepository;
