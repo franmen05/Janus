@@ -227,6 +227,9 @@
     "BADGE_ARRIVAL": "Arrival"
   },
   "WAREHOUSES": {
+    "TITLE": "Warehouses"
+  },
+  "BONDED_WAREHOUSES": {
     "TITLE": "Warehouses",
     "NEW": "New Warehouse",
     "EDIT_TITLE": "Edit Warehouse",

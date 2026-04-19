@@ -227,6 +227,9 @@
     "BADGE_ARRIVAL": "Arribo"
   },
   "WAREHOUSES": {
+    "TITLE": "Almacenes"
+  },
+  "BONDED_WAREHOUSES": {
     "TITLE": "Almacenes",
     "NEW": "Nuevo Almacén",
     "EDIT_TITLE": "Editar Almacén",

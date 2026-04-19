@@ -112,21 +112,27 @@ export const routes: Routes = [
       },
       {
         path: 'warehouses',
-        loadComponent: () => import('./features/warehouses/warehouse-list/warehouse-list.component').then(m => m.WarehouseListComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR'] },
-        canActivate: [roleGuard]
-      },
-      {
-        path: 'warehouses/new',
-        loadComponent: () => import('./features/warehouses/warehouse-form/warehouse-form.component').then(m => m.WarehouseFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR'] },
-        canActivate: [roleGuard]
-      },
-      {
-        path: 'warehouses/:id/edit',
-        loadComponent: () => import('./features/warehouses/warehouse-form/warehouse-form.component').then(m => m.WarehouseFormComponent),
-        data: { roles: ['ADMIN', 'SUPERVISOR'] },
-        canActivate: [roleGuard]
+        children: [
+          { path: '', redirectTo: 'bonded', pathMatch: 'full' },
+          {
+            path: 'bonded',
+            loadComponent: () => import('./features/warehouses/bonded/bonded-warehouse-list/bonded-warehouse-list.component').then(m => m.BondedWarehouseListComponent),
+            data: { roles: ['ADMIN', 'SUPERVISOR'] },
+            canActivate: [roleGuard]
+          },
+          {
+            path: 'bonded/new',
+            loadComponent: () => import('./features/warehouses/bonded/bonded-warehouse-form/bonded-warehouse-form.component').then(m => m.BondedWarehouseFormComponent),
+            data: { roles: ['ADMIN', 'SUPERVISOR'] },
+            canActivate: [roleGuard]
+          },
+          {
+            path: 'bonded/:id/edit',
+            loadComponent: () => import('./features/warehouses/bonded/bonded-warehouse-form/bonded-warehouse-form.component').then(m => m.BondedWarehouseFormComponent),
+            data: { roles: ['ADMIN', 'SUPERVISOR'] },
+            canActivate: [roleGuard]
+          }
+        ]
       },
       {
         path: 'users',

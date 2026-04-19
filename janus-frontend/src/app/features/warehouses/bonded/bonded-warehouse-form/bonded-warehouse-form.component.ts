@@ -4,43 +4,43 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
-import { WarehouseService } from '../../../core/services/warehouse.service';
-import { environment } from '../../../../environments/environment';
+import { BondedWarehouseService } from '../../../../core/services/bonded-warehouse.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
-  selector: 'app-warehouse-form',
+  selector: 'app-bonded-warehouse-form',
   standalone: true,
   imports: [ReactiveFormsModule, TranslateModule],
   template: `
-    <h2 class="mb-4">{{ (isEdit() ? 'WAREHOUSES.EDIT_TITLE' : 'WAREHOUSES.NEW_TITLE') | translate }}</h2>
+    <h2 class="mb-4">{{ (isEdit() ? 'BONDED_WAREHOUSES.EDIT_TITLE' : 'BONDED_WAREHOUSES.NEW_TITLE') | translate }}</h2>
     <div class="card">
       <div class="card-body">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'WAREHOUSES.CODE' | translate }} <span class="text-danger">*</span></label>
+              <label class="form-label">{{ 'BONDED_WAREHOUSES.CODE' | translate }} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="code">
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'WAREHOUSES.NAME' | translate }} <span class="text-danger">*</span></label>
+              <label class="form-label">{{ 'BONDED_WAREHOUSES.NAME' | translate }} <span class="text-danger">*</span></label>
               <input type="text" class="form-control" formControlName="name">
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label">{{ 'WAREHOUSES.DESCRIPTION' | translate }}</label>
+            <label class="form-label">{{ 'BONDED_WAREHOUSES.DESCRIPTION' | translate }}</label>
             <textarea class="form-control" formControlName="description" rows="2"></textarea>
           </div>
           <div class="row mb-3">
             <div class="col-md-4">
-              <label class="form-label">{{ 'WAREHOUSES.SECUENCIA' | translate }}</label>
+              <label class="form-label">{{ 'BONDED_WAREHOUSES.SECUENCIA' | translate }}</label>
               <input type="number" class="form-control" formControlName="secuencia">
             </div>
             <div class="col-md-4">
-              <label class="form-label">{{ 'WAREHOUSES.TIPO_LOCALIZACION' | translate }}</label>
+              <label class="form-label">{{ 'BONDED_WAREHOUSES.TIPO_LOCALIZACION' | translate }}</label>
               <input type="text" class="form-control" formControlName="tipoLocalizacion">
             </div>
             <div class="col-md-4">
-              <label class="form-label">{{ 'WAREHOUSES.PAIS_ORIGEN' | translate }}</label>
+              <label class="form-label">{{ 'BONDED_WAREHOUSES.PAIS_ORIGEN' | translate }}</label>
               <select class="form-select" formControlName="paisOrigen">
                 <option [ngValue]="null">—</option>
                 @for (country of countries(); track country.code) {
@@ -51,11 +51,11 @@ import { environment } from '../../../../environments/environment';
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'WAREHOUSES.CENTRO_LOGISTICO' | translate }}</label>
+              <label class="form-label">{{ 'BONDED_WAREHOUSES.CENTRO_LOGISTICO' | translate }}</label>
               <input type="text" class="form-control" formControlName="centroLogistico">
             </div>
             <div class="col-md-6">
-              <label class="form-label">{{ 'WAREHOUSES.UBICACION_AREA' | translate }}</label>
+              <label class="form-label">{{ 'BONDED_WAREHOUSES.UBICACION_AREA' | translate }}</label>
               <input type="text" class="form-control" formControlName="ubicacionArea">
             </div>
           </div>
@@ -68,8 +68,8 @@ import { environment } from '../../../../environments/environment';
     </div>
   `
 })
-export class WarehouseFormComponent implements OnInit {
-  private warehouseService = inject(WarehouseService);
+export class BondedWarehouseFormComponent implements OnInit {
+  private warehouseService = inject(BondedWarehouseService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
@@ -127,8 +127,8 @@ export class WarehouseFormComponent implements OnInit {
       paisOrigen: val.paisOrigen || undefined
     };
     const obs = this.isEdit() ? this.warehouseService.update(this.warehouseId!, request) : this.warehouseService.create(request);
-    obs.subscribe(() => this.router.navigate(['/warehouses']));
+    obs.subscribe(() => this.router.navigate(['/warehouses/bonded']));
   }
 
-  onCancel(): void { this.router.navigate(['/warehouses']); }
+  onCancel(): void { this.router.navigate(['/warehouses/bonded']); }
 }
