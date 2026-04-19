@@ -253,7 +253,14 @@
     "EXPORT_CSV": "Export CSV",
     "IMPORT_CSV": "Import CSV",
     "DOWNLOAD_TEMPLATE": "Download Template",
-    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}"
+    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}",
+    "PARTNER_ACCOUNTS": "Partner Accounts",
+    "ADD_PARTNER": "Add Account",
+    "NO_PARTNERS": "No accounts associated",
+    "PARTNER_SEARCH_PLACEHOLDER": "Search account by name...",
+    "PARTNER_NAME": "Name",
+    "PARTNER_CODE": "Account Code",
+    "PARTNER_ACTIONS": "Actions"
   },
   "ACCOUNT_TYPES": {
     "COMPANY": "Company",
@@ -1112,7 +1119,10 @@
     "WAREHOUSE_HAS_OPERATIONS": "This warehouse cannot be deleted because it has associated operations.",
     "ACCOUNT_NAME_ALREADY_EXISTS": "An account with this name already exists.",
     "ACCOUNT_TAX_ID_ALREADY_EXISTS": "An account with this tax ID already exists.",
-    "ACCOUNT_CODE_ALREADY_EXISTS": "An account with this code already exists."
+    "ACCOUNT_CODE_ALREADY_EXISTS": "An account with this code already exists.",
+    "ACCOUNT_NOT_SOCIO": "The account is not of type SOCIO",
+    "PARTNER_ALREADY_EXISTS": "This account is already associated",
+    "PARTNER_SELF_REFERENCE": "An account cannot be its own partner"
   },
   "API_KEYS": {
     "TITLE": "API Keys",

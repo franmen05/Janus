@@ -6,7 +6,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AccountService } from '../../../core/services/account.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
-import { AccountType, DocumentType, ContactType, AccountContact, CreateAccountContactRequest } from '../../../core/models/account.model';
+import { Account, AccountType, DocumentType, ContactType, AccountContact, CreateAccountContactRequest, AccountPartner } from '../../../core/models/account.model';
 
 @Component({
   selector: 'app-account-form',
@@ -217,6 +217,75 @@ import { AccountType, DocumentType, ContactType, AccountContact, CreateAccountCo
         </div>
       </div>
     }
+
+    <!-- Partner Accounts Section (edit mode + SOCIO type only) -->
+    @if (isEdit() && isSocio()) {
+      <div class="card mt-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">{{ 'ACCOUNTS.PARTNER_ACCOUNTS' | translate }}</h5>
+          @if (!showPartnerSearch()) {
+            <button type="button" class="btn btn-sm btn-primary" (click)="onAddPartner()">
+              <i class="bi bi-plus-lg me-1"></i>{{ 'ACCOUNTS.ADD_PARTNER' | translate }}
+            </button>
+          }
+        </div>
+        <div class="card-body">
+          @if (partnerAccounts().length === 0 && !showPartnerSearch()) {
+            <p class="text-muted text-center mb-0">{{ 'ACCOUNTS.NO_PARTNERS' | translate }}</p>
+          }
+
+          @if (partnerAccounts().length > 0) {
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>{{ 'ACCOUNTS.PARTNER_NAME' | translate }}</th>
+                    <th>{{ 'ACCOUNTS.PARTNER_CODE' | translate }}</th>
+                    <th>{{ 'ACCOUNTS.PARTNER_ACTIONS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (partner of partnerAccounts(); track partner.id) {
+                    <tr>
+                      <td>{{ partner.name }}</td>
+                      <td>{{ partner.accountCode ?? '-' }}</td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-outline-danger" (click)="onRemovePartner(partner.id)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+
+          @if (showPartnerSearch()) {
+            <hr>
+            <div class="mb-3">
+              <input type="text" class="form-control" [placeholder]="'ACCOUNTS.PARTNER_SEARCH_PLACEHOLDER' | translate"
+                     [value]="partnerSearchTerm()"
+                     (input)="onPartnerSearch($any($event.target).value)">
+            </div>
+            @if (partnerSearchResults().length > 0) {
+              <div class="list-group mb-3">
+                @for (result of partnerSearchResults(); track result.id) {
+                  <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                          (click)="onSelectPartner(result)">
+                    <span>{{ result.name }}</span>
+                    <small class="text-muted">{{ result.accountCode ?? '' }}</small>
+                  </button>
+                }
+              </div>
+            }
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onCancelPartnerSearch()">
+              {{ 'ACTIONS.CANCEL' | translate }}
+            </button>
+          }
+        </div>
+      </div>
+    }
   `
 })
 export class AccountFormComponent implements OnInit {
@@ -241,6 +310,12 @@ export class AccountFormComponent implements OnInit {
   contacts = signal<AccountContact[]>([]);
   showContactForm = signal(false);
   editingContactId = signal<number | null>(null);
+
+  // Partner accounts state
+  partnerAccounts = signal<AccountPartner[]>([]);
+  showPartnerSearch = signal(false);
+  partnerSearchTerm = signal('');
+  partnerSearchResults = signal<Account[]>([]);
 
   form = new FormGroup({
     businessName: new FormControl('', { nonNullable: true }),
@@ -299,6 +374,7 @@ export class AccountFormComponent implements OnInit {
           notes: c.notes ?? ''
         });
         this.selectedTypes.set(c.accountTypes);
+        this.partnerAccounts.set(c.partnerAccounts ?? []);
       });
       this.loadContacts();
     }
@@ -415,4 +491,54 @@ export class AccountFormComponent implements OnInit {
   }
 
   onCancel(): void { this.router.navigate(['/accounts']); }
+
+  isSocio(): boolean {
+    return this.selectedTypes().includes(AccountType.SOCIO);
+  }
+
+  onAddPartner(): void {
+    this.showPartnerSearch.set(true);
+    this.partnerSearchTerm.set('');
+    this.partnerSearchResults.set([]);
+  }
+
+  onCancelPartnerSearch(): void {
+    this.showPartnerSearch.set(false);
+    this.partnerSearchResults.set([]);
+  }
+
+  onPartnerSearch(term: string): void {
+    this.partnerSearchTerm.set(term);
+    if (!term || term.length < 2) {
+      this.partnerSearchResults.set([]);
+      return;
+    }
+    this.accountService.getAll(0, 10, term).subscribe(page => {
+      const existing = new Set(this.partnerAccounts().map(p => p.id));
+      this.partnerSearchResults.set(
+        page.content.filter(a => a.id !== this.accountId && !existing.has(a.id))
+      );
+    });
+  }
+
+  onSelectPartner(account: Account): void {
+    if (!this.accountId) return;
+    this.accountService.addPartner(this.accountId, account.id).subscribe({
+      next: (updated) => {
+        this.partnerAccounts.set(updated.partnerAccounts ?? []);
+        this.onCancelPartnerSearch();
+      },
+      error: (err) => this.toastService.error(getErrorMessage(err, this.translate))
+    });
+  }
+
+  onRemovePartner(partnerId: number): void {
+    if (!this.accountId) return;
+    this.accountService.removePartner(this.accountId, partnerId).subscribe({
+      next: () => {
+        this.partnerAccounts.set(this.partnerAccounts().filter(p => p.id !== partnerId));
+      },
+      error: (err) => this.toastService.error(getErrorMessage(err, this.translate))
+    });
+  }
 }
