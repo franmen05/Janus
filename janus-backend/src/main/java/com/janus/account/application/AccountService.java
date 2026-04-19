@@ -3,6 +3,7 @@ package com.janus.account.application;
 import com.janus.account.api.dto.AccountResponse;
 import com.janus.account.api.dto.CreateAccountRequest;
 import com.janus.account.domain.model.Account;
+import com.janus.account.domain.model.AccountType;
 import com.janus.account.domain.repository.AccountRepository;
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
@@ -28,14 +29,20 @@ public class AccountService {
     @Transactional
     public List<Account> listAll() {
         var accounts = accountRepository.listAll();
-        accounts.forEach(a -> a.contacts.size());
+        accounts.forEach(a -> {
+            a.contacts.size();
+            a.associatedAccounts.size();
+        });
         return accounts;
     }
 
     @Transactional
     public PageResponse<AccountResponse> listPaginated(String search, int page, int size) {
         var accounts = accountRepository.findPaginated(search, page, size);
-        accounts.forEach(a -> a.contacts.size());
+        accounts.forEach(a -> {
+            a.contacts.size();
+            a.associatedAccounts.size();
+        });
         var total = accountRepository.countFiltered(search);
         var content = accounts.stream().map(AccountResponse::from).toList();
         return PageResponse.of(content, page, size, total);
@@ -46,6 +53,7 @@ public class AccountService {
         var account = accountRepository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Account", id));
         account.contacts.size();
+        account.associatedAccounts.size();
         return account;
     }
 
@@ -93,6 +101,40 @@ public class AccountService {
         account.notes = request.notes();
         auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Account", account.id, null, null, null, "Account updated: " + account.name));
         return account;
+    }
+
+    @Transactional
+    public Account addPartner(Long socioId, Long associatedId, String username) {
+        var socio = accountRepository.findByIdOptional(socioId)
+                .orElseThrow(() -> new NotFoundException("Account", socioId));
+        socio.contacts.size();
+        socio.associatedAccounts.size();
+        if (!socio.accountTypes.contains(AccountType.SOCIO)) {
+            throw new BusinessException("ACCOUNT_NOT_SOCIO", "Account is not of type SOCIO");
+        }
+        if (socioId.equals(associatedId)) {
+            throw new BusinessException("PARTNER_SELF_REFERENCE", "An account cannot be its own partner");
+        }
+        var associated = accountRepository.findByIdOptional(associatedId)
+                .orElseThrow(() -> new NotFoundException("Account", associatedId));
+        boolean alreadyLinked = socio.associatedAccounts.stream().anyMatch(a -> a.id.equals(associatedId));
+        if (alreadyLinked) {
+            throw new BusinessException("PARTNER_ALREADY_EXISTS", "This account is already a partner");
+        }
+        socio.associatedAccounts.add(associated);
+        auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Account", socioId, null, null, null, "Partner added: " + associated.name));
+        return socio;
+    }
+
+    @Transactional
+    public Account removePartner(Long socioId, Long associatedId, String username) {
+        var socio = accountRepository.findByIdOptional(socioId)
+                .orElseThrow(() -> new NotFoundException("Account", socioId));
+        socio.contacts.size();
+        socio.associatedAccounts.size();
+        socio.associatedAccounts.removeIf(a -> a.id.equals(associatedId));
+        auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Account", socioId, null, null, null, "Partner removed: " + associatedId));
+        return socio;
     }
 
     private void checkNoDuplicates(String name, String taxId, String accountCode, Long excludeId) {

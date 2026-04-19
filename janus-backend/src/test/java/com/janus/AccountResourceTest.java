@@ -264,4 +264,105 @@ class AccountResourceTest {
                 .statusCode(400)
                 .body("errorCode", is("ACCOUNT_TAX_ID_ALREADY_EXISTS"));
     }
+
+    // ---- Partner tests ----
+
+    private static Long socioAccountId;
+    private static Long partnerAccountId;
+
+    @Test
+    @Order(50)
+    void testCreateSocioAccount() {
+        socioAccountId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {
+                            "name": "Socio Test Corp",
+                            "taxId": "RTN-SOCIO-001",
+                            "email": "socio@test.com",
+                            "accountTypes": ["SOCIO"]
+                        }
+                        """)
+                .when().post("/api/accounts")
+                .then()
+                .statusCode(201)
+                .body("accountTypes", org.hamcrest.Matchers.hasItem("SOCIO"))
+                .extract().jsonPath().getLong("id");
+    }
+
+    @Test
+    @Order(51)
+    void testCreateAssociatedAccount() {
+        partnerAccountId = given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {
+                            "name": "Associated Corp",
+                            "taxId": "RTN-ASSOC-001",
+                            "email": "assoc@test.com",
+                            "accountTypes": ["COMPANY"]
+                        }
+                        """)
+                .when().post("/api/accounts")
+                .then()
+                .statusCode(201)
+                .extract().jsonPath().getLong("id");
+    }
+
+    @Test
+    @Order(52)
+    void testAddPartnerToSocioAccount() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().post("/api/accounts/{socioId}/partners/{associatedId}", socioAccountId, partnerAccountId)
+                .then()
+                .statusCode(200)
+                .body("partnerAccounts.size()", is(1))
+                .body("partnerAccounts[0].name", is("Associated Corp"));
+    }
+
+    @Test
+    @Order(53)
+    void testAddPartnerDuplicateFails() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().post("/api/accounts/{socioId}/partners/{associatedId}", socioAccountId, partnerAccountId)
+                .then()
+                .statusCode(400)
+                .body("errorCode", is("PARTNER_ALREADY_EXISTS"));
+    }
+
+    @Test
+    @Order(54)
+    void testAddPartnerToNonSocioFails() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().post("/api/accounts/{socioId}/partners/{associatedId}", partnerAccountId, socioAccountId)
+                .then()
+                .statusCode(400)
+                .body("errorCode", is("ACCOUNT_NOT_SOCIO"));
+    }
+
+    @Test
+    @Order(55)
+    void testRemovePartner() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().delete("/api/accounts/{socioId}/partners/{associatedId}", socioAccountId, partnerAccountId)
+                .then()
+                .statusCode(204);
+    }
+
+    @Test
+    @Order(56)
+    void testPartnerRemovedFromResponse() {
+        given()
+                .auth().basic("admin", "admin123")
+                .when().get("/api/accounts/{id}", socioAccountId)
+                .then()
+                .statusCode(200)
+                .body("partnerAccounts.size()", is(0));
+    }
 }

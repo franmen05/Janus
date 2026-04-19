@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Account, CreateAccountRequest, AccountContact, CreateAccountContactRequest } from '../models/account.model';
+import { Account, CreateAccountRequest, AccountContact, CreateAccountContactRequest, AccountPartner } from '../models/account.model';
 import { CsvImportResponse } from '../models/shared.model';
 import { PageResponse } from '../models/page.model';
 
@@ -45,6 +45,14 @@ export class AccountService {
 
   deleteContact(accountId: number, contactId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${accountId}/contacts/${contactId}`);
+  }
+
+  addPartner(accountId: number, partnerId: number): Observable<Account> {
+    return this.http.post<Account>(`${this.apiUrl}/${accountId}/partners/${partnerId}`, null);
+  }
+
+  removePartner(accountId: number, partnerId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${accountId}/partners/${partnerId}`);
   }
 
   exportCsv(): Observable<Blob> {

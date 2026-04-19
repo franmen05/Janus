@@ -27,6 +27,13 @@ export interface Account {
   accountCode: string | null;
   notes: string | null;
   contacts: AccountContact[];
+  partnerAccounts: AccountPartner[];
+}
+
+export interface AccountPartner {
+  id: number;
+  name: string;
+  accountCode: string | null;
 }
 
 export enum ContactType {
