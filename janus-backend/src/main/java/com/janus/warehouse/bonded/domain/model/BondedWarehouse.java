@@ -1,4 +1,4 @@
-package com.janus.warehouse.domain.model;
+package com.janus.warehouse.bonded.domain.model;
 
 import com.janus.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "depositos")
-public class Warehouse extends BaseEntity {
+public class BondedWarehouse extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     public String code;

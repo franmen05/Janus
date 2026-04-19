@@ -1,4 +1,4 @@
-export interface Warehouse {
+export interface BondedWarehouse {
   id: number;
   code: string;
   name: string;
@@ -12,7 +12,7 @@ export interface Warehouse {
   active: boolean;
 }
 
-export interface CreateWarehouseRequest {
+export interface CreateBondedWarehouseRequest {
   code: string;
   name: string;
   description?: string;

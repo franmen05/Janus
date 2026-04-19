@@ -28,14 +28,14 @@ public class AccountService {
     @Transactional
     public List<Account> listAll() {
         var accounts = accountRepository.listAll();
-        accounts.forEach(a -> a.contacts.size()); // force lazy init
+        accounts.forEach(a -> a.contacts.size());
         return accounts;
     }
 
     @Transactional
     public PageResponse<AccountResponse> listPaginated(String search, int page, int size) {
         var accounts = accountRepository.findPaginated(search, page, size);
-        accounts.forEach(a -> a.contacts.size()); // force lazy init
+        accounts.forEach(a -> a.contacts.size());
         var total = accountRepository.countFiltered(search);
         var content = accounts.stream().map(AccountResponse::from).toList();
         return PageResponse.of(content, page, size, total);
@@ -45,19 +45,17 @@ public class AccountService {
     public Account findById(Long id) {
         var account = accountRepository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Account", id));
-        account.contacts.size(); // force lazy init
+        account.contacts.size();
         return account;
     }
 
     @Transactional
     public Account create(CreateAccountRequest request, String username) {
-        if (accountRepository.findByTaxId(request.taxId()).isPresent()) {
-            throw new BusinessException("Account with tax ID already exists: " + request.taxId());
-        }
+        checkNoDuplicates(request.name(), request.taxId(), request.accountCode(), -1L);
 
         var account = new Account();
-        account.name = request.name();
-        account.taxId = request.taxId();
+        account.name = normalize(request.name());
+        account.taxId = normalize(request.taxId());
         account.email = request.email();
         account.phone = request.phone();
         account.address = request.address();
@@ -67,7 +65,7 @@ public class AccountService {
         account.documentType = request.documentType();
         account.alternatePhone = request.alternatePhone();
         account.country = request.country();
-        account.accountCode = request.accountCode();
+        account.accountCode = normalize(request.accountCode());
         account.notes = request.notes();
         accountRepository.persist(account);
         auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "Account", account.id, null, null, null, "Account created: " + account.name));
@@ -76,9 +74,11 @@ public class AccountService {
 
     @Transactional
     public Account update(Long id, CreateAccountRequest request, String username) {
+        checkNoDuplicates(request.name(), request.taxId(), request.accountCode(), id);
+
         var account = findById(id);
-        account.name = request.name();
-        account.taxId = request.taxId();
+        account.name = normalize(request.name());
+        account.taxId = normalize(request.taxId());
         account.email = request.email();
         account.phone = request.phone();
         account.address = request.address();
@@ -89,9 +89,30 @@ public class AccountService {
         account.documentType = request.documentType();
         account.alternatePhone = request.alternatePhone();
         account.country = request.country();
-        account.accountCode = request.accountCode();
+        account.accountCode = normalize(request.accountCode());
         account.notes = request.notes();
         auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Account", account.id, null, null, null, "Account updated: " + account.name));
         return account;
+    }
+
+    private void checkNoDuplicates(String name, String taxId, String accountCode, Long excludeId) {
+        if (accountRepository.findByNameExcluding(name, excludeId).isPresent()) {
+            throw new BusinessException("ACCOUNT_NAME_ALREADY_EXISTS",
+                    "An account with this name already exists: " + name);
+        }
+        if (accountRepository.findByTaxIdExcluding(taxId, excludeId).isPresent()) {
+            throw new BusinessException("ACCOUNT_TAX_ID_ALREADY_EXISTS",
+                    "An account with this tax ID already exists: " + taxId);
+        }
+        if (accountCode != null && !accountCode.isBlank()
+                && accountRepository.findByAccountCodeExcluding(accountCode, excludeId).isPresent()) {
+            throw new BusinessException("ACCOUNT_CODE_ALREADY_EXISTS",
+                    "An account with this code already exists: " + accountCode);
+        }
+    }
+
+    private String normalize(String value) {
+        if (value == null) return null;
+        return value.trim().replaceAll("\\s+", " ");
     }
 }

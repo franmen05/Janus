@@ -1,10 +1,10 @@
-package com.janus.warehouse.application;
+package com.janus.warehouse.bonded.application;
 
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
-import com.janus.warehouse.api.dto.CreateWarehouseRequest;
-import com.janus.warehouse.domain.model.Warehouse;
-import com.janus.warehouse.domain.repository.WarehouseRepository;
+import com.janus.warehouse.bonded.api.dto.CreateBondedWarehouseRequest;
+import com.janus.warehouse.bonded.domain.model.BondedWarehouse;
+import com.janus.warehouse.bonded.domain.repository.BondedWarehouseRepository;
 import com.janus.operation.domain.repository.OperationRepository;
 import com.janus.shared.infrastructure.exception.BusinessException;
 import com.janus.shared.infrastructure.exception.ConflictException;
@@ -16,10 +16,10 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
-public class WarehouseService {
+public class BondedWarehouseService {
 
     @Inject
-    WarehouseRepository warehouseRepository;
+    BondedWarehouseRepository warehouseRepository;
 
     @Inject
     Event<AuditEvent> auditEvent;
@@ -27,25 +27,25 @@ public class WarehouseService {
     @Inject
     OperationRepository operationRepository;
 
-    public List<Warehouse> listAll(boolean includeInactive) {
+    public List<BondedWarehouse> listAll(boolean includeInactive) {
         if (includeInactive) {
             return warehouseRepository.findAllOrdered();
         }
         return warehouseRepository.findAllActive();
     }
 
-    public Warehouse findById(Long id) {
+    public BondedWarehouse findById(Long id) {
         return warehouseRepository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Warehouse", id));
     }
 
     @Transactional
-    public Warehouse create(CreateWarehouseRequest request, String username) {
+    public BondedWarehouse create(CreateBondedWarehouseRequest request, String username) {
         if (warehouseRepository.findByCode(request.code()).isPresent()) {
             throw new BusinessException("WAREHOUSE_CODE_ALREADY_EXISTS", "Warehouse with code already exists: " + request.code());
         }
 
-        var warehouse = new Warehouse();
+        var warehouse = new BondedWarehouse();
         warehouse.code = request.code();
         warehouse.name = request.name();
         warehouse.description = request.description();
@@ -60,7 +60,7 @@ public class WarehouseService {
     }
 
     @Transactional
-    public Warehouse update(Long id, CreateWarehouseRequest request, String username) {
+    public BondedWarehouse update(Long id, CreateBondedWarehouseRequest request, String username) {
         var warehouse = findById(id);
 
         warehouseRepository.findByCode(request.code()).ifPresent(existing -> {
@@ -82,7 +82,7 @@ public class WarehouseService {
     }
 
     @Transactional
-    public Warehouse toggleActive(Long id, String username) {
+    public BondedWarehouse toggleActive(Long id, String username) {
         var warehouse = findById(id);
         warehouse.active = !warehouse.active;
         var action = warehouse.active ? "activated" : "deactivated";

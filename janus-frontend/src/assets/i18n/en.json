@@ -22,8 +22,7 @@
     "SERVICES": "Services",
     "COLLAPSE_SIDEBAR": "Collapse",
     "EXPAND_SIDEBAR": "Expand",
-    "API_KEYS": "API Keys",
-    "WAREHOUSES": "Warehouses"
+    "API_KEYS": "API Keys"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -227,6 +226,9 @@
     "BADGE_ARRIVAL": "Arrival"
   },
   "WAREHOUSES": {
+    "TITLE": "Warehouses"
+  },
+  "BONDED_WAREHOUSES": {
     "TITLE": "Warehouses",
     "NEW": "New Warehouse",
     "EDIT_TITLE": "Edit Warehouse",
@@ -1107,7 +1109,10 @@
     "MISSING_TAX_ID": "Account must have a tax ID for billing.",
     "DUPLICATE_PRIMARY_CONTACT": "Account already has a primary contact.",
     "EMAIL_REQUIRED_FOR_NOTIFICATIONS": "Email is required to receive notifications.",
-    "WAREHOUSE_HAS_OPERATIONS": "This warehouse cannot be deleted because it has associated operations."
+    "WAREHOUSE_HAS_OPERATIONS": "This warehouse cannot be deleted because it has associated operations.",
+    "ACCOUNT_NAME_ALREADY_EXISTS": "An account with this name already exists.",
+    "ACCOUNT_TAX_ID_ALREADY_EXISTS": "An account with this tax ID already exists.",
+    "ACCOUNT_CODE_ALREADY_EXISTS": "An account with this code already exists."
   },
   "API_KEYS": {
     "TITLE": "API Keys",

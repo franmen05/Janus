@@ -3,16 +3,16 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTypeaheadModule, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { OperatorFunction, Observable, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
 import { AccountService } from '../../../core/services/account.service';
 import { PortService } from '../../../core/services/port.service';
-import { WarehouseService } from '../../../core/services/warehouse.service';
+import { BondedWarehouseService } from '../../../core/services/bonded-warehouse.service';
 import { Account } from '../../../core/models/account.model';
 import { Port } from '../../../core/models/port.model';
-import { Warehouse } from '../../../core/models/warehouse.model';
+import { BondedWarehouse } from '../../../core/models/bonded-warehouse.model';
 import { TransportMode, OperationType, OperationCategory, CargoType, BlType, BlAvailability } from '../../../core/models/operation.model';
 import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
 
@@ -236,7 +236,7 @@ export class OperationFormComponent implements OnInit {
   private operationService = inject(OperationService);
   private accountService = inject(AccountService);
   private portService = inject(PortService);
-  private warehouseService = inject(WarehouseService);
+  private warehouseService = inject(BondedWarehouseService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -248,8 +248,8 @@ export class OperationFormComponent implements OnInit {
   selectedAccount = signal<Account | null>(null);
   selectedAccountDisplay = signal('');
   accountLocked = signal(false);
-  warehouses = signal<Warehouse[]>([]);
-  selectedWarehouse = signal<Warehouse | null>(null);
+  warehouses = signal<BondedWarehouse[]>([]);
+  selectedWarehouse = signal<BondedWarehouse | null>(null);
   selectedWarehouseDisplay = signal('');
   transportModes = Object.values(TransportMode);
   cargoTypes = Object.values(CargoType);
@@ -302,7 +302,7 @@ export class OperationFormComponent implements OnInit {
 
   accountInputFormatter = (account: Account) => account.name;
 
-  searchWarehouse: OperatorFunction<string, Warehouse[]> = (text$: Observable<string>) =>
+  searchWarehouse: OperatorFunction<string, BondedWarehouse[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -316,13 +316,13 @@ export class OperationFormComponent implements OnInit {
       })
     );
 
-  warehouseResultFormatter = (warehouse: Warehouse) =>
+  warehouseResultFormatter = (warehouse: BondedWarehouse) =>
     `${warehouse.code}  —  ${warehouse.name}`;
 
-  warehouseInputFormatter = (warehouse: Warehouse) => warehouse.name;
+  warehouseInputFormatter = (warehouse: BondedWarehouse) => warehouse.name;
 
-  onWarehouseSelected(event: any): void {
-    const warehouse = event.item as Warehouse;
+  onWarehouseSelected(event: NgbTypeaheadSelectItemEvent<BondedWarehouse>): void {
+    const warehouse = event.item;
     this.selectedWarehouse.set(warehouse);
     this.selectedWarehouseDisplay.set(warehouse.name);
     this.form.get('warehouseId')!.setValue(warehouse.id.toString());

@@ -15,3 +15,6 @@
 
 # Screenshots from functional testing
 screenshots/
+
+# Git worktrees
+.worktrees/
