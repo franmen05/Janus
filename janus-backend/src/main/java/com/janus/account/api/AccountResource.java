@@ -11,6 +11,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -66,6 +67,20 @@ public class AccountResource {
     @Path("/{id}")
     public AccountResponse update(@PathParam("id") Long id, @Valid CreateAccountRequest request, @Context SecurityContext sec) {
         return AccountResponse.from(accountService.update(id, request, sec.getUserPrincipal().getName()));
+    }
+
+    @POST
+    @Path("/{id}/partners/{associatedId}")
+    @Consumes(MediaType.WILDCARD)
+    public AccountResponse addPartner(@PathParam("id") Long id, @PathParam("associatedId") Long associatedId, @Context SecurityContext sec) {
+        return AccountResponse.from(accountService.addPartner(id, associatedId, sec.getUserPrincipal().getName()));
+    }
+
+    @DELETE
+    @Path("/{id}/partners/{associatedId}")
+    public Response removePartner(@PathParam("id") Long id, @PathParam("associatedId") Long associatedId, @Context SecurityContext sec) {
+        accountService.removePartner(id, associatedId, sec.getUserPrincipal().getName());
+        return Response.noContent().build();
     }
 
     @GET

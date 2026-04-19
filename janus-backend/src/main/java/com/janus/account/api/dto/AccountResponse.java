@@ -24,7 +24,8 @@ public record AccountResponse(
         String accountCode,
         String notes,
         LocalDateTime createdAt,
-        List<AccountContactResponse> contacts
+        List<AccountContactResponse> contacts,
+        List<AccountPartnerResponse> partnerAccounts
 ) {
     public static AccountResponse from(Account account) {
         return new AccountResponse(
@@ -44,7 +45,8 @@ public record AccountResponse(
                 account.accountCode,
                 account.notes,
                 account.createdAt,
-                account.contacts.stream().map(AccountContactResponse::from).toList()
+                account.contacts.stream().map(AccountContactResponse::from).toList(),
+                account.associatedAccounts.stream().map(AccountPartnerResponse::from).toList()
         );
     }
 }
