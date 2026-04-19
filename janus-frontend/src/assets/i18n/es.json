@@ -1083,7 +1083,10 @@
     "INACTIVE_SERVICE": "El servicio está inactivo",
     "SERVICE_NAME_EXISTS": "Ya existe un servicio con este nombre",
     "SERVICE_HAS_EXPENSES": "No se puede eliminar: el servicio tiene gastos asociados",
-    "WAREHOUSE_HAS_OPERATIONS": "Este almacén no puede eliminarse porque tiene operaciones asociadas."
+    "WAREHOUSE_HAS_OPERATIONS": "Este almacén no puede eliminarse porque tiene operaciones asociadas.",
+    "ACCOUNT_NAME_ALREADY_EXISTS": "Ya existe una cuenta con este nombre.",
+    "ACCOUNT_TAX_ID_ALREADY_EXISTS": "Ya existe una cuenta con este RNC/cédula fiscal.",
+    "ACCOUNT_CODE_ALREADY_EXISTS": "Ya existe una cuenta con este código."
   },
   "API_KEYS": {
     "TITLE": "Claves API",
