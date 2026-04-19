@@ -1,8 +1,8 @@
-package com.janus.warehouse.api.dto;
+package com.janus.warehouse.bonded.api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CreateWarehouseRequest(
+public record CreateBondedWarehouseRequest(
         @NotBlank String code,
         @NotBlank String name,
         String description,

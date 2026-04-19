@@ -1,10 +1,10 @@
-package com.janus.warehouse.api;
+package com.janus.warehouse.bonded.api;
 
 import com.janus.shared.api.dto.CsvImportResponse;
-import com.janus.warehouse.api.dto.CreateWarehouseRequest;
-import com.janus.warehouse.api.dto.WarehouseResponse;
-import com.janus.warehouse.application.WarehouseCsvService;
-import com.janus.warehouse.application.WarehouseService;
+import com.janus.warehouse.bonded.api.dto.CreateBondedWarehouseRequest;
+import com.janus.warehouse.bonded.api.dto.BondedWarehouseResponse;
+import com.janus.warehouse.bonded.application.BondedWarehouseCsvService;
+import com.janus.warehouse.bonded.application.BondedWarehouseService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -29,53 +29,53 @@ import java.util.List;
 import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
-@Path("/api/warehouses")
+@Path("/api/warehouses/bonded")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class WarehouseResource {
+public class BondedWarehouseResource {
 
     @Inject
-    WarehouseService warehouseService;
+    BondedWarehouseService warehouseService;
 
     @Inject
-    WarehouseCsvService warehouseCsvService;
+    BondedWarehouseCsvService warehouseCsvService;
 
     @GET
     @RolesAllowed({"SUPERVISOR", "ADMIN", "AGENT"})
-    public List<WarehouseResponse> list(@QueryParam("includeInactive") boolean includeInactive) {
+    public List<BondedWarehouseResponse> list(@QueryParam("includeInactive") boolean includeInactive) {
         return warehouseService.listAll(includeInactive).stream()
-                .map(WarehouseResponse::from)
+                .map(BondedWarehouseResponse::from)
                 .toList();
     }
 
     @GET
     @Path("/{id}")
     @RolesAllowed({"SUPERVISOR", "ADMIN", "AGENT"})
-    public WarehouseResponse getById(@PathParam("id") Long id) {
-        return WarehouseResponse.from(warehouseService.findById(id));
+    public BondedWarehouseResponse getById(@PathParam("id") Long id) {
+        return BondedWarehouseResponse.from(warehouseService.findById(id));
     }
 
     @POST
     @RolesAllowed("SUPERVISOR")
-    public Response create(@Valid CreateWarehouseRequest request, @Context SecurityContext sec) {
+    public Response create(@Valid CreateBondedWarehouseRequest request, @Context SecurityContext sec) {
         var warehouse = warehouseService.create(request, sec.getUserPrincipal().getName());
         return Response.status(Response.Status.CREATED)
-                .entity(WarehouseResponse.from(warehouse))
+                .entity(BondedWarehouseResponse.from(warehouse))
                 .build();
     }
 
     @PUT
     @Path("/{id}")
     @RolesAllowed("SUPERVISOR")
-    public WarehouseResponse update(@PathParam("id") Long id, @Valid CreateWarehouseRequest request, @Context SecurityContext sec) {
-        return WarehouseResponse.from(warehouseService.update(id, request, sec.getUserPrincipal().getName()));
+    public BondedWarehouseResponse update(@PathParam("id") Long id, @Valid CreateBondedWarehouseRequest request, @Context SecurityContext sec) {
+        return BondedWarehouseResponse.from(warehouseService.update(id, request, sec.getUserPrincipal().getName()));
     }
 
     @PATCH
     @Path("/{id}/toggle-active")
     @RolesAllowed({"SUPERVISOR", "ADMIN"})
-    public WarehouseResponse toggleActive(@PathParam("id") Long id, @Context SecurityContext sec) {
-        return WarehouseResponse.from(warehouseService.toggleActive(id, sec.getUserPrincipal().getName()));
+    public BondedWarehouseResponse toggleActive(@PathParam("id") Long id, @Context SecurityContext sec) {
+        return BondedWarehouseResponse.from(warehouseService.toggleActive(id, sec.getUserPrincipal().getName()));
     }
 
     @DELETE

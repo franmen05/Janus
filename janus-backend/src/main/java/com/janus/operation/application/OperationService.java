@@ -25,7 +25,7 @@ import com.janus.operation.domain.model.OperationStatus;
 import com.janus.operation.domain.model.StatusHistory;
 import com.janus.operation.domain.model.CargoType;
 import com.janus.operation.domain.model.TransportMode;
-import com.janus.warehouse.domain.repository.WarehouseRepository;
+import com.janus.warehouse.bonded.domain.repository.BondedWarehouseRepository;
 import com.janus.port.domain.repository.PortRepository;
 import com.janus.operation.domain.repository.OperationRepository;
 import com.janus.operation.domain.repository.StatusHistoryRepository;
@@ -77,7 +77,7 @@ public class OperationService {
     PortRepository portRepository;
 
     @Inject
-    WarehouseRepository warehouseRepository;
+    BondedWarehouseRepository warehouseRepository;
 
     @Inject
     AlertRepository alertRepository;

@@ -1,11 +1,11 @@
-package com.janus.warehouse.application;
+package com.janus.warehouse.bonded.application;
 
 import com.janus.audit.domain.model.AuditAction;
 import com.janus.audit.domain.model.AuditEvent;
 import com.janus.shared.api.dto.CsvImportResponse;
 import com.janus.shared.infrastructure.util.CsvUtil;
-import com.janus.warehouse.domain.model.Warehouse;
-import com.janus.warehouse.domain.repository.WarehouseRepository;
+import com.janus.warehouse.bonded.domain.model.BondedWarehouse;
+import com.janus.warehouse.bonded.domain.repository.BondedWarehouseRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -17,20 +17,20 @@ import java.util.List;
 import org.jboss.logging.Logger;
 
 @ApplicationScoped
-public class WarehouseCsvService {
+public class BondedWarehouseCsvService {
 
-    private static final Logger LOG = Logger.getLogger(WarehouseCsvService.class);
+    private static final Logger LOG = Logger.getLogger(BondedWarehouseCsvService.class);
     static final String HEADER = "code,name,description,secuencia,tipoLocalizacion,centroLogistico,ubicacionArea,paisOrigen";
 
     @Inject
-    WarehouseRepository warehouseRepository;
+    BondedWarehouseRepository warehouseRepository;
 
     @Inject
     Event<AuditEvent> auditEvent;
 
     @Transactional
     public String exportCsv(boolean includeInactive) {
-        List<Warehouse> warehouses = includeInactive
+        List<BondedWarehouse> warehouses = includeInactive
                 ? warehouseRepository.findAllOrdered()
                 : warehouseRepository.findAllActive();
         var sb = new StringBuilder(HEADER).append("\r\n");
@@ -87,7 +87,7 @@ public class WarehouseCsvService {
                     continue;
                 }
             }
-            var warehouse = new Warehouse();
+            var warehouse = new BondedWarehouse();
             warehouse.code = code;
             warehouse.name = name;
             warehouse.description = fields.size() > 2 && !fields.get(2).isBlank() ? fields.get(2) : null;
