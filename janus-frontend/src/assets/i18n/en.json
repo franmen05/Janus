@@ -22,8 +22,7 @@
     "SERVICES": "Services",
     "COLLAPSE_SIDEBAR": "Collapse",
     "EXPAND_SIDEBAR": "Expand",
-    "API_KEYS": "API Keys",
-    "WAREHOUSES": "Warehouses"
+    "API_KEYS": "API Keys"
   },
   "LOGIN": {
     "USERNAME": "Username",

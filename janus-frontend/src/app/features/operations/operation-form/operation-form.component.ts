@@ -3,7 +3,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTypeaheadModule, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { OperatorFunction, Observable, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { OperationService } from '../../../core/services/operation.service';
@@ -321,8 +321,8 @@ export class OperationFormComponent implements OnInit {
 
   warehouseInputFormatter = (warehouse: BondedWarehouse) => warehouse.name;
 
-  onWarehouseSelected(event: any): void {
-    const warehouse = event.item as BondedWarehouse;
+  onWarehouseSelected(event: NgbTypeaheadSelectItemEvent<BondedWarehouse>): void {
+    const warehouse = event.item;
     this.selectedWarehouse.set(warehouse);
     this.selectedWarehouseDisplay.set(warehouse.name);
     this.form.get('warehouseId')!.setValue(warehouse.id.toString());

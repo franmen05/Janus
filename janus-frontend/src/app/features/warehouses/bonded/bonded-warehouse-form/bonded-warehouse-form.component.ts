@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { BondedWarehouseService } from '../../../../core/services/bonded-warehouse.service';
+import { BondedWarehouse } from '../../../../core/models/bonded-warehouse.model';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -98,7 +99,7 @@ export class BondedWarehouseFormComponent implements OnInit {
     if (id) {
       this.isEdit.set(true);
       this.warehouseId = +id;
-      this.warehouseService.getById(+id).subscribe(d => {
+      this.warehouseService.getById(+id).subscribe((d: BondedWarehouse) => {
         this.form.patchValue({
           code: d.code,
           name: d.name,

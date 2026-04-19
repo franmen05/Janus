@@ -81,18 +81,16 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
                 }
               </a>
             </li>
-            @if (authService.hasRole(['ADMIN', 'SUPERVISOR'])) {
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/warehouses/bonded" routerLinkActive="active"
-                   [ngbTooltip]="sidebarService.collapsed() ? ('BONDED_WAREHOUSES.TITLE' | translate) : null"
-                   placement="end" container="body">
-                  <i class="bi bi-building"></i>
-                  @if (!sidebarService.collapsed()) {
-                    <span>{{ 'BONDED_WAREHOUSES.TITLE' | translate }}</span>
-                  }
-                </a>
-              </li>
-            }
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/warehouses/bonded" routerLinkActive="active"
+                 [ngbTooltip]="sidebarService.collapsed() ? ('BONDED_WAREHOUSES.TITLE' | translate) : null"
+                 placement="end" container="body">
+                <i class="bi bi-building"></i>
+                @if (!sidebarService.collapsed()) {
+                  <span>{{ 'BONDED_WAREHOUSES.TITLE' | translate }}</span>
+                }
+              </a>
+            </li>
           </ul>
         }
 
