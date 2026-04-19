@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = "accounts")
 public class Account extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     public String name;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -51,6 +51,7 @@ public class Account extends BaseEntity {
 
     public String country;
 
+    @Column(unique = true)
     public String accountCode;
 
     public String notes;
