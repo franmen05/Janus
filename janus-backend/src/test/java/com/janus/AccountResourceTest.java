@@ -227,13 +227,13 @@ class AccountResourceTest {
     @Test
     @Order(42)
     void testCreateDuplicateNameCaseInsensitive() {
-        // "Test Account Corp" was created in Order(20) — try different case
+        // "Updated Account Corp" was set in Order(21) — try different case
         given()
                 .auth().basic("admin", "admin123")
                 .contentType(ContentType.JSON)
                 .body("""
                         {
-                            "name": "test account corp",
+                            "name": "updated account corp",
                             "taxId": "RTN-DUP-NAME-001",
                             "email": "dup@test.com",
                             "accountTypes": ["COMPANY"]

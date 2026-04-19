@@ -11,22 +11,31 @@ import java.util.Optional;
 public class AccountRepository implements PanacheRepository<Account> {
 
     public Optional<Account> findByTaxId(String taxId) {
-        return find("LOWER(TRIM(taxId)) = LOWER(TRIM(?1))", taxId).firstResultOptional();
+        var normalized = normalize(taxId);
+        return find("LOWER(TRIM(taxId)) = ?1", normalized).firstResultOptional();
     }
 
     public Optional<Account> findByTaxIdExcluding(String taxId, Long excludeId) {
-        return find("LOWER(TRIM(taxId)) = LOWER(TRIM(?1)) AND id != ?2", taxId, excludeId)
+        var normalized = normalize(taxId);
+        return find("LOWER(TRIM(taxId)) = ?1 AND id != ?2", normalized, excludeId)
                 .firstResultOptional();
     }
 
     public Optional<Account> findByNameExcluding(String name, Long excludeId) {
-        return find("LOWER(TRIM(name)) = LOWER(TRIM(?1)) AND id != ?2", name, excludeId)
+        var normalized = normalize(name);
+        return find("LOWER(TRIM(name)) = ?1 AND id != ?2", normalized, excludeId)
                 .firstResultOptional();
     }
 
     public Optional<Account> findByAccountCodeExcluding(String code, Long excludeId) {
-        return find("LOWER(TRIM(accountCode)) = LOWER(TRIM(?1)) AND id != ?2", code, excludeId)
+        var normalized = normalize(code);
+        return find("LOWER(TRIM(accountCode)) = ?1 AND id != ?2", normalized, excludeId)
                 .firstResultOptional();
+    }
+
+    private String normalize(String value) {
+        if (value == null) return null;
+        return value.trim().replaceAll("\\s+", " ").toLowerCase();
     }
 
     public List<Account> findPaginated(String search, int page, int size) {
