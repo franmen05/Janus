@@ -11,7 +11,22 @@ import java.util.Optional;
 public class AccountRepository implements PanacheRepository<Account> {
 
     public Optional<Account> findByTaxId(String taxId) {
-        return find("taxId", taxId).firstResultOptional();
+        return find("LOWER(TRIM(taxId)) = LOWER(TRIM(?1))", taxId).firstResultOptional();
+    }
+
+    public Optional<Account> findByTaxIdExcluding(String taxId, Long excludeId) {
+        return find("LOWER(TRIM(taxId)) = LOWER(TRIM(?1)) AND id != ?2", taxId, excludeId)
+                .firstResultOptional();
+    }
+
+    public Optional<Account> findByNameExcluding(String name, Long excludeId) {
+        return find("LOWER(TRIM(name)) = LOWER(TRIM(?1)) AND id != ?2", name, excludeId)
+                .firstResultOptional();
+    }
+
+    public Optional<Account> findByAccountCodeExcluding(String code, Long excludeId) {
+        return find("LOWER(TRIM(accountCode)) = LOWER(TRIM(?1)) AND id != ?2", code, excludeId)
+                .firstResultOptional();
     }
 
     public List<Account> findPaginated(String search, int page, int size) {

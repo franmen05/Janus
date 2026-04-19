@@ -223,4 +223,45 @@ class AccountResourceTest {
                 .then()
                 .statusCode(400);
     }
+
+    @Test
+    @Order(42)
+    void testCreateDuplicateNameCaseInsensitive() {
+        // "Test Account Corp" was created in Order(20) — try different case
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {
+                            "name": "test account corp",
+                            "taxId": "RTN-DUP-NAME-001",
+                            "email": "dup@test.com",
+                            "accountTypes": ["COMPANY"]
+                        }
+                        """)
+                .when().post("/api/accounts")
+                .then()
+                .statusCode(400)
+                .body("errorCode", is("ACCOUNT_NAME_ALREADY_EXISTS"));
+    }
+
+    @Test
+    @Order(43)
+    void testCreateDuplicateTaxIdCaseInsensitive() {
+        given()
+                .auth().basic("admin", "admin123")
+                .contentType(ContentType.JSON)
+                .body("""
+                        {
+                            "name": "Unique Name Corp",
+                            "taxId": "rtn-test-001",
+                            "email": "taxdup@test.com",
+                            "accountTypes": ["COMPANY"]
+                        }
+                        """)
+                .when().post("/api/accounts")
+                .then()
+                .statusCode(400)
+                .body("errorCode", is("ACCOUNT_TAX_ID_ALREADY_EXISTS"));
+    }
 }
