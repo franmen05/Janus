@@ -650,7 +650,7 @@
     "INCOMPLETE_DOCS_FOR_PAYMENT": "La lista de verificación documental debe estar completa (100%) antes de avanzar a Preparación de Pago",
     "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "La lista de verificación documental debe estar completa antes de avanzar a Preparación de Pago",
     "DECLARATION_NUMBER_MISSING": "La declaración preliminar debe tener un número de declaración antes de avanzar a Presentado a Aduanas",
-    "LIQUIDATION_PAID_FOR_CLOSING": "La liquidación debe estar pagada antes de cerrar la operación"
+    "LIQUIDATION_PAID_FOR_CLOSING": "La liquidación debe estar aprobada o pagada antes de cerrar la operación"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Tipo de Inspección",

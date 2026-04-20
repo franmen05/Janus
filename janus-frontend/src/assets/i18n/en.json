@@ -650,7 +650,7 @@
     "INCOMPLETE_DOCS_FOR_PAYMENT": "Document verification checklist must be complete (100%) before advancing to Payment Preparation",
     "CHECKLIST_INCOMPLETE_FOR_PAYMENT": "Document verification checklist must be complete before advancing to Payment Preparation",
     "DECLARATION_NUMBER_MISSING": "Preliminary declaration must have a declaration number before advancing to Submitted to Customs",
-    "LIQUIDATION_PAID_FOR_CLOSING": "Liquidation must be paid before closing the operation"
+    "LIQUIDATION_PAID_FOR_CLOSING": "Liquidation must be APPROVED or PAID before closing the operation"
   },
   "INSPECTION": {
     "TYPE_LABEL": "Inspection Type",

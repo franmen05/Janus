@@ -38,11 +38,11 @@ public class LiquidationPaidForClosingRule implements ComplianceRule {
             ));
         }
 
-        if (liquidation.status != LiquidationStatus.PAID) {
+        if (liquidation.status != LiquidationStatus.PAID && liquidation.status != LiquidationStatus.APPROVED) {
             return ValidationResult.failure(List.of(
                     new ValidationResult.ValidationError(
                             "LIQUIDATION_PAID_FOR_CLOSING",
-                            "Liquidation must be PAID before closing the operation. Current status: " + liquidation.status
+                            "Liquidation must be APPROVED or PAID before closing the operation. Current status: " + liquidation.status
                     )
             ));
         }
