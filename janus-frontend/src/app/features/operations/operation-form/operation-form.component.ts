@@ -220,8 +220,6 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                 </div>
               }
             </div>
-          </div>
-          <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.INCOTERM' | translate }}</label>
               <select class="form-select" formControlName="incoterm">
