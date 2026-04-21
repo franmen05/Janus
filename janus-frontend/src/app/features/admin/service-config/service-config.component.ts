@@ -29,6 +29,22 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
       </div>
     </div>
 
+    <div class="row g-2 mb-3">
+      <div class="col">
+        <input type="text" class="form-control"
+               [ngModel]="searchTerm()"
+               (ngModelChange)="onSearch($event)"
+               placeholder="{{ 'COMMON.SEARCH' | translate }}" />
+      </div>
+      <div class="col-auto">
+        <select class="form-select" [ngModel]="appliesToFilter()" (ngModelChange)="onFilterModule($event)">
+          <option value="">{{ 'SERVICE_CONFIG.ALL_MODULES' | translate }}</option>
+          <option value="LOGISTICS">Logistics</option>
+          <option value="CARGO">Cargo</option>
+        </select>
+      </div>
+    </div>
+
     @if (loading()) {
       <div class="text-center py-5">
         <div class="spinner-border text-primary" role="status">
@@ -235,7 +251,7 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         <app-pagination
           [currentPage]="currentPage()"
           [pageSize]="pageSize"
-          [totalElements]="services().length"
+          [totalElements]="filteredServices().length"
           [totalPages]="totalPages()"
           (pageChange)="onPageChange($event)" />
       </div>
@@ -270,13 +286,29 @@ export class ServiceConfigComponent implements OnInit {
   pageSize = 10;
   importing = signal(false);
   importResult = signal<CsvImportResponse | null>(null);
+  searchTerm = signal('');
+  appliesToFilter = signal<string>('');
+
+  filteredServices = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    const module = this.appliesToFilter();
+    return this.services().filter(s => {
+      const matchesTerm = !term || (
+        s.name.toLowerCase().includes(term) ||
+        s.labelEs.toLowerCase().includes(term) ||
+        s.labelEn.toLowerCase().includes(term)
+      );
+      const matchesModule = !module || s.appliesTo.includes(module as any);
+      return matchesTerm && matchesModule;
+    });
+  });
 
   pagedServices = computed(() => {
     const start = (this.currentPage() - 1) * this.pageSize;
-    return this.services().slice(start, start + this.pageSize);
+    return this.filteredServices().slice(start, start + this.pageSize);
   });
 
-  totalPages = computed(() => Math.ceil(this.services().length / this.pageSize));
+  totalPages = computed(() => Math.ceil(this.filteredServices().length / this.pageSize));
 
   editLabelEs = '';
   editLabelEn = '';
@@ -299,6 +331,16 @@ export class ServiceConfigComponent implements OnInit {
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
+  }
+
+  onSearch(term: string): void {
+    this.searchTerm.set(term);
+    this.currentPage.set(1);
+  }
+
+  onFilterModule(module: string): void {
+    this.appliesToFilter.set(module);
+    this.currentPage.set(1);
   }
 
   onExportCsv(): void {

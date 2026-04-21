@@ -450,7 +450,8 @@
     "LOADING": "Cargando...",
     "NO_DATA": "No hay datos disponibles",
     "YES": "Sí",
-    "NO": "No"
+    "NO": "No",
+    "SEARCH": "Buscar..."
   },
   "FILE_UPLOAD": {
     "DRAG_DROP": "Arrastre y suelte un archivo aquí, o",
@@ -1149,6 +1150,7 @@
     "DOWNLOAD_TEMPLATE": "Descargar Plantilla",
     "IMPORT_SUCCESS": "Importados {{imported}} registros, omitidos {{skipped}}",
     "DEFAULT_PRICE": "Precio por Defecto",
-    "DEFAULT_CURRENCY": "Moneda por Defecto"
+    "DEFAULT_CURRENCY": "Moneda por Defecto",
+    "ALL_MODULES": "Todos los módulos"
   }
 }

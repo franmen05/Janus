@@ -450,7 +450,8 @@
     "LOADING": "Loading...",
     "NO_DATA": "No data available",
     "YES": "Yes",
-    "NO": "No"
+    "NO": "No",
+    "SEARCH": "Search..."
   },
   "FILE_UPLOAD": {
     "DRAG_DROP": "Drag & drop a file here, or",
@@ -1076,7 +1077,8 @@
     "DOWNLOAD_TEMPLATE": "Download Template",
     "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}",
     "DEFAULT_PRICE": "Default Price",
-    "DEFAULT_CURRENCY": "Default Currency"
+    "DEFAULT_CURRENCY": "Default Currency",
+    "ALL_MODULES": "All modules"
   },
   "ERRORS": {
     "INVALID_STATUS_TRANSITION": "Cannot change from {{from}} to {{to}}. Only the next step is allowed.",
