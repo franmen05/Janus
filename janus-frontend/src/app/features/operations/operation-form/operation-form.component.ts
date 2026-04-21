@@ -85,6 +85,18 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                 <div class="invalid-feedback">{{ 'OPERATIONS.OPERATION_TYPE_REQUIRED' | translate }}</div>
               }
             </div>
+            <div class="col-md-6">
+              <label class="form-label">{{ 'OPERATIONS.BL_AVAILABILITY' | translate }} <span class="text-danger">*</span></label>
+              <select class="form-select" formControlName="blAvailability"
+                      [class.is-invalid]="form.get('blAvailability')!.invalid && form.get('blAvailability')!.touched">
+                <option value="">{{ 'OPERATIONS.SELECT_BL_AVAILABILITY' | translate }}</option>
+                <option value="ORIGINAL">{{ 'BL_AVAILABILITY.ORIGINAL' | translate }}</option>
+                <option value="NOT_AVAILABLE">{{ 'BL_AVAILABILITY.NOT_AVAILABLE' | translate }}</option>
+              </select>
+              @if (form.get('blAvailability')!.hasError('required') && form.get('blAvailability')!.touched) {
+                <div class="invalid-feedback">{{ 'OPERATIONS.BL_AVAILABILITY_REQUIRED' | translate }}</div>
+              }
+            </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
@@ -216,18 +228,6 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                 <option value="">-</option>
                 @for (inc of incoterms; track inc) { <option [value]="inc">{{ inc }}</option> }
               </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">{{ 'OPERATIONS.BL_AVAILABILITY' | translate }} <span class="text-danger">*</span></label>
-              <select class="form-select" formControlName="blAvailability"
-                      [class.is-invalid]="form.get('blAvailability')!.invalid && form.get('blAvailability')!.touched">
-                <option value="">{{ 'OPERATIONS.SELECT_BL_AVAILABILITY' | translate }}</option>
-                <option value="ORIGINAL">{{ 'BL_AVAILABILITY.ORIGINAL' | translate }}</option>
-                <option value="NOT_AVAILABLE">{{ 'BL_AVAILABILITY.NOT_AVAILABLE' | translate }}</option>
-              </select>
-              @if (form.get('blAvailability')!.hasError('required') && form.get('blAvailability')!.touched) {
-                <div class="invalid-feedback">{{ 'OPERATIONS.BL_AVAILABILITY_REQUIRED' | translate }}</div>
-              }
             </div>
           </div>
           @if (form.get('blAvailability')!.value === 'NOT_AVAILABLE') {
