@@ -182,6 +182,14 @@ public class OperationService {
                     .orElseThrow(() -> new NotFoundException("Warehouse", request.warehouseId()));
         }
 
+        if (request.partnerId() != null) {
+            op.partner = account.associatedAccounts.stream()
+                    .filter(p -> p.id.equals(request.partnerId()))
+                    .findFirst()
+                    .orElseThrow(() -> new BusinessException("PARTNER_NOT_ASSOCIATED",
+                            "The selected partner is not associated with this account"));
+        }
+
         op.referenceNumber = generateReferenceNumber(op.arrivalPort.code);
 
         // Validate childBlNumber (HBL) required for CONSOLIDATED BL
@@ -290,6 +298,16 @@ public class OperationService {
                     .orElseThrow(() -> new NotFoundException("Warehouse", request.warehouseId()));
         } else {
             op.warehouse = null;
+        }
+
+        if (request.partnerId() != null) {
+            op.partner = op.account.associatedAccounts.stream()
+                    .filter(p -> p.id.equals(request.partnerId()))
+                    .findFirst()
+                    .orElseThrow(() -> new BusinessException("PARTNER_NOT_ASSOCIATED",
+                            "The selected partner is not associated with this account"));
+        } else {
+            op.partner = null;
         }
 
         // Validate childBlNumber (HBL) required for CONSOLIDATED BL

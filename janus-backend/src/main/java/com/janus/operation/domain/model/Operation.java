@@ -25,6 +25,9 @@ public class Operation extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     public Account account;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Account partner;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "operation_type", nullable = false)
     public OperationType operationType;

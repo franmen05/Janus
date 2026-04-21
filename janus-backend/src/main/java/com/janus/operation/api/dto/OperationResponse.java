@@ -48,6 +48,8 @@ public record OperationResponse(
         Long warehouseId,
         String warehouseCode,
         String warehouseName,
+        Long partnerId,
+        String partnerName,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         // Cargo dimension fields
@@ -94,6 +96,8 @@ public record OperationResponse(
                 op.warehouse != null ? op.warehouse.id : null,
                 op.warehouse != null ? op.warehouse.code : null,
                 op.warehouse != null ? op.warehouse.name : null,
+                op.partner != null ? op.partner.id : null,
+                op.partner != null ? op.partner.name : null,
                 op.createdAt,
                 op.updatedAt,
                 op.pieces,
