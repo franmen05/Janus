@@ -65,7 +65,7 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                   <select id="partnerId" class="form-select" formControlName="partnerId">
                     <option value="">{{ 'OPERATIONS.PARTNER_PLACEHOLDER' | translate }}</option>
                     @for (partner of availablePartners(); track partner.id) {
-                      <option [value]="partner.id">{{ partner.name }}</option>
+                      <option [value]="partner.id.toString()">{{ partner.name }}</option>
                     }
                   </select>
                 </div>
