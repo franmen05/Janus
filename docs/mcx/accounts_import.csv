@@ -1,0 +1,567 @@
+name,taxId,email,accountTypes,phone,address,businessName,representative,documentType,alternatePhone,country,accountCode,notes
+MCX LOGISTICS GROUP,MCX,medinaarrindell@gmail.com,COMPANY;CARRIER;CONSIGNEE;SHIPPER;INDIVIDUAL,8095498800,"LAS AMERICA KM 25 #30, Santo",,,RNC,,DO,MCX,Own Company Account
+JMC XPRESS CUSTOMS SRL,131619312,INFO@MEDINACARGOXPRESS.COM,CONSIGNEE;COMPANY,809-549-0424,"LAS AMAERICAS KM 25 # 30, Santo Domingo Este",,,RNC,,DO,JMC,
+Ecu Trucing,MCX-3,mcx-3@mcxpending.com,CARRIER;COMPANY,(833) 328-7447,"2401 Northwest 69th Street, Miami",,,,,,MCX-3,
+IRON PLANET,MCX-4,mcx-4@mcxpending.com,INDIVIDUAL;CONSIGNEE,18007776666,"8006 Lorton Road, Lorton",,,,,,MCX-4,
+BBC LOGISTICS,MCX-5,mcx-5@mcxpending.com,INDIVIDUAL;CONSIGNEE;CARRIER;COMPANY;SHIPPER,305-777-6666,"2016 Northwest 135th Avenue, Miami",,,,,,MCX-5,
+MAERKS LINE,MCX-6,mcx-6@mcxpending.com,CARRIER;COMPANY,,"TORRE PROFECIONAL, SANTO DOMINIGO",,,RNC,,DO,MCX-6,
+Seaboard Marine,SMLU,smlu@mcxpending.com,CARRIER;COMPANY,,Miami,,,,,,SMLU,
+Lan  Import &  Export   S.A,MCX-8,trafico1@lanimportzl.com,SHIPPER;CARRIER,+(507) 439-8573,"Calle 4a France Field, Colón",,,,,,MCX-8,
+VAL CARGO EXPRESS SRL,RNC 130-27394-4,jleon@valcargoexpress.com,CONSIGNEE;COMPANY;CARRIER;SHIPPER,829-810-0900,"C./ Roberto Pastoriza #874, Ensanche Quisqueya, DISTRITO NACIONAL",,,RNC,,DO,MCX-9,
+D & R OCEAN TRADING COMPANY SRL,MCX-10,droceantradingc@gmail.com,INDIVIDUAL;CONSIGNEE,8097215151,"AV. LAS AMERICAS, KM. 14, CALLE PRIMERA
+NUM . 12 URB. LOS LAURELES, SANTO DOMINGO ESTE",,,RNC,,DO,MCX-10,
+POLIVEKTRIS,MCX-11,strap@polivektris.lt,SHIPPER,+370 686 25308,Jašiūnai,,,,,,MCX-11,
+Juan de los santos,MCX-12,mcx-12@mcxpending.com,CARRIER;COMPANY,,Santo Domingo Este,,,RNC,,DO,MCX-12,
+fumi,MCX-13,mcx-13@mcxpending.com,COMPANY,,,,,,,,MCX-13,
+CMA CGM,MCX-14,mcx-14@mcxpending.com,CARRIER;COMPANY,,"504 Avenida Abraham Lincoln, Santo Domingo",,,RNC,,DO,MCX-14,
+CORROGO CHINA LIMITED,MCX-15,sales@corrogo.shop,SHIPPER,8.62038E+12,"#898 TIANHE N. ROAD, RM 17-18, 33RD
+FLOOR INFO SOURCE PLAZA ,USCI: 91440101MA5CX0DP42, GUANGZHOU",,,,,,MCX-15,
+SEGURO HOLA,MCX-17,mcx-17@mcxpending.com,COMPANY,,,,,,,,MCX-17,
+Puerto multimodal Caucedo,MCX-18,mcx-18@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-18,
+Puerto Haina Oriental,MCX-19,mcx-19@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-19,
+DAMANI REALTY SEVICES SRL,MCX-21,info.damanirealtyservices@gmail.com,CONSIGNEE,829-362-7061,"CALLE 1 #3, ATARTIDA, HIGUEY",,,RNC,,DO,MCX-21,
+"HENAN DINISI ENTERTAINMENT TECHNOLOGY CO., LTD",MCX-22,mcx-22@mcxpending.com,INDIVIDUAL;CONSIGNEE,-13995,"Jin Hua Lu, Zheng Zhou Shi",,,,,,MCX-22,
+ALMACENES LOGISTICOS DIF,MCX-23,mcx-23@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Prolongación Avenida 27 de Febrero, Santo Domingo",,,RNC,,DO,MCX-23,
+Karl Schmidt Manufacturing,MCX-24,mcx-24@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"3900 East 68th Avenue, Commerce City",,,,,,MCX-24,
+Parque Industrial El Rinconcito,MCX-25,mcx-25@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Carretera a Santa Ana km. 28 1/2, Zona industrial El Rinconcito, San Juan de Opico",,,,,,MCX-25,
+ALL BUSINESS LOGISTICS SUPPORT,MCX-26,info.sal@allbusiness-ls.com,COMPANY,+(503) 2528-3607,"Calle San Antonio Abad, Pasaje Valdivieso #15, San
+Salvador, El Salvador, San Salvador",,,,,,MCX-26,
+V5 COLLECTION SRL / RNC 131346202,MCX-27,CAMILAMINAYA4@GMAIL.COM,CONSIGNEE,829-721-7276,"Calle Baltazara de los Reyes #5, Santo Domingo",,,RNC,,DO,MCX-27,
+MSC,MSCU,mscu@mcxpending.com,CARRIER;COMPANY,,"1751 North Cruise Boulevard, Miami",,,,,,MSCU,
+DESPACHOS PORTUARIOS HISPANIOLA,MCX-29,mcx-29@mcxpending.com,COMPANY,,Santo Domingo,,,RNC,,DO,MCX-29,
+YUDELCA  SANTOS GRULLON,809-543-8337,mcx-31@mcxpending.com,CONSIGNEE,809-543-8337,"9 Calle 14 , LA ZURZA III, Santiago de los Caballeros",,,RNC,,DO,MCX-31,
+EXTRAMODA ABDEL SRL,MCX-32,extramoda@hotamil.com,CONSIGNEE,8096860000,C/ Sanchez Valverde no. 57,,,,,,MCX-32,
+ZIM INTEGRATED SHIPPING SERVICES LTD,MCX-33,mcx-33@mcxpending.com,CARRIER;COMPANY,,"504 Avenida Abraham Lincoln, Santo Domingo",,,RNC,,DO,MCX-33,
+YIWU DONGCHENG INTERNATIONAL TRADING LTD,MCX-34,mcx-34@mcxpending.com,SHIPPER,,"Room 201-2, Unit 1 Building 68, Chengxi no.3, Futian Street, Yiwu, Jinhua",,,,,,MCX-34,
+ELECTRONES DEL CARIBE SRL RNC. 131-64290-1,MCX-35,mcx-35@mcxpending.com,CONSIGNEE,,"C/FLAMENCO NO. 21, DOMINICAN REPUBLIC 
+RNC: 131642901
+809-549-8800",,,,,,MCX-35,
+OOCL,OOCL,oocl@mcxpending.com,CARRIER;COMPANY,,"2 Calle El Recodo, Santo Domingo",,,RNC,,DO,OOCL,
+HONGKONG GULAI LIMITED,MCX-37,mcx-37@mcxpending.com,SHIPPER,,"UNIT 1507C, 15/F., EASTCORE, 398 KWUN TONG ROAD, KWUN TONG, KLN, HONG KONG",,,,,,MCX-37,
+INVERSIONES Y NEGOCIOS (INESA),MCX-38,arodriguez@inesa.com.do,INDIVIDUAL;CONSIGNEE,(809) 563-8522,"17 Calle Haim Lopez Penha, Santo Domingo",,,RNC,,DO,MCX-38,
+DAFRE LOGISTICS SRL,MCX-39,americanboxesnaco@gmail.com,INDIVIDUAL;CONSIGNEE,8296412551,DISTRITO NACIONAL,,,RNC,,DO,MCX-39,
+FIRMENICH INC,MCX-40,mcx-40@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"250 Plainsboro Road, Plainsboro Township",,,,,,MCX-40,
+MCX Logistics Group,MCX-41,info@medinacargoxpress.com,INDIVIDUAL;CONSIGNEE,,"2016 Northwest 135th Avenue, Miami",,,,,,MCX-41,
+ARTES MERET SRL,MCX-42,artes_meret2024@hotmail.com,INDIVIDUAL;CONSIGNEE,(829) 714-8953,"Avenida Charles de Gaulle, Santo Domingo Este",,,RNC,,DO,MCX-42,
+BLUE ANCHOR LINE,MCX-43,mcx-43@mcxpending.com,CARRIER;COMPANY,,"Av. Lope de Vega 29, Santo Domingo, SANTO DOMINGO",,,RNC,,DO,MCX-43,
+JIANGSU WLD MEDICAL CO. LTD,MCX-44,mcx-44@mcxpending.com,SHIPPER,,"NO. 138, XISHAN SOUTH ROAD, CHENJI TOWN, YIZHENG CITY, JIANGSU PROVINCE, CHINA",,,,,,MCX-44,
+GRUNENTHAL S A,MCX-45,mcx-45@mcxpending.com,CARRIER;COMPANY,,"J. CAIN PANAMA PACIFICO,S.A",,,,,,MCX-45,
+"KUEHNE NAGEL,S.A.",MCX-46,mcx-46@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-46,
+PFIZER FREE ZONE PANAMA,MCX-47,mcx-47@mcxpending.com,CARRIER;COMPANY,,"Calle Elvira Méndez, Panamá",,,,,,MCX-47,
+"CHINA LOGISTICS SERVICES CLS S.R.L,",MCX-48,Info@chinalogisticsdr.com,INDIVIDUAL;CONSIGNEE,809-549-8800,"78 Avenida de la Vega Real, Santo Domingo",,,RNC,,DO,MCX-48,
+"MEDINA CARGO XPRESS, RNC 130966354,",MCX-49,INFO@MEDINACARGOXPRESS.COM,INDIVIDUAL;CONSIGNEE,809-549-8800,"LAS AMERICA KM 25 #30, LAS AMERICAS",,,RNC,,DO,MCX-49,
+"R2 LOGISTICA Y ACESORIA, RNC: 132613198",MCX-50,Rsvm29@gmail.com,INDIVIDUAL;CONSIGNEE,Tel .: 809-869-9534,"102 Avenida Hípica, Santo Domingo Este",,,RNC,,DO,MCX-50,
+Paola  Mateo / KIDS STUFF,MCX-51,Kidsstuffrd@hotmail.com,INDIVIDUAL;CONSIGNEE,829-856-5644,"Residencial los laureles bloque L 101 Carretera la Isabella Arroyo Hondo, DISTRITO NACIONAL",,,RNC,,DO,MCX-51,
+VARMECAS SRL -  131926819,MCX-52,mcx-52@mcxpending.com,CONSIGNEE,(809) 896-6238,"Francisco José Peynado 76, Bonao 42000",,,,,,MCX-52,
+BABY CHANCE SRL - 132763442,MCX-53,mcx-53@mcxpending.com,CONSIGNEE,(809) 895-1352,"Av. Sabana Larga esq, Santo Domingo Este 11501",,,,,,MCX-53,
+"Woosung Autocon Co., Ltd",MCX-54,mcx-54@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"11, MTV buk-ro 193beon-gil, Jeongwang-Dong, Siheung-si",,,,,,MCX-54,
+CHINA BOX PTY,MCX-55,mcx-55@mcxpending.com,COMPANY,,"Avenida de la Paz, Panamá",,,,,,MCX-55,
+LOS MISMOS,MCX-56,mcx-56@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-56,
+Cartones del Caribe SAS,RNC 101164816,comprasint@cartonesdelcaribe.com,INDIVIDUAL;CONSIGNEE,809-549-0601,"22 Autopista Las Américas, Santo Domingo Este",,,RNC,,DO,MCX-57,
+EMPAQUES COLON S.A.,MCX-58,comprasecsa@ecsabox.com,SHIPPER,507 204 3550,Río Duque,,,,,,MCX-58,
+UPS,MCX-59,mcx-59@mcxpending.com,CARRIER;COMPANY,,"UPS Dominicana, S.A.
+Aeropuerto Internacional Las Américas (AILA)
+Santo Domingo, República Dominicana",,,,,,MCX-59,
+PT DOMINICAN SRL,MCX-60,mcx-60@mcxpending.com,CONSIGNEE,,"Mella Km. 1, Higüey 23000",,,,,,MCX-60,
+ZORRILLASA SRL  RNC 130-24093-2,MCX-61,mcx-61@mcxpending.com,INDIVIDUAL;CONSIGNEE,Tel.: 829-883-8042,"6 Gaspar Hernandez, Higüey",,,RNC,,DO,MCX-61,
+AMERICARGO INC,MCX-62,mcx-62@mcxpending.com,INDIVIDUAL;CONSIGNEE,,38-28 28th Street,,,,,,MCX-62,
+GRUPO ESTEVEZ SRL : RNC 131-485227,MCX-63,grupoestevez@gmail.com,INDIVIDUAL;CONSIGNEE,,"Avenida México, Santo Domingo",,,RNC,,DO,MCX-63,
+ZORRILLASA SRL  RNC 130-24093-2,MCX-64,mcx-64@mcxpending.com,CONSIGNEE,,"6 Gaspar Hernandez, Higüey",,,RNC,,DO,MCX-64,
+NEUTRAL LOGISTICS,MCX-65,mcx-65@mcxpending.com,CARRIER;COMPANY,(809) 793-4300,"Av. Abraham Lincoln 1019, Santo Domingo",,,,,,MCX-65,
+"HANGZHOU HIKVISION TECHNOLOGY CO.,LTD",MCX-66,mcx-66@mcxpending.com,SHIPPER,,"700 DONGLIU ROAD,BINJIANG
+AREA,HANGZHOU,ZHEJIANG,CHINA CITY: HANGZHOU
+ZIP CODE: 310052 COUNTRY CODE: CN
+AEOCN3301961C17",,,,,,MCX-66,
+JM SS,MCX-67,mcx-67@mcxpending.com,CONSIGNEE,,"C/LORENZO DESPRADEL
+#7, LOS PRADOS,SANTO DOMINGO,DOMINICAN REP.",,,,,,MCX-67,
+DAYDRY YHOENNY VILLAR ROMANO,MCX-68,Daydryvillar@gmail.com,INDIVIDUAL;CONSIGNEE,8098044304,"Calle Máximo Rossi, Santo Domingo",,,RNC,,DO,MCX-68,
+DAYDRY VILLAR,MCX-69,Daydryvillar@gmail.com,INDIVIDUAL;CONSIGNEE,8098044304,,,,,,,MCX-69,
+CARLOS ODEMIR TAVARES,MCX-71,mcx-71@mcxpending.com,CONSIGNEE,,"Av. Espana, Santo Domingo Este, Santo Domingo, REPUBLICA DOMINICANA",,,,,,MCX-71,
+FREDDY MARCIAL RODRIGUEZ GUEVARA,MCX-72,mcx-72@mcxpending.com,CONSIGNEE,,"Santo Domingo, RD",,,,,,MCX-72,
+CARGO ORION DOMINICANA,MCX-73,mcx-73@mcxpending.com,CARRIER;COMPANY,809-533-6141,"C. Victor Garrido Puello, Santo Domingo",,,,,,MCX-73,
+"HANGZHOU HIKVISION TECHNOLOGY CO.,LTD.",MCX-74,mcx-74@mcxpending.com,SHIPPER,,"700 DONGLIU ROAD,BINJIANG
+AREA,HANGZHOU,ZHEJIANG,CHINA
+CITY: HANGZHOU
+ZIP CODE: 310052
+COUNTRY CODE: CN
+TEL: +86571-88075998
+USCI+91330108685810195",,,,,,MCX-74,
+"Shenzhen Huasifei Technology Co., Ltd.",MCX-75,mcx-75@mcxpending.com,SHIPPER,,8 Hua Ning Lu,,,,,,MCX-75,
+"Shenzhen Huasifei Technology Co., Ltd",MCX-76,mcx-76@mcxpending.com,SHIPPER,,,,,,,,MCX-76,
+YIWU DONGCHENG INTERNATIONAL TRADING LTD,MCX-77,mcx-77@mcxpending.com,SHIPPER,,,,,,,,MCX-77,
+"JINAN BADA PLASTIC PIPE WELDING EQUIPMENT CO., Ltd,",MCX-78,mcx-78@mcxpending.com,SHIPPER,,"Wu Tai Zha Lu, Ji Ning Shi",,,,,,MCX-78,
+"Shijiazhuang Truter Packaging Co., Ltd",MCX-79,mcx-79@mcxpending.com,SHIPPER,,"1606 Xinke International Plaza, Huai'an East Road, Shijiazhuang, Hebei, China",,,,,,MCX-79,
+"YIM DURO IMPORT & EXPORT CO, LTD",MCX-80,mcx-80@mcxpending.com,CARRIER;COMPANY,,"ROOM 201,UNIT 1,BUILDING 68 CHENGXIN 3 DISTRICT,FUTIAN,STREET YIWU,CHINA USCI+91330782336907458W ,",,,,,,MCX-80,
+Barq Impex USA Inc,MCX-81,cherian@barqimpex.com,INDIVIDUAL;CONSIGNEE,1 617 888 0263,"220 Redmond Ridge Circle, Alpharetta",,,,,,MCX-81,
+ZAMIR FELIZ,MCX-82,Zamil_feliz@hotmail.com,INDIVIDUAL;CONSIGNEE,8295780548,,,,,,,MCX-82,
+CARTONERA HUED,MCX-83,compras@cartonerahued.com,CONSIGNEE,(809) 560-6861,"Autopista Duarte, Km. 15 ½
+Carretera La Isabela #20
+Pantoja, Santo Domingo Oeste, Pantoja",,,RNC,,DO,MCX-83,
+"Woosung Autocon Co., Ltd.",MCX-84,mcx-84@mcxpending.com,SHIPPER,,,,,,,,MCX-84,
+Henríquez,MCX-85,mcx-85@mcxpending.com,CARRIER;COMPANY,(809) 688-8787,"Av Simón Bolívar #195, Santo Domingo 10108, Santo Domingo,",,,,,,MCX-85,
+FERRETERS SRL,MCX-86,mcx-86@mcxpending.com,CONSIGNEE,,"AV. ECOLOGICA, TORRE VERSA 202",,,,,,MCX-86,
+"GRUPO PAILL, S.A. DE C.V",MCX-87,mcx-87@mcxpending.com,CARRIER;COMPANY,,"8A AV SUR Y 10A CALLE ORIENTE No 470
+SAN SALVADOR SS SV",,,,,,MCX-87,
+ALEX MANUEL MANSILLA YABRA,MCX-88,mcx-88@mcxpending.com,SHIPPER,,"BOHECHIO CASA 5C, FERNANDEZ
+SANTO DOMINGO (REPUBLICA DOMINICANA) FORWARDING AGENT EXPORT REFERENCE
+ID: 00112256516",,,,,,MCX-88,
+ELECTRA SOLUTIONS GROUP LLC,MCX-89,mcx-89@mcxpending.com,CONSIGNEE,,"170 COMMERCE WAY, SUITE 200
+PORTSMOUTH NH 03801
+ID 834062339",,,,,,MCX-89,
+KING OCEAN SERVICES LTD,MCX-90,mcx-90@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-90,
+"Vanderbilt Minerals, LLC",MCX-91,mcx-91@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"396 Pella Way, Murray",,,,,,MCX-91,
+IBERCHEM S.A.U.,MCX-92,mcx-92@mcxpending.com,CARRIER;COMPANY,,"Avenida del Descubrimiento, Alcantarilla",,,,,,MCX-92,
+FEILO SYLVANIA COSTA RICA S A,MCX-94,mcx-94@mcxpending.com,SHIPPER,,"Zona Industrial, Costa Rica",,,,,,MCX-94,
+RH Toronto,MCX-95,jmojsiak@uwo.ca,INDIVIDUAL;CONSIGNEE,(416) 560-0269,"3401 Dufferin Street, Toronto",,,,,,MCX-95,
+Franmen Guillermo De Los Santos,TEST01,franmen05@gmail.com,CONSIGNEE,8093051653,"rosa  roja, santo domingo",,,,,,TEST01,
+Harry Heinsen & Co. SRL,MCX-96,jterrero@harryheinsen.com,CONSIGNEE,(809) 561-5999,"214 Prolongación Avenida 27 de Febrero, Santo Domingo",,,RNC,,DO,MCX-96,
+"France Field, Zona Libre de Colón, Panamá",MCX-97,mcx-97@mcxpending.com,INDIVIDUAL;CONSIGNEE,,Colón,,,,,,MCX-97,
+DM GROUP INTERNATIONAL SRL.-,MCX-98,mcx-98@mcxpending.com,CONSIGNEE,809-528-5760,"RNC: 114080787
+TEL;.809-528-5760
+Zonas Francas, Av Libertad 1, Pedernales, Dominican Republic, Pedernales",,,RNC,,DO,MCX-98,
+GLOBAL TRADING SERVICE,MCX-99,mcx-99@mcxpending.com,SHIPPER,OFFICE: 305-740-0338,"7165 Southwest 47th Street, Miami",,,,,,MCX-99,
+IRON PLANET,MCX-100,mcx-100@mcxpending.com,CARRIER;COMPANY,,"8006 Lorton Road
+Lorton, VA 22079
+Estados Unidos
+ 18007776666",,,,,,MCX-100,
+CARIBBEAN EXPRESS LINE,MCX-101,mcx-101@mcxpending.com,SHIPPER,,,,,,,,MCX-101,
+DSV AIR,MCX-102,mcx-102@mcxpending.com,CARRIER;COMPANY,,"RNC: 101709189 AV. 27 DE FEBRERO
+NO. 325 TORRE PROF. KM SUITE 301
+EVARISTO MORALES, SANTO DOMINGO
+Email:DO.Impsea.SDQ@do.dsv.com",,,,,,MCX-102,
+"AVIENT GUATEMALA, S.A.",MCX-103,mcx-103@mcxpending.com,SHIPPER,,"27 AVENIDA 34-11 ZONA 12, 
+GLOBAL BODEGA 13 Y 6
+GUATEMALA CIUDAD",,,,,,MCX-103,
+"DURANZA CO., LIMITED",MCX-104,mcx-104@mcxpending.com,SHIPPER,,,,,,,,MCX-104,
+KENIYA,MCX-105,mcx-105@mcxpending.com,SHIPPER,,,,,,,,MCX-105,
+M.C. LOGISTICS  SRL,MCX-106,mcx-106@mcxpending.com,CARRIER;COMPANY,,"#5 y #9, Av. Carlos Perez Ricart, Santo Domingo",,,,,,MCX-106,
+"Cambo shenzhen Industrial Co., Ltd.",MCX-107,mcx-107@mcxpending.com,SHIPPER,,"D3007 Vanke Tianyu Plaza, No.7188 Longxiang Avenue, Jixiang Community, Shenzhen, Guangdong, China",,,,,,MCX-107,
+Yangzhou Hangyu Tourist Products Factory LTD.,MCX-108,mcx-108@mcxpending.com,SHIPPER,.,"Yuanchen Road, Guangling Industrial Park, Yangzhou, Jiangsu, China",,,,,,MCX-108,
+"YIWU DURO IMPORT & EXPORT CO.,LTD.",MCX-109,logistica@medinacargoxpress.com,SHIPPER,,"ROOM 201,UNIT 1,BUILDING 68 CHENGXIN 3 DISTRICT,FUTIAN,STREET YIWU,CHINA USCI+91330782336907458W",,,,,,MCX-109,
+Royal World Logistics,MCX-110,mcx-110@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Ave. Santa Isabel Edificio Cofrisa No.4,
+France Field, Zona Libre de Colón, Panamá",,,,,,MCX-110,
+MANGUERAS Y CONESIONES,MCX-111,mcx-111@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-111,
+ANBEL(AB IND.SUPPLY CORP),MCX-112,mcx-112@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-112,
+RICKY RICARDO GARRIDO,MCX-114,mcx-114@mcxpending.com,INDIVIDUAL;CONSIGNEE,18296488851,"Calle Caballito de Mar, Santo Domingo Este",,,RNC,,DO,MCX-114,
+MICHAEL UTENS,MCX-115,mcx-115@mcxpending.com,INDIVIDUAL;CONSIGNEE,8093726124,,,,,,,MCX-115,
+NOVOTRANS SRL,MCX-116,mcx-116@mcxpending.com,CARRIER;COMPANY,,"Edificio RC, C. Puerto Rico 99, Santo Domingo Este 10014",,,,,,MCX-116,
+HOME CHEN INTERNATIONAL LIMITED,MCX-117,mcx-117@mcxpending.com,SHIPPER,,,,,,,,MCX-117,
+IMPORTADORA K4R RACING EIRL,MCX-118,importadorak4rracing@gmail.com,INDIVIDUAL;CONSIGNEE,8293135869,"CARRETERA VERON BAVARO PUNTA CANA ESQUINA SIMON BOLIVAR, Circunvalación de Verón - Bávaro, Punta Cana",,,RNC,,DO,MCX-118,
+COMERCIAL LA CLAVE,MCX-119,mcx-119@mcxpending.com,INDIVIDUAL;CONSIGNEE,8098790755,San Cristóbal,,,RNC,,DO,MCX-119,
+CARTONERA ALFREDO HUED SAS RNC. 101-00081-3,MCX-120,compras@cartonerahued.com,INDIVIDUAL;CONSIGNEE,809) 560-6861,,,,RNC,,DO,MCX-120,
+JUAN MIGUEL ARIAS CURET,MCX-122,mcx-122@mcxpending.com,CONSIGNEE,,,,,,,,MCX-122,
+EVERGREEN LINE,MCX-124,mcx-124@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-124,
+AMAZON ZONA LIBRE,MCX-125,mcx-125@mcxpending.com,INDIVIDUAL;CONSIGNEE,,Colón,,,,,,MCX-125,
+FOAMDADY,MCX-126,mcx-126@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"2140 South 7th Avenue, Phoenix",,,,,,MCX-126,
+SUPER TIENDA LA ALEGRIA  SRL   RNC No.130763862,MCX-127,mcx-127@mcxpending.com,CONSIGNEE,,"REPUBLICA DOMINICANA, 
+SANTIAGO BELLEN NO.102, SANTIAGO",,,,,,MCX-127,
+RADHAMES ALEXANDER PORTES FELIZ,MCX-128,mcx-128@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (849) 205-5610,"406 Calle Arzobispo Meriño, Santo Domingo",,,RNC,,DO,MCX-128,
+"SHENZHEN GOLDEN SHIPPING CO.,LTD",MCX-129,Amanda@szgolden-shipping.com,SHIPPER,178 8791 4107,"Unit1308, 13 / F, Zhujiang International Centre,                                                                               9009 Longxiang Avenue, Longgang District, Shenzhen",,,,,,MCX-129,
+BENJA AUTO SERVICE RNC 131775527,MCX-131,Benjaautoservice@gmail.com,INDIVIDUAL;CONSIGNEE,1 (829) 294-4660,"KM 31 1/2, AUTOPISTA LAS AMERICAS, BOCA CHICA, REPUBLICA DOMINICANA.",,,,,,MCX-131,
+HANGZHOU GINO TECH CO LTD,MCX-132,mcx-132@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Room 2003, Building 2, Meilai International, Nanyuan Street, Hangzhou, Zhejiang, China",,,,,,MCX-132,
+HENRY VARGAS,MCX-133,mcx-133@mcxpending.com,INDIVIDUAL;CONSIGNEE,809-223-5100,Santo Domingo,,,RNC,,DO,MCX-133,
+VIMARO SRL,MCX-134,mcx-134@mcxpending.com,INDIVIDUAL;CONSIGNEE,8497519633,"NAVE INDUSTRIAL DE ESTE, ENTRANDO POL EL HOTEL PRIMAVERAL BAVARO, REPUBLICA DOMINICANA.",,,,,,MCX-134,
+GLOBAL TRADING  SERVICES INC,MCX-137,mcx-137@mcxpending.com,CARRIER;COMPANY,,"7001 N Waterway Dr # 109, Miami, FL 33155, Estados Unidos",,,,,,MCX-137,
+LIFT TAG,MCX-138,mcx-138@mcxpending.com,CARRIER;COMPANY,,"Aeropuerto José Francisco Peña Gomez (AILA),
+Boca Chica, República Dominicana",,,,,,MCX-138,
+CARIBBEAN MULTISERVICE GROUP,RNC: 13268037-5,caribbeanmultiservicesg@gmail.com,CONSIGNEE;SHIPPER,TELF.: (849) 258-9761,"AUT. SAN ISIDRO, CORAL MALL, PYHEX WORK III, SEGUNDO NIVEL",,,,,,MCX-139,
+DHL,MCX-140,mcx-140@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-140,
+CARIBETRANS,MCX-141,mcx-141@mcxpending.com,CARRIER;COMPANY,,"Dirección: Av. Independencia, Santo Domingo
+Teléfono: (809) 682-0102",,,,,,MCX-141,
+LABORATORIOS ATRAL S A,MCX-142,mcx-142@mcxpending.com,CARRIER;COMPANY,,"Dirección: R. da Estação 1, Castanheira do Ribatejo, Portugal
+Teléfono: +351 263 856 800",,,,,,MCX-142,
+AEROPRONTO,MCX-143,mcx-143@mcxpending.com,CARRIER;COMPANY,,"Dirección: Seminario Padres Paules, Antigua Calle 15 3, Santo Domingo Este 11501
+Teléfono: (809) 592-9100",,,,,,MCX-143,
+MERCHANT DOMINICANA SRL,MCX-144,mcx-144@mcxpending.com,CONSIGNEE,,"AV. INDEPENDENCIA, ESQ WINS, ESTACION CENTRO DE LOS HEROES, SANTO DOMINGO RD, Distrito Nacional",,,RNC,,DO,MCX-144,
+FULTER LOGISTICS,MCX-145,mcx-145@mcxpending.com,CARRIER;COMPANY,,"CALLE 1RA, ESQ PEDRO A. BOBEA, LOCAL 1
+TEL.:829-607-2119",,,,,,MCX-145,
+HANGZHOU HENGUANG IMPORT AND EXPORT LIMITED,MCX-146,mcx-146@mcxpending.com,SHIPPER,,"ROON 414, UNIT 3-3 WANDA COMERCIAL CENTER, GONGSHU DISTRICT HANGZHOU",,,,,,MCX-146,
+PAPELERIA KIM SRL,MCX-147,mcx-147@mcxpending.com,CONSIGNEE,,SANTO DOMING RD,,,,,,MCX-147,
+MC LOGISTICS,MCX-148,mcx-148@mcxpending.com,CARRIER;COMPANY,,"Dirección: #5 y #9, Av. Carlos Perez Ricart, Santo Domingo
+Teléfono: (809) 565-3265",,,,,,MCX-148,
+YOUDO INTERNATIONAL CO LIMITED,MCX-149,mcx-149@mcxpending.com,SHIPPER,,,,,,,,MCX-149,
+"DISTRIBUIDORA VASQUEZ A&S SUMINISTRO FERRETEROS Y MATERIALES LIGEROS, SRL",MCX-150,mcx-150@mcxpending.com,CONSIGNEE,,"DIRRECCION:AV.30 DE MAYO #3 MONTECRISTI CASTAÑUELAS
+RNC/CED:132-96299-2
+TEL:(829)325 6305",,,,,,MCX-150,
+"SH WANWAY DIGITAL TECHNOLOGY CO., LTD",MCX-151,mcx-151@mcxpending.com,SHIPPER,,,,,,,,MCX-151,
+RAMIL COMERCIAL SRL  RNC. 130898383,MCX-152,mcx-152@mcxpending.com,INDIVIDUAL;CONSIGNEE,829-512-7778,"DIRECCIÓN : Calle B #5 urbanización carola , santo domingo este",,,,,,MCX-152,
+"APS GOLDEN GROUP CO., LIMITED.",MCX-153,KIMMI_HUANG@APSGOLDENGROUP.COM,SHIPPER,00852-2152-1733,"TAX ID: 66905060-000-11-23-8 SPA CENTRE 53-55 LOCKHART ROAD WANCHAI HONGKONG, CHINA.",,,,,,MCX-153,
+YARIS,MCX-154,mcx-154@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-154,
+GRUPO ELECTRO WORLD ( MARCOS MENALDO),MCX-155,mcx-155@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (829) 763-1834,REPUBLICA DOMINICANA,,,,,,MCX-155,
+SWARM TRANSPORT,MCX-158,mpanesso@swarmtransport.com,CONSIGNEE;COMPANY;CARRIER;SHIPPER,1305-735-8893,"11230 Northwest 122nd Street, Medley",,,,,,MCX-158,
+ABLEREX LATAM CORP,MCX-159,mcx-159@mcxpending.com,INDIVIDUAL;CONSIGNEE;SHIPPER,,"11230 Northwest 122nd Street, Miami",,,,,,MCX-159,
+IT SUPPORT INC,MCX-160,mcx-160@mcxpending.com,INDIVIDUAL;CONSIGNEE,,MIAMI,,,,,,MCX-160,
+LATAM CARGO,MCX-161,mcx-161@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-161,
+"KEG GROUP CO.,LTD",MCX-163,mcx-163@mcxpending.com,SHIPPER,,"GuanhaiWei Industry Zone, Cixi, China
++86 131 3630 0008
+info@keggroup.com.cn",,,,,,MCX-163,
+SONIC CAPITAL SRL - RNC: 133151456,MCX-164,mcx-164@mcxpending.com,CONSIGNEE,,"SANTO DOMINGO, RD",,,,,,MCX-164,
+MYLAN IRELAND LIMITED,MCX-165,mcx-165@mcxpending.com,SHIPPER,,,,,,,,MCX-165,
+"Berkeley, California, EE. UU.",MCX-166,mcx-166@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-166,
+DECOR KENIA,MCX-167,mcx-167@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-167,
+FAJARTE,MCX-168,mcx-168@mcxpending.com,INDIVIDUAL;CONSIGNEE,,REPUBLICA DOMINICANA,,,,,,MCX-168,
+NOVEDADES JIREH,MCX-169,mcx-169@mcxpending.com,INDIVIDUAL;CONSIGNEE,,REPUBLICA DOMINICANA,,,,,,MCX-169,
+LIDIA SANTANA,MCX-170,mcx-170@mcxpending.com,INDIVIDUAL;CONSIGNEE,,REPUBLICA DOMINICANA,,,,,,MCX-170,
+LITTLE BABY,MCX-171,mcx-171@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-171,
+MUEBLES GAEL,MCX-172,mcx-172@mcxpending.com,INDIVIDUAL;CONSIGNEE,,REPUBLICA DOMINICANA,,,,,,MCX-172,
+OLGA VARIEDADES,MCX-173,mcx-173@mcxpending.com,INDIVIDUAL;CONSIGNEE,,RD,,,,,,MCX-173,
+TIENDA PREMON PERLA UEVA,MCX-174,mcx-174@mcxpending.com,INDIVIDUAL;CONSIGNEE,,RD,,,,,,MCX-174,
+PLAZA PITUA,MCX-175,mcx-175@mcxpending.com,INDIVIDUAL;CONSIGNEE,,RD,,,,,,MCX-175,
+SOLUCIONES GARE,MCX-176,mcx-176@mcxpending.com,INDIVIDUAL;CONSIGNEE,,RD,,,,,,MCX-176,
+"TRUETHER GROUP SRL , 131-153077",MCX-177,mcx-177@mcxpending.com,INDIVIDUAL;CONSIGNEE,849-333-2851,"AV. CHARLES DE GAULLE, NO. 3, CASI ESQ.
+CARRETERA MELLA ALMIRANTE SANTO
+DOMINGO",,,,,,MCX-177,
+PUNTO 21 STORE SRL - 131990487,MCX-178,mcx-178@mcxpending.com,CONSIGNEE,,"C. Manuela Diez No 249, Santo Domingo 10306
+(809) 684-8682",,,,,,MCX-178,
+"Calle 11 No. 6 - 119 bodega 38 G zona industrial la Macarena, Pereira, Colombia",MCX-180,mcx-180@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-180,
+PENTA BOX SRL,MCX-181,mcx-181@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-181,
+PENTA BOX SRL,MCX-182,max.zandi@pentabox.eu,INDIVIDUAL;CONSIGNEE,+ 39 333 6876068,"Strada Păstorului, Arad",,,,,,MCX-182,
+TIENDAS LAS MARAVILLAS,MCX-183,mcx-183@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-183,
+ROLFHI HERNANDEZ,MCX-184,mcx-184@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"203 Avenida 27 de Febrero, Santo Domingo",,,RNC,,DO,MCX-184,
+FG FOR YOU,MCX-185,mcx-185@mcxpending.com,INDIVIDUAL;CONSIGNEE,,ENSANCHE OZAMA,,,,,,MCX-185,
+LOIS E MOTORS MOVILIDAD ELECTRICA,MCX-187,mcx-187@mcxpending.com,INDIVIDUAL;CONSIGNEE,,Bonao,,,RNC,,DO,MCX-187,
+MIA GARDENNS,MCX-188,mcx-188@mcxpending.com,INDIVIDUAL;CONSIGNEE,,MIAMIA,,,,,,MCX-188,
+MARINE EXPRESS,MCX-189,mcx-189@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-189,
+"FUJIAN HAOBANG IMPORT & EXPORT CO.,LTO.",MCX-190,mcx-190@mcxpending.com,SHIPPER,,"ROOM 201.1ST FLOOR.BUILDING 3. SANJIAONEI COMMERCIAL ANO              Phooc  0595-85697922
+RESIOENTIAL EAST OISTRICT,NO 55, SHIGU ROAD,MEIQING CDMMUNITY MEILING STREET,JINJIANG CITY",,,,,,MCX-190,
+ITSUPPORT INC,MCX-191,mcx-191@mcxpending.com,SHIPPER,,"7491 eATON sT, 33024 Hollywood, Florida 
+7867061606
+Sales@itsuppotcala.com",,,,,,MCX-191,
+PROMPTUS,MCX-192,mcx-192@mcxpending.com,SHIPPER,,"PROMPTUS, LLC AS AGENT FOR THE CONSIGNEE
+ 3950 EXECUTIVE WAY
+ MIRAMAR, FL 33025. UNITED STATES OF AMERICA",,,,,,MCX-192,
+Mylan Ireland Limited,MCX-193,mcx-193@mcxpending.com,SHIPPER,,"Mylan Ireland Limited
+ Shippers Account Number
+ Newenham Court, Northern Cross
+ Malahide Road,
+ 06079 Dublin 17 IRELAND",,,,,,MCX-193,
+"ASG DOMINICANA, SAS",MCX-194,mcx-194@mcxpending.com,CARRIER;COMPANY,,"ASG DOMINICANA, SAS
+ CALLE JOSE GABRIEL GARCIA # 8, ZONA 
+COLONIAL
+ SANTO DOMINGO, REPÚBLICA DOMINICANA
+ RNC 130336164
+ TEL: 1 809-685-3760  FAX: 1 809-687-7158",,,,,,MCX-194,
+CHARTER LINK LOGISTICS (HK) LIMITED O/B  P,MCX-195,mcx-195@mcxpending.com,SHIPPER,,"CHARTER LINK LOGISTICS (HK) LIMITED O/B
+ PARAMOUNT CORPORATION INC
+ 613, GANESH GLORY, NR. GODREJ GARDEN CITY,
+ JAGATPUR, ,AHMEDABAD, AHMADABAD,
+ GUJARAT, 382470",,,,,,MCX-195,
+PIER 17 GROUP DOMINICANA,MCX-196,mcx-196@mcxpending.com,CARRIER;COMPANY,,"Pier 17 Group Dominicana, S.A. 
+Av. Gustavo Mejia Ricart No. 128
+ Edificio ELAB, Suite 107
+ Evaristo Morales, Sto Dgo. R.D.   
+Ph.: 809-567-9100",,,,,,MCX-196,
+CHINA LOGISTICS SERVICES CLS  SRL,MCX-197,mcx-197@mcxpending.com,CONSIGNEE,,,,,,,,MCX-197,
+INTERNATIONAL DONGCHENG,MCX-198,mcx-198@mcxpending.com,CONSIGNEE,,,,,,,,MCX-198,
+KENIYA SRL SRL 131940811,MCX-199,mcx-199@mcxpending.com,CONSIGNEE,,"177 Avenida San Martín, Santo Domingo",,,RNC,,DO,MCX-199,
+EVOLET HEALTCARE PVT LTD,MCX-200,mcx-200@mcxpending.com,SHIPPER,,,,,,,,MCX-200,
+EPIC CARGO,MCX-201,mcx-201@mcxpending.com,CARRIER;COMPANY,,"Plaza bonaire, Av. San Vicente de Paúl, Santo Domingo Este 11504
+Teléfono: (809) 373-0689",,,,,,MCX-201,
+"SHANGHAI WANWAY DIGITAL TECHNOLOGY CO.,LTD",MCX-202,mcx-202@mcxpending.com,SHIPPER,,"SHANGHAI WANWAY DIGITAL TECHNOLOGY CO.,LTD.
+ 5G BIG SHOT INDUSTRIAL PARK, NO.58, LANE 1188, 
+WENCHUAN ROAD, BAOSHAN DISTRICT, SHANGHAI, 
+CHINA  15089413647**",,,,,,MCX-202,
+IMPORTADORA TAVAREZ MARTINEZ SRL RNC.102613443,MCX-203,mcx-203@mcxpending.com,CONSIGNEE,8297709592,"MANZANA A, EDIFICIO 19, APARTAMENTO 1-B, VILLA OLIMPICA, SANTIAGO",,,,,,MCX-203,
+"HIKVISION PANAMA COMMERCIAL,S.A.",MCX-204,mcx-204@mcxpending.com,SHIPPER,,"HIKVISION PANAMA COMMERCIAL,S.A.   
+France Field, Calle #6, Avenida 4ta, Manzana 34,    
+Ciudad de Colon, Zona libre de Colon.",,,,,,MCX-204,
+COMPLEMENTOS LA BOUTIQUE DEL HOGAR SRL RNC. 130414203,MCX-205,mcx-205@mcxpending.com,CONSIGNEE;SHIPPER,,"SANCHEZ 124, SECTOR MIRAMAR, SAN PEDRO, REPUBLICA DOMINICANA",,,,,,MCX-205,CLIENTE NEYRA PANAMA.
+BHS ROBOTICS,MCX-206,mcx-206@mcxpending.com,SHIPPER;CONSIGNEE,630.784.0800,"865 Muirfield Dr Hanover Park. IL 60133, Hanover Park",,,,,,MCX-206,
+"APS GOLDEN GROUP CO.,LIMITED",MCX-207,mcx-207@mcxpending.com,SHIPPER,,53 Lockhart Road,,,,,,MCX-207,
+305 Logistics Cargo LLC,MCX-208,info@305logisticscargo.com,INDIVIDUAL;CONSIGNEE,+1 3057289072,"2016 Northwest 135th Avenue, Miami",,,,,,MCX-208,
+Parque Industrial Las Americas,MCX-209,mcx-209@mcxpending.com,INDIVIDUAL;CONSIGNEE,,Pacora,,,,,,MCX-209,
+MANGUERAS Y CONEXIONES,MCX-210,mcx-210@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-210,
+MONICA MAX PETS,MCX-211,mcx-211@mcxpending.com,INDIVIDUAL;CONSIGNEE,8096947492,Republica Dominicana,,,,,,MCX-211,
+ELIANA NIEME,MCX-212,mcx-212@mcxpending.com,INDIVIDUAL;CONSIGNEE,8687247161,UNIT #5 LOT #12 LABURNAM AVENUE RETIT VALLER PART OF SPAIN TRINIDAD Y TOBAGO,,,,,,MCX-212,
+LEANNY CONSUELO MESA,MCX-213,mcx-213@mcxpending.com,INDIVIDUAL;CONSIGNEE,9787716819,"59 DOUVERST APT 2 MANCHESTER NH, Z.C 03102",,,,,,MCX-213,
+CAMILA BOTARELI,MCX-214,mcx-214@mcxpending.com,INDIVIDUAL;CONSIGNEE,34608359513,"MADRID ESPAÑA PASEO DE LA CASTELLANA 193,901 CODIGO POSTAL 28046",,,,,,MCX-214,
+IMP GLOBAL LOGISTIC TRANSPORT,MCX-215,mcx-215@mcxpending.com,CARRIER;COMPANY,,"IMP GLOBAL LOGISTIC TRANSPORT
+ C/ ROBERTO PASTORIZA ESQ. MANUEL DE
+ JESUS TRONCOSO, TORRE DA VINCI, 5TO NIVEL.
+ SANTO DOMINGO, REP. DOMINICANA
+ 809-378-1027",,,,,,MCX-215,
+NINGBO LINKBASIC INTERNATIONAL TRADING CO LTD,MCX-216,mcx-216@mcxpending.com,SHIPPER,,"NINGBO LINKBASIC INTERNATIONAL TRADING CO LTD
+ C277,NO.5,ZHONGCHUANGYUAN,BINHAISI ROAD
+ NORTH,HANGZHOU BAY NEW ZONE,NINGBO,ZHEJIANG
+ PROVINCE,CHINA
+ TID                               
+TEL:1",,,,,,MCX-216,
+NOVOA FASHION,MCX-217,mcx-217@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-217,
+"CHICAGO ELECTRIC SALES, INC. FEIN:81-3013064",MCX-218,mcx-218@mcxpending.com,SHIPPER,,"490 TOWER BOULEVARD CAROL STREAM, IL 60188",,,,,,MCX-218,
+hapag-lloyd.com,MCX-219,mcx-219@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-219,
+HAPAG LLOYD,MCX-220,mcx-220@mcxpending.com,CARRIER;COMPANY,,"353 Avenida George Washington, Santo Domingo",,,RNC,,DO,MCX-220,
+CORRE AGUA,MCX-221,mcx-221@mcxpending.com,SHIPPER,,"Carretera Interamericana, Pacora",,,,,,MCX-221,
+PUNTO 21 STORE SRL. RNC.131-99048-7 .,MCX-222,mcx-222@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"AVE.CHARLES DE GAULLE,CSANTO DOMINIGO ESTE ,REPUBLICA DOMINICANA",,,,,,MCX-222,
+"COMPLEMENTOS, SRL RNC 130414203",MCX-223,mcx-223@mcxpending.com,INDIVIDUAL;CONSIGNEE,809-529-5070 / 526-6370,"CALLE SANCHEZ 124
+SAN PEDRO DE MACORIS,
+REP. DOMINICANA",,,,,,MCX-223,
+MIRIAM LIMA,MCX-224,mcx-224@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (809) 924-6506,"Avenida República de Colombia, Santo Domingo",,,RNC,,DO,MCX-224,
+DANNY CONCEPCION,MCX-225,mcx-225@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-225,
+GISELA DEL CARMEN,MCX-226,mcx-226@mcxpending.com,INDIVIDUAL;CONSIGNEE,,Santo Domingo,,,RNC,,DO,MCX-226,
+1805 Commerce Road Springfield,MCX-227,mcx-227@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"1805 Commerce Road, Springfield",,,,,,MCX-227,
+"INDUSTRIA MONACO, E.I.R.L RNC: 1-31-71890-6",MCX-228,EMAIL:industriamonaco@hotmail.com,INDIVIDUAL;CONSIGNEE,TEL: 809-7241815/ 829-621616,"CALLE 1 # 11 MAINARDI REYNA
+SANTIAGO, REP. DOMINICANA, Santiago de los Caballeros",,,RNC,,DO,MCX-228,
+EDUARDO POLANCO SRL RNC  130276218,MCX-229,mcx-229@mcxpending.com,INDIVIDUAL;CONSIGNEE,8095787280,"C/Imbert # 91 moca , República dominicana, MOCA",,,RNC,,DO,MCX-229,
+DHAYANA GUZMAN,MCX-230,mcx-230@mcxpending.com,INDIVIDUAL;CONSIGNEE,,La Vega,,,RNC,,DO,MCX-230,
+LETICIA VERAS CAPRICHOSA,MCX-231,mcx-231@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (829) 902-5143,Eden villa mella Santo Domingo norte  entrando por la gregorio Urbano gilbert suero aL lado del pica pollo el eden / Caprichosa,,,,,,MCX-231,
+BBX COURRIER SRL,MCX-233,LOGISTICA@MEDINACARGOXPRESS.COM,INDIVIDUAL;CONSIGNEE,8093789453,"Calle la Ladera, Santo Domingo",,,RNC,,DO,MCX-233,
+INGENICO,MCX-235,mcx-235@mcxpending.com,SHIPPER,,ZONA LIBRE COLON Panamá,,,,,,MCX-235,
+SERVICIOS DE TELECOMUNICACIONES TECHCOMM SRL RNC: 130351511,MCX-236,mcx-236@mcxpending.com,CONSIGNEE,,"PANTOJA SANTO DOMINGO OESTE
+REPUBLICA DOMINICANA",,,,,,MCX-236,
+"ZHEJIANG HANGCHA IMP.& EXP. CO.,LTD.",MCX-237,mcx-237@mcxpending.com,SHIPPER,TEL: 86-571-88926778,"ADD: NO.398 SHI QIAO ROAD,HANGZHOU ZHEJIANG
+PROVINCE,CHINA(310022)
+ FAX: 86-571-88926789",,,,,,MCX-237,
+EUDIMIR CORREA,MCX-238,mcx-238@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-238,
+JUANA LUISA RAMIREZ,MCX-239,mcx-239@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-239,
+ING ROBERTO HERRERA SRL,MCX-240,mcx-240@mcxpending.com,CONSIGNEE,,"RNC: 101790458
+PRESIDENTE VASQUEZ, NO. 183 ALMA ROSA I SANTO DOMINGO ESTE 
+REPUBLICA DOMINICANA",,,,,,MCX-240,
+PROMECO,MCX-241,mcx-241@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (829) 585-5519,"Calle primera # 8 los hidalgos, SANTIAGO",,,,,,MCX-241,
+TIENDA IMPORTADORA LISANDRO SRL,MCX-242,mcx-242@mcxpending.com,INDIVIDUAL;CONSIGNEE,,LICEY SANTIAGO,,,,,,MCX-242,
+JOSE MIGUEL CABRERA,MCX-243,mcx-243@mcxpending.com,CONSIGNEE,8098275761,REPUBLICA DOMINICANA,,,,,,MCX-243,
+JACQUELINE CABRERA,MCX-244,mcx-244@mcxpending.com,INDIVIDUAL;CONSIGNEE,774-712-7426,"112 BLUEFIELD ST. NEW BEDFORD, MA 02740",,,,,,MCX-244,
+ROBERTO HERNANDEZ,MCX-245,mcx-245@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"DUARTE Y JOSE MARTIN, TIENDA DESIRE FASHION.",,,,,,MCX-245,
+ARC INTERNATIONAL,MCX-246,mcx-246@mcxpending.com,INDIVIDUAL;CONSIGNEE,,Carolina del Norte 28278,,,,,,MCX-246,
+RAFAEL RAMIREZ,MCX-247,mcx-247@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-247,
+PL DOMINICANA,MCX-248,mcx-248@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-248,
+EDUARDO JORGE,MCX-249,mcx-249@mcxpending.com,INDIVIDUAL;CONSIGNEE,8299397987,AV. MONUMENTAL SANTO DOMINGO.,,,,,,MCX-249,
+P L DOMINICANA ENTERPRISE SRL RNC 131480586,MCX-250,mcx-250@mcxpending.com,INDIVIDUAL;CONSIGNEE,809-967-8862,"AVENIDA 30 MARZO 114, DON BOSCO, SANTO DOMINGO.",,,,,,MCX-250,
+EDDY MERCEDES,MCX-251,mcx-251@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,RNC,,DO,MCX-251,
+LIRANZO ENRIQUE,MCX-252,mcx-252@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,RNC,,DO,MCX-252,
+MARLENNY RAMIREZ,MCX-253,mcx-253@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,RNC,,DO,MCX-253,
+DOFEX INVERSIONES,MCX-254,mcx-254@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,RNC,,DO,MCX-254,
+MIGUEL BRITO,MCX-255,mcx-255@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,RNC,,DO,MCX-255,
+JOSE VERAS,MCX-257,mcx-257@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-257,
+N & N DRILLING SUPPLY MFR,MCX-259,mcx-259@mcxpending.com,SHIPPER,,"200 Clarkson avenue Jessup, PA 18434.
+(570) 489-6761",,,,,,MCX-259,
+NORBERTO CUEVAS,MCX-260,mcx-260@mcxpending.com,INDIVIDUAL;CONSIGNEE,1 (829) 885-3051,,,,RNC,,DO,MCX-260,
+TIENDA LA GRAN MARAVILLA EIRL,MCX-261,mcx-261@mcxpending.com,CONSIGNEE,(809) 380-1973,"Carretera Francisco del Rosario Sánchez, Baní",,,RNC,,DO,MCX-261,
+TIENDA LA MARAVILLA DAMA EIRL,MCX-262,mcx-262@mcxpending.com,CONSIGNEE,+1 (809) 846-4781,Baní,,,RNC,,DO,MCX-262,
+TIENDA LA MARAVILLITA EIRL,MCX-263,mcx-263@mcxpending.com,CONSIGNEE,(809) 522-2900,"Avenida Presidente Billini, Baní",,,RNC,,DO,MCX-263,
+RITCHIE BROS IRON PLANET,MCX-264,mcx-264@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"4000 Pine Lake Rd
+Lincoln, NE USA, 68516",,,,,,MCX-264,
+GAMATEC IMPORT INC,MCX-266,mcx-266@mcxpending.com,SHIPPER,,"Colon, Zona Libre, Manzana 48 del area Comercial de France Field, Lote No. 2 y 8, Rep. Panama Tel (s):(507), 224.8068 6949.7275 www.gamatec.com",,,,,,MCX-266,
+AIRES DOMINICANOS SRL RNC: 130045895,MCX-267,mcx-267@mcxpending.com,CONSIGNEE,,"AVE. SAN MARTIN, ESQU. DR. DELGADO SANTO DOMINGO República Dominicana (809) 686-6300",,,,,,MCX-267,
+NTN SUDAMERICANAM S.A.,MCX-268,mcx-268@mcxpending.com,SHIPPER,,ZONA LIBRE DE COLON PANAMA,,,,,,MCX-268,
+RODAMIENTOS IBERIA SRL RNC: 131-41348-1,MCX-269,mcx-269@mcxpending.com,CONSIGNEE,,"AUTOPISTA DUARTE KM. 16, NO. 31 SANTO DOMINGO OESTE República Dominicana  1 809-289-4838",,,,,,MCX-269,
+Fernández Garrido SAS RNC 101023163,MCX-270,mcx-270@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Avenida Duarte No. 75 Villa Francisca, D. N Rep. Dom Contacto: Cinthia Abreu 809.682.0519",,,,,,MCX-270,
+"BAGUTA    R.U.C. 20141 -146 - 182894 D.V.40,",MCX-271,mcx-271@mcxpending.com,SHIPPER,,"CALLE C PO. BOX 0302-00499 ZONA LIBRE DE COLON COLON, REP DE PANAMA TELEFONOS: 441-6432 - 441-2165 TEI-EFONOS: 441-0667 - 441-0778 FAX: (507) 441-6628 E-MAl L: modatex@modatexzl.com",,,,,,MCX-271,
+DISTRIBUIDORA CALUM,MCX-272,mcx-272@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-272,
+"Distribuidora Alondra, SRL RNC: 130-12096-1",MCX-273,mcx-273@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-273,
+JACKY CANTAVE ID R10035323,MCX-276,mcx-276@mcxpending.com,INDIVIDUAL;CONSIGNEE,+509 39 13 7777,CAMINO CHIQUITO ARROYO HONDO,,,RNC,,DO,MCX-276,
+American President Lines (APL),CMDU,cmdu@mcxpending.com,CARRIER,,,,,,,,CMDU,
+Arkas Line,ARKU,arku@mcxpending.com,CARRIER,,,,,,,,ARKU,
+Australia National Line (ANL),ANNU,annu@mcxpending.com,CARRIER,,,,,,,,ANNU,
+Cheng Lie Navigation Company (CNC),CMDU,cmdu@mcxpending.com,CARRIER,,,,,,,,CMDU,
+China Shipping Container Company (CSCL),COSU,cosu@mcxpending.com,CARRIER,,,,,,,,COSU,
+CK Line,CKLU,cklu@mcxpending.com,CARRIER,,,,,,,,CKLU,
+CMA-CGM,CMDU,cmdu@mcxpending.com,CARRIER,,,,,,,,CMDU,
+Compagnia Chilena de Navigacion Interoceanica SA (CCNI),SUDU,sudu@mcxpending.com,CARRIER,,,,,,,,SUDU,
+Compania Sud Americana de Vapores (CSAV),HLCU,hlcu@mcxpending.com,CARRIER,,,,,,,,HLCU,
+Containerships,CMDU,cmdu@mcxpending.com,CARRIER,,,,,,,,CMDU,
+COSCO,COSU,cosu@mcxpending.com,CARRIER,,,,,,,,COSU,
+Crowley,CMCU,cmcu@mcxpending.com,CARRIER,,,,,,,,CMCU,
+Dongjin,DJLU,djlu@mcxpending.com,CARRIER,,,,,,,,DJLU,
+Evergreen,EGLV,eglv@mcxpending.com,CARRIER,,,,,,,,EGLV,
+Hamburg-Süd,SUDU,sudu@mcxpending.com,CARRIER,,,,,,,,SUDU,
+Hapag-Lloyd,HLCU,hlcu@mcxpending.com,CARRIER,,,,,,,,HLCU,
+Heung-A Shipping,HASL,hasl@mcxpending.com,CARRIER,,,,,,,,HASL,
+Hyundai Merchant Marine (HMM),HDMU,hdmu@mcxpending.com,CARRIER,,,,,,,,HDMU,
+Kawasaki Kisen Kaisha (K Line),ONEY,oney@mcxpending.com,CARRIER,,,,,,,,ONEY,
+Korea Marine Transport (KMTC),KMTU,kmtu@mcxpending.com,CARRIER,,,,,,,,KMTU,
+MacAndrews,CMDU,cmdu@mcxpending.com,CARRIER,,,,,,,,CMDU,
+Maersk,MAEU,maeu@mcxpending.com,CARRIER,,,,,,,,MAEU,
+Matson,MATS,mats@mcxpending.com,CARRIER,,,,,,,,MATS,
+MCC Transport,MAEU,maeu@mcxpending.com,CARRIER,,,,,,,,MAEU,
+Mitsui O.S.K. Lines (MOL),ONEY,oney@mcxpending.com,CARRIER,,,,,,,,ONEY,
+Namsung,NSRU,nsru@mcxpending.com,CARRIER,,,,,,,,NSRU,
+Nile Dutch Africa Line,HLCU,hlcu@mcxpending.com,CARRIER,,,,,,,,HLCU,
+Nippon Yusen Kaisha (NYK Line),ONEY,oney@mcxpending.com,CARRIER,,,,,,,,ONEY,
+Ocean Network Express (ONE),ONEY,oney@mcxpending.com,CARRIER,,,,,,,,ONEY,
+Oldenburg-Portugiesische Dampfschiffs-Rheederei (OPDR),CMDU,cmdu@mcxpending.com,CARRIER,,,,,,,,CMDU,
+Pacific International Line,PCIU,pciu@mcxpending.com,CARRIER,,,,,,,,PCIU,
+Regional Container Lines (RCL),RCLU,rclu@mcxpending.com,CARRIER,,,,,,,,RCLU,
+Safmarine,SAFM,safm@mcxpending.com,CARRIER,,,,,,,,SAFM,
+Seago Line,MAEU,maeu@mcxpending.com,CARRIER,,,,,,,,MAEU,
+Sealand,SEAU,seau@mcxpending.com,CARRIER,,,,,,,,SEAU,
+Sinokor,SNKO,snko@mcxpending.com,CARRIER,,,,,,,,SNKO,
+Sinotrans,STRS,strs@mcxpending.com,CARRIER,,,,,,,,STRS,
+SITC,SITC,sitc@mcxpending.com,CARRIER,,,,,,,,SITC,
+SM Line (SML),SMLM,smlm@mcxpending.com,CARRIER,,,,,,,,SMLM,
+TS Line,TSTU,tstu@mcxpending.com,CARRIER,,,,,,,,TSTU,
+United Arab Shipping Company (UASC),HLCU,hlcu@mcxpending.com,CARRIER,,,,,,,,HLCU,
+W.E.C. (West European Container) Lines,WECU,wecu@mcxpending.com,CARRIER,,,,,,,,WECU,
+Wan Hai,WHLC,whlc@mcxpending.com,CARRIER,,,,,,,,WHLC,
+Westwood Shipping Lines,WWSU,wwsu@mcxpending.com,CARRIER,,,,,,,,WWSU,
+Yang Ming,YMLU,ymlu@mcxpending.com,CARRIER,,,,,,,,YMLU,
+ZIM,ZIMU,zimu@mcxpending.com,CARRIER,,,,,,,,ZIMU,
+Atlantic Container Line,ACLU,aclu@mcxpending.com,CARRIER,,,,,,,,ACLU,
+Cartonesa Sa de CV,MCX-323,mcx-323@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Km 28 Carretera a Santa Ana
+San Juan Opico, La Libertad
+El Salvador",,,,,,MCX-323,
+"ALMACENES SANTIAGO, C . POR A. RNC: 102-00598-2",MCX-324,ALMACENESSANTIAGO97@YAHOO.COM,INDIVIDUAL;CONSIGNEE,8095823470,"Del sol No 97 Santiago, Rep . Dominicana",,,,,,MCX-324,
+M RODRIGUEZ & CO SRL RNC 102-00099-9,MCX-325,mcx-325@mcxpending.com,INDIVIDUAL;CONSIGNEE,8092247042 / 8095824044,"C/ DEL SOL #93, SANTIAGO, REPUBLICA DOMINICANA",,,RNC,,DO,MCX-325,
+DANIEL GARCIA,MCX-326,mcx-326@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-326,
+Aura Confecciones Rnc 131 941631,MCX-327,mcx-327@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-327,
+Westrock,MCX-328,mcx-328@mcxpending.com,INDIVIDUAL;CONSIGNEE,1.201.852.8355,"8440 Tewantin Dr, 
+Houston, TX 77061 
+John Bohorquez",,,,,,MCX-328,
+LUCIEN LOVE,MCX-329,expertaenfiscalizacion@gmail.com,CONSIGNEE,18294582920,,,,,,,MCX-329,
+YLSIA SANTIAGO,MCX-331,mcx-331@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (849) 884-3720,"Cercano al estadio cibao, Santiago.",,,RNC,,DO,MCX-331,
+GMAX MOBILE RD SRL RNC.132162811,MCX-332,mcx-332@mcxpending.com,INDIVIDUAL;CONSIGNEE,8493566555,"CALLE JOSE MARTI, DUARTE, SANTO DOMINGO., santo domingo",,,RNC,,DO,MCX-332,
+HM COMERCIAL,MCX-333,mcx-333@mcxpending.com,INDIVIDUAL;CONSIGNEE,(809) 593-0047,"Av Pdte E Ureña 47 Sd, santo domingo ,Republica Dominicana",,,,,,MCX-333,
+CAZA Y ASOCIADOS S.A RNC 112107108.,MCX-334,mcx-334@mcxpending.com,CONSIGNEE,,"6 Gaspar Hernandez  
+Higüey, La Altagracia 23000
+DOMINICAN REPUBLIC
+ Tel.: 829-883-8042",,,,,,MCX-334,
+MONITO SRL RNC. 133261839,MCX-335,mcx-335@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"AUTOPISTA LAS AMERICAS KM 25, #30, LA CALETA, BOCA CHICA, SANTO DOMINGO.",,,,,,MCX-335,
+EMPRESA DE PRUEBA,MCX-1000,INFO@555.COM,CONSIGNEE;COMPANY;CARRIER;SHIPPER,809-555-5555,"Juan Puablo Duerte # 1, Santo domingo",,,RNC,,DO,MCX-1000,Esta empresa no es real
+"Qingdao PNTEK Machinery Co.,Ltd",MCX-339,mcx-339@mcxpending.com,INDIVIDUAL;CONSIGNEE,0086-18366260007,"6-8 BUILDING, NO.948 DONGXIN ROAD, GONGSHU DISTRICT, HANGZHOU CITY, 310022, CN",,,,,,MCX-339,
+PL DOMINICANA,MCX-340,mcx-340@mcxpending.com,CONSIGNEE,,"PL DOMINICANA RNC 131480586
+AVENIDA 30 MARZO 114, DON BOSCO, SANTO DOMINGO.
+ 809-967-8862",,,,,,MCX-340,
+CAPRICE TU ESTILO ERIL,MCX-341,mcx-341@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"C/  El CARMEN ESQ  RESTAURACION 49
+Santo Domingo Este
+Santo Domingo
+RNC 130648026",,,,,,MCX-341,
+ENGEL ROPA CASUAL SRL Rnc 131415921.,MCX-343,mcx-343@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Avenida José Ortega y Gasset esquina 34/A, Local número 15, Cristo Rey Santo Domingo",,,,,,MCX-343,
+LUIS ADUANERO NEYRA,MCX-344,mcx-344@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-344,
+CAIYANXIE,MCX-345,mcx-345@mcxpending.com,INDIVIDUAL;CONSIGNEE,,VILLA CONSUELO,,,,,,MCX-345,
+SADOTEL,MCX-346,OSOLIS@SADOTEL.COM,INDIVIDUAL;CONSIGNEE,+1(829)715-0279,"ADDRESS: F2W6+GCF, SANTO DOMINGO, DOMINICAN REPUBLIC
+PHONE: +1(829)715-0279
+EMAIL: OSOLIS@SADOTEL.COM",,,,,,MCX-346,
+"SHANGHAI WARNER TELECOM CO.,LTD",MCX-347,mcx-347@mcxpending.com,SHIPPER,,"ADD: BUILDING38, ORIENTAL WISDOM VALLEY INDUSTRIAL 
+PARK,NO2999 BAO'AN RD, SHANGHAI, CHINA.
+PH.: +86 19121505247",,,,,,MCX-347,
+"INTERNATIONAL DONGCHEN SRL , RNC 132310608",MCX-348,mcx-348@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"AUT. Duarte km 12 , Santo Domingo",,,,,,MCX-348,
+Kennedy Structures Gorporation,MCX-349,mcx-349@mcxpending.com,SHIPPER,507 439-3186,"Kennedy Structures Gorporation
+Cl. 15 & Ave. Sta. lsabel, Edif. Kennedy Cenler
+Zona libre de Colon, P.O. Box 0302-00737 Z.L
+Colón, Rep. de Panamá",,,,,,MCX-349,
+KR COMPANY,MCX-350,mcx-350@mcxpending.com,SHIPPER,,"KR COMPANY 
+Zona Libre de Colón
+Zona Libre de Colón, Rep de Panamá",,,,,,MCX-350,
+NEGOCIOS UNIVERSALES,MCX-351,mcx-351@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-351,
+ANGELICA YINET,MCX-352,mcx-352@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-352,
+"YANNIS CLAVEL SORIANO BAUTISTA  00113707145,",MCX-353,mcx-353@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"CALLE FRANCISCO DEL ROSARIO SANCHEZ 6A , LA CALETA , REPUBLICA DOMINICANA",,,,,,MCX-353,
+MAROLA ANDREINA CASTILLO,MCX-354,mcx-354@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-354,
+CHINA LOGISTICS DR,MCX-355,INFO@CHINALOGISTICSDR.COM,SHIPPER,,Cantón,,,,,,MCX-355,
+DETALLES LI DECORACIONES Y ALGO MAS SRL RNC 132-21066-2,MCX-356,mcx-356@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (809) 973-8885,"11 Calle Primera, Santo Domingo",,,RNC,,DO,MCX-356,
+YANIBELIS CONTRERAS,MCX-357,mcx-357@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-357,
+ORIENT OVERSEAS CONTAINER LINE,MCX-358,mcx-358@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-358,
+ROMPOL SERVICES SRL 133-19987-4,MCX-359,Rompolservices@gmail.com,CONSIGNEE,8096029006,"Calle martin López, Santo Domingo",,,RNC,,DO,MCX-359,
+IMPORTADORA REGALADO RNC 130197997,MCX-361,mcx-361@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"CALLE JOSE MARTI 132, ENTRE LA 27 DE FEBRERO Y ANA VALVERDE VILLA MARIA STO DGO, REP. DOM.",,,,,,MCX-361,
+RODRIGUEZ Y ASOCIADOS,MCX-362,mcx-362@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-362,
+IMPORTLAND SRL RNC 130708029,MCX-363,mcx-363@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"CALLE HERMANAS MIRABAL NO. 13, SANTO DOMINGO, REPÚBLICA DOMINICANA",,,,,,MCX-363,
+"Goettsch International, Inc.",MCX-364,greta@goettsch.com,INDIVIDUAL;CONSIGNEE,1513-588-3189,"4824 Socialville-Foster Road, Mason",,,,,,MCX-364,
+CAL GUATEMALA // GTS GUATEMALA,MCX-367,mcx-367@mcxpending.com,CONSIGNEE,,"GTS GUATEMALA
+AVENIDA LAS AMERICAS 9-55, ZONA 14
+LOCAL 10 PLAZA ORO
+CIUDAD GUATEMALA, GUATEMALA
+NIT 120252031",,,,,,MCX-367,
+INV AGAJE,MCX-369,mcx-369@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-369,
+PLAZA CALVO,MCX-370,mcx-370@mcxpending.com,INDIVIDUAL;CONSIGNEE,8098868125,,,,,,,MCX-370,
+YANIRIS CLAVEL SORIANO BATISTA,MCX-373,mcx-373@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-373,
+YIWU LIANXA TRADING FIRM,MCX-374,mcx-374@mcxpending.com,INDIVIDUAL;CONSIGNEE,13302228381,,,,,,,MCX-374,
+LIA,MCX-376,mcx-376@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-376,
+"Heredia 3220, B1872 Sarandí, Provincia de Buenos Aires, Argentina",MCX-377,mcx-377@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-377,
+HARRIS AMERICAN,MCX-378,mcx-378@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"800 E CENTER ST. BELLEVUE, OHIO 44811",,,,,,MCX-378,
+BHS Robotics Inc.,MCX-379,mcx-379@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"865 Muirfield Drive Hanover Park, IL 60133, USA.",,,,,,MCX-379,
+123 N CLINTON ST >BALTIMORE MD. 21224,MCX-380,mcx-380@mcxpending.com,INDIVIDUAL;CONSIGNEE,,Direccion : 123 N CLINTON ST >BALTIMORE MD. 21224,,,,,,MCX-380,
+"Jiangsu Yuanrui Digital Technology Co.,Ltd",MCX-381,mcx-381@mcxpending.com,INDIVIDUAL;CONSIGNEE,18994608710,"No. 77, Taisheng Road, Hailing District, Taizhou City, Jiangsu Province, China, china",,,,,,MCX-381,
+"Camaiore, 27/28, 55064 Monsagrati LU, Italia",MCX-383,mcx-383@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Camaiore, 27/28, 55064 Monsagrati LU, Italia",,,,,,MCX-383,
+"MENTE URBANA SRL 	130-32697-5",MCX-384,mcx-384@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"EDICIÓN DE PERIÓDICOS, REVISTAS Y PUBLICACIONES PERIÓDICAS, ADM LOCAL ABRAHAM LINCOLN",,,,,,MCX-384,
+MAMALIA SRL RNC 133143951,MCX-385,mcx-385@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"27 de Febrero, casi Esq. Duarte, No. 137
+Tel.: 829-882-2773",,,,,,MCX-385,
+JOSE GABRIEL FRANCISCO,MCX-386,mcx-386@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-386,
+BHS CORRUGATED,MCX-387,mcx-387@mcxpending.com,INDIVIDUAL;CONSIGNEE,,TENNESSE 37932,,,,,,MCX-387,
+PRINSUR S.R.L.,MCX-388,mcx-388@mcxpending.com,SHIPPER,,"CUIT 30-71134528-7
+RUTA 6, KM 96.7 - CAÑUELAS PCIA BS AS ARGENTINA",,,,,,MCX-388,
+APLIQUES RD SRL 132-77881-2,MCX-389,mcx-389@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"Av. Rómulo Betancourt 316, Plaza Nicole, local 203., Santo Domingo",,,RNC,,DO,MCX-389,
+"RECINTO CCFS, AVENIDA RANDOLPH, MANZANA 1, LOTES 16A y 16B, COCO SOLO, COLÓN, REPÚBLICA DE PANAMÁ.",MCX-390,mcx-390@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-390,
+STERLING PACKAGING,MCX-391,mcx-391@mcxpending.com,CONSIGNEE,,"19 Bell Road, Kingston",,,,,,MCX-391,
+Smurfit Westrock Puerto Rico,MCX-392,mcx-392@mcxpending.com,INDIVIDUAL;CONSIGNEE,787.792.7800,,,,,,,MCX-392,
+WERK INDUSTRIAL S.A RUC: 155664281-2-2018,MCX-393,mcx-393@mcxpending.com,SHIPPER,507 6380-3916,"RECINTO CCFS, AVENIDA RANDOLPH, MANZANA 1, LOTES 16A & 16B, COCO SOLO, COLÓN, REPÚBLICA DE PANAMÁ.",,,,,,MCX-393,
+CAPITAL PACIFICO,MCX-394,mcx-394@mcxpending.com,COMPANY,,,,,,,,MCX-394,
+ANTILLEAN MARINE,MCX-395,mcx-395@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-395,
+SOLER & TAVERAS CONSTRUCTORA SRL.  RNC 133206872,MCX-396,solertaverasconstructora@gmail.com,INDIVIDUAL;CONSIGNEE,1 (829) 603-0718,,,,RNC,,DO,MCX-396,
+"Quantum Corrugated at Via Lecco 72, 20871 Vimercate (MB), and ThinkQuantum srl at Via Della Tecnica 85, 36030 Sarcedo Vicenza, Italy",MCX-397,mcx-397@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-397,
+"GUANGDONG GETO NEW MATERIALS TECH CO., LTD",MCX-398,mcx-398@mcxpending.com,INDIVIDUAL;CONSIGNEE,0086-794-3637899,,,,,,,MCX-398,
+ESTILO URBANO,MCX-399,mcx-399@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-399,
+DAYHANA GUZMAN,MCX-400,mcx-400@mcxpending.com,CONSIGNEE,,,,,,,,MCX-400,
+LUCERITO,MCX-401,mcx-401@mcxpending.com,CONSIGNEE,,,,,,,,MCX-401,
+Tank Holding Corp/Snyder Industries,MCX-402,mcx-402@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"736  Birginal Drive Bensenville,  IL 60106",,,,,,MCX-402,
+"JIANGSU LECAI PRINTING MATERIAL CO.,LTD.",MCX-403,mcx-403@mcxpending.com,SHIPPER,,"WEST INDUSTRIAL ZONE,TAIHU ROAD,
+HUZHUANG TOWN,GAOGANG CHINA",,,,,,MCX-403,
+Embarko Logistic,MCX-404,mcx-404@mcxpending.com,COMPANY;CONSIGNEE,5.93969E+11,"Vía a Daule Km 14 1/2, Guayaquil",,,,,,MCX-404,
+LCN DANIEL LOPEZ IRIBARNE,MCX-405,mcx-405@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-405,
+PATRICIA SANTOS,MCX-406,mcx-406@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-406,
+"HONG KONG GUANGCHI TRADING CO., LTD",MCX-407,mcx-407@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-407,
+CARLOS HERNANDEZ,MCX-408,c.hernandez@msard.com.do,INDIVIDUAL;CONSIGNEE,+1 (829) 383-7704,,,,,,,MCX-408,
+RICHIE BROS,MCX-409,mcx-409@mcxpending.com,SHIPPER,,"4000 Pine Lake Rd
+ Lincoln, NE 68516, USA
+ Phone: (800) 211-3983
+ Fax: (833) 675-0619
+ www.ironplanet.com",,,,,,MCX-409,
+FEDDEX,MCX-410,mcx-410@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-410,
+FEDEX,MCX-411,mcx-411@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-411,
+FEDEX,MCX-412,mcx-412@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-412,
+Logistics Cargo Solution,MCX-413,mcx-413@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"1926 NW 135th Ave Miami FL, 33182 305.728.9072",,,,,,MCX-413,
+R&P PROVISOLUCIONES  RNC 131313592,MCX-414,rypprovisoluciones@gmail.com,INDIVIDUAL;CONSIGNEE,8095394591,"Calle Miguel Ángel Buonarroti, Santo Domingo",,,,,,MCX-414,
+RONALD ROSIL,MCX-417,mcx-417@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-417,
+YOBANNY BALISAN YIAN,MCX-418,mcx-418@mcxpending.com,CONSIGNEE,,,,,,,,MCX-418,
+ANTONIO FELICIANO CASTILLO FRIAS,MCX-420,Castillo110611@gmail.com,CONSIGNEE;INDIVIDUAL,8099031858,"5 Carretera Bayaguana - Monte Plata, Monte Plata",,,,,,MCX-420,
+CASA ANNY SRL  RNC: 133-32774-2,MCX-421,mcx-421@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"AVENIDA DUARTE #70, SANTO DOMINGO REPUBLICA DOMINICANA.",,,,,,MCX-421,
+DIMALBA IMPORT SRL RNC 130140421,MCX-422,bastardofausto@dimalba.com,INDIVIDUAL;CONSIGNEE,1 (809) 399-0778,"Ave. Mexico edif. 33. San Carlos, SANTO  DOMINGO",,,,,,MCX-422,
+"XIAMEN YOULAN TRADING CO.,LTD  UNIT ONE NO20.HEXIANGXI ROAD SIMING  DISTRICT XIAMEN CHINA",MCX-423,mcx-423@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-423,
+PLAZA LAMA RNC:  101-17111-1,MCX-424,importaciones@plazalama.com,INDIVIDUAL;CONSIGNEE,8092745262,"Av. 27 de Febrero No, 302.",,,RNC,,DO,MCX-424,
+"APOLO ZONA LIBRE, S.A",MCX-425,mcx-425@mcxpending.com,SHIPPER,,"Apolo Zona Libre, S.A.
+R.U.C 32134-16-246386 DV 77
+Clave: 2753
+Tel.: (507)474-7200
+email: info@apolo.com",,,,,,MCX-425,
+"FRAM JUAN  FRAM JUAN  ROOM 205, NO. 1,  280 ZHENYE ROAD, , SONGJIANG DISTRICT  SHANGHAI  201619",MCX-426,mcx-426@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-426,
+LIRIO DE PLATA IMPORT SRL,MCX-427,liriodeplata1124@gmail.com,INDIVIDUAL;CONSIGNEE,8093775474,"27 de febrero casi esquina juna salti topa., SANTO DOMINGO",,,RNC,,DO,MCX-427,
+"MERCHANT DOMINICANA SRL  AV. INDEPENDENCIA, ESQ WINS, ESTACION CENTRO DE LOS  HEROES, SANTO DOMINGO RD  Distrito Nacional, Santo Domingo  DOMINICAN REPUBLIC",MCX-428,mcx-428@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-428,
+MARIA JOSEFA FLORIAN,MCX-429,josefinaflorian@gmail.com,INDIVIDUAL;CONSIGNEE,829-341-5053,"10 Calle Padre Billini, Barahona",,,RNC,,DO,MCX-429,
+GRANITO DE ARENA IMPORT SRL 131896707,MCX-430,mcx-430@mcxpending.com,INDIVIDUAL;CONSIGNEE,,LOCAL 49,,,,,,MCX-430,
+RENY NICOLE VAZQUEZ ROSARIO 40208985784,MCX-431,mcx-431@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-431,
+ALMACÉN TIRUÑA,MCX-433,mcx-433@mcxpending.com,INDIVIDUAL;CONSIGNEE,Tel.: +34 948 355 108,"Pol. Ind. Ampl. Comarca 1, C/L nº 2
+31160 Orcoyen - Navarra, España",,,,,,MCX-433,
+DAISY DE LEON,MCX-436,mcx-436@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (809) 696-1882,"Villa consuelo,manuela diaz calle  jose martin Duarte., SANTO DOMIGO",,,,,,MCX-436,
+DAISY DE LEON,MCX-437,mcx-437@mcxpending.com,CONSIGNEE,+1 (809) 696-1882,"CEDULA 00109241604
+Villa consuelo, esq.Manuela Diaz, calle Jose Martin,Duarte., Santo Domingo",,,,,,MCX-437,
+EASY DOMINICANA AUTO ADORNOS EIRL,MCX-438,mcx-438@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"CALLE EL VERGEL #46, ESQ ORTEGA Y GASSET, ENS EL VERGEL",,,,,,MCX-438,
+KAREN PEÑA,MCX-439,mcx-439@mcxpending.com,INDIVIDUAL;CONSIGNEE,1 (809) 453-5183,"Santiago de los caballeros
+Santo Domingo
+REPUBLICA DOMINICANA",,,,,,MCX-439,
+IND DEL YAQUE,MCX-440,mcx-440@mcxpending.com,INDIVIDUAL;CONSIGNEE,+1 (829) 904-6602,"SANTIAGO - REPUBLICA DOMINICANA
+CIRCUNVALACION #419",,,,,,MCX-440,
+ROGAQUMASA SRL (CENTROMODA) RNC: 1-01-11532-7,MCX-441,mcx-441@mcxpending.com,INDIVIDUAL;CONSIGNEE,tel. 8096898393,Av Duarte 69 Santo Domingo,,,,,,MCX-441,
+GMAX MOBILE PLAZA SRL RNC 132603567,MCX-442,gmaxmobilerd@gmail.com,INDIVIDUAL;CONSIGNEE,,"AV. 27 DE FEBRERO ESQ. WINSTON CHURCHILL, PLAZA CENTRAL, LOCAL B, NO. 208- A4",,,,,,MCX-442,
+KENIA REYES,MCX-449,mcx-449@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-449,
+CHENG XIANG 32/251212,MCX-450,mcx-450@mcxpending.com,CARRIER;COMPANY,,,,,,,,MCX-450,
+Gildan Honduras Properties S. de R.L,MCX-451,mcx-451@mcxpending.com,CONSIGNEE,,CHOLOMA,,,,,,MCX-451,
+"Anhui Strong State New Materials Co., Ltd.",MCX-452,lynne@shqiangbang.com,SHIPPER,8.61573E+12,"37 Peng Ju Lu, Xuan Cheng Shi",,,,,,MCX-452,
+"ALHU INTERNATIONAL, INC. 7362 REMCON CIRCLE EL PASO",MCX-453,mcx-453@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-453,
+AMAURY MEDINA,MCX-456,mcx-456@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-456,
+EL PUENTE COMERCIAL,MCX-461,mcx-461@mcxpending.com,INDIVIDUAL;CONSIGNEE,1 (829) 343-5722,"111 Avenida Santiago Tamboril, Santiago de los Caballeros",,,RNC,,DO,MCX-461,
+ATLANTIC LOGISTICS COMPANY   RTN 05069022365715,MCX-462,mcx-462@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"S DE RL BO EL CENTRO 3 CLL 5 Y 6 AVE EDIFICIO HELEODORA NIVEL 1 LOCAL 5 PUERTO CORTES, HONDURASS DE RL BO EL CENTRO 3 CLL 5 Y 6 AVE EDIFICIO HELEODORA NIVEL 1 LOCAL 5 PUERTO CORTES, HONDURAS",,,,,,MCX-462,
+DONALDO  ANTONIO MEJIA TORRES,MCX-463,doamejia@gildan.com,INDIVIDUAL;CONSIGNEE,50497088503,GILDA HONDURAS,,,,,,MCX-463,
+ENGELS ROPA CASUAL SRL RNC 131-41592-1,MCX-464,engelsropacasual@hormail.com,INDIVIDUAL;CONSIGNEE,809-563-3189,"Avenida José Ortega y Gasset, Santo Domingo",,,,,,MCX-464,
+POWER FIX,MCX-465,mcx-465@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-465,
+SPOTMOD,MCX-466,mcx-466@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-466,
+CASA DE LA MOTOCIERA,MCX-467,mcx-467@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-467,
+CASA DE LA MOTOCIERRA,MCX-468,mcx-468@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-468,
+LOUIS MENDRICK  PASAPORTE 0059321067,MCX-469,mcx-469@mcxpending.com,INDIVIDUAL;CONSIGNEE,8094882002,"Avenida República de Colombia, Santo Domingo",,,RNC,,DO,MCX-469,
+"CHANGZHOU AUTOKINRAY CO.,LTD",MCX-470,mcx-470@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-470,
+PORADEL DISTRIBUIDORA SRL RNC: 130-30619-2,MCX-471,mcx-471@mcxpending.com,CONSIGNEE,+1 809-806-2099,CALLE VDA. MARIA DE LA CRUZ NO. 340 SANTO DOMINGO República Dominicana +1 809-806-2099,,,,,,MCX-471,
+KQM OPTICOS,MCX-472,mcx-472@mcxpending.com,SHIPPER,,"ZONA LIBRE COLON PANAMA
+Panamá",,,,,,MCX-472,
+M ABBOTT GESTIONES SRL RNC: 131562035,MCX-473,mcx-473@mcxpending.com,INDIVIDUAL;CONSIGNEE,,"CALLE PROF. FEDERICO IZQUIERDO
+SANTIAGO
+República Dominicana
++1 809-806-2099",,,,,,MCX-473,
+GOLDEN BABY,MCX-474,mcx-474@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-474,
+ROLLOS DE HILO LAYNO,MCX-476,mcx-476@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-476,
+712 N. Iowa St,MCX-478,mcx-478@mcxpending.com,INDIVIDUAL;CONSIGNEE,,,,,,,,MCX-478,
