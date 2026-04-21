@@ -120,7 +120,9 @@
     "SEARCH": "Buscar por referencia, BL, declaración, RNC o cliente",
     "ALL_TRANSPORT_MODES": "Todos los modos de transporte",
     "WAREHOUSE": "Almacén",
-    "SELECT_WAREHOUSE": "Buscar almacén por código o nombre..."
+    "SELECT_WAREHOUSE": "Buscar almacén por código o nombre...",
+    "PARTNER_LABEL": "Socio",
+    "PARTNER_PLACEHOLDER": "— Seleccionar socio —"
   },
   "DOCUMENTS": {
     "TITLE": "Documentos",
@@ -1099,7 +1101,8 @@
     "ACCOUNT_CODE_ALREADY_EXISTS": "Ya existe una cuenta con este código.",
     "ACCOUNT_NOT_SOCIO": "La cuenta no es de tipo SOCIO",
     "PARTNER_ALREADY_EXISTS": "Esta cuenta ya está asociada",
-    "PARTNER_SELF_REFERENCE": "Una cuenta no puede ser su propio socio"
+    "PARTNER_SELF_REFERENCE": "Una cuenta no puede ser su propio socio",
+    "PARTNER_NOT_ASSOCIATED": "El socio seleccionado no está asociado a esta cuenta"
   },
   "API_KEYS": {
     "TITLE": "Claves API",

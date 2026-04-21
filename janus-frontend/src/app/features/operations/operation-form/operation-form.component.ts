@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
@@ -57,6 +57,22 @@ import { StatusLabelPipe } from '../../../shared/pipes/status-label.pipe';
                 </div>
               }
             </div>
+            <div class="col-md-6">
+              <!-- Partner (optional) -->
+              @if (availablePartners().length > 0) {
+                <div class="mb-3">
+                  <label for="partnerId" class="form-label">{{ 'OPERATIONS.PARTNER_LABEL' | translate }}</label>
+                  <select id="partnerId" class="form-select" formControlName="partnerId">
+                    <option value="">{{ 'OPERATIONS.PARTNER_PLACEHOLDER' | translate }}</option>
+                    @for (partner of availablePartners(); track partner.id) {
+                      <option [value]="partner.id">{{ partner.name }}</option>
+                    }
+                  </select>
+                </div>
+              }
+            </div>
+          </div>
+          <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">{{ 'OPERATIONS.OPERATION_TYPE' | translate }} <span class="text-danger">*</span></label>
               <select class="form-select" formControlName="operationType"
@@ -246,6 +262,7 @@ export class OperationFormComponent implements OnInit {
   isEdit = signal(false);
   operationId: number | null = null;
   selectedAccount = signal<Account | null>(null);
+  availablePartners = computed(() => this.selectedAccount()?.partnerAccounts ?? []);
   selectedAccountDisplay = signal('');
   accountLocked = signal(false);
   warehouses = signal<BondedWarehouse[]>([]);
@@ -279,7 +296,8 @@ export class OperationFormComponent implements OnInit {
     incoterm: new FormControl('', { nonNullable: true }),
     arrivalPortId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     originPortId: new FormControl('', { nonNullable: true }),
-    warehouseId: new FormControl('', { nonNullable: true })
+    warehouseId: new FormControl('', { nonNullable: true }),
+    partnerId: new FormControl('', { nonNullable: true })
   });
 
   searchAccount: OperatorFunction<string, Account[]> = (text$: Observable<string>) =>
@@ -339,12 +357,14 @@ export class OperationFormComponent implements OnInit {
     this.selectedAccount.set(account);
     this.selectedAccountDisplay.set(account.name);
     this.form.get('accountId')!.setValue(account.id.toString());
+    this.form.get('partnerId')!.setValue('');
   }
 
   clearAccount(): void {
     this.selectedAccount.set(null);
     this.selectedAccountDisplay.set('');
     this.form.get('accountId')!.setValue('');
+    this.form.get('partnerId')!.setValue('');
   }
 
   ngOnInit(): void {
@@ -402,7 +422,8 @@ export class OperationFormComponent implements OnInit {
           incoterm: op.incoterm ?? '',
           arrivalPortId: op.arrivalPortId?.toString() ?? '',
           originPortId: op.originPortId?.toString() ?? '',
-          warehouseId: op.warehouseId?.toString() ?? ''
+          warehouseId: op.warehouseId?.toString() ?? '',
+          partnerId: op.partnerId?.toString() ?? ''
         });
         // Disable BL Availability when operation is at or past VALUATION_REVIEW
         if (this.blAvailabilityLockedStatuses.has(op.status)) {
@@ -499,7 +520,8 @@ export class OperationFormComponent implements OnInit {
       incoterm: val.incoterm || undefined,
       arrivalPortId: val.arrivalPortId ? +val.arrivalPortId : undefined,
       originPortId: val.originPortId ? +val.originPortId : undefined,
-      warehouseId: val.warehouseId ? +val.warehouseId : undefined
+      warehouseId: val.warehouseId ? +val.warehouseId : undefined,
+      partnerId: val.partnerId ? +val.partnerId : undefined
     };
     const obs = this.isEdit() ? this.operationService.update(this.operationId!, request) : this.operationService.create(request);
     obs.subscribe(op => this.router.navigate(['/operations', op.id]));

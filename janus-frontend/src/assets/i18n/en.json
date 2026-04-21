@@ -120,7 +120,9 @@
     "SEARCH": "Search by reference, BL, declaration, RNC or customer",
     "ALL_TRANSPORT_MODES": "All transport modes",
     "WAREHOUSE": "Warehouse",
-    "SELECT_WAREHOUSE": "Search warehouse by code or name..."
+    "SELECT_WAREHOUSE": "Search warehouse by code or name...",
+    "PARTNER_LABEL": "Partner",
+    "PARTNER_PLACEHOLDER": "— Select a partner —"
   },
   "DOCUMENTS": {
     "TITLE": "Documents",
@@ -1124,7 +1126,8 @@
     "ACCOUNT_CODE_ALREADY_EXISTS": "An account with this code already exists.",
     "ACCOUNT_NOT_SOCIO": "The account is not of type SOCIO",
     "PARTNER_ALREADY_EXISTS": "This account is already associated",
-    "PARTNER_SELF_REFERENCE": "An account cannot be its own partner"
+    "PARTNER_SELF_REFERENCE": "An account cannot be its own partner",
+    "PARTNER_NOT_ASSOCIATED": "The selected partner is not associated with this account"
   },
   "API_KEYS": {
     "TITLE": "API Keys",

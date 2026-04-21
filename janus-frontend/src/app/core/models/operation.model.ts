@@ -89,6 +89,8 @@ export interface Operation {
   warehouseId?: number | null;
   warehouseCode?: string | null;
   warehouseName?: string | null;
+  partnerId: number | null;
+  partnerName: string | null;
   createdAt: string;
   updatedAt: string;
   pieces?: number | null;
