@@ -8,6 +8,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-janus}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - janus-internal
 
@@ -24,12 +29,13 @@ services:
       CORS_ORIGINS: ${CORS_ORIGINS}
       FRONTEND_URL: ${FRONTEND_URL}
       EXTERNAL_API_KEY: ${EXTERNAL_API_KEY}
-      BILLFLOW_URL: ${BILLFLOW_URL:-http://localhost:8081}
+      BILLFLOW_URL: ${BILLFLOW_URL}
       BILLFLOW_API_KEY: ${BILLFLOW_API_KEY}
     volumes:
       - backend_storage:/deployments/storage
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - janus-internal
       - npm-proxy
