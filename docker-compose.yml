@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: janusdb
+      POSTGRES_USER: ${DB_USERNAME:-janus}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - janus-internal
+
+  janus-backend:
+    image: ghcr.io/franmen/janus-backend:latest
+    restart: unless-stopped
+    environment:
+      DB_USERNAME: ${DB_USERNAME:-janus}
+      DB_PASSWORD: ${DB_PASSWORD}
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      FRONTEND_URL: ${FRONTEND_URL}
+      EXTERNAL_API_KEY: ${EXTERNAL_API_KEY}
+      BILLFLOW_URL: ${BILLFLOW_URL:-http://localhost:8081}
+      BILLFLOW_API_KEY: ${BILLFLOW_API_KEY}
+    volumes:
+      - backend_storage:/deployments/storage
+    depends_on:
+      - postgres
+    networks:
+      - janus-internal
+      - npm-proxy
+
+  janus-frontend:
+    image: ghcr.io/franmen/janus-frontend:latest
+    restart: unless-stopped
+    networks:
+      - npm-proxy
+
+volumes:
+  postgres_data:
+  backend_storage:
+
+networks:
+  janus-internal:
+    driver: bridge
+  npm-proxy:
+    external: true

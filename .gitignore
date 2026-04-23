@@ -1,3 +1,4 @@
+.env
 /janus-backend/storage/
 /janus-backend/data/
 /janus-backend/.gradle
