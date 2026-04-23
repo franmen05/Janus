@@ -1,7 +1,9 @@
 name: Publish Docker Images
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
     branches: [main]
 
 env:
@@ -13,6 +15,7 @@ jobs:
   publish:
     name: Build and Push Images
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
     permissions:
       contents: read
       packages: write
@@ -40,7 +43,7 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Build and push backend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: janus-backend
           file: janus-backend/src/main/docker/Dockerfile.jvm
@@ -51,7 +54,7 @@ jobs:
 
       # ── Frontend ──────────────────────────────────────────────
       - name: Build and push frontend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: janus-frontend
           file: janus-frontend/Dockerfile
