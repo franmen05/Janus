@@ -1,0 +1,7 @@
+.git
+.gradle
+src
+build/reports
+build/test-results
+*.md
+.DS_Store
