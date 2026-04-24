@@ -7,6 +7,7 @@ import { ToastService } from '../../../core/services/toast.service';
 import { Account } from '../../../core/models/account.model';
 import { Operation } from '../../../core/models/operation.model';
 import { InspectionExpense, ChargeType } from '../../../core/models/inspection.model';
+import { ServiceModule } from '../../../core/models/service.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
 import { ExpenseDetailModalComponent } from './expense-detail-modal/expense-detail-modal.component';
@@ -129,6 +130,7 @@ export class ChargesTableComponent implements OnInit {
   } | null>(null);
   accounts = input<Account[]>([]);
   liquidationStatus = input<string | null>(null);
+  module = input<ServiceModule>('LOGISTICS');
   changed = output<void>();
 
   private inspectionService = inject(InspectionService);
@@ -190,6 +192,7 @@ export class ChargesTableComponent implements OnInit {
     ref.componentInstance.accounts = this.accounts();
     ref.componentInstance.operationSummary = this.operationSummary();
     ref.componentInstance.defaultChargeType = this.activeChargeTab();
+    ref.componentInstance.module = this.module();
     ref.componentInstance.initForm();
     ref.closed.subscribe((result) => {
       if (result === 'created' || result === 'created-continue') {
@@ -209,6 +212,7 @@ export class ChargesTableComponent implements OnInit {
     ref.componentInstance.canEdit = this.canManageExpenses();
     ref.componentInstance.accounts = this.accounts();
     ref.componentInstance.operationSummary = this.operationSummary();
+    ref.componentInstance.module = this.module();
     ref.componentInstance.initForm();
     ref.closed.subscribe((result) => {
       if (result === 'updated') {
