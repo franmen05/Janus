@@ -10,7 +10,7 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { getErrorMessage } from '../../../../core/utils/error-message.util';
 import { InspectionExpense, ExpenseCategory, CreateExpenseRequest, ChargeType, PaymentType, BillToType } from '../../../../core/models/inspection.model';
 import { ServiceService } from '../../../../core/services/service.service';
-import { ServiceConfig } from '../../../../core/models/service.model';
+import { ServiceConfig, ServiceModule } from '../../../../core/models/service.model';
 import { Account, AccountType } from '../../../../core/models/account.model';
 
 @Component({
@@ -309,11 +309,12 @@ export class ExpenseDetailModalComponent implements OnInit {
   editing = signal(false);
   activeTab = signal<ChargeType>('EXPENSE');
 
+  module: ServiceModule = 'LOGISTICS';
+
   activeCategories = signal<ServiceConfig[]>([]);
   categoriesLoading = signal(true);
 
   ngOnInit(): void {
-    this.loadCategories();
   }
 
   getCategoryLabel(cat: ServiceConfig): string {
@@ -324,7 +325,9 @@ export class ExpenseDetailModalComponent implements OnInit {
     this.categoriesLoading.set(true);
     this.serviceService.getActive().subscribe({
       next: categories => {
-        this.activeCategories.set(categories);
+        this.activeCategories.set(
+          categories.filter(cat => cat.appliesTo.includes(this.module))
+        );
         this.categoriesLoading.set(false);
       },
       error: () => {
@@ -398,6 +401,7 @@ export class ExpenseDetailModalComponent implements OnInit {
   }
 
   initForm(): void {
+    this.loadCategories();
     if (this.expense) {
       // Edit/view mode: populate from existing expense
       this.editForm.patchValue({
