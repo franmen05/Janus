@@ -13,6 +13,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
   selector: 'app-declaration-list',
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, LoadingIndicatorComponent],
+  styles: [`:host { display: block; background: #fff; border-radius: 8px; padding: 1rem; }`],
   template: `
     @if (loading()) {
       <app-loading-indicator size="sm" />
