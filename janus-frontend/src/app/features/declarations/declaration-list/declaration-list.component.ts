@@ -13,7 +13,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
   selector: 'app-declaration-list',
   standalone: true,
   imports: [CommonModule, RouterModule, TranslateModule, StatusBadgeComponent, LoadingIndicatorComponent],
-  styles: [`:host { display: block; background: #fff; border-radius: 8px; padding: 1rem; }`],
+  styles: [`:host { display: block; background: var(--bs-body-bg); border-radius: 8px; padding: 1rem; }`],
   template: `
     @if (loading()) {
       <app-loading-indicator size="sm" />
@@ -31,7 +31,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
     @if (declarations().length > 0) {
       <div class="table-responsive">
         <table class="table table-sm table-hover">
-          <thead class="table-light">
+          <thead>
             <tr>
               <th>{{ 'DECLARATIONS.TYPE' | translate }}</th>
               <th>{{ 'DECLARATIONS.DECLARATION_NUMBER' | translate }}</th>
