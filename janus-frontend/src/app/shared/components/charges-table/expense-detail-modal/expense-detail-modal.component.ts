@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbTypeaheadModule, NgbNavModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -275,7 +275,7 @@ import { Account, AccountType } from '../../../../core/models/account.model';
     </div>
   `
 })
-export class ExpenseDetailModalComponent implements OnInit {
+export class ExpenseDetailModalComponent {
   activeModal = inject(NgbActiveModal);
   private inspectionService = inject(InspectionService);
   private toastService = inject(ToastService);
@@ -313,9 +313,6 @@ export class ExpenseDetailModalComponent implements OnInit {
 
   activeCategories = signal<ServiceConfig[]>([]);
   categoriesLoading = signal(true);
-
-  ngOnInit(): void {
-  }
 
   getCategoryLabel(cat: ServiceConfig): string {
     return this.translate.currentLang === 'es' ? cat.labelEs : cat.labelEn;
