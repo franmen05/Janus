@@ -26,6 +26,7 @@ import { ChargesTableComponent } from '../../../shared/components/charges-table/
         [operation]="operation()"
         [operationSummary]="operationSummary()"
         [accounts]="accounts()"
+        [module]="'LOGISTICS'"
         (changed)="onChargesChanged()" />
     }
 

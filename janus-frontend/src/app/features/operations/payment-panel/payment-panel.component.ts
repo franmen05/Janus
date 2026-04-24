@@ -29,6 +29,7 @@ import { LoadingIndicatorComponent } from '../../../shared/components/loading-in
       [operationSummary]="operationSummary()"
       [accounts]="accounts()"
       [liquidationStatus]="liquidation()?.status ?? null"
+      [module]="'LOGISTICS'"
       (changed)="onChargesChanged()" />
 
     <!-- Liquidation & Payment Card -->
