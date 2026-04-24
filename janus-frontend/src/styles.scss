@@ -84,6 +84,12 @@
 }
 
 // ---- Body ----
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
 body {
   font-family: var(--janus-font-body);
   background-color: var(--janus-bg-body);
@@ -91,6 +97,21 @@ body {
   font-size: 0.875rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+app-main-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 // ---- Headings ----
@@ -374,11 +395,7 @@ input[type="datetime-local"] {
 }
 
 .sidebar {
-  height: 100%;
-  position: sticky;
-  top: 56px;
-  max-height: calc(100vh - 56px);
-  overflow-y: auto;
+  min-height: 100%;
   overflow-x: hidden;
   background: linear-gradient(180deg, #0c0e14 0%, #0a0c12 100%);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
@@ -461,6 +478,7 @@ input[type="datetime-local"] {
 
 // ---- Navbar (always dark in both themes) ----
 .navbar-janus {
+  flex-shrink: 0;
   background: linear-gradient(90deg, #0c0e14 0%, #10131a 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(12px);
@@ -494,7 +512,9 @@ input[type="datetime-local"] {
 
 // ---- Content area ----
 .content-area {
-  min-height: calc(100vh - 56px);
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
   padding: 1.5rem;
   background-color: var(--janus-bg-body);
 }

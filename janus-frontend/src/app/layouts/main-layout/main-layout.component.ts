@@ -20,12 +20,25 @@ import { SidebarService } from '../../core/services/sidebar.service';
     </div>
   `,
   styles: [`
+    :host {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
     .layout-wrapper {
       display: flex;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
     }
     .sidebar-wrapper {
       width: 220px;
       min-width: 220px;
+      height: 100%;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #0c0e14 0%, #0a0c12 100%);
       transition: width 0.25s ease, min-width 0.25s ease;
     }
     .sidebar-collapsed .sidebar-wrapper {
