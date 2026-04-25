@@ -22,7 +22,8 @@
     "SERVICES": "Services",
     "COLLAPSE_SIDEBAR": "Collapse",
     "EXPAND_SIDEBAR": "Expand",
-    "API_KEYS": "API Keys"
+    "API_KEYS": "API Keys",
+    "ACCOUNT_CODE_CONFIG": "Account Code Config"
   },
   "LOGIN": {
     "USERNAME": "Username",
@@ -195,6 +196,8 @@
     "ALL_TYPES": "All types",
     "FILTER_TYPE": "Filter by type",
     "ACCOUNT_CODE": "Account Code",
+    "EDIT_CODE_MANUALLY": "Edit code manually",
+    "AUTO_GENERATED_CODE_HINT": "Auto-generated on save",
     "NOTES": "Notes",
     "TYPE_REQUIRED": "At least one type must be selected",
     "EXPORT_CSV": "Export CSV",
@@ -1050,6 +1053,18 @@
     "AUTO_FETCH_OFF": "Disabled",
     "SCHEDULED_TIME": "Scheduled time"
   },
+  "ADMIN": {
+    "ACCOUNT_CODE_CONFIG": {
+      "TITLE": "Account Code Configuration",
+      "MENU": "Account Code Config",
+      "PREFIX": "Prefix",
+      "SEPARATOR": "Separator",
+      "PADDING": "Padding length",
+      "ENABLED": "Auto-generation enabled",
+      "SAVE_SUCCESS": "Configuration saved",
+      "PREVIEW": "Preview"
+    }
+  },
   "DOCUMENT_TYPES_CONFIG": {
     "TITLE": "Document Type Configuration",
     "CODE": "Code",
@@ -1127,7 +1142,10 @@
     "ACCOUNT_NOT_SOCIO": "The account is not of type SOCIO",
     "PARTNER_ALREADY_EXISTS": "This account is already associated",
     "PARTNER_SELF_REFERENCE": "An account cannot be its own partner",
-    "PARTNER_NOT_ASSOCIATED": "The selected partner is not associated with this account"
+    "PARTNER_NOT_ASSOCIATED": "The selected partner is not associated with this account",
+    "ACCOUNT_CODE_CONFIG_INVALID_PREFIX": "Invalid prefix",
+    "ACCOUNT_CODE_CONFIG_INVALID_PADDING": "Padding must be 1..10",
+    "ACCOUNT_CODE_CONFIG_INVALID_SEPARATOR": "Invalid separator"
   },
   "API_KEYS": {
     "TITLE": "API Keys",

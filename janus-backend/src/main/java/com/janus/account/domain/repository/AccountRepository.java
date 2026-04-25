@@ -48,6 +48,37 @@ public class AccountRepository implements PanacheRepository<Account> {
         return findAll().page(Page.of(page, size)).list();
     }
 
+    public long findMaxSequenceForPrefix(String prefix, String separator) {
+        if (prefix == null) prefix = "";
+        if (separator == null) separator = "";
+        var fullPrefix = prefix + separator;
+        var pattern = fullPrefix + "%";
+        List<Account> matching = find("accountCode LIKE ?1", pattern).list();
+        List<String> codes = matching.stream().map(a -> a.accountCode).toList();
+        long max = 0L;
+        int prefixLen = fullPrefix.length();
+        for (String code : codes) {
+            if (code == null || code.length() <= prefixLen) continue;
+            String suffix = code.substring(prefixLen);
+            if (suffix.isEmpty()) continue;
+            boolean allDigits = true;
+            for (int i = 0; i < suffix.length(); i++) {
+                if (!Character.isDigit(suffix.charAt(i))) {
+                    allDigits = false;
+                    break;
+                }
+            }
+            if (!allDigits) continue;
+            try {
+                long n = Long.parseLong(suffix);
+                if (n > max) max = n;
+            } catch (NumberFormatException ignored) {
+                // skip
+            }
+        }
+        return max;
+    }
+
     public long countFiltered(String search) {
         if (search != null && !search.isBlank()) {
             var pattern = "%" + search.toLowerCase() + "%";

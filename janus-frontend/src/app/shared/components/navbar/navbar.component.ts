@@ -99,6 +99,11 @@ import { ThemeService, ThemeMode } from '../../../core/services/theme.service';
                   </a>
                 </li>
                 <li class="nav-item d-lg-none">
+                  <a class="nav-link ps-4" routerLink="/admin/account-code-config" routerLinkActive="active" (click)="closeMenu()">
+                    <i class="bi bi-hash me-2"></i>{{ 'NAV.ACCOUNT_CODE_CONFIG' | translate }}
+                  </a>
+                </li>
+                <li class="nav-item d-lg-none">
                   <a class="nav-link ps-4" routerLink="/api-keys" routerLinkActive="active" (click)="closeMenu()">
                     <i class="bi bi-key me-2"></i>{{ 'NAV.API_KEYS' | translate }}
                   </a>

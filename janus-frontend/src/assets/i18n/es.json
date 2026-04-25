@@ -22,7 +22,8 @@
     "COLLAPSE_SIDEBAR": "Contraer",
     "EXPAND_SIDEBAR": "Expandir",
     "API_KEYS": "Claves API",
-    "SERVICES": "Servicios"
+    "SERVICES": "Servicios",
+    "ACCOUNT_CODE_CONFIG": "Config. Código de Cuenta"
   },
   "LOGIN": {
     "USERNAME": "Usuario",
@@ -195,6 +196,8 @@
     "ALL_TYPES": "Todos los tipos",
     "FILTER_TYPE": "Filtrar por tipo",
     "ACCOUNT_CODE": "Código de Cuenta",
+    "EDIT_CODE_MANUALLY": "Editar código manualmente",
+    "AUTO_GENERATED_CODE_HINT": "Se generará automáticamente al guardar",
     "NOTES": "Notas",
     "TYPE_REQUIRED": "Debe seleccionar al menos un tipo",
     "EXPORT_CSV": "Exportar CSV",
@@ -1050,6 +1053,18 @@
     "AUTO_FETCH_OFF": "Desactivada",
     "SCHEDULED_TIME": "Hora programada"
   },
+  "ADMIN": {
+    "ACCOUNT_CODE_CONFIG": {
+      "TITLE": "Configuración de Código de Cuenta",
+      "MENU": "Config. Código de Cuenta",
+      "PREFIX": "Prefijo",
+      "SEPARATOR": "Separador",
+      "PADDING": "Longitud de relleno",
+      "ENABLED": "Generación automática activa",
+      "SAVE_SUCCESS": "Configuración guardada",
+      "PREVIEW": "Vista previa"
+    }
+  },
   "DOCUMENT_TYPES_CONFIG": {
     "TITLE": "Configuración de Tipos de Documento",
     "CODE": "Código",
@@ -1102,7 +1117,10 @@
     "ACCOUNT_NOT_SOCIO": "La cuenta no es de tipo SOCIO",
     "PARTNER_ALREADY_EXISTS": "Esta cuenta ya está asociada",
     "PARTNER_SELF_REFERENCE": "Una cuenta no puede ser su propio socio",
-    "PARTNER_NOT_ASSOCIATED": "El socio seleccionado no está asociado a esta cuenta"
+    "PARTNER_NOT_ASSOCIATED": "El socio seleccionado no está asociado a esta cuenta",
+    "ACCOUNT_CODE_CONFIG_INVALID_PREFIX": "Prefijo inválido",
+    "ACCOUNT_CODE_CONFIG_INVALID_PADDING": "El padding debe estar entre 1 y 10",
+    "ACCOUNT_CODE_CONFIG_INVALID_SEPARATOR": "Separador inválido"
   },
   "API_KEYS": {
     "TITLE": "Claves API",

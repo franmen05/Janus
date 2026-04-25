@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AccountService } from '../../../core/services/account.service';
+import { AccountCodeConfigService } from '../services/account-code-config.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { getErrorMessage } from '../../../core/utils/error-message.util';
 import { Account, AccountType, DocumentType, ContactType, AccountContact, CreateAccountContactRequest, AccountPartner } from '../../../core/models/account.model';
@@ -30,7 +31,18 @@ import { Account, AccountType, DocumentType, ContactType, AccountContact, Create
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">{{ 'ACCOUNTS.ACCOUNT_CODE' | translate }}</label>
-              <input type="text" class="form-control" formControlName="accountCode">
+              <input type="text" class="form-control" formControlName="accountCode"
+                     [readonly]="autoCodeReadOnly()"
+                     [placeholder]="autoCodeReadOnly() ? ('ACCOUNTS.AUTO_GENERATED_CODE_HINT' | translate) : ''">
+              @if (!isEdit() && codeConfigEnabled()) {
+                <div class="form-check mt-1">
+                  <input type="checkbox" class="form-check-input" id="edit-code-manually"
+                         [checked]="editCodeManually()" (change)="onToggleEditCodeManually($event)">
+                  <label class="form-check-label small" for="edit-code-manually">
+                    {{ 'ACCOUNTS.EDIT_CODE_MANUALLY' | translate }}
+                  </label>
+                </div>
+              }
             </div>
             <div class="col-md-6">
               <label class="form-label">{{ 'ACCOUNTS.TYPE' | translate }} <span class="text-danger">*</span></label>
@@ -290,6 +302,7 @@ import { Account, AccountType, DocumentType, ContactType, AccountContact, Create
 })
 export class AccountFormComponent implements OnInit {
   private accountService = inject(AccountService);
+  private accountCodeConfigService = inject(AccountCodeConfigService);
   private toastService = inject(ToastService);
   private translate = inject(TranslateService);
   private router = inject(Router);
@@ -305,6 +318,11 @@ export class AccountFormComponent implements OnInit {
   // Account types state (checkboxes instead of dropdown)
   selectedTypes = signal<AccountType[]>([]);
   typeTouched = signal(false);
+
+  // Auto-generated code config state (CREATE mode only)
+  codeConfigEnabled = signal(false);
+  editCodeManually = signal(false);
+  autoCodeReadOnly = signal(false);
 
   // Contacts state
   contacts = signal<AccountContact[]>([]);
@@ -377,6 +395,32 @@ export class AccountFormComponent implements OnInit {
         this.partnerAccounts.set(c.partnerAccounts ?? []);
       });
       this.loadContacts();
+    } else {
+      // CREATE mode: check if auto-generation is enabled
+      this.accountCodeConfigService.get().subscribe({
+        next: cfg => {
+          if (cfg.enabled) {
+            this.codeConfigEnabled.set(true);
+            this.autoCodeReadOnly.set(true);
+            this.form.get('accountCode')!.disable();
+          }
+        },
+        error: () => { /* ignore - fallback to manual entry */ }
+      });
+    }
+  }
+
+  onToggleEditCodeManually(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.editCodeManually.set(checked);
+    const ctrl = this.form.get('accountCode')!;
+    if (checked) {
+      this.autoCodeReadOnly.set(false);
+      ctrl.enable();
+    } else {
+      ctrl.setValue('');
+      this.autoCodeReadOnly.set(true);
+      ctrl.disable();
     }
   }
 

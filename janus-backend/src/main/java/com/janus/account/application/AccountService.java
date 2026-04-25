@@ -24,6 +24,9 @@ public class AccountService {
     AccountRepository accountRepository;
 
     @Inject
+    AccountCodeConfigService accountCodeConfigService;
+
+    @Inject
     Event<AuditEvent> auditEvent;
 
     @Transactional
@@ -59,7 +62,21 @@ public class AccountService {
 
     @Transactional
     public Account create(CreateAccountRequest request, String username) {
-        checkNoDuplicates(request.name(), request.taxId(), request.accountCode(), -1L);
+        var providedCode = request.accountCode();
+        boolean autoGenerate = (providedCode == null || providedCode.isBlank());
+        String resolvedCode;
+        if (autoGenerate) {
+            var config = accountCodeConfigService.getConfig();
+            if (config.enabled) {
+                resolvedCode = generateUniqueAccountCode();
+            } else {
+                resolvedCode = null;
+            }
+        } else {
+            resolvedCode = normalize(providedCode);
+        }
+
+        checkNoDuplicates(request.name(), request.taxId(), resolvedCode, -1L);
 
         var account = new Account();
         account.name = normalize(request.name());
@@ -73,11 +90,26 @@ public class AccountService {
         account.documentType = request.documentType();
         account.alternatePhone = request.alternatePhone();
         account.country = request.country();
-        account.accountCode = normalize(request.accountCode());
+        account.accountCode = resolvedCode;
         account.notes = request.notes();
         accountRepository.persist(account);
         auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "Account", account.id, null, null, null, "Account created: " + account.name));
         return account;
+    }
+
+    private String generateUniqueAccountCode() {
+        // Try up to 3 times: first attempt uses max+1; if it collides (race),
+        // try max+2 and max+3.
+        var config = accountCodeConfigService.getConfig();
+        long base = accountRepository.findMaxSequenceForPrefix(config.prefix, config.separator);
+        for (int i = 1; i <= 3; i++) {
+            String candidate = accountCodeConfigService.formatCode(config, base + i);
+            if (accountRepository.findByAccountCodeExcluding(candidate, -1L).isEmpty()) {
+                return candidate;
+            }
+        }
+        throw new BusinessException("ACCOUNT_CODE_GENERATION_FAILED",
+                "Could not generate a unique account code after 3 attempts");
     }
 
     @Transactional

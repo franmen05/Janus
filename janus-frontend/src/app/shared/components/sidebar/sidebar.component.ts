@@ -168,6 +168,16 @@ import { AlertBadgeComponent } from '../alert-badge/alert-badge.component';
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link" routerLink="/admin/account-code-config" routerLinkActive="active"
+                     [ngbTooltip]="sidebarService.collapsed() ? ('NAV.ACCOUNT_CODE_CONFIG' | translate) : null"
+                     placement="end" container="body">
+                    <i class="bi bi-hash"></i>
+                    @if (!sidebarService.collapsed()) {
+                      <span>{{ 'NAV.ACCOUNT_CODE_CONFIG' | translate }}</span>
+                    }
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link" routerLink="/api-keys" routerLinkActive="active"
                      [ngbTooltip]="sidebarService.collapsed() ? ('NAV.API_KEYS' | translate) : null"
                      placement="end" container="body">
@@ -256,7 +266,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     const url = this.router.url;
-    if (url.startsWith('/users') || url.startsWith('/ports') || url.startsWith('/exchange-rates') || url.startsWith('/compliance-config') || url.startsWith('/admin/document-types') || url.startsWith('/admin/services') || url.startsWith('/api-keys')) {
+    if (url.startsWith('/users') || url.startsWith('/ports') || url.startsWith('/exchange-rates') || url.startsWith('/compliance-config') || url.startsWith('/admin/document-types') || url.startsWith('/admin/services') || url.startsWith('/admin/account-code-config') || url.startsWith('/api-keys')) {
       this.configCollapsed.set(false);
     }
   }
