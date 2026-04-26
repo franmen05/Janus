@@ -66,22 +66,23 @@ public class AccountCsvService {
             rowNum++;
             String name = fields.size() > 0 ? fields.get(0).trim() : "";
             String taxId = fields.size() > 1 ? fields.get(1).trim() : "";
-            String email = fields.size() > 2 ? fields.get(2).trim() : "";
+            String emailRaw = fields.size() > 2 ? fields.get(2).trim() : "";
+            String email = emailRaw.isBlank() ? null : emailRaw;
 
             if (name.isBlank()) {
                 errors.add("Row " + rowNum + ": name is required");
                 skipped++;
                 continue;
             }
+
+            String accountCodeEarly = fields.size() > 11 ? fields.get(11).trim() : "";
             if (taxId.isBlank()) {
-                errors.add("Row " + rowNum + ": taxId is required");
-                skipped++;
-                continue;
-            }
-            if (email.isBlank()) {
-                errors.add("Row " + rowNum + ": email is required");
-                skipped++;
-                continue;
+                if (accountCodeEarly.isBlank()) {
+                    errors.add("Row " + rowNum + ": taxId or accountCode is required");
+                    skipped++;
+                    continue;
+                }
+                taxId = accountCodeEarly;
             }
 
             // Parse accountTypes (semicolon-separated)
