@@ -102,7 +102,7 @@ public class BondedWarehouseCsvService {
                     "Warehouse imported via CSV: " + warehouse.name));
             imported++;
         }
-        return new CsvImportResponse(imported, skipped, errors);
+        return new CsvImportResponse(imported, 0, 0, skipped, errors);
     }
 
     @Transactional
