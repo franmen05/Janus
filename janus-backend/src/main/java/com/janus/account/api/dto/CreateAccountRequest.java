@@ -11,7 +11,7 @@ import java.util.Set;
 public record CreateAccountRequest(
         @NotBlank String name,
         @NotBlank String taxId,
-        @NotBlank @Email String email,
+        @Email String email,
         String phone,
         String address,
         @NotNull @Size(min = 1) Set<AccountType> accountTypes,
