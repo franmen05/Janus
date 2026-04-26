@@ -203,7 +203,18 @@
     "EXPORT_CSV": "Export CSV",
     "IMPORT_CSV": "Import CSV",
     "DOWNLOAD_TEMPLATE": "Download Template",
-    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}"
+    "IMPORT_SUCCESS": "Imported {{imported}} records, skipped {{skipped}}",
+    "IMPORT_RESULT_CREATED": "Created: {{count}}",
+    "IMPORT_RESULT_UPDATED": "Updated: {{count}}",
+    "IMPORT_RESULT_DUPLICATES": "Duplicates: {{count}}",
+    "IMPORT_RESULT_ERRORS": "Errors: {{count}}",
+    "DEACTIVATE": "Deactivate",
+    "ACTIVATE": "Activate",
+    "SHOW_INACTIVE": "Show inactive",
+    "CONFIRM_DEACTIVATE_TITLE": "Deactivate account",
+    "CONFIRM_DEACTIVATE_MESSAGE": "Are you sure you want to deactivate {{name}}?",
+    "DEACTIVATED_SUCCESS": "Account deactivated",
+    "ACTIVATED_SUCCESS": "Account activated"
   },
   "PORTS": {
     "TITLE": "Ports",

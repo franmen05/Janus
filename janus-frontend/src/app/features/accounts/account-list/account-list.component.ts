@@ -3,13 +3,16 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountService } from '../../../core/services/account.service';
 import { Account, AccountType } from '../../../core/models/account.model';
 import { CsvImportResponse } from '../../../core/models/shared.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator/loading-indicator.component';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-account-list',
@@ -30,6 +33,24 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         }
       </div>
     </div>
+    @if (importResult()) {
+      <div class="alert alert-info mb-3 alert-dismissible fade show">
+        <div class="d-flex flex-wrap gap-2">
+          <span class="badge bg-success">{{ 'ACCOUNTS.IMPORT_RESULT_CREATED' | translate:{count: importResult()!.imported} }}</span>
+          <span class="badge bg-primary">{{ 'ACCOUNTS.IMPORT_RESULT_UPDATED' | translate:{count: importResult()!.updated} }}</span>
+          <span class="badge bg-secondary">{{ 'ACCOUNTS.IMPORT_RESULT_DUPLICATES' | translate:{count: importResult()!.duplicates} }}</span>
+          <span class="badge bg-danger">{{ 'ACCOUNTS.IMPORT_RESULT_ERRORS' | translate:{count: importResult()!.skipped} }}</span>
+        </div>
+        @if (importResult()!.errors.length > 0) {
+          <ul class="mb-0 mt-1">
+            @for (err of importResult()!.errors; track err) {
+              <li>{{ err }}</li>
+            }
+          </ul>
+        }
+        <button type="button" class="btn-close" (click)="importResult.set(null)"></button>
+      </div>
+    }
     <div class="card">
       <div class="card-header">
         <div class="row g-2">
@@ -50,6 +71,14 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
               }
             </select>
           </div>
+        </div>
+        <div class="form-check form-switch mt-2">
+          <input class="form-check-input" type="checkbox" id="showInactiveToggle"
+                 [checked]="showInactive()"
+                 (change)="onToggleShowInactive($any($event.target).checked)">
+          <label class="form-check-label" for="showInactiveToggle">
+            {{ 'ACCOUNTS.SHOW_INACTIVE' | translate }}
+          </label>
         </div>
       </div>
       @if (loading()) {
@@ -85,6 +114,19 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
                       {{ 'ACCOUNTS.OPERATIONS' | translate }}
                     </a>
                   }
+                  @if (authService.hasRole(['ADMIN'])) {
+                    @if (account.active) {
+                      <button type="button" class="btn btn-sm btn-outline-danger"
+                              (click)="onDeactivate(account, $event)">
+                        {{ 'ACCOUNTS.DEACTIVATE' | translate }}
+                      </button>
+                    } @else {
+                      <button type="button" class="btn btn-sm btn-outline-success"
+                              (click)="onActivate(account, $event)">
+                        {{ 'ACCOUNTS.ACTIVATE' | translate }}
+                      </button>
+                    }
+                  }
                   </div>
                 </td>
               </tr>
@@ -100,25 +142,15 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
         (pageChange)="onPageChange($event)" />
       }
     </div>
-    @if (importResult()) {
-      <div class="alert alert-info mt-3 alert-dismissible fade show">
-        {{ 'ACCOUNTS.IMPORT_SUCCESS' | translate:{imported: importResult()!.imported, skipped: importResult()!.skipped} }}
-        @if (importResult()!.errors.length > 0) {
-          <ul class="mb-0 mt-1">
-            @for (err of importResult()!.errors; track err) {
-              <li>{{ err }}</li>
-            }
-          </ul>
-        }
-        <button type="button" class="btn-close" (click)="importResult.set(null)"></button>
-      </div>
-    }
   `
 })
 export class AccountListComponent implements OnInit, OnDestroy {
   private accountService = inject(AccountService);
   private router = inject(Router);
   authService = inject(AuthService);
+  private modalService = inject(NgbModal);
+  private toast = inject(ToastService);
+  private translate = inject(TranslateService);
 
   loading = signal(true);
   accounts = signal<Account[]>([]);
@@ -130,6 +162,7 @@ export class AccountListComponent implements OnInit, OnDestroy {
   totalPages = signal(0);
   importing = signal(false);
   importResult = signal<CsvImportResponse | null>(null);
+  showInactive = signal(false);
 
   accountTypes = Object.values(AccountType);
 
@@ -159,7 +192,8 @@ export class AccountListComponent implements OnInit, OnDestroy {
   private loadAccounts(): void {
     this.loading.set(true);
     const search = this.searchTerm() || undefined;
-    this.accountService.getAll(this.currentPage() - 1, this.pageSize, search).subscribe({
+    const activeOnly = !this.showInactive();
+    this.accountService.getAll(this.currentPage() - 1, this.pageSize, search, activeOnly).subscribe({
       next: response => {
         this.accounts.set(response.content);
         this.totalElements.set(response.totalElements);
@@ -168,6 +202,46 @@ export class AccountListComponent implements OnInit, OnDestroy {
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  onToggleShowInactive(value: boolean): void {
+    this.showInactive.set(value);
+    this.currentPage.set(1);
+    this.loadAccounts();
+  }
+
+  onActivate(account: Account, event: Event): void {
+    event.stopPropagation();
+    this.accountService.setActive(account.id, true).subscribe({
+      next: updated => {
+        this.accounts.update(list => list.map(a => a.id === updated.id ? updated : a));
+        this.toast.success(this.translate.instant('ACCOUNTS.ACTIVATED_SUCCESS'));
+      }
+    });
+  }
+
+  onDeactivate(account: Account, event: Event): void {
+    event.stopPropagation();
+    const ref = this.modalService.open(ConfirmDialogComponent);
+    const componentRef = (ref as unknown as { _contentRef: { componentRef: { setInput: (n: string, v: unknown) => void } } })._contentRef.componentRef;
+    componentRef.setInput('title', this.translate.instant('ACCOUNTS.CONFIRM_DEACTIVATE_TITLE'));
+    componentRef.setInput('message', this.translate.instant('ACCOUNTS.CONFIRM_DEACTIVATE_MESSAGE', { name: account.name }));
+    ref.result.then(
+      confirmed => {
+        if (!confirmed) return;
+        this.accountService.setActive(account.id, false).subscribe({
+          next: updated => {
+            if (!this.showInactive()) {
+              this.accounts.update(list => list.filter(a => a.id !== updated.id));
+            } else {
+              this.accounts.update(list => list.map(a => a.id === updated.id ? updated : a));
+            }
+            this.toast.success(this.translate.instant('ACCOUNTS.DEACTIVATED_SUCCESS'));
+          }
+        });
+      },
+      () => { /* dismissed */ }
+    );
   }
 
   onDownloadTemplate(): void {

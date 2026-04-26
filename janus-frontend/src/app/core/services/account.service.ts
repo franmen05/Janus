@@ -11,11 +11,12 @@ export class AccountService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/api/accounts`;
 
-  getAll(page = 0, size = 10, search?: string): Observable<PageResponse<Account>> {
+  getAll(page = 0, size = 10, search?: string, activeOnly?: boolean): Observable<PageResponse<Account>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
     if (search) params = params.set('search', search);
+    if (activeOnly) params = params.set('activeOnly', 'true');
     return this.http.get<PageResponse<Account>>(this.apiUrl, { params });
   }
 
@@ -29,6 +30,10 @@ export class AccountService {
 
   update(id: number, request: CreateAccountRequest): Observable<Account> {
     return this.http.put<Account>(`${this.apiUrl}/${id}`, request);
+  }
+
+  setActive(id: number, active: boolean): Observable<Account> {
+    return this.http.patch<Account>(`${this.apiUrl}/${id}/active`, { active });
   }
 
   getContacts(accountId: number): Observable<AccountContact[]> {
