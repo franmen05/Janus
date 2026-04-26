@@ -464,7 +464,7 @@ export class PaymentPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.accountService.getAll(0, 9999).subscribe(response => this.accounts.set(response.content));
+    this.accountService.getAll(0, 9999, undefined, true).subscribe(response => this.accounts.set(response.content));
   }
 
   loadData(): void {

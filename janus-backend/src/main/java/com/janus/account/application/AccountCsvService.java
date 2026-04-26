@@ -59,34 +59,30 @@ public class AccountCsvService {
     @Transactional
     public CsvImportResponse importCsv(InputStream in, String username) throws IOException {
         List<List<String>> rows = CsvUtil.parseLines(in);
-        int imported = 0, skipped = 0;
+        int imported = 0, updated = 0, duplicates = 0, skipped = 0;
         List<String> errors = new ArrayList<>();
         int rowNum = 1; // 1-based (header is row 0)
         for (var fields : rows) {
             rowNum++;
             String name = fields.size() > 0 ? fields.get(0).trim() : "";
             String taxId = fields.size() > 1 ? fields.get(1).trim() : "";
-            String email = fields.size() > 2 ? fields.get(2).trim() : "";
+            String emailRaw = fields.size() > 2 ? fields.get(2).trim() : "";
+            String email = emailRaw.isBlank() ? null : emailRaw;
 
             if (name.isBlank()) {
                 errors.add("Row " + rowNum + ": name is required");
                 skipped++;
                 continue;
             }
+
+            String accountCodeEarly = fields.size() > 11 ? fields.get(11).trim() : "";
             if (taxId.isBlank()) {
-                errors.add("Row " + rowNum + ": taxId is required");
-                skipped++;
-                continue;
-            }
-            if (email.isBlank()) {
-                errors.add("Row " + rowNum + ": email is required");
-                skipped++;
-                continue;
-            }
-            if (accountRepository.findByTaxId(taxId).isPresent()) {
-                errors.add("Row " + rowNum + ": duplicate taxId '" + taxId + "'");
-                skipped++;
-                continue;
+                if (accountCodeEarly.isBlank()) {
+                    errors.add("Row " + rowNum + ": taxId or accountCode is required");
+                    skipped++;
+                    continue;
+                }
+                taxId = accountCodeEarly;
             }
 
             // Parse accountTypes (semicolon-separated)
@@ -124,26 +120,72 @@ public class AccountCsvService {
                 }
             }
 
+            String phone = fields.size() > 4 && !fields.get(4).isBlank() ? fields.get(4).trim() : null;
+            String address = fields.size() > 5 && !fields.get(5).isBlank() ? fields.get(5).trim() : null;
+            String businessName = fields.size() > 6 && !fields.get(6).isBlank() ? fields.get(6).trim() : null;
+            String representative = fields.size() > 7 && !fields.get(7).isBlank() ? fields.get(7).trim() : null;
+            String alternatePhone = fields.size() > 9 && !fields.get(9).isBlank() ? fields.get(9).trim() : null;
+            String country = fields.size() > 10 && !fields.get(10).isBlank() ? fields.get(10).trim() : null;
+            String accountCode = fields.size() > 11 && !fields.get(11).isBlank() ? fields.get(11).trim() : null;
+            String notes = fields.size() > 12 && !fields.get(12).isBlank() ? fields.get(12).trim() : null;
+
+            var existingOpt = accountRepository.findByTaxId(taxId);
+            if (existingOpt.isPresent()) {
+                var existing = existingOpt.get();
+                boolean changed = false;
+                if (!stringEquals(existing.name, name)) { existing.name = name; changed = true; }
+                if (!stringEquals(existing.email, email)) { existing.email = email; changed = true; }
+                if (!stringEquals(existing.phone, phone)) { existing.phone = phone; changed = true; }
+                if (!stringEquals(existing.address, address)) { existing.address = address; changed = true; }
+                if (!stringEquals(existing.businessName, businessName)) { existing.businessName = businessName; changed = true; }
+                if (!stringEquals(existing.representative, representative)) { existing.representative = representative; changed = true; }
+                if (existing.documentType != documentType) { existing.documentType = documentType; changed = true; }
+                if (!stringEquals(existing.alternatePhone, alternatePhone)) { existing.alternatePhone = alternatePhone; changed = true; }
+                if (!stringEquals(existing.country, country)) { existing.country = country; changed = true; }
+                if (!stringEquals(existing.accountCode, accountCode)) { existing.accountCode = accountCode; changed = true; }
+                if (!stringEquals(existing.notes, notes)) { existing.notes = notes; changed = true; }
+                Set<AccountType> existingTypes = existing.accountTypes == null ? new HashSet<>() : new HashSet<>(existing.accountTypes);
+                if (!existingTypes.equals(accountTypes)) { existing.accountTypes = accountTypes; changed = true; }
+
+                if (changed) {
+                    auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Account", existing.id, null, null, null,
+                            "Account updated via CSV: " + existing.name));
+                    updated++;
+                } else {
+                    duplicates++;
+                }
+                continue;
+            }
+
             var account = new Account();
             account.name = name;
             account.taxId = taxId;
             account.email = email;
             account.accountTypes = accountTypes;
-            account.phone = fields.size() > 4 && !fields.get(4).isBlank() ? fields.get(4).trim() : null;
-            account.address = fields.size() > 5 && !fields.get(5).isBlank() ? fields.get(5).trim() : null;
-            account.businessName = fields.size() > 6 && !fields.get(6).isBlank() ? fields.get(6).trim() : null;
-            account.representative = fields.size() > 7 && !fields.get(7).isBlank() ? fields.get(7).trim() : null;
+            account.phone = phone;
+            account.address = address;
+            account.businessName = businessName;
+            account.representative = representative;
             account.documentType = documentType;
-            account.alternatePhone = fields.size() > 9 && !fields.get(9).isBlank() ? fields.get(9).trim() : null;
-            account.country = fields.size() > 10 && !fields.get(10).isBlank() ? fields.get(10).trim() : null;
-            account.accountCode = fields.size() > 11 && !fields.get(11).isBlank() ? fields.get(11).trim() : null;
-            account.notes = fields.size() > 12 && !fields.get(12).isBlank() ? fields.get(12).trim() : null;
+            account.alternatePhone = alternatePhone;
+            account.country = country;
+            account.accountCode = accountCode;
+            account.notes = notes;
             account.active = true;
             accountRepository.persist(account);
             auditEvent.fire(new AuditEvent(username, AuditAction.CREATE, "Account", account.id, null, null, null,
                     "Account imported via CSV: " + account.name));
             imported++;
         }
-        return new CsvImportResponse(imported, skipped, errors);
+        return new CsvImportResponse(imported, updated, duplicates, skipped, errors);
+    }
+
+    private static String normalize(String s) {
+        if (s == null) return "";
+        return s.trim();
+    }
+
+    private static boolean stringEquals(String a, String b) {
+        return normalize(a).equals(normalize(b));
     }
 }

@@ -2,6 +2,7 @@ package com.janus.account.api;
 
 import com.janus.account.api.dto.AccountResponse;
 import com.janus.account.api.dto.CreateAccountRequest;
+import com.janus.account.api.dto.SetAccountActiveRequest;
 import com.janus.account.application.AccountCsvService;
 import com.janus.account.application.AccountService;
 import com.janus.shared.api.dto.CsvImportResponse;
@@ -14,6 +15,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -45,8 +47,9 @@ public class AccountResource {
     public PageResponse<AccountResponse> list(
             @QueryParam("page") @DefaultValue("0") int page,
             @QueryParam("size") @DefaultValue("10") int size,
-            @QueryParam("search") String search) {
-        return accountService.listPaginated(search, page, size);
+            @QueryParam("search") String search,
+            @QueryParam("activeOnly") @DefaultValue("false") boolean activeOnly) {
+        return accountService.listPaginated(search, page, size, activeOnly);
     }
 
     @GET
@@ -67,6 +70,13 @@ public class AccountResource {
     @Path("/{id}")
     public AccountResponse update(@PathParam("id") Long id, @Valid CreateAccountRequest request, @Context SecurityContext sec) {
         return AccountResponse.from(accountService.update(id, request, sec.getUserPrincipal().getName()));
+    }
+
+    @PATCH
+    @Path("/{id}/active")
+    @RolesAllowed("ADMIN")
+    public AccountResponse setActive(@PathParam("id") Long id, @Valid SetAccountActiveRequest request, @Context SecurityContext sec) {
+        return AccountResponse.from(accountService.setActive(id, request.active(), sec.getUserPrincipal().getName()));
     }
 
     @POST

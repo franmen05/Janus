@@ -38,12 +38,20 @@ public class AccountRepository implements PanacheRepository<Account> {
         return value.trim().replaceAll("\\s+", " ").toLowerCase();
     }
 
-    public List<Account> findPaginated(String search, int page, int size) {
+    public List<Account> findPaginated(String search, int page, int size, boolean activeOnly) {
         if (search != null && !search.isBlank()) {
             var pattern = "%" + search.toLowerCase() + "%";
+            if (activeOnly) {
+                return find("(LOWER(name) LIKE ?1 OR LOWER(taxId) LIKE ?1 OR LOWER(accountCode) LIKE ?1) AND active = true", pattern)
+                        .page(Page.of(page, size))
+                        .list();
+            }
             return find("LOWER(name) LIKE ?1 OR LOWER(taxId) LIKE ?1 OR LOWER(accountCode) LIKE ?1", pattern)
                     .page(Page.of(page, size))
                     .list();
+        }
+        if (activeOnly) {
+            return find("active = true").page(Page.of(page, size)).list();
         }
         return findAll().page(Page.of(page, size)).list();
     }
@@ -79,10 +87,16 @@ public class AccountRepository implements PanacheRepository<Account> {
         return max;
     }
 
-    public long countFiltered(String search) {
+    public long countFiltered(String search, boolean activeOnly) {
         if (search != null && !search.isBlank()) {
             var pattern = "%" + search.toLowerCase() + "%";
+            if (activeOnly) {
+                return count("(LOWER(name) LIKE ?1 OR LOWER(taxId) LIKE ?1 OR LOWER(accountCode) LIKE ?1) AND active = true", pattern);
+            }
             return count("LOWER(name) LIKE ?1 OR LOWER(taxId) LIKE ?1 OR LOWER(accountCode) LIKE ?1", pattern);
+        }
+        if (activeOnly) {
+            return count("active = true");
         }
         return count();
     }

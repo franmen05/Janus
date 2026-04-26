@@ -149,6 +149,6 @@ public class ServiceCsvService {
                     "Service imported via CSV: " + config.name));
             imported++;
         }
-        return new CsvImportResponse(imported, skipped, errors);
+        return new CsvImportResponse(imported, 0, 0, skipped, errors);
     }
 }

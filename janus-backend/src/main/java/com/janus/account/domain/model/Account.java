@@ -35,7 +35,6 @@ public class Account extends BaseEntity {
     @Column(name = "tax_id", nullable = false, unique = true)
     public String taxId;
 
-    @Column(nullable = false)
     public String email;
 
     public String phone;

@@ -40,13 +40,13 @@ public class AccountService {
     }
 
     @Transactional
-    public PageResponse<AccountResponse> listPaginated(String search, int page, int size) {
-        var accounts = accountRepository.findPaginated(search, page, size);
+    public PageResponse<AccountResponse> listPaginated(String search, int page, int size, boolean activeOnly) {
+        var accounts = accountRepository.findPaginated(search, page, size, activeOnly);
         accounts.forEach(a -> {
             a.contacts.size();
             a.associatedAccounts.size();
         });
-        var total = accountRepository.countFiltered(search);
+        var total = accountRepository.countFiltered(search, activeOnly);
         var content = accounts.stream().map(AccountResponse::from).toList();
         return PageResponse.of(content, page, size, total);
     }
@@ -132,6 +132,16 @@ public class AccountService {
         account.accountCode = normalize(request.accountCode());
         account.notes = request.notes();
         auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Account", account.id, null, null, null, "Account updated: " + account.name));
+        return account;
+    }
+
+    @Transactional
+    public Account setActive(Long id, boolean active, String username) {
+        var account = findById(id);
+        account.active = active;
+        var verb = active ? "activated" : "deactivated";
+        auditEvent.fire(new AuditEvent(username, AuditAction.UPDATE, "Account", account.id, null, null, null,
+                "Account " + verb + ": " + account.name));
         return account;
     }
 

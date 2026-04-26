@@ -79,7 +79,7 @@ import { Account, AccountType, DocumentType, ContactType, AccountContact, Create
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
-              <label class="form-label">{{ 'ACCOUNTS.EMAIL' | translate }} <span class="text-danger">*</span></label>
+              <label class="form-label">{{ 'ACCOUNTS.EMAIL' | translate }}</label>
               <input type="email" class="form-control" formControlName="email">
             </div>
             <div class="col-md-6">
@@ -339,7 +339,7 @@ export class AccountFormComponent implements OnInit {
     businessName: new FormControl('', { nonNullable: true }),
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     taxId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.email] }),
     documentType: new FormControl('', { nonNullable: true }),
     phone: new FormControl('', { nonNullable: true }),
     alternatePhone: new FormControl('', { nonNullable: true }),

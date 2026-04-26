@@ -154,7 +154,7 @@ export class InspectionPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPhotos();
-    this.accountService.getAll(0, 9999).subscribe(response => this.accounts.set(response.content));
+    this.accountService.getAll(0, 9999, undefined, true).subscribe(response => this.accounts.set(response.content));
   }
 
   canSetType(): boolean {
