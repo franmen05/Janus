@@ -223,9 +223,8 @@ export class AccountListComponent implements OnInit, OnDestroy {
   onDeactivate(account: Account, event: Event): void {
     event.stopPropagation();
     const ref = this.modalService.open(ConfirmDialogComponent);
-    const componentRef = (ref as unknown as { _contentRef: { componentRef: { setInput: (n: string, v: unknown) => void } } })._contentRef.componentRef;
-    componentRef.setInput('title', this.translate.instant('ACCOUNTS.CONFIRM_DEACTIVATE_TITLE'));
-    componentRef.setInput('message', this.translate.instant('ACCOUNTS.CONFIRM_DEACTIVATE_MESSAGE', { name: account.name }));
+    ref.componentInstance.title.set(this.translate.instant('ACCOUNTS.CONFIRM_DEACTIVATE_TITLE'));
+    ref.componentInstance.message.set(this.translate.instant('ACCOUNTS.CONFIRM_DEACTIVATE_MESSAGE', { name: account.name }));
     ref.result.then(
       confirmed => {
         if (!confirmed) return;

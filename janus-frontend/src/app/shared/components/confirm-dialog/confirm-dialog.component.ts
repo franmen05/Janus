@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, model } from '@angular/core';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -22,8 +22,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   `
 })
 export class ConfirmDialogComponent {
-  title = input<string>('Confirm');
-  message = input<string>('Are you sure?');
+  title = model<string>('Confirm');
+  message = model<string>('Are you sure?');
 
   constructor(public modal: NgbActiveModal) {}
 }
