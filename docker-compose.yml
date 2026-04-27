@@ -1,15 +1,15 @@
 services:
-  postgres:
+  janus-db:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: janusdb
-      POSTGRES_USER: ${DB_USERNAME:-janus}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-janus}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -17,34 +17,32 @@ services:
       - janus-internal
 
   janus-backend:
-    image: ghcr.io/franmen/janus-backend:latest
+    image: ghcr.io/franmen05/janus-backend:latest
     restart: unless-stopped
     environment:
-      DB_USERNAME: ${DB_USERNAME:-janus}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
       DB_PASSWORD: ${DB_PASSWORD}
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://janus-db:5432/janusdb
       MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
       MAIL_PORT: ${MAIL_PORT:-587}
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       CORS_ORIGINS: ${CORS_ORIGINS}
       FRONTEND_URL: ${FRONTEND_URL}
-      EXTERNAL_API_KEY: ${EXTERNAL_API_KEY}
-      BILLFLOW_URL: ${BILLFLOW_URL}
-      BILLFLOW_API_KEY: ${BILLFLOW_API_KEY}
     volumes:
       - backend_storage:/deployments/storage
     depends_on:
-      postgres:
+      janus-db:
         condition: service_healthy
     networks:
       - janus-internal
-      - npm-proxy
+      - shared_network
 
   janus-frontend:
-    image: ghcr.io/franmen/janus-frontend:latest
+    image: ghcr.io/franmen05/janus-frontend:latest
     restart: unless-stopped
     networks:
-      - npm-proxy
+      - shared_network
 
 volumes:
   postgres_data:
@@ -53,5 +51,5 @@ volumes:
 networks:
   janus-internal:
     driver: bridge
-  npm-proxy:
+  shared_network:
     external: true
