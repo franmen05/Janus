@@ -226,7 +226,7 @@ INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SE
 INSERT INTO accounts (id, active, created_at, updated_at, address, alternatePhone, businessName, country, accountCode, email, name, notes, phone, representative, tax_id, documentType) VALUES (NEXTVAL('accounts_SEQ'), true, CURRENT_TIMESTAMP, NULL, '8006 Lorton Road
 Lorton, VA 22079
 Estados Unidos
- 18007776666', NULL, NULL, NULL, 'MCX-100', 'noemail@placeholder.com', 'IRON PLANET', NULL, NULL, NULL, 'MCX-100', NULL);
+ 18007776666', NULL, NULL, NULL, 'MCX-100', 'noemail@placeholder.com', 'IRON PLANET (MCX-100)', NULL, NULL, NULL, 'MCX-100', NULL);
 INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SEQ'), 'CARRIER';
 INSERT INTO accounts (id, active, created_at, updated_at, address, alternatePhone, businessName, country, accountCode, email, name, notes, phone, representative, tax_id, documentType) VALUES (NEXTVAL('accounts_SEQ'), true, CURRENT_TIMESTAMP, NULL, NULL, NULL, NULL, NULL, 'MCX-101', 'noemail@placeholder.com', 'CARIBBEAN EXPRESS LINE', NULL, NULL, NULL, 'MCX-101', NULL);
 INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SEQ'), 'SHIPPER';
@@ -787,7 +787,7 @@ INSERT INTO accounts (id, active, created_at, updated_at, address, alternatePhon
 INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SEQ'), 'COMPANY';
 INSERT INTO accounts (id, active, created_at, updated_at, address, alternatePhone, businessName, country, accountCode, email, name, notes, phone, representative, tax_id, documentType) VALUES (NEXTVAL('accounts_SEQ'), true, CURRENT_TIMESTAMP, NULL, 'PL DOMINICANA RNC 131480586
 AVENIDA 30 MARZO 114, DON BOSCO, SANTO DOMINGO.
- 809-967-8862', NULL, NULL, NULL, 'MCX-340', 'noemail@placeholder.com', 'PL DOMINICANA', NULL, NULL, NULL, 'MCX-340', NULL);
+ 809-967-8862', NULL, NULL, NULL, 'MCX-340', 'noemail@placeholder.com', 'PL DOMINICANA (MCX-340)', NULL, NULL, NULL, 'MCX-340', NULL);
 INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SEQ'), 'CONSIGNEE';
 INSERT INTO accounts (id, active, created_at, updated_at, address, alternatePhone, businessName, country, accountCode, email, name, notes, phone, representative, tax_id, documentType) VALUES (NEXTVAL('accounts_SEQ'), true, CURRENT_TIMESTAMP, NULL, 'C/  El CARMEN ESQ  RESTAURACION 49
 Santo Domingo Este
@@ -1016,7 +1016,7 @@ INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SE
 INSERT INTO accounts (id, active, created_at, updated_at, address, alternatePhone, businessName, country, accountCode, email, name, notes, phone, representative, tax_id, documentType) VALUES (NEXTVAL('accounts_SEQ'), true, CURRENT_TIMESTAMP, NULL, 'Villa consuelo,manuela diaz calle  jose martin Duarte., SANTO DOMIGO', NULL, NULL, NULL, 'MCX-436', 'noemail@placeholder.com', 'DAISY DE LEON', NULL, '+1 (809) 696-1882', NULL, 'MCX-436', NULL);
 INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SEQ'), 'COMPANY';
 INSERT INTO accounts (id, active, created_at, updated_at, address, alternatePhone, businessName, country, accountCode, email, name, notes, phone, representative, tax_id, documentType) VALUES (NEXTVAL('accounts_SEQ'), true, CURRENT_TIMESTAMP, NULL, 'CEDULA 00109241604
-Villa consuelo, esq.Manuela Diaz, calle Jose Martin,Duarte., Santo Domingo', NULL, NULL, NULL, 'MCX-437', 'noemail@placeholder.com', 'DAISY DE LEON', NULL, '+1 (809) 696-1882', NULL, 'MCX-437', NULL);
+Villa consuelo, esq.Manuela Diaz, calle Jose Martin,Duarte., Santo Domingo', NULL, NULL, NULL, 'MCX-437', 'noemail@placeholder.com', 'DAISY DE LEON (MCX-437)', NULL, '+1 (809) 696-1882', NULL, 'MCX-437', NULL);
 INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SEQ'), 'CONSIGNEE';
 INSERT INTO accounts (id, active, created_at, updated_at, address, alternatePhone, businessName, country, accountCode, email, name, notes, phone, representative, tax_id, documentType) VALUES (NEXTVAL('accounts_SEQ'), true, CURRENT_TIMESTAMP, NULL, 'CALLE EL VERGEL #46, ESQ ORTEGA Y GASSET, ENS EL VERGEL', NULL, NULL, NULL, 'MCX-438', 'noemail@placeholder.com', 'EASY DOMINICANA AUTO ADORNOS EIRL', NULL, NULL, NULL, 'MCX-438', NULL);
 INSERT INTO account_types (account_id, account_type) SELECT CURRVAL('accounts_SEQ'), 'COMPANY';
